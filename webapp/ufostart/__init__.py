@@ -5,8 +5,7 @@ from pyramid.mako_templating import renderer_factory
 from pyramid.renderers import JSON
 from pyramid_beaker import session_factory_from_settings
 
-from hnctools.request import extend_request
-from hnctools import i18n
+from hnctools import request, i18n
 from .lib.subscribers import context_authorization, add_renderer_variables
 from .lib.globals import Globals
 
@@ -23,14 +22,15 @@ def main(global_config, **settings):
         , session_factory = session_factory_from_settings(settings))
 
 
-    extend_request(config, TranslationStringFactory('ufostart'), g.available_locales, g.default_locale_name)
-    config.add_translation_dirs('formencode:i18n')
-    config.add_translation_dirs('ufostart:locale')
+    available_locales = settings['pyramid.available_locales'].split()
+    default_locale_name = settings['pyramid.default_locale_name']
+
+    request.extend_request(config)
+    i18n.extend_request(config, "ufostart", available_locales, default_locale_name)
 
     config.add_renderer(".html", renderer_factory)
     config.add_renderer(".xml", renderer_factory)
     config.add_renderer('json', jsonRenderer)
-
 
     config.add_subscriber(context_authorization, 'pyramid.events.ContextFound')
     config.add_subscriber(add_renderer_variables, 'pyramid.events.BeforeRender')

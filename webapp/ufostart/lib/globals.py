@@ -1,4 +1,5 @@
 import logging, os, random
+from dogpile.cache import make_region
 from hncapiclient.backend import VersionedBackend
 
 log = logging.getLogger(__name__)
@@ -13,7 +14,6 @@ else:
     VERSION_TOKEN = random.random()
 log.info("USING NEW STATIC RESOURCE TOKEN: %s", VERSION_TOKEN)
 
-from dogpile.cache import make_region
 
 
 
@@ -45,9 +45,6 @@ class Globals(object):
         self.site_slogan = settings['project.site_slogan']
         self.secure_scheme = settings['deploy.secure_scheme']
 
-        self.available_locales = settings['pyramid.available_locales'].split()
-        self.default_locale_name = settings['pyramid.default_locale_name']
-
         self.mailConfig.update({"mail.smtp.server":settings['email.host']
             ,"mail.smtp.username":settings['email.user']
             ,"mail.smtp.password":settings['email.pwd']
@@ -57,7 +54,6 @@ class Globals(object):
 
         self.cache = make_region().configure_from_config(settings, "cache.")
         log.info("SETUP CACHE WITH %s", {k:v for k,v in settings.items() if k.startswith("cache.")})
-        self.LANGUAGES = settings['pyramid.available_locales'].split()
 
 
     def getMailConfig(self):
