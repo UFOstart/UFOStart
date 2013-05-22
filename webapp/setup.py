@@ -63,5 +63,7 @@ setup(name='ufostart',
       entry_points="""\
       [paste.app_factory]
       main = ufostart:main
+      [paste.paster_command]
+      buildapp = ufostart.commands:BuildStatics
       """,
       )

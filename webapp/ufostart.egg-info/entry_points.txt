@@ -1,3 +1,5 @@
       [paste.app_factory]
       main = ufostart:main
+      [paste.paster_command]
+      buildapp = ufostart.commands:BuildStatics
       

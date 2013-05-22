@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="${request._LOCALE_}">
+<head>
+    <meta charset="utf-8">
+    <title><%block name="title">${self.subtitle()} ${g.project_name}</%block></title>
+    <meta name="Generator" content="${g.project_name}">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+    <meta name="MobileOptimized" content="width">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="cleartype" content="on">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta itemprop="name" content="${g.project_name}">
+    <meta itemprop="description" content="${g.project_name}">
+    ${self.seo_tags()}
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+    <%block name='extra_head'></%block>
+    %if g.is_debug:
+        <script type="text/javascript">less = { env: 'development' };</script>
+        <link rel="stylesheet/less" href="${STATIC_URL}less/site.less">
+        ${self.styles_debug()}
+        <script src="${ROOT_STATIC_URL}scripts/libs/less-1.3.3.min.js" type="text/javascript"></script>
+    %else:
+        <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/site.min.css?${VERSION_TOKEN}">
+        ${self.styles_live()}
+    %endif
+</head>
+<body class="<%block name='body_class'>${request.root.app_label}</%block>">
+    ${next.body()}
+    <div id="fb-root"></div>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script>
+        (function(root){
+            var options = {fb : {appId : "${vctxt.settings.fbAppId}", user : ${vctxt.user.toJSON(True)|n}, connect : true }
+                , furl: "${request.furl}"
+                , brandName: "${g.project_name}"
+                , $messagingContainer: $("#message-container")
+                , staticPrefix: '${ROOT_STATIC_URL}'
+                , loadingHtml : '<div class="show-loading"><img src="${ROOT_STATIC_URL}/img/ajax-loader-light.gif"/></div>'
+                , uploadUrl: '${request.globals.uploadUrl}'
+                , resHosts: ${statics.toJSON()|n}
+            };
+            <%block name="options"/>
+            root.__options__ = options;
+        })(window);
+        var require = {   urlArgs: "${VERSION_TOKEN}"
+            , baseUrl: "${STATIC_URL}scripts/apps"
+            , paths : {
+                "tools"     :"${ROOT_STATIC_URL}scripts/tools"
+                ,"text"     :"${ROOT_STATIC_URL}scripts/text"
+                ,"ajax/templates":"/ajax/templates"
+            }};
+    </script>
+
+
+<!-- START DEBUG SCRIPTS -->
+        <script src="${ROOT_STATIC_URL}scripts/libs/bootstrap.js"></script>
+        <script src="${ROOT_STATIC_URL}scripts/libs/JSON.js"></script>
+        <script src="${ROOT_STATIC_URL}scripts/libs/store.js"></script>
+        <script src="${ROOT_STATIC_URL}scripts/libs/underscore.js"></script>
+        <script src="${ROOT_STATIC_URL}scripts/libs/backbone.js"></script>
+        <script src="${ROOT_STATIC_URL}scripts/libs/globalize.js"></script>
+        <script src="${ROOT_STATIC_URL}scripts/libs/cultures/globalize.culture.es.js"></script>
+        <script src="${ROOT_STATIC_URL}scripts/libs/cultures/globalize.culture.de.js"></script>
+        <script src="${ROOT_STATIC_URL}scripts/libs/cultures/globalize.culture.fr.js"></script>
+        <script src="${ROOT_STATIC_URL}scripts/libs/jquery.validate.min.js"></script>
+        <script src="${ROOT_STATIC_URL}scripts/libs/jquery.placeholder.js"></script>
+        <script src="${ROOT_STATIC_URL}scripts/libs/require.js"></script>
+        <script src="${ROOT_STATIC_URL}scripts/setup.js"></script>
+        <script src="${STATIC_URL}scripts/setup.js"></script>
+        <script src="${STATIC_URL}scripts/fb.js"></script>
+<!-- END DEBUG SCRIPTS -->
+
+      %if request._LOCALE_ != 'en':
+          <script src="${STATIC_URL}i18n/messages_${request._LOCALE_}.js"></script>
+      %endif
+
+    <%block name="layoutscripts"/>
+    <%block name="scripts"/>
+</body>
+</html>
+
+
+<%def name="subtitle()"></%def>
+<%def name="styles_live()"></%def>
+<%def name="styles_debug()"></%def>
+<%def name="seo_tags()">
+<meta content="friendfund.com - Collect money with friends!" name="generator"/>
+<meta content="social commerce, e-commerce, group gifts, group gifting, social community, gifts, gemeinsam schenken" name="keywords"/>
+<meta content="Collect money with friends. Create a Pool. Chip in. friendfund it!" name="description"/>
+</%def>
+
+<%def name="header_messages()">
+    <div id="message-container" class="container message-container ${'show' if len(request.session.peek_flash("generic_messages")) > 0 else ''}">
+        %for msg in request.session.pop_flash("generic_messages"):
+            <div class="alert alert-${msg.type}">
+                <a class="close" data-dismiss="alert">×</a>
+                %if msg.heading:
+                    <h4 class="alert-heading">${msg.heading|n}</h4>
+                %endif
+            ${msg.body|n}
+            </div>
+        %endfor
+    </div>
+</%def>

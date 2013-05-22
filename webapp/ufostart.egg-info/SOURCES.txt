@@ -6,6 +6,7 @@ local.ini
 setup.cfg
 setup.py
 ufostart/__init__.py
+ufostart/commands.py
 ufostart.egg-info/PKG-INFO
 ufostart.egg-info/SOURCES.txt
 ufostart.egg-info/dependency_links.txt
@@ -16,7 +17,6 @@ ufostart.egg-info/top_level.txt
 ufostart/lib/__init__.py
 ufostart/lib/baseviews.py
 ufostart/lib/globals.py
-ufostart/lib/i18n.py
 ufostart/lib/subscribers.py
 ufostart/models/__init__.py
 ufostart/website/__init__.py
@@ -24,3 +24,4 @@ ufostart/website/apps/__init__.py
 ufostart/website/apps/contexts.py
 ufostart/website/apps/index/__init__.py
 ufostart/website/apps/index/handlers.py
+ufostart/website/templates/index.html

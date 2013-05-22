@@ -20,5 +20,5 @@ dogpile.cache>=0.4.1
 redis
 httplib2
 hncapiclient>=0.1.0dev
-hnctools>=0.1.1dev
+hnctools>=0.1.3dev
 hncforms>=0.1.2dev
