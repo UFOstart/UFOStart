@@ -18,7 +18,7 @@
         <script type="text/javascript">less = { env: 'development' };</script>
         <link rel="stylesheet/less" href="${STATIC_URL}less/site.less">
         ${self.styles_debug()}
-        <script src="${ROOT_STATIC_URL}scripts/dist/less.js" type="text/javascript"></script>
+        <script src="${ROOT_STATIC_URL}scripts/dev/less.js" type="text/javascript"></script>
     %else:
         <link rel="stylesheet" type="text/css" href="${STATIC_URL}${VERSION_TOKEN}/css/site.min.css">
         ${self.styles_live()}
@@ -27,31 +27,7 @@
 <body class="${self.body_class()}">
     ${next.body()}
     <div id="fb-root"></div>
-    <script>
-        var require = {   urlArgs: "${VERSION_TOKEN}"
-            , baseUrl: "${STATIC_URL}scripts"
-            , paths : {
-                "text"     :"${ROOT_STATIC_URL}scripts/text"
-                ,"ajax/templates":"/ajax/templates"
-            }};
-    </script>
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="${ROOT_STATIC_URL}scripts/dist/libs.min.js"></script>
-
-    <script>
-        var options = {fb : { appId : "${vctxt.settings.fbAppId}", user : {}, connect : true }
-            , $messagingContainer: $("#message-container")
-            , staticPrefix: '${ROOT_STATIC_URL}'
-            , loadingHtml : '<div class="show-loading"><img src="${ROOT_STATIC_URL}/img/ajax-loader-light.gif"/></div>'
-        };
-        <%block name="options"/>
-        require(["site"], function(site){
-            site.setup(window, options);
-        });
-    </script>
-
-    <%block name="layoutscripts"/>
-    <%block name="scripts"/>
+    ${self.scripts()}
 </body>
 </html>
 
@@ -61,6 +37,41 @@
 <%def name="seo_tags()"></%def>
 <%def name="body_class()"></%def>
 <%def name="page_class()"></%def>
+
+
+
+<%def name="pre_scripts()"></%def>
+<%def name="post_scripts()"></%def>
+<%def name="layout_scripts()"></%def>
+<%def name="jsoptions()">
+    <script>
+        window.__options__ = {fb : { appId : "${vctxt.settings.fbAppId}", user : {}, connect : true }
+            , messagingContainer: "#message-container"
+            , staticPrefix: '${ROOT_STATIC_URL}'
+            , loadingHtml : '<div class="show-loading"><img src="${ROOT_STATIC_URL}/img/ajax-loader-light.gif"/></div>'
+        };
+    </script>
+</%def>
+
+<%def name="scripts()">
+    <script>
+        var require = {   urlArgs: "${VERSION_TOKEN}"
+            , baseUrl: "${STATIC_URL}scripts"
+            , paths : {
+                "tools"     :"${ROOT_STATIC_URL}scripts/tools"
+                ,"text"     :"${ROOT_STATIC_URL}scripts/text"
+                ,"ajax/templates":"/ajax/templates"
+            }};
+    </script>
+    ${self.jsoptions()}
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="${ROOT_STATIC_URL}scripts/dist/libs.min.js"></script>
+    ${self.pre_scripts()}
+    <script data-main="site"  src="${ROOT_STATIC_URL}scripts/dev/require.js" type="text/javascript"></script>
+    ${self.layout_scripts()}
+    ${self.post_scripts()}
+</%def>
+
 
 <%def name="header_messages()">
     <div id="message-container" class="container message-container ${'show' if len(request.session.peek_flash("generic_messages")) > 0 else ''}">

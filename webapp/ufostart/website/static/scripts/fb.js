@@ -1,4 +1,4 @@
-define([], function(){
+define(["tools/ajax"], function(ajax){
     var setup = function (root, root_options) {
         var
             SCOPE = "email", MAX_SCOPE = "email"
@@ -238,10 +238,9 @@ define([], function(){
             }
         });
         root.fb = new FBAuthHandler(root_options.fb);
-        if(!root.fb.user.token){
-            require(["tools/ajax"], function(ajax){
-                ajax.ifyForm({root:$("#login-pull-down-form")});
-            });
+        var form = $("#login-pull-down-form");
+        if(!root.fb.user.token && form.length){
+            ajax.ifyForm({root:form});
         }
     };
     return {setup:setup};

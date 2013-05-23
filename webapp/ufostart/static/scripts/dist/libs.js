@@ -1,8 +1,8 @@
 /* ========================================================================
- * Bootstrap: affix.js v3.0.0
- * http://twitter.github.com/bootstrap/javascript.html#affix
+ * Bootstrap: transition.js v3.0.0
+ * http://twitter.github.com/bootstrap/javascript.html#transitions
  * ========================================================================
- * Copyright 2012 Twitter, Inc.
+ * Copyright 2013 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,101 +20,28 @@
 
 +function ($) { "use strict";
 
-  // AFFIX CLASS DEFINITION
-  // ======================
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
 
-  var Affix = function (element, options) {
-    this.options = $.extend({}, Affix.DEFAULTS, options)
-    this.$window = $(window)
-      .on('scroll.bs.affix.data-api', $.proxy(this.checkPosition, this))
-      .on('click.bs.affix.data-api',  $.proxy(this.checkPositionWithEventLoop, this))
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
 
-    this.$element = $(element)
-    this.affixed  =
-    this.unpin    = null
+    var transEndEventNames = {
+      'WebkitTransition' : 'webkitTransitionEnd'
+    , 'MozTransition'    : 'transitionend'
+    , 'OTransition'      : 'oTransitionEnd otransitionend'
+    , 'transition'       : 'transitionend'
+    }
 
-    this.checkPosition()
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
   }
 
-  Affix.DEFAULTS = {
-    offset: 0
-  }
-
-  Affix.prototype.checkPositionWithEventLoop = function () {
-    setTimeout($.proxy(this.checkPosition, this), 1)
-  }
-
-  Affix.prototype.checkPosition = function () {
-    if (!this.$element.is(':visible')) return
-
-    var scrollHeight = $(document).height()
-    var scrollTop    = this.$window.scrollTop()
-    var position     = this.$element.offset()
-    var offset       = this.options.offset
-    var offsetTop    = offset.top
-    var offsetBottom = offset.bottom
-    var reset        = 'affix affix-top affix-bottom'
-
-    if (typeof offset != 'object')         offsetBottom = offsetTop = offset
-    if (typeof offsetTop == 'function')    offsetTop    = offset.top()
-    if (typeof offsetBottom == 'function') offsetBottom = offset.bottom()
-
-    var affix = this.unpin   != null && (scrollTop + this.unpin <= position.top) ? false :
-                offsetBottom != null && (position.top + this.$element.height() >= scrollHeight - offsetBottom) ? 'bottom' :
-                offsetTop    != null && (scrollTop <= offsetTop) ? 'top' : false
-
-    if (this.affixed === affix) return
-
-    this.affixed = affix
-    this.unpin   = affix == 'bottom' ? position.top - scrollTop : null
-
-    this.$element.removeClass(reset).addClass('affix' + (affix ? '-' + affix : ''))
-  }
-
-
-  // AFFIX PLUGIN DEFINITION
-  // =======================
-
-  var old = $.fn.affix
-
-  $.fn.affix = function (option) {
-    return this.each(function () {
-      var $this   = $(this)
-      var data    = $this.data('bs.affix')
-      var options = typeof option == 'object' && option
-
-      if (!data) $this.data('bs.affix', (data = new Affix(this, options)))
-      if (typeof option == 'string') data[option]()
-    })
-  }
-
-  $.fn.affix.Constructor = Affix
-
-
-  // AFFIX NO CONFLICT
-  // =================
-
-  $.fn.affix.noConflict = function () {
-    $.fn.affix = old
-    return this
-  }
-
-
-  // AFFIX DATA-API
-  // ==============
-
-  $(window).on('load', function () {
-    $('[data-spy="affix"]').each(function () {
-      var $spy = $(this)
-      var data = $spy.data()
-
-      data.offset = data.offset || {}
-
-      if (data.offsetBottom) data.offset.bottom = data.offsetBottom
-      if (data.offsetTop)    data.offset.top    = data.offsetTop
-
-      $spy.affix(data)
-    })
+  $(function () {
+    $.support.transition = transitionEnd()
   })
 
 }(window.jQuery);
@@ -1063,6 +990,359 @@
 
 }(window.jQuery);
 ;/* ========================================================================
+ * Bootstrap: tooltip.js v3.0.0
+ * http://twitter.github.com/bootstrap/javascript.html#affix
+ * Inspired by the original jQuery.tipsy by Jason Frame
+ * ========================================================================
+ * Copyright 2012 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ======================================================================== */
+
+
++function ($) { "use strict";
+
+  // TOOLTIP PUBLIC CLASS DEFINITION
+  // ===============================
+
+  var Tooltip = function (element, options) {
+    this.type       =
+    this.options    =
+    this.enabled    =
+    this.timeout    =
+    this.hoverState =
+    this.$element   = null
+
+    this.init('tooltip', element, options)
+  }
+
+  Tooltip.DEFAULTS = {
+    animation: true
+  , placement: 'top'
+  , selector: false
+  , template: '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+  , trigger: 'hover focus'
+  , title: ''
+  , delay: 0
+  , html: false
+  , container: false
+  }
+
+  Tooltip.prototype.init = function (type, element, options) {
+    this.enabled  = true
+    this.type     = type
+    this.$element = $(element)
+    this.options  = this.getOptions(options)
+
+    var triggers = this.options.trigger.split(' ')
+
+    for (var i = triggers.length; i--;) {
+      var trigger = triggers[i]
+
+      if (trigger == 'click') {
+        this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
+      } else if (trigger != 'manual') {
+        var eventIn  = trigger == 'hover' ? 'mouseenter' : 'focus'
+        var eventOut = trigger == 'hover' ? 'mouseleave' : 'blur'
+
+        this.$element.on(eventIn + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
+        this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
+      }
+    }
+
+    this.options.selector ?
+      (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
+      this.fixTitle()
+  }
+
+  Tooltip.prototype.getDefaults = function () {
+    return Tooltip.DEFAULTS
+  }
+
+  Tooltip.prototype.getOptions = function (options) {
+    options = $.extend({}, this.getDefaults(), this.$element.data(), options)
+
+    if (options.delay && typeof options.delay == 'number') {
+      options.delay = {
+        show: options.delay
+      , hide: options.delay
+      }
+    }
+
+    return options
+  }
+
+  Tooltip.prototype.enter = function (e) {
+    var defaults = this.getDefaults()
+    var options  = {}
+
+    this._options && $.each(this._options, function (key, value) {
+      if (defaults[key] != value) options[key] = value
+    })
+
+    var self = $(e.currentTarget)[this.type](options).data('bs.' + this.type)
+
+    if (!self.options.delay || !self.options.delay.show) return self.show()
+
+    clearTimeout(this.timeout)
+
+    self.hoverState = 'in'
+    this.timeout    = setTimeout(function() {
+      if (self.hoverState == 'in') self.show()
+    }, self.options.delay.show)
+  }
+
+  Tooltip.prototype.leave = function (e) {
+    var self = $(e.currentTarget)[this.type](this._options).data('bs.' + this.type)
+
+    if (this.timeout) clearTimeout(this.timeout)
+    if (!self.options.delay || !self.options.delay.hide) return self.hide()
+
+    self.hoverState = 'out'
+    this.timeout    = setTimeout(function() {
+      if (self.hoverState == 'out') self.hide()
+    }, self.options.delay.hide)
+  }
+
+  Tooltip.prototype.show = function () {
+    var e = $.Event('show.bs.'+ this.type)
+
+    if (this.hasContent() && this.enabled) {
+      this.$element.trigger(e)
+
+      if (e.isDefaultPrevented()) return
+
+      var $tip = this.tip()
+
+      this.setContent()
+
+      if (this.options.animation) $tip.addClass('fade')
+
+      var placement = typeof this.options.placement == 'function' ?
+        this.options.placement.call(this, $tip[0], this.$element[0]) :
+        this.options.placement
+
+      $tip
+        .detach()
+        .css({ top: 0, left: 0, display: 'block' })
+
+      this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
+
+      var tp
+      var pos          = this.getPosition()
+      var actualWidth  = $tip[0].offsetWidth
+      var actualHeight = $tip[0].offsetHeight
+
+      switch (placement) {
+        case 'bottom':
+          tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2}
+          break
+        case 'top':
+          tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2}
+          break
+        case 'left':
+          tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}
+          break
+        case 'right':
+          tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}
+          break
+      }
+
+      this.applyPlacement(tp, placement)
+      this.$element.trigger('shown.bs.' + this.type)
+    }
+  }
+
+  Tooltip.prototype.applyPlacement = function(offset, placement) {
+    var replace
+    var $tip   = this.tip()
+    var width  = $tip[0].offsetWidth
+    var height = $tip[0].offsetHeight
+
+    $tip
+      .offset(offset)
+      .addClass(placement)
+      .addClass('in')
+
+    var actualWidth  = $tip[0].offsetWidth
+    var actualHeight = $tip[0].offsetHeight
+
+    if (placement == 'top' && actualHeight != height) {
+      replace = true
+      offset.top  = offset.top + height - actualHeight
+    }
+
+    if (placement == 'bottom' || placement == 'top') {
+      var delta = 0
+
+      if (offset.left < 0){
+        delta       = offset.left * -2
+        offset.left = 0
+
+        $tip.offset(offset)
+
+        actualWidth  = $tip[0].offsetWidth
+        actualHeight = $tip[0].offsetHeight
+      }
+
+      this.replaceArrow(delta - width + actualWidth, actualWidth, 'left')
+    } else {
+      this.replaceArrow(actualHeight - height, actualHeight, 'top')
+    }
+
+    if (replace) $tip.offset(offset)
+  }
+
+  Tooltip.prototype.replaceArrow = function(delta, dimension, position) {
+    this.arrow().css(position, delta ? (50 * (1 - delta / dimension) + "%") : '')
+  }
+
+  Tooltip.prototype.setContent = function () {
+    var $tip  = this.tip()
+    var title = this.getTitle()
+
+    $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
+    $tip.removeClass('fade in top bottom left right')
+  }
+
+  Tooltip.prototype.hide = function () {
+    var that = this
+    var $tip = this.tip()
+    var e    = $.Event('hide.bs.' + this.type)
+
+    this.$element.trigger(e)
+
+    if (e.isDefaultPrevented()) return
+
+    $tip.removeClass('in')
+
+    function removeWithAnimation() {
+      var timeout = setTimeout(function () {
+        $tip.off($.support.transition.end).detach()
+      }, 500)
+
+      $tip.one($.support.transition.end, function () {
+        clearTimeout(timeout)
+        $tip.detach()
+      })
+    }
+
+    $.support.transition && this.$tip.hasClass('fade') ?
+      removeWithAnimation() :
+      $tip.detach()
+
+    this.$element.trigger('hidden.bs.' + this.type)
+
+    return this
+  }
+
+  Tooltip.prototype.fixTitle = function () {
+    var $e = this.$element
+    if ($e.attr('title') || typeof($e.attr('data-original-title')) != 'string') {
+      $e.attr('data-original-title', $e.attr('title') || '').attr('title', '')
+    }
+  }
+
+  Tooltip.prototype.hasContent = function () {
+    return this.getTitle()
+  }
+
+  Tooltip.prototype.getPosition = function () {
+    var el = this.$element[0]
+    return $.extend({}, (typeof el.getBoundingClientRect == 'function') ? el.getBoundingClientRect() : {
+      width: el.offsetWidth
+    , height: el.offsetHeight
+    }, this.$element.offset())
+  }
+
+  Tooltip.prototype.getTitle = function () {
+    var title
+    var $e = this.$element
+    var o  = this.options
+
+    title = $e.attr('data-original-title')
+      || (typeof o.title == 'function' ? o.title.call($e[0]) :  o.title)
+
+    return title
+  }
+
+  Tooltip.prototype.tip = function () {
+    return this.$tip = this.$tip || $(this.options.template)
+  }
+
+  Tooltip.prototype.arrow =function(){
+    return this.$arrow = this.$arrow || this.tip().find(".tooltip-arrow")
+  }
+
+  Tooltip.prototype.validate = function () {
+    if (!this.$element[0].parentNode) {
+      this.hide()
+      this.$element = null
+      this.options  = null
+    }
+  }
+
+  Tooltip.prototype.enable = function () {
+    this.enabled = true
+  }
+
+  Tooltip.prototype.disable = function () {
+    this.enabled = false
+  }
+
+  Tooltip.prototype.toggleEnabled = function () {
+    this.enabled = !this.enabled
+  }
+
+  Tooltip.prototype.toggle = function (e) {
+    var self = e ? $(e.currentTarget)[this.type](this._options).data('bs.' + this.type) : this
+    self.tip().hasClass('in') ? self.hide() : self.show()
+  }
+
+  Tooltip.prototype.destroy = function () {
+    this.hide().$element.off('.' + this.type).removeData('bs.' + this.type)
+  }
+
+
+  // TOOLTIP PLUGIN DEFINITION
+  // =========================
+
+  var old = $.fn.tooltip
+
+  $.fn.tooltip = function (option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.tooltip')
+      var options = typeof option == 'object' && option
+
+      if (!data) $this.data('bs.tooltip', (data = new Tooltip(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  $.fn.tooltip.Constructor = Tooltip
+
+
+  // TOOLTIP NO CONFLICT
+  // ===================
+
+  $.fn.tooltip.noConflict = function () {
+    $.fn.tooltip = old
+    return this
+  }
+
+}(window.jQuery);
+;/* ========================================================================
  * Bootstrap: popover.js v3.0.0
  * http://twitter.github.com/bootstrap/javascript.html#popovers
  * ========================================================================
@@ -1461,9 +1741,8 @@
 
 }(window.jQuery);
 ;/* ========================================================================
- * Bootstrap: tooltip.js v3.0.0
+ * Bootstrap: affix.js v3.0.0
  * http://twitter.github.com/bootstrap/javascript.html#affix
- * Inspired by the original jQuery.tipsy by Jason Frame
  * ========================================================================
  * Copyright 2012 Twitter, Inc.
  *
@@ -1483,380 +1762,101 @@
 
 +function ($) { "use strict";
 
-  // TOOLTIP PUBLIC CLASS DEFINITION
-  // ===============================
+  // AFFIX CLASS DEFINITION
+  // ======================
 
-  var Tooltip = function (element, options) {
-    this.type       =
-    this.options    =
-    this.enabled    =
-    this.timeout    =
-    this.hoverState =
-    this.$element   = null
+  var Affix = function (element, options) {
+    this.options = $.extend({}, Affix.DEFAULTS, options)
+    this.$window = $(window)
+      .on('scroll.bs.affix.data-api', $.proxy(this.checkPosition, this))
+      .on('click.bs.affix.data-api',  $.proxy(this.checkPositionWithEventLoop, this))
 
-    this.init('tooltip', element, options)
-  }
-
-  Tooltip.DEFAULTS = {
-    animation: true
-  , placement: 'top'
-  , selector: false
-  , template: '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
-  , trigger: 'hover focus'
-  , title: ''
-  , delay: 0
-  , html: false
-  , container: false
-  }
-
-  Tooltip.prototype.init = function (type, element, options) {
-    this.enabled  = true
-    this.type     = type
     this.$element = $(element)
-    this.options  = this.getOptions(options)
+    this.affixed  =
+    this.unpin    = null
 
-    var triggers = this.options.trigger.split(' ')
-
-    for (var i = triggers.length; i--;) {
-      var trigger = triggers[i]
-
-      if (trigger == 'click') {
-        this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
-      } else if (trigger != 'manual') {
-        var eventIn  = trigger == 'hover' ? 'mouseenter' : 'focus'
-        var eventOut = trigger == 'hover' ? 'mouseleave' : 'blur'
-
-        this.$element.on(eventIn + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
-        this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
-      }
-    }
-
-    this.options.selector ?
-      (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
-      this.fixTitle()
+    this.checkPosition()
   }
 
-  Tooltip.prototype.getDefaults = function () {
-    return Tooltip.DEFAULTS
+  Affix.DEFAULTS = {
+    offset: 0
   }
 
-  Tooltip.prototype.getOptions = function (options) {
-    options = $.extend({}, this.getDefaults(), this.$element.data(), options)
-
-    if (options.delay && typeof options.delay == 'number') {
-      options.delay = {
-        show: options.delay
-      , hide: options.delay
-      }
-    }
-
-    return options
+  Affix.prototype.checkPositionWithEventLoop = function () {
+    setTimeout($.proxy(this.checkPosition, this), 1)
   }
 
-  Tooltip.prototype.enter = function (e) {
-    var defaults = this.getDefaults()
-    var options  = {}
+  Affix.prototype.checkPosition = function () {
+    if (!this.$element.is(':visible')) return
 
-    this._options && $.each(this._options, function (key, value) {
-      if (defaults[key] != value) options[key] = value
-    })
+    var scrollHeight = $(document).height()
+    var scrollTop    = this.$window.scrollTop()
+    var position     = this.$element.offset()
+    var offset       = this.options.offset
+    var offsetTop    = offset.top
+    var offsetBottom = offset.bottom
+    var reset        = 'affix affix-top affix-bottom'
 
-    var self = $(e.currentTarget)[this.type](options).data('bs.' + this.type)
+    if (typeof offset != 'object')         offsetBottom = offsetTop = offset
+    if (typeof offsetTop == 'function')    offsetTop    = offset.top()
+    if (typeof offsetBottom == 'function') offsetBottom = offset.bottom()
 
-    if (!self.options.delay || !self.options.delay.show) return self.show()
+    var affix = this.unpin   != null && (scrollTop + this.unpin <= position.top) ? false :
+                offsetBottom != null && (position.top + this.$element.height() >= scrollHeight - offsetBottom) ? 'bottom' :
+                offsetTop    != null && (scrollTop <= offsetTop) ? 'top' : false
 
-    clearTimeout(this.timeout)
+    if (this.affixed === affix) return
 
-    self.hoverState = 'in'
-    this.timeout    = setTimeout(function() {
-      if (self.hoverState == 'in') self.show()
-    }, self.options.delay.show)
-  }
+    this.affixed = affix
+    this.unpin   = affix == 'bottom' ? position.top - scrollTop : null
 
-  Tooltip.prototype.leave = function (e) {
-    var self = $(e.currentTarget)[this.type](this._options).data('bs.' + this.type)
-
-    if (this.timeout) clearTimeout(this.timeout)
-    if (!self.options.delay || !self.options.delay.hide) return self.hide()
-
-    self.hoverState = 'out'
-    this.timeout    = setTimeout(function() {
-      if (self.hoverState == 'out') self.hide()
-    }, self.options.delay.hide)
-  }
-
-  Tooltip.prototype.show = function () {
-    var e = $.Event('show.bs.'+ this.type)
-
-    if (this.hasContent() && this.enabled) {
-      this.$element.trigger(e)
-
-      if (e.isDefaultPrevented()) return
-
-      var $tip = this.tip()
-
-      this.setContent()
-
-      if (this.options.animation) $tip.addClass('fade')
-
-      var placement = typeof this.options.placement == 'function' ?
-        this.options.placement.call(this, $tip[0], this.$element[0]) :
-        this.options.placement
-
-      $tip
-        .detach()
-        .css({ top: 0, left: 0, display: 'block' })
-
-      this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
-
-      var tp
-      var pos          = this.getPosition()
-      var actualWidth  = $tip[0].offsetWidth
-      var actualHeight = $tip[0].offsetHeight
-
-      switch (placement) {
-        case 'bottom':
-          tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2}
-          break
-        case 'top':
-          tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2}
-          break
-        case 'left':
-          tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}
-          break
-        case 'right':
-          tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}
-          break
-      }
-
-      this.applyPlacement(tp, placement)
-      this.$element.trigger('shown.bs.' + this.type)
-    }
-  }
-
-  Tooltip.prototype.applyPlacement = function(offset, placement) {
-    var replace
-    var $tip   = this.tip()
-    var width  = $tip[0].offsetWidth
-    var height = $tip[0].offsetHeight
-
-    $tip
-      .offset(offset)
-      .addClass(placement)
-      .addClass('in')
-
-    var actualWidth  = $tip[0].offsetWidth
-    var actualHeight = $tip[0].offsetHeight
-
-    if (placement == 'top' && actualHeight != height) {
-      replace = true
-      offset.top  = offset.top + height - actualHeight
-    }
-
-    if (placement == 'bottom' || placement == 'top') {
-      var delta = 0
-
-      if (offset.left < 0){
-        delta       = offset.left * -2
-        offset.left = 0
-
-        $tip.offset(offset)
-
-        actualWidth  = $tip[0].offsetWidth
-        actualHeight = $tip[0].offsetHeight
-      }
-
-      this.replaceArrow(delta - width + actualWidth, actualWidth, 'left')
-    } else {
-      this.replaceArrow(actualHeight - height, actualHeight, 'top')
-    }
-
-    if (replace) $tip.offset(offset)
-  }
-
-  Tooltip.prototype.replaceArrow = function(delta, dimension, position) {
-    this.arrow().css(position, delta ? (50 * (1 - delta / dimension) + "%") : '')
-  }
-
-  Tooltip.prototype.setContent = function () {
-    var $tip  = this.tip()
-    var title = this.getTitle()
-
-    $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
-    $tip.removeClass('fade in top bottom left right')
-  }
-
-  Tooltip.prototype.hide = function () {
-    var that = this
-    var $tip = this.tip()
-    var e    = $.Event('hide.bs.' + this.type)
-
-    this.$element.trigger(e)
-
-    if (e.isDefaultPrevented()) return
-
-    $tip.removeClass('in')
-
-    function removeWithAnimation() {
-      var timeout = setTimeout(function () {
-        $tip.off($.support.transition.end).detach()
-      }, 500)
-
-      $tip.one($.support.transition.end, function () {
-        clearTimeout(timeout)
-        $tip.detach()
-      })
-    }
-
-    $.support.transition && this.$tip.hasClass('fade') ?
-      removeWithAnimation() :
-      $tip.detach()
-
-    this.$element.trigger('hidden.bs.' + this.type)
-
-    return this
-  }
-
-  Tooltip.prototype.fixTitle = function () {
-    var $e = this.$element
-    if ($e.attr('title') || typeof($e.attr('data-original-title')) != 'string') {
-      $e.attr('data-original-title', $e.attr('title') || '').attr('title', '')
-    }
-  }
-
-  Tooltip.prototype.hasContent = function () {
-    return this.getTitle()
-  }
-
-  Tooltip.prototype.getPosition = function () {
-    var el = this.$element[0]
-    return $.extend({}, (typeof el.getBoundingClientRect == 'function') ? el.getBoundingClientRect() : {
-      width: el.offsetWidth
-    , height: el.offsetHeight
-    }, this.$element.offset())
-  }
-
-  Tooltip.prototype.getTitle = function () {
-    var title
-    var $e = this.$element
-    var o  = this.options
-
-    title = $e.attr('data-original-title')
-      || (typeof o.title == 'function' ? o.title.call($e[0]) :  o.title)
-
-    return title
-  }
-
-  Tooltip.prototype.tip = function () {
-    return this.$tip = this.$tip || $(this.options.template)
-  }
-
-  Tooltip.prototype.arrow =function(){
-    return this.$arrow = this.$arrow || this.tip().find(".tooltip-arrow")
-  }
-
-  Tooltip.prototype.validate = function () {
-    if (!this.$element[0].parentNode) {
-      this.hide()
-      this.$element = null
-      this.options  = null
-    }
-  }
-
-  Tooltip.prototype.enable = function () {
-    this.enabled = true
-  }
-
-  Tooltip.prototype.disable = function () {
-    this.enabled = false
-  }
-
-  Tooltip.prototype.toggleEnabled = function () {
-    this.enabled = !this.enabled
-  }
-
-  Tooltip.prototype.toggle = function (e) {
-    var self = e ? $(e.currentTarget)[this.type](this._options).data('bs.' + this.type) : this
-    self.tip().hasClass('in') ? self.hide() : self.show()
-  }
-
-  Tooltip.prototype.destroy = function () {
-    this.hide().$element.off('.' + this.type).removeData('bs.' + this.type)
+    this.$element.removeClass(reset).addClass('affix' + (affix ? '-' + affix : ''))
   }
 
 
-  // TOOLTIP PLUGIN DEFINITION
-  // =========================
+  // AFFIX PLUGIN DEFINITION
+  // =======================
 
-  var old = $.fn.tooltip
+  var old = $.fn.affix
 
-  $.fn.tooltip = function (option) {
+  $.fn.affix = function (option) {
     return this.each(function () {
       var $this   = $(this)
-      var data    = $this.data('bs.tooltip')
+      var data    = $this.data('bs.affix')
       var options = typeof option == 'object' && option
 
-      if (!data) $this.data('bs.tooltip', (data = new Tooltip(this, options)))
+      if (!data) $this.data('bs.affix', (data = new Affix(this, options)))
       if (typeof option == 'string') data[option]()
     })
   }
 
-  $.fn.tooltip.Constructor = Tooltip
+  $.fn.affix.Constructor = Affix
 
 
-  // TOOLTIP NO CONFLICT
-  // ===================
+  // AFFIX NO CONFLICT
+  // =================
 
-  $.fn.tooltip.noConflict = function () {
-    $.fn.tooltip = old
+  $.fn.affix.noConflict = function () {
+    $.fn.affix = old
     return this
   }
 
-}(window.jQuery);
-;/* ========================================================================
- * Bootstrap: transition.js v3.0.0
- * http://twitter.github.com/bootstrap/javascript.html#transitions
- * ========================================================================
- * Copyright 2013 Twitter, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ======================================================================== */
 
+  // AFFIX DATA-API
+  // ==============
 
-+function ($) { "use strict";
+  $(window).on('load', function () {
+    $('[data-spy="affix"]').each(function () {
+      var $spy = $(this)
+      var data = $spy.data()
 
-  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
-  // ============================================================
+      data.offset = data.offset || {}
 
-  function transitionEnd() {
-    var el = document.createElement('bootstrap')
+      if (data.offsetBottom) data.offset.bottom = data.offsetBottom
+      if (data.offsetTop)    data.offset.top    = data.offsetTop
 
-    var transEndEventNames = {
-      'WebkitTransition' : 'webkitTransitionEnd'
-    , 'MozTransition'    : 'transitionend'
-    , 'OTransition'      : 'oTransitionEnd otransitionend'
-    , 'transition'       : 'transitionend'
-    }
-
-    for (var name in transEndEventNames) {
-      if (el.style[name] !== undefined) {
-        return { end: transEndEventNames[name] }
-      }
-    }
-  }
-
-  $(function () {
-    $.support.transition = transitionEnd()
+      $spy.affix(data)
+    })
   })
 
 }(window.jQuery);
@@ -2642,7 +2642,160 @@
       return JSON3;
     });
   }
-}).call(this);;//     Underscore.js 1.4.4
+}).call(this);;;(function(){
+	var store = {},
+		win = window,
+		doc = win.document,
+		localStorageName = 'localStorage',
+		namespace = '__storejs__',
+		storage
+
+	store.disabled = false
+	store.set = function(key, value) {}
+	store.get = function(key) {}
+	store.remove = function(key) {}
+	store.clear = function() {}
+	store.transact = function(key, defaultVal, transactionFn) {
+		var val = store.get(key)
+		if (transactionFn == null) {
+			transactionFn = defaultVal
+			defaultVal = null
+		}
+		if (typeof val == 'undefined') { val = defaultVal || {} }
+		transactionFn(val)
+		store.set(key, val)
+	}
+	store.getAll = function() {}
+
+	store.serialize = function(value) {
+		return JSON.stringify(value)
+	}
+	store.deserialize = function(value) {
+		if (typeof value != 'string') { return undefined }
+		try { return JSON.parse(value) }
+		catch(e) { return value || undefined }
+	}
+
+	// Functions to encapsulate questionable FireFox 3.6.13 behavior
+	// when about.config::dom.storage.enabled === false
+	// See https://github.com/marcuswestin/store.js/issues#issue/13
+	function isLocalStorageNameSupported() {
+		try { return (localStorageName in win && win[localStorageName]) }
+		catch(err) { return false }
+	}
+
+	if (isLocalStorageNameSupported()) {
+		storage = win[localStorageName]
+		store.set = function(key, val) {
+			if (val === undefined) { return store.remove(key) }
+			storage.setItem(key, store.serialize(val))
+			return val
+		}
+		store.get = function(key) { return store.deserialize(storage.getItem(key)) }
+		store.remove = function(key) { storage.removeItem(key) }
+		store.clear = function() { storage.clear() }
+		store.getAll = function() {
+			var ret = {}
+			for (var i=0; i<storage.length; ++i) {
+				var key = storage.key(i)
+				ret[key] = store.get(key)
+			}
+			return ret
+		}
+	} else if (doc.documentElement.addBehavior) {
+		var storageOwner,
+			storageContainer
+		// Since #userData storage applies only to specific paths, we need to
+		// somehow link our data to a specific path.  We choose /favicon.ico
+		// as a pretty safe option, since all browsers already make a request to
+		// this URL anyway and being a 404 will not hurt us here.  We wrap an
+		// iframe pointing to the favicon in an ActiveXObject(htmlfile) object
+		// (see: http://msdn.microsoft.com/en-us/library/aa752574(v=VS.85).aspx)
+		// since the iframe access rules appear to allow direct access and
+		// manipulation of the document element, even for a 404 page.  This
+		// document can be used instead of the current document (which would
+		// have been limited to the current path) to perform #userData storage.
+		try {
+			storageContainer = new ActiveXObject('htmlfile')
+			storageContainer.open()
+			storageContainer.write('<s' + 'cript>document.w=window</s' + 'cript><iframe src="/favicon.ico"></iframe>')
+			storageContainer.close()
+			storageOwner = storageContainer.w.frames[0].document
+			storage = storageOwner.createElement('div')
+		} catch(e) {
+			// somehow ActiveXObject instantiation failed (perhaps some special
+			// security settings or otherwse), fall back to per-path storage
+			storage = doc.createElement('div')
+			storageOwner = doc.body
+		}
+		function withIEStorage(storeFunction) {
+			return function() {
+				var args = Array.prototype.slice.call(arguments, 0)
+				args.unshift(storage)
+				// See http://msdn.microsoft.com/en-us/library/ms531081(v=VS.85).aspx
+				// and http://msdn.microsoft.com/en-us/library/ms531424(v=VS.85).aspx
+				storageOwner.appendChild(storage)
+				storage.addBehavior('#default#userData')
+				storage.load(localStorageName)
+				var result = storeFunction.apply(store, args)
+				storageOwner.removeChild(storage)
+				return result
+			}
+		}
+
+		// In IE7, keys may not contain special chars. See all of https://github.com/marcuswestin/store.js/issues/40
+		var forbiddenCharsRegex = new RegExp("[!\"#$%&'()*+,/\\\\:;<=>?@[\\]^`{|}~]", "g")
+		function ieKeyFix(key) {
+			return key.replace(forbiddenCharsRegex, '___')
+		}
+		store.set = withIEStorage(function(storage, key, val) {
+			key = ieKeyFix(key)
+			if (val === undefined) { return store.remove(key) }
+			storage.setAttribute(key, store.serialize(val))
+			storage.save(localStorageName)
+			return val
+		})
+		store.get = withIEStorage(function(storage, key) {
+			key = ieKeyFix(key)
+			return store.deserialize(storage.getAttribute(key))
+		})
+		store.remove = withIEStorage(function(storage, key) {
+			key = ieKeyFix(key)
+			storage.removeAttribute(key)
+			storage.save(localStorageName)
+		})
+		store.clear = withIEStorage(function(storage) {
+			var attributes = storage.XMLDocument.documentElement.attributes
+			storage.load(localStorageName)
+			for (var i=0, attr; attr=attributes[i]; i++) {
+				storage.removeAttribute(attr.name)
+			}
+			storage.save(localStorageName)
+		})
+		store.getAll = withIEStorage(function(storage) {
+			var attributes = storage.XMLDocument.documentElement.attributes
+			var ret = {}
+			for (var i=0, attr; attr=attributes[i]; ++i) {
+				var key = ieKeyFix(attr.name)
+				ret[attr.name] = store.deserialize(storage.getAttribute(key))
+			}
+			return ret
+		})
+	}
+
+	try {
+		store.set(namespace, namespace)
+		if (store.get(namespace) != namespace) { store.disabled = true }
+		store.remove(namespace)
+	} catch(e) {
+		store.disabled = true
+	}
+	store.enabled = !store.disabled
+	if (typeof module != 'undefined' && module.exports) { module.exports = store }
+	else if (typeof define === 'function' && define.amd) { define(store) }
+	else { this.store = store }
+})();
+;//     Underscore.js 1.4.4
 //     http://underscorejs.org
 //     (c) 2009-2013 Jeremy Ashkenas, DocumentCloud Inc.
 //     Underscore may be freely distributed under the MIT license.
@@ -5439,2048 +5592,1327 @@
   };
 
 }).call(this);
-;/** vim: et:ts=4:sw=4:sts=4
- * @license RequireJS 2.1.6 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
- * Available via the MIT or new BSD license.
- * see: http://github.com/jrburke/requirejs for details
- */
-//Not using strict: uneven strict support in browsers, #392, and causes
-//problems with requirejs.exec()/transpiler plugins that may not be strict.
-/*jslint regexp: true, nomen: true, sloppy: true */
-/*global window, navigator, document, importScripts, setTimeout, opera */
+;/*
+ * Parsley.js allows you to verify your form inputs frontend side, without writing a line of javascript. Or so..
+ *
+ * Author: Guillaume Potier - @guillaumepotier
+*/
 
-var requirejs, require, define;
-(function (global) {
-    var req, s, head, baseElement, dataMain, src,
-        interactiveScript, currentlyAddingScript, mainScript, subPath,
-        version = '2.1.6',
-        commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg,
-        cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,
-        jsSuffixRegExp = /\.js$/,
-        currDirRegExp = /^\.\//,
-        op = Object.prototype,
-        ostring = op.toString,
-        hasOwn = op.hasOwnProperty,
-        ap = Array.prototype,
-        apsp = ap.splice,
-        isBrowser = !!(typeof window !== 'undefined' && navigator && window.document),
-        isWebWorker = !isBrowser && typeof importScripts !== 'undefined',
-        //PS3 indicates loaded and complete, but need to wait for complete
-        //specifically. Sequence is 'loading', 'loaded', execution,
-        // then 'complete'. The UA check is unfortunate, but not sure how
-        //to feature test w/o causing perf issues.
-        readyRegExp = isBrowser && navigator.platform === 'PLAYSTATION 3' ?
-                      /^complete$/ : /^(complete|loaded)$/,
-        defContextName = '_',
-        //Oh the tragedy, detecting opera. See the usage of isOpera for reason.
-        isOpera = typeof opera !== 'undefined' && opera.toString() === '[object Opera]',
-        contexts = {},
-        cfg = {},
-        globalDefQueue = [],
-        useInteractive = false;
+!function ($) {
 
-    function isFunction(it) {
-        return ostring.call(it) === '[object Function]';
-    }
+  'use strict';
 
-    function isArray(it) {
-        return ostring.call(it) === '[object Array]';
-    }
+  /**
+  * Validator class stores all constraints functions and associated messages.
+  * Provides public interface to add, remove or modify them
+  *
+  * @class Validator
+  * @constructor
+  */
+  var Validator = function ( options ) {
+    /**
+    * Error messages
+    *
+    * @property messages
+    * @type {Object}
+    */
+    this.messages = {
+        defaultMessage: "This value seems to be invalid."
+      , type: {
+            email:      "This value should be a valid email."
+          , url:        "This value should be a valid url."
+          , urlstrict:  "This value should be a valid url."
+          , number:     "This value should be a valid number."
+          , digits:     "This value should be digits."
+          , dateIso:    "This value should be a valid date (YYYY-MM-DD)."
+          , alphanum:   "This value should be alphanumeric."
+          , phone:      "This value should be a valid phone number."
+        }
+      , notnull:        "This value should not be null."
+      , notblank:       "This value should not be blank."
+      , required:       "This value is required."
+      , regexp:         "This value seems to be invalid."
+      , min:            "This value should be greater than or equal to %s."
+      , max:            "This value should be lower than or equal to %s."
+      , range:          "This value should be between %s and %s."
+      , minlength:      "This value is too short. It should have %s characters or more."
+      , maxlength:      "This value is too long. It should have %s characters or less."
+      , rangelength:    "This value length is invalid. It should be between %s and %s characters long."
+      , mincheck:       "You must select at least %s choices."
+      , maxcheck:       "You must select %s choices or less."
+      , rangecheck:     "You must select between %s and %s choices."
+      , equalto:        "This value should be the same."
+    },
+
+    this.init( options );
+  };
+
+  Validator.prototype = {
+
+    constructor: Validator
 
     /**
-     * Helper function for iterating over an array. If the func returns
-     * a true value, it will break out of the loop.
-     */
-    function each(ary, func) {
-        if (ary) {
-            var i;
-            for (i = 0; i < ary.length; i += 1) {
-                if (ary[i] && func(ary[i], i, ary)) {
-                    break;
-                }
+    * Validator list. Built-in validators functions
+    *
+    * @property validators
+    * @type {Object}
+    */
+    , validators: {
+      notnull: function ( val ) {
+        return val.length > 0;
+      }
+
+      , notblank: function ( val ) {
+        return 'string' === typeof val && '' !== val.replace( /^\s+/g, '' ).replace( /\s+$/g, '' );
+      }
+
+      // Works on all inputs. val is object for checkboxes
+      , required: function ( val ) {
+
+        // for checkboxes and select multiples. Check there is at least one required value
+        if ( 'object' === typeof val ) {
+          for ( var i in val ) {
+            if ( this.required( val[ i ] ) ) {
+              return true;
             }
+          }
+
+          return false;
         }
-    }
 
-    /**
-     * Helper function for iterating over an array backwards. If the func
-     * returns a true value, it will break out of the loop.
-     */
-    function eachReverse(ary, func) {
-        if (ary) {
-            var i;
-            for (i = ary.length - 1; i > -1; i -= 1) {
-                if (ary[i] && func(ary[i], i, ary)) {
-                    break;
-                }
-            }
+        return this.notnull( val ) && this.notblank( val );
+      }
+
+      , type: function ( val, type ) {
+        var regExp;
+
+        switch ( type ) {
+          case 'number':
+            regExp = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/;
+            break;
+          case 'digits':
+            regExp = /^\d+$/;
+            break;
+          case 'alphanum':
+            regExp = /^\w+$/;
+            break;
+          case 'email':
+            regExp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
+            break;
+          case 'url':
+            val = new RegExp( '(https?|s?ftp|git)', 'i' ).test( val ) ? val : 'http://' + val;
+            /* falls through */
+          case 'urlstrict':
+            regExp = /^(https?|s?ftp|git):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
+            break;
+          case 'dateIso':
+            regExp = /^(\d{4})\D?(0[1-9]|1[0-2])\D?([12]\d|0[1-9]|3[01])$/;
+            break;
+          case 'phone':
+            regExp = /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/;
+            break;
+          default:
+            return false;
         }
-    }
 
-    function hasProp(obj, prop) {
-        return hasOwn.call(obj, prop);
-    }
+        // test regExp if not null
+        return '' !== val ? regExp.test( val ) : false;
+      }
 
-    function getOwn(obj, prop) {
-        return hasProp(obj, prop) && obj[prop];
-    }
+      , regexp: function ( val, regExp, self ) {
+        return new RegExp( regExp, self.options.regexpFlag || '' ).test( val );
+      }
 
-    /**
-     * Cycles over properties in an object and calls a function for each
-     * property value. If the function returns a truthy value, then the
-     * iteration is stopped.
-     */
-    function eachProp(obj, func) {
-        var prop;
-        for (prop in obj) {
-            if (hasProp(obj, prop)) {
-                if (func(obj[prop], prop)) {
-                    break;
-                }
-            }
+      , minlength: function ( val, min ) {
+        return val.length >= min;
+      }
+
+      , maxlength: function ( val, max ) {
+        return val.length <= max;
+      }
+
+      , rangelength: function ( val, arrayRange ) {
+        return this.minlength( val, arrayRange[ 0 ] ) && this.maxlength( val, arrayRange[ 1 ] );
+      }
+
+      , min: function ( val, min ) {
+        return Number( val ) >= min;
+      }
+
+      , max: function ( val, max ) {
+        return Number( val ) <= max;
+      }
+
+      , range: function ( val, arrayRange ) {
+        return val >= arrayRange[ 0 ] && val <= arrayRange[ 1 ];
+      }
+
+      , equalto: function ( val, elem, self ) {
+        self.options.validateIfUnchanged = true;
+
+        return val === $( elem ).val();
+      }
+
+      , remote: function ( val, url, self ) {
+        var result = null
+          , data = {}
+          , dataType = {};
+
+        data[ self.$element.attr( 'name' ) ] = val;
+
+        if ( 'undefined' !== typeof self.options.remoteDatatype ) {
+          dataType = { dataType: self.options.remoteDatatype };
         }
-    }
 
-    /**
-     * Simple function to mix in properties from source into target,
-     * but only if target does not already have a property of the same name.
-     */
-    function mixin(target, source, force, deepStringMixin) {
-        if (source) {
-            eachProp(source, function (value, prop) {
-                if (force || !hasProp(target, prop)) {
-                    if (deepStringMixin && typeof value !== 'string') {
-                        if (!target[prop]) {
-                            target[prop] = {};
-                        }
-                        mixin(target[prop], value, force, deepStringMixin);
-                    } else {
-                        target[prop] = value;
-                    }
-                }
-            });
-        }
-        return target;
-    }
+        var manage = function ( isConstraintValid, message ) {
+          // remove error message if we got a server message, different from previous message
+          if ( 'undefined' !== typeof message && 'undefined' !== typeof self.Validator.messages.remote && message !== self.Validator.messages.remote ) {
+            $( self.ulError + ' .remote' ).remove();
+          }
 
-    //Similar to Function.prototype.bind, but the 'this' object is specified
-    //first, since it is easier to read/figure out what 'this' will be.
-    function bind(obj, fn) {
-        return function () {
-            return fn.apply(obj, arguments);
+          self.updtConstraint( { name: 'remote', valid: isConstraintValid }, message );
+          self.manageValidationResult();
         };
-    }
 
-    function scripts() {
-        return document.getElementsByTagName('script');
-    }
+        // transform string response into object
+        var handleResponse = function ( response ) {
+          if ( 'object' === typeof response ) {
+            return response;
+          }
 
-    function defaultOnError(err) {
-        throw err;
-    }
+          try {
+            response = $.parseJSON( response );
+          } catch ( err ) {}
 
-    //Allow getting a global that expressed in
-    //dot notation, like 'a.b.c'.
-    function getGlobal(value) {
-        if (!value) {
-            return value;
+          return response;
         }
-        var g = global;
-        each(value.split('.'), function (part) {
-            g = g[part];
-        });
-        return g;
+
+        var manageErrorMessage = function ( response ) {
+          return 'object' === typeof response && null !== response ? ( 'undefined' !== typeof response.error ? response.error : ( 'undefined' !== typeof response.message ? response.message : null ) ) : null;
+        }
+
+        $.ajax( $.extend( {}, {
+            url: url
+          , data: data
+          , type: self.options.remoteMethod || 'GET'
+          , success: function ( response ) {
+            response = handleResponse( response );
+            manage( 1 === response || true === response || ( 'object' === typeof response && null !== response && 'undefined' !== typeof response.success ), manageErrorMessage( response )
+            );
+          }
+          , error: function ( response ) {
+            response = handleResponse( response );
+            manage( false, manageErrorMessage( response ) );
+          }
+        }, dataType ) );
+
+        return result;
+      }
+
+      /**
+      * Aliases for checkboxes constraints
+      */
+      , mincheck: function ( obj, val ) {
+        return this.minlength( obj, val );
+      }
+
+      , maxcheck: function ( obj, val ) {
+        return this.maxlength( obj, val);
+      }
+
+      , rangecheck: function ( obj, arrayRange ) {
+        return this.rangelength( obj, arrayRange );
+      }
+    }
+
+    /*
+    * Register custom validators and messages
+    */
+    , init: function ( options ) {
+      var customValidators = options.validators
+        , customMessages = options.messages;
+
+      var key;
+      for ( key in customValidators ) {
+        this.addValidator(key, customValidators[ key ]);
+      }
+
+      for ( key in customMessages ) {
+        this.addMessage(key, customMessages[ key ]);
+      }
     }
 
     /**
-     * Constructs an error with a pointer to an URL with more information.
-     * @param {String} id the error ID that maps to an ID on a web page.
-     * @param {String} message human readable error.
-     * @param {Error} [err] the original error, if there is one.
-     *
-     * @returns {Error}
-     */
-    function makeError(id, msg, err, requireModules) {
-        var e = new Error(msg + '\nhttp://requirejs.org/docs/errors.html#' + id);
-        e.requireType = id;
-        e.requireModules = requireModules;
-        if (err) {
-            e.originalError = err;
+    * Replace %s placeholders by values
+    *
+    * @method formatMesssage
+    * @param {String} message Message key
+    * @param {Mixed} args Args passed by validators functions. Could be string, number or object
+    * @return {String} Formatted string
+    */
+    , formatMesssage: function ( message, args ) {
+
+      if ( 'object' === typeof args ) {
+        for ( var i in args ) {
+          message = this.formatMesssage( message, args[ i ] );
         }
-        return e;
+
+        return message;
+      }
+
+      return 'string' === typeof message ? message.replace( new RegExp( '%s', 'i' ), args ) : '';
     }
 
-    if (typeof define !== 'undefined') {
-        //If a define is already in play via another AMD loader,
-        //do not overwrite.
+    /**
+    * Add / override a validator in validators list
+    *
+    * @method addValidator
+    * @param {String} name Validator name. Will automatically bindable through data-name=''
+    * @param {Function} fn Validator function. Must return {Boolean}
+    */
+    , addValidator: function ( name, fn ) {
+      this.validators[ name ] = fn;
+    }
+
+    /**
+    * Add / override error message
+    *
+    * @method addMessage
+    * @param {String} name Message name. Will automatically be binded to validator with same name
+    * @param {String} message Message
+    */
+    , addMessage: function ( key, message, type ) {
+
+      if ( 'undefined' !== typeof type && true === type ) {
+        this.messages.type[ key ] = message;
         return;
+      }
+
+      // custom types messages are a bit tricky cuz' nested ;)
+      if ( 'type' === key ) {
+        for ( var i in message ) {
+          this.messages.type[ i ] = message[ i ];
+        }
+
+        return;
+      }
+
+      this.messages[ key ] = message;
+    }
+  };
+
+  /**
+  * ParsleyField class manage each form field inside a validated Parsley form.
+  * Returns if field valid or not depending on its value and constraints
+  * Manage field error display and behavior, event triggers and more
+  *
+  * @class ParsleyField
+  * @constructor
+  */
+  var ParsleyField = function ( element, options, type ) {
+    this.options = options;
+    this.Validator = new Validator( options );
+
+    // if type is ParsleyFieldMultiple, just return this. used for clone
+    if ( type === 'ParsleyFieldMultiple' ) {
+      return this;
     }
 
-    if (typeof requirejs !== 'undefined') {
-        if (isFunction(requirejs)) {
-            //Do not overwrite and existing requirejs instance.
+    this.init( element, type || 'ParsleyField' );
+  };
+
+  ParsleyField.prototype = {
+
+    constructor: ParsleyField
+
+    /**
+    * Set some properties, bind constraint validators and validation events
+    *
+    * @method init
+    * @param {Object} element
+    * @param {Object} options
+    */
+    , init: function ( element, type ) {
+      this.type = type;
+      this.valid = true;
+      this.element = element;
+      this.validatedOnce = false;
+      this.$element = $( element );
+      this.val = this.$element.val();
+      this.isRequired = false;
+      this.constraints = {};
+
+      // overriden by ParsleyItemMultiple if radio or checkbox input
+      if ( 'undefined' === typeof this.isRadioOrCheckbox ) {
+        this.isRadioOrCheckbox = false;
+        this.hash = this.generateHash();
+        this.errorClassHandler = this.options.errors.classHandler( element, this.isRadioOrCheckbox ) || this.$element;
+      }
+
+      // error ul dom management done only once at init
+      this.ulErrorManagement();
+
+      // bind some html5 properties
+      this.bindHtml5Constraints();
+
+      // bind validators to field
+      this.addConstraints();
+
+      // bind parsley events if validators have been registered
+      if ( this.hasConstraints() ) {
+        this.bindValidationEvents();
+      }
+    }
+
+    , setParent: function ( elem ) {
+      this.$parent = $( elem );
+    }
+
+    , getParent: function () {
+      return this.$parent;
+    }
+
+    /**
+    * Bind some extra html5 types / validators
+    *
+    * @private
+    * @method bindHtml5Constraints
+    */
+    , bindHtml5Constraints: function () {
+      // add html5 required support + class required support
+      if ( this.$element.hasClass( 'required' ) || this.$element.prop( 'required' ) ) {
+        this.options.required = true;
+      }
+
+      // add html5 supported types & options
+      if ( 'undefined' !== typeof this.$element.attr( 'type' ) && new RegExp( this.$element.attr( 'type' ), 'i' ).test( 'email url number range' ) ) {
+        this.options.type = this.$element.attr( 'type' );
+
+        // number and range types could have min and/or max values
+        if ( new RegExp( this.options.type, 'i' ).test( 'number range' ) ) {
+          this.options.type = 'number';
+
+          // double condition to support jQuery and Zepto.. :(
+          if ( 'undefined' !== typeof this.$element.attr( 'min' ) && this.$element.attr( 'min' ).length ) {
+            this.options.min = this.$element.attr( 'min' );
+          }
+
+          if ( 'undefined' !== typeof this.$element.attr( 'max' ) && this.$element.attr( 'max' ).length ) {
+            this.options.max = this.$element.attr( 'max' );
+          }
+        }
+      }
+
+      if ( 'string' === typeof this.$element.attr( 'pattern' ) && this.$element.attr( 'pattern' ).length ) {
+          this.options.regexp = this.$element.attr( 'pattern' );
+      }
+
+    }
+
+    /**
+    * Attach field validators functions passed through data-api
+    *
+    * @private
+    * @method addConstraints
+    */
+    , addConstraints: function () {
+      for ( var constraint in this.options ) {
+        var addConstraint = {};
+        addConstraint[ constraint ] = this.options[ constraint ];
+        this.addConstraint( addConstraint, true );
+      }
+    }
+
+    /**
+    * Dynamically add a new constraint to a field
+    *
+    * @method addConstraint
+    * @param {Object} constraint { name: requirements }
+    */
+    , addConstraint: function ( constraint, doNotUpdateValidationEvents ) {
+        for ( var name in constraint ) {
+          name = name.toLowerCase();
+
+          if ( 'function' === typeof this.Validator.validators[ name ] ) {
+            this.constraints[ name ] = {
+                name: name
+              , requirements: constraint[ name ]
+              , valid: null
+            }
+
+            if ( name === 'required' ) {
+              this.isRequired = true;
+            }
+
+            this.addCustomConstraintMessage( name );
+          }
+        }
+
+        // force field validation next check and reset validation events
+        if ( 'undefined' === typeof doNotUpdateValidationEvents ) {
+          this.bindValidationEvents();
+        }
+    }
+
+    /**
+    * Dynamically update an existing constraint to a field.
+    * Simple API: { name: requirements }
+    *
+    * @method updtConstraint
+    * @param {Object} constraint
+    */
+    , updateConstraint: function ( constraint, message ) {
+      for ( var name in constraint ) {
+        this.updtConstraint( { name: name, requirements: constraint[ name ], valid: null }, message );
+      }
+    }
+
+    /**
+    * Dynamically update an existing constraint to a field.
+    * Complex API: { name: name, requirements: requirements, valid: boolean }
+    *
+    * @method updtConstraint
+    * @param {Object} constraint
+    */
+    , updtConstraint: function ( constraint, message ) {
+      this.constraints[ constraint.name ] = $.extend( true, this.constraints[ constraint.name ], constraint );
+
+      if ( 'string' === typeof message ) {
+        this.Validator.messages[ constraint.name ] = message ;
+      }
+
+      // force field validation next check and reset validation events
+      this.bindValidationEvents();
+    }
+
+    /**
+    * Dynamically remove an existing constraint to a field.
+    *
+    * @method removeConstraint
+    * @param {String} constraintName
+    */
+    , removeConstraint: function ( constraintName ) {
+      var constraintName = constraintName.toLowerCase();
+
+      delete this.constraints[ constraintName ];
+
+      if ( constraintName === 'required' ) {
+        this.isRequired = false;
+      }
+
+      // if there are no more constraint, destroy parsley instance for this field
+      if ( !this.hasConstraints() ) {
+        // in a form context, remove item from parent
+        if ( 'ParsleyForm' === typeof this.getParent() ) {
+          this.getParent().removeItem( this.$element );
+          return;
+        }
+
+        this.destroy();
+        return;
+      }
+
+      this.bindValidationEvents();
+    }
+
+    /**
+    * Add custom constraint message, passed through data-API
+    *
+    * @private
+    * @method addCustomConstraintMessage
+    * @param constraint
+    */
+    , addCustomConstraintMessage: function ( constraint ) {
+      // custom message type data-type-email-message -> typeEmailMessage | data-minlength-error => minlengthMessage
+      var customMessage = constraint
+        + ( 'type' === constraint && 'undefined' !== typeof this.options[ constraint ] ? this.options[ constraint ].charAt( 0 ).toUpperCase() + this.options[ constraint ].substr( 1 ) : '' )
+        + 'Message';
+
+      if ( 'undefined' !== typeof this.options[ customMessage ] ) {
+        this.Validator.addMessage( 'type' === constraint ? this.options[ constraint ] : constraint, this.options[ customMessage ], 'type' === constraint );
+      }
+    }
+
+    /**
+    * Bind validation events on a field
+    *
+    * @private
+    * @method bindValidationEvents
+    */
+    , bindValidationEvents: function () {
+      // this field has validation events, that means it has to be validated
+      this.valid = null;
+      this.$element.addClass( 'parsley-validated' );
+
+      // remove eventually already binded events
+      this.$element.off( '.' + this.type );
+
+      // force add 'change' event if async remote validator here to have result before form submitting
+      if ( this.options.remote && !new RegExp( 'change', 'i' ).test( this.options.trigger ) ) {
+        this.options.trigger = !this.options.trigger ? 'change' : ' change';
+      }
+
+      // alaways bind keyup event, for better UX when a field is invalid
+      var triggers = ( !this.options.trigger ? '' : this.options.trigger )
+        + ( new RegExp( 'key', 'i' ).test( this.options.trigger ) ? '' : ' keyup' );
+
+      // alaways bind change event, for better UX when a select is invalid
+      if ( this.$element.is( 'select' ) ) {
+        triggers += new RegExp( 'change', 'i' ).test( triggers ) ? '' : ' change';
+      }
+
+      // trim triggers to bind them correctly with .on()
+      triggers = triggers.replace( /^\s+/g , '' ).replace( /\s+$/g , '' );
+
+      this.$element.on( ( triggers + ' ' ).split( ' ' ).join( '.' + this.type + ' ' ), false, $.proxy( this.eventValidation, this ) );
+    }
+
+    /**
+    * Hash management. Used for ul error
+    *
+    * @method generateHash
+    * @returns {String} 5 letters unique hash
+    */
+    , generateHash: function () {
+      return 'parsley-' + ( Math.random() + '' ).substring( 2 );
+    }
+
+    /**
+    * Public getHash accessor
+    *
+    * @method getHash
+    * @returns {String} hash
+    */
+    , getHash: function () {
+      return this.hash;
+    }
+
+    /**
+    * Returns field val needed for validation
+    * Special treatment for radio & checkboxes
+    *
+    * @method getVal
+    * @returns {String} val
+    */
+    , getVal: function () {
+      return this.$element.data('value') || this.$element.val();
+    }
+
+    /**
+    * Called when validation is triggered by an event
+    * Do nothing if val.length < this.options.validationMinlength
+    *
+    * @method eventValidation
+    * @param {Object} event jQuery event
+    */
+    , eventValidation: function ( event ) {
+      var val = this.getVal();
+
+      // do nothing on keypress event if not explicitely passed as data-trigger and if field has not already been validated once
+      if ( event.type === 'keyup' && !/keyup/i.test( this.options.trigger ) && !this.validatedOnce ) {
+        return true;
+      }
+
+      // do nothing on change event if not explicitely passed as data-trigger and if field has not already been validated once
+      if ( event.type === 'change' && !/change/i.test( this.options.trigger ) && !this.validatedOnce ) {
+        return true;
+      }
+
+      // start validation process only if field has enough chars and validation never started
+      if ( !this.isRadioOrCheckbox && val.length < this.options.validationMinlength && !this.validatedOnce ) {
+        return true;
+      }
+
+      this.validate();
+    }
+
+    /**
+    * Return if field verify its constraints
+    *
+    * @method isValid
+    * @return {Boolean} Is field valid or not
+    */
+    , isValid: function () {
+      return this.validate( false );
+    }
+
+    /**
+    * Return if field has constraints
+    *
+    * @method hasConstraints
+    * @return {Boolean} Is field has constraints or not
+    */
+    , hasConstraints: function () {
+      for ( var constraint in this.constraints ) {
+        return true;
+      }
+
+      return false;
+    }
+
+    /**
+    * Validate a field & display errors
+    *
+    * @method validate
+    * @param {Boolean} errorBubbling set to false if you just want valid boolean without error bubbling next to fields
+    * @return {Boolean} Is field valid or not
+    */
+    , validate: function ( errorBubbling ) {
+      var val = this.getVal()
+        , valid = null;
+
+      // do not even bother trying validating a field w/o constraints
+      if ( !this.hasConstraints() ) {
+        return null;
+      }
+
+      // reset Parsley validation if onFieldValidate returns true, or if field is empty and not required
+      if ( this.options.listeners.onFieldValidate( this.element, this ) || ( '' === val && !this.isRequired ) ) {
+        this.reset();
+        return null;
+      }
+
+      // do not validate a field already validated and unchanged !
+      if ( !this.needsValidation( val ) ) {
+        return this.valid;
+      }
+
+      valid = this.applyValidators();
+
+      if ( 'undefined' !== typeof errorBubbling ? errorBubbling : this.options.showErrors ) {
+        this.manageValidationResult();
+      }
+
+      return valid;
+    }
+
+    /**
+    * Check if value has changed since previous validation
+    *
+    * @method needsValidation
+    * @param value
+    * @return {Boolean}
+    */
+    , needsValidation: function ( val ) {
+      if ( !this.options.validateIfUnchanged && this.valid !== null && this.val === val && this.validatedOnce ) {
+        return false;
+      }
+
+      this.val = val;
+      return this.validatedOnce = true;
+    }
+
+    /**
+    * Loop through every fields validators
+    * Adds errors after unvalid fields
+    *
+    * @method applyValidators
+    * @return {Mixed} {Boolean} If field valid or not, null if not validated
+    */
+    , applyValidators: function () {
+      var valid = null;
+
+      for ( var constraint in this.constraints ) {
+        var result = this.Validator.validators[ this.constraints[ constraint ].name ]( this.val, this.constraints[ constraint ].requirements, this );
+
+        if ( false === result ) {
+          valid = false;
+          this.constraints[ constraint ].valid = valid;
+          this.options.listeners.onFieldError( this.element, this.constraints, this );
+        } else if ( true === result ) {
+          this.constraints[ constraint ].valid = true;
+          valid = false !== valid;
+          this.options.listeners.onFieldSuccess( this.element, this.constraints, this );
+        }
+      }
+
+      return valid;
+    }
+
+    /**
+    * Fired when all validators have be executed
+    * Returns true or false if field is valid or not
+    * Display errors messages below failed fields
+    * Adds parsley-success or parsley-error class on fields
+    *
+    * @method manageValidationResult
+    * @return {Boolean} Is field valid or not
+    */
+    , manageValidationResult: function () {
+      var valid = null;
+
+      for ( var constraint in this.constraints ) {
+        if ( false === this.constraints[ constraint ].valid ) {
+          this.manageError( this.constraints[ constraint ] );
+          valid = false;
+        } else if ( true === this.constraints[ constraint ].valid ) {
+          this.removeError( this.constraints[ constraint ].name );
+          valid = false !== valid;
+        }
+      }
+
+      this.valid = valid;
+
+      if ( true === this.valid ) {
+        this.removeErrors();
+        this.errorClassHandler.removeClass( this.options.errorClass ).addClass( this.options.successClass );
+        return true;
+      } else if ( false === this.valid ) {
+        this.errorClassHandler.removeClass( this.options.successClass ).addClass( this.options.errorClass );
+        return false;
+      }
+
+      return valid;
+    }
+
+    /**
+    * Manage ul error Container
+    *
+    * @private
+    * @method ulErrorManagement
+    */
+    , ulErrorManagement: function () {
+      this.ulError = '#' + this.hash;
+      this.ulTemplate = $( this.options.errors.errorsWrapper ).attr( 'id', this.hash ).addClass( 'parsley-error-list' );
+    }
+
+    /**
+    * Remove li / ul error
+    *
+    * @method removeError
+    * @param {String} constraintName Method Name
+    */
+    , removeError: function ( constraintName ) {
+      var liError = this.ulError + ' .' + constraintName
+        , that = this;
+
+      this.options.animate ? $( liError ).fadeOut( this.options.animateDuration, function () {
+        $( this ).remove();
+
+        if ( that.ulError && $( that.ulError ).children().length === 0 ) {
+          that.removeErrors();
+        } } ) : $( liError ).remove();
+
+      // remove li error, and ul error if no more li inside
+      if ( this.ulError && $( this.ulError ).children().length === 0 ) {
+        this.removeErrors();
+      }
+    }
+
+    /**
+    * Add li error
+    *
+    * @method addError
+    * @param {Object} { minlength: "error message for minlength constraint" }
+    */
+    , addError: function ( error ) {
+      for ( var constraint in error ) {
+        var liTemplate = $( this.options.errors.errorElem ).addClass( constraint );
+
+        $( this.ulError ).append( this.options.animate ? $( liTemplate ).html( error[ constraint ] ).hide().fadeIn( this.options.animateDuration ) : $( liTemplate ).html( error[ constraint ] ) );
+      }
+    }
+
+    /**
+    * Remove all ul / li errors
+    *
+    * @method removeErrors
+    */
+    , removeErrors: function () {
+      this.options.animate ? $( this.ulError ).fadeOut( this.options.animateDuration, function () { $( this ).remove(); } ) : $( this.ulError ).remove();
+    }
+
+    /**
+    * Remove ul errors and parsley error or success classes
+    *
+    * @method reset
+    */
+    , reset: function () {
+      this.valid = null;
+      this.removeErrors();
+      this.validatedOnce = false;
+      this.errorClassHandler.removeClass( this.options.successClass ).removeClass( this.options.errorClass );
+
+      for ( var constraint in this.constraints ) {
+        this.constraints[ constraint ].valid = null;
+      }
+
+      return this;
+    }
+
+    /**
+    * Add li / ul errors messages
+    *
+    * @method manageError
+    * @param {Object} constraint
+    */
+    , manageError: function ( constraint ) {
+      // display ulError container if it has been removed previously (or never shown)
+      if ( !$( this.ulError ).length ) {
+        this.manageErrorContainer();
+      }
+
+      // TODO: refacto properly
+      // if required constraint but field is not null, do not display
+      if ( 'required' === constraint.name && null !== this.getVal() && this.getVal().length > 0 ) {
+        return;
+      // if empty required field and non required constraint fails, do not display
+      } else if ( this.isRequired && 'required' !== constraint.name && ( null === this.getVal() || 0 === this.getVal().length ) ) {
+        return;
+      }
+
+      // TODO: refacto error name w/ proper & readable function
+      var constraintName = constraint.name
+        , liClass = false !== this.options.errorMessage ? 'custom-error-message' : constraintName
+        , liError = {}
+        , message = false !== this.options.errorMessage ? this.options.errorMessage : ( constraint.name === 'type' ?
+            this.Validator.messages[ constraintName ][ constraint.requirements ] : ( 'undefined' === typeof this.Validator.messages[ constraintName ] ?
+              this.Validator.messages.defaultMessage : this.Validator.formatMesssage( this.Validator.messages[ constraintName ], constraint.requirements ) ) );
+
+      // add liError if not shown. Do not add more than once custom errorMessage if exist
+      if ( !$( this.ulError + ' .' + liClass ).length ) {
+        liError[ liClass ] = message;
+        this.addError( liError );
+      }
+    }
+
+    /**
+    * Create ul error container
+    *
+    * @method manageErrorContainer
+    */
+    , manageErrorContainer: function () {
+      var errorContainer = this.options.errorContainer || this.options.errors.container( this.element, this.isRadioOrCheckbox )
+        , ulTemplate = this.options.animate ? this.ulTemplate.show() : this.ulTemplate;
+
+      if ( 'undefined' !== typeof errorContainer ) {
+        $( errorContainer ).append( ulTemplate );
+        return;
+      }
+
+      !this.isRadioOrCheckbox ? this.$element.after( ulTemplate ) : this.$element.parent().after( ulTemplate );
+    }
+
+    /**
+    * Add custom listeners
+    *
+    * @param {Object} { listener: function () {} }, eg { onFormSubmit: function ( valid, event, focus ) { ... } }
+    */
+    , addListener: function ( object ) {
+      for ( var listener in object ) {
+        this.options.listeners[ listener ] = object[ listener ];
+      }
+    }
+
+    /**
+    * Destroy parsley field instance
+    *
+    * @private
+    * @method destroy
+    */
+    , destroy: function () {
+      this.$element.removeClass( 'parsley-validated' );
+      this.reset().$element.off( '.' + this.type ).removeData( this.type );
+    }
+  };
+
+  /**
+  * ParsleyFieldMultiple override ParsleyField for checkbox and radio inputs
+  * Pseudo-heritance to manage divergent behavior from ParsleyItem in dedicated methods
+  *
+  * @class ParsleyFieldMultiple
+  * @constructor
+  */
+  var ParsleyFieldMultiple = function ( element, options, type ) {
+    this.initMultiple( element, options );
+    this.inherit( element, options );
+    this.Validator = new Validator( options );
+
+    // call ParsleyField constructor
+    this.init( element, type || 'ParsleyFieldMultiple' );
+  };
+
+  ParsleyFieldMultiple.prototype = {
+
+    constructor: ParsleyFieldMultiple
+
+    /**
+    * Set some specific properties, call some extra methods to manage radio / checkbox
+    *
+    * @method init
+    * @param {Object} element
+    * @param {Object} options
+    */
+    , initMultiple: function ( element, options ) {
+      this.element = element;
+      this.$element = $( element );
+      this.group = options.group || false;
+      this.hash = this.getName();
+      this.siblings = this.group ? '[data-group="' + this.group + '"]' : 'input[name="' + this.$element.attr( 'name' ) + '"]';
+      this.isRadioOrCheckbox = true;
+      this.isRadio = this.$element.is( 'input[type=radio]' );
+      this.isCheckbox = this.$element.is( 'input[type=checkbox]' );
+      this.errorClassHandler = options.errors.classHandler( element, this.isRadioOrCheckbox ) || this.$element.parent();
+    }
+
+    /**
+    * Set specific constraints messages, do pseudo-heritance
+    *
+    * @private
+    * @method inherit
+    * @param {Object} element
+    * @param {Object} options
+    */
+    , inherit: function ( element, options ) {
+      var clone = new ParsleyField( element, options, 'ParsleyFieldMultiple' );
+
+      for ( var property in clone ) {
+        if ( 'undefined' === typeof this[ property ] ) {
+          this[ property ] = clone [ property ];
+        }
+      }
+    }
+
+    /**
+    * Set specific constraints messages, do pseudo-heritance
+    *
+    * @method getName
+    * @returns {String} radio / checkbox hash is cleaned 'name' or data-group property
+    */
+   , getName: function () {
+     if ( this.group ) {
+       return 'parsley-' + this.group;
+     }
+
+     if ( 'undefined' === typeof this.$element.attr( 'name' ) ) {
+       throw "A radio / checkbox input must have a data-group attribute or a name to be Parsley validated !";
+     }
+
+     return 'parsley-' + this.$element.attr( 'name' ).replace( /(:|\.|\[|\])/g, '' );
+   }
+
+   /**
+   * Special treatment for radio & checkboxes
+   * Returns checked radio or checkboxes values
+   *
+   * @method getVal
+   * @returns {String} val
+   */
+   , getVal: function () {
+      if ( this.isRadio ) {
+        return $( this.siblings + ':checked' ).val() || '';
+      }
+
+      if ( this.isCheckbox ) {
+        var values = [];
+
+        $( this.siblings + ':checked' ).each( function () {
+          values.push( $( this ).val() );
+        } );
+
+        return values;
+      }
+   }
+
+   /**
+   * Bind validation events on a field
+   *
+   * @private
+   * @method bindValidationEvents
+   */
+   , bindValidationEvents: function () {
+     // this field has validation events, that means it has to be validated
+     this.valid = null;
+     this.$element.addClass( 'parsley-validated' );
+
+     // remove eventually already binded events
+     this.$element.off( '.' + this.type );
+
+      // alaways bind keyup event, for better UX when a field is invalid
+      var self = this
+        , triggers = ( !this.options.trigger ? '' : this.options.trigger )
+        + ( new RegExp( 'change', 'i' ).test( this.options.trigger ) ? '' : ' change' );
+
+      // trim triggers to bind them correctly with .on()
+      triggers = triggers.replace( /^\s+/g , '' ).replace( /\s+$/g ,'' );
+
+     // bind trigger event on every siblings
+     $( this.siblings ).each(function () {
+       $( this ).on( triggers.split( ' ' ).join( '.' + self.type + ' ' ) , false, $.proxy( self.eventValidation, self ) );
+     } )
+   }
+  };
+
+  /**
+  * ParsleyForm class manage Parsley validated form.
+  * Manage its fields and global validation
+  *
+  * @class ParsleyForm
+  * @constructor
+  */
+  var ParsleyForm = function ( element, options, type ) {
+    this.init( element, options, type || 'parsleyForm' );
+  };
+
+  ParsleyForm.prototype = {
+
+    constructor: ParsleyForm
+
+    /* init data, bind jQuery on() actions */
+    , init: function ( element, options, type ) {
+      this.type = type;
+      this.items = [];
+      this.$element = $( element );
+      this.options = options;
+      var self = this;
+
+      this.$element.find( options.inputs ).each( function () {
+        self.addItem( this );
+      });
+
+      this.$element.on( 'submit.' + this.type , false, $.proxy( this.validate, this ) );
+    }
+
+    /**
+    * Add custom listeners
+    *
+    * @param {Object} { listener: function () {} }, eg { onFormSubmit: function ( valid, event, focus ) { ... } }
+    */
+    , addListener: function ( object ) {
+      for ( var listener in object ) {
+        if ( new RegExp( 'Field' ).test( listener ) ) {
+          for ( var item = 0; item < this.items.length; item++ ) {
+            this.items[ item ].addListener( object );
+          }
+        } else {
+          this.options.listeners[ listener ] = object[ listener ];
+        }
+      }
+    }
+
+    /**
+    * Adds a new parsleyItem child to ParsleyForm
+    *
+    * @method addItem
+    * @param elem
+    */
+    , addItem: function ( elem ) {
+      if ( $( elem ).is( this.options.excluded ) ) {
+        return false;
+      }
+
+      var ParsleyField = $( elem ).parsley( this.options );
+      ParsleyField.setParent( this );
+
+      this.items.push( ParsleyField );
+    }
+
+    /**
+    * Removes a parsleyItem child from ParsleyForm
+    *
+    * @method removeItem
+    * @param elem
+    * @return {Boolean}
+    */
+    , removeItem: function ( elem ) {
+      var parsleyItem = $( elem ).parsley();
+
+      // identify & remove item if same Parsley hash
+      for ( var i = 0; i < this.items.length; i++ ) {
+        if ( this.items[ i ].hash === parsleyItem.hash ) {
+          this.items[ i ].destroy();
+          this.items.splice( i, 1 );
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    /**
+    * Process each form field validation
+    * Display errors, call custom onFormSubmit() function
+    *
+    * @method validate
+    * @param {Object} event jQuery Event
+    * @return {Boolean} Is form valid or not
+    */
+    , validate: function ( event ) {
+      var valid = true;
+      this.focusedField = false;
+
+      for ( var item = 0; item < this.items.length; item++ ) {
+        if ( 'undefined' !== typeof this.items[ item ] && false === this.items[ item ].validate() ) {
+          valid = false;
+
+          if ( !this.focusedField && 'first' === this.options.focus || 'last' === this.options.focus ) {
+            this.focusedField = this.items[ item ].$element;
+          }
+        }
+      }
+
+      // form is invalid, focus an error field depending on focus policy
+      if ( this.focusedField && !valid ) {
+        this.focusedField.focus();
+      }
+
+      this.options.listeners.onFormSubmit( valid, event, this );
+
+      return valid;
+    }
+
+    , isValid: function () {
+      for ( var item = 0; item < this.items.length; item++ ) {
+        if ( false === this.items[ item ].isValid() ) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    /**
+    * Remove all errors ul under invalid fields
+    *
+    * @method removeErrors
+    */
+    , removeErrors: function () {
+      for ( var item = 0; item < this.items.length; item++ ) {
+        this.items[ item ].parsley( 'reset' );
+      }
+    }
+
+    /**
+    * destroy Parsley binded on the form and its fields
+    *
+    * @method destroy
+    */
+    , destroy: function () {
+      for ( var item = 0; item < this.items.length; item++ ) {
+        this.items[ item ].destroy();
+      }
+
+      this.$element.off( '.' + this.type ).removeData( this.type );
+    }
+
+    /**
+    * reset Parsley binded on the form and its fields
+    *
+    * @method reset
+    */
+    , reset: function () {
+      for ( var item = 0; item < this.items.length; item++ ) {
+        this.items[ item ].reset();
+      }
+    }
+  };
+
+  /**
+  * Parsley plugin definition
+  * Provides an interface to access public Validator, ParsleyForm and ParsleyField functions
+  *
+  * @class Parsley
+  * @constructor
+  * @param {Mixed} Options. {Object} to configure Parsley or {String} method name to call a public class method
+  * @param {Function} Callback function
+  * @return {Mixed} public class method return
+  */
+  $.fn.parsley = function ( option, fn ) {
+    var options = $.extend( true, {}, $.fn.parsley.defaults, 'undefined' !== typeof window.ParsleyConfig ? window.ParsleyConfig : {}, option, this.data() )
+      , newInstance = null;
+
+    function bind ( self, type ) {
+      var parsleyInstance = $( self ).data( type );
+
+      // if data never binded or we want to clone a build (for radio & checkboxes), bind it right now!
+      if ( !parsleyInstance ) {
+        switch ( type ) {
+          case 'parsleyForm':
+            parsleyInstance = new ParsleyForm( self, options, 'parsleyForm' );
+            break;
+          case 'parsleyField':
+            parsleyInstance = new ParsleyField( self, options, 'parsleyField' );
+            break;
+          case 'parsleyFieldMultiple':
+            parsleyInstance = new ParsleyFieldMultiple( self, options, 'parsleyFieldMultiple' );
+            break;
+          default:
             return;
         }
-        cfg = requirejs;
-        requirejs = undefined;
+
+        $( self ).data( type, parsleyInstance );
+      }
+
+      // here is our parsley public function accessor
+      if ( 'string' === typeof option && 'function' === typeof parsleyInstance[ option ] ) {
+        var response = parsleyInstance[ option ]( fn );
+
+        return 'undefined' !== typeof response ? response : $( self );
+      }
+
+      return parsleyInstance;
     }
 
-    //Allow for a require config object
-    if (typeof require !== 'undefined' && !isFunction(require)) {
-        //assume it is a config object.
-        cfg = require;
-        require = undefined;
+    // if a form elem is given, bind all its input children
+    if ( $( this ).is( 'form' ) ) {
+      newInstance = bind ( $( this ), 'parsleyForm' );
+
+    // if it is a Parsley supported single element, bind it too, except inputs type hidden
+    // add here a return instance, cuz' we could call public methods on single elems with data[ option ]() above
+    } else if ( $( this ).is( options.inputs ) && !$( this ).is( options.excluded ) ) {
+      newInstance = bind( $( this ), !$( this ).is( 'input[type=radio], input[type=checkbox]' ) ? 'parsleyField' : 'parsleyFieldMultiple' );
     }
 
-    function newContext(contextName) {
-        var inCheckLoaded, Module, context, handlers,
-            checkLoadedTimeoutId,
-            config = {
-                //Defaults. Do not set a default for map
-                //config to speed up normalize(), which
-                //will run faster if there is no default.
-                waitSeconds: 7,
-                baseUrl: './',
-                paths: {},
-                pkgs: {},
-                shim: {},
-                config: {}
-            },
-            registry = {},
-            //registry of just enabled modules, to speed
-            //cycle breaking code when lots of modules
-            //are registered, but not activated.
-            enabledRegistry = {},
-            undefEvents = {},
-            defQueue = [],
-            defined = {},
-            urlFetched = {},
-            requireCounter = 1,
-            unnormalizedCounter = 1;
-
-        /**
-         * Trims the . and .. from an array of path segments.
-         * It will keep a leading path segment if a .. will become
-         * the first path segment, to help with module name lookups,
-         * which act like paths, but can be remapped. But the end result,
-         * all paths that use this function should look normalized.
-         * NOTE: this method MODIFIES the input array.
-         * @param {Array} ary the array of path segments.
-         */
-        function trimDots(ary) {
-            var i, part;
-            for (i = 0; ary[i]; i += 1) {
-                part = ary[i];
-                if (part === '.') {
-                    ary.splice(i, 1);
-                    i -= 1;
-                } else if (part === '..') {
-                    if (i === 1 && (ary[2] === '..' || ary[0] === '..')) {
-                        //End of the line. Keep at least one non-dot
-                        //path segment at the front so it can be mapped
-                        //correctly to disk. Otherwise, there is likely
-                        //no path mapping for a path starting with '..'.
-                        //This can still fail, but catches the most reasonable
-                        //uses of ..
-                        break;
-                    } else if (i > 0) {
-                        ary.splice(i - 1, 2);
-                        i -= 2;
-                    }
-                }
-            }
-        }
-
-        /**
-         * Given a relative module name, like ./something, normalize it to
-         * a real name that can be mapped to a path.
-         * @param {String} name the relative name
-         * @param {String} baseName a real name that the name arg is relative
-         * to.
-         * @param {Boolean} applyMap apply the map config to the value. Should
-         * only be done if this normalization is for a dependency ID.
-         * @returns {String} normalized name
-         */
-        function normalize(name, baseName, applyMap) {
-            var pkgName, pkgConfig, mapValue, nameParts, i, j, nameSegment,
-                foundMap, foundI, foundStarMap, starI,
-                baseParts = baseName && baseName.split('/'),
-                normalizedBaseParts = baseParts,
-                map = config.map,
-                starMap = map && map['*'];
-
-            //Adjust any relative paths.
-            if (name && name.charAt(0) === '.') {
-                //If have a base name, try to normalize against it,
-                //otherwise, assume it is a top-level require that will
-                //be relative to baseUrl in the end.
-                if (baseName) {
-                    if (getOwn(config.pkgs, baseName)) {
-                        //If the baseName is a package name, then just treat it as one
-                        //name to concat the name with.
-                        normalizedBaseParts = baseParts = [baseName];
-                    } else {
-                        //Convert baseName to array, and lop off the last part,
-                        //so that . matches that 'directory' and not name of the baseName's
-                        //module. For instance, baseName of 'one/two/three', maps to
-                        //'one/two/three.js', but we want the directory, 'one/two' for
-                        //this normalization.
-                        normalizedBaseParts = baseParts.slice(0, baseParts.length - 1);
-                    }
-
-                    name = normalizedBaseParts.concat(name.split('/'));
-                    trimDots(name);
-
-                    //Some use of packages may use a . path to reference the
-                    //'main' module name, so normalize for that.
-                    pkgConfig = getOwn(config.pkgs, (pkgName = name[0]));
-                    name = name.join('/');
-                    if (pkgConfig && name === pkgName + '/' + pkgConfig.main) {
-                        name = pkgName;
-                    }
-                } else if (name.indexOf('./') === 0) {
-                    // No baseName, so this is ID is resolved relative
-                    // to baseUrl, pull off the leading dot.
-                    name = name.substring(2);
-                }
-            }
-
-            //Apply map config if available.
-            if (applyMap && map && (baseParts || starMap)) {
-                nameParts = name.split('/');
-
-                for (i = nameParts.length; i > 0; i -= 1) {
-                    nameSegment = nameParts.slice(0, i).join('/');
-
-                    if (baseParts) {
-                        //Find the longest baseName segment match in the config.
-                        //So, do joins on the biggest to smallest lengths of baseParts.
-                        for (j = baseParts.length; j > 0; j -= 1) {
-                            mapValue = getOwn(map, baseParts.slice(0, j).join('/'));
-
-                            //baseName segment has config, find if it has one for
-                            //this name.
-                            if (mapValue) {
-                                mapValue = getOwn(mapValue, nameSegment);
-                                if (mapValue) {
-                                    //Match, update name to the new value.
-                                    foundMap = mapValue;
-                                    foundI = i;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    if (foundMap) {
-                        break;
-                    }
-
-                    //Check for a star map match, but just hold on to it,
-                    //if there is a shorter segment match later in a matching
-                    //config, then favor over this star map.
-                    if (!foundStarMap && starMap && getOwn(starMap, nameSegment)) {
-                        foundStarMap = getOwn(starMap, nameSegment);
-                        starI = i;
-                    }
-                }
-
-                if (!foundMap && foundStarMap) {
-                    foundMap = foundStarMap;
-                    foundI = starI;
-                }
-
-                if (foundMap) {
-                    nameParts.splice(0, foundI, foundMap);
-                    name = nameParts.join('/');
-                }
-            }
-
-            return name;
-        }
-
-        function removeScript(name) {
-            if (isBrowser) {
-                each(scripts(), function (scriptNode) {
-                    if (scriptNode.getAttribute('data-requiremodule') === name &&
-                            scriptNode.getAttribute('data-requirecontext') === context.contextName) {
-                        scriptNode.parentNode.removeChild(scriptNode);
-                        return true;
-                    }
-                });
-            }
-        }
-
-        function hasPathFallback(id) {
-            var pathConfig = getOwn(config.paths, id);
-            if (pathConfig && isArray(pathConfig) && pathConfig.length > 1) {
-                removeScript(id);
-                //Pop off the first array value, since it failed, and
-                //retry
-                pathConfig.shift();
-                context.require.undef(id);
-                context.require([id]);
-                return true;
-            }
-        }
-
-        //Turns a plugin!resource to [plugin, resource]
-        //with the plugin being undefined if the name
-        //did not have a plugin prefix.
-        function splitPrefix(name) {
-            var prefix,
-                index = name ? name.indexOf('!') : -1;
-            if (index > -1) {
-                prefix = name.substring(0, index);
-                name = name.substring(index + 1, name.length);
-            }
-            return [prefix, name];
-        }
-
-        /**
-         * Creates a module mapping that includes plugin prefix, module
-         * name, and path. If parentModuleMap is provided it will
-         * also normalize the name via require.normalize()
-         *
-         * @param {String} name the module name
-         * @param {String} [parentModuleMap] parent module map
-         * for the module name, used to resolve relative names.
-         * @param {Boolean} isNormalized: is the ID already normalized.
-         * This is true if this call is done for a define() module ID.
-         * @param {Boolean} applyMap: apply the map config to the ID.
-         * Should only be true if this map is for a dependency.
-         *
-         * @returns {Object}
-         */
-        function makeModuleMap(name, parentModuleMap, isNormalized, applyMap) {
-            var url, pluginModule, suffix, nameParts,
-                prefix = null,
-                parentName = parentModuleMap ? parentModuleMap.name : null,
-                originalName = name,
-                isDefine = true,
-                normalizedName = '';
-
-            //If no name, then it means it is a require call, generate an
-            //internal name.
-            if (!name) {
-                isDefine = false;
-                name = '_@r' + (requireCounter += 1);
-            }
-
-            nameParts = splitPrefix(name);
-            prefix = nameParts[0];
-            name = nameParts[1];
-
-            if (prefix) {
-                prefix = normalize(prefix, parentName, applyMap);
-                pluginModule = getOwn(defined, prefix);
-            }
-
-            //Account for relative paths if there is a base name.
-            if (name) {
-                if (prefix) {
-                    if (pluginModule && pluginModule.normalize) {
-                        //Plugin is loaded, use its normalize method.
-                        normalizedName = pluginModule.normalize(name, function (name) {
-                            return normalize(name, parentName, applyMap);
-                        });
-                    } else {
-                        normalizedName = normalize(name, parentName, applyMap);
-                    }
-                } else {
-                    //A regular module.
-                    normalizedName = normalize(name, parentName, applyMap);
-
-                    //Normalized name may be a plugin ID due to map config
-                    //application in normalize. The map config values must
-                    //already be normalized, so do not need to redo that part.
-                    nameParts = splitPrefix(normalizedName);
-                    prefix = nameParts[0];
-                    normalizedName = nameParts[1];
-                    isNormalized = true;
-
-                    url = context.nameToUrl(normalizedName);
-                }
-            }
-
-            //If the id is a plugin id that cannot be determined if it needs
-            //normalization, stamp it with a unique ID so two matching relative
-            //ids that may conflict can be separate.
-            suffix = prefix && !pluginModule && !isNormalized ?
-                     '_unnormalized' + (unnormalizedCounter += 1) :
-                     '';
-
-            return {
-                prefix: prefix,
-                name: normalizedName,
-                parentMap: parentModuleMap,
-                unnormalized: !!suffix,
-                url: url,
-                originalName: originalName,
-                isDefine: isDefine,
-                id: (prefix ?
-                        prefix + '!' + normalizedName :
-                        normalizedName) + suffix
-            };
-        }
-
-        function getModule(depMap) {
-            var id = depMap.id,
-                mod = getOwn(registry, id);
-
-            if (!mod) {
-                mod = registry[id] = new context.Module(depMap);
-            }
-
-            return mod;
-        }
-
-        function on(depMap, name, fn) {
-            var id = depMap.id,
-                mod = getOwn(registry, id);
-
-            if (hasProp(defined, id) &&
-                    (!mod || mod.defineEmitComplete)) {
-                if (name === 'defined') {
-                    fn(defined[id]);
-                }
-            } else {
-                mod = getModule(depMap);
-                if (mod.error && name === 'error') {
-                    fn(mod.error);
-                } else {
-                    mod.on(name, fn);
-                }
-            }
-        }
-
-        function onError(err, errback) {
-            var ids = err.requireModules,
-                notified = false;
-
-            if (errback) {
-                errback(err);
-            } else {
-                each(ids, function (id) {
-                    var mod = getOwn(registry, id);
-                    if (mod) {
-                        //Set error on module, so it skips timeout checks.
-                        mod.error = err;
-                        if (mod.events.error) {
-                            notified = true;
-                            mod.emit('error', err);
-                        }
-                    }
-                });
-
-                if (!notified) {
-                    req.onError(err);
-                }
-            }
-        }
-
-        /**
-         * Internal method to transfer globalQueue items to this context's
-         * defQueue.
-         */
-        function takeGlobalQueue() {
-            //Push all the globalDefQueue items into the context's defQueue
-            if (globalDefQueue.length) {
-                //Array splice in the values since the context code has a
-                //local var ref to defQueue, so cannot just reassign the one
-                //on context.
-                apsp.apply(defQueue,
-                           [defQueue.length - 1, 0].concat(globalDefQueue));
-                globalDefQueue = [];
-            }
-        }
-
-        handlers = {
-            'require': function (mod) {
-                if (mod.require) {
-                    return mod.require;
-                } else {
-                    return (mod.require = context.makeRequire(mod.map));
-                }
-            },
-            'exports': function (mod) {
-                mod.usingExports = true;
-                if (mod.map.isDefine) {
-                    if (mod.exports) {
-                        return mod.exports;
-                    } else {
-                        return (mod.exports = defined[mod.map.id] = {});
-                    }
-                }
-            },
-            'module': function (mod) {
-                if (mod.module) {
-                    return mod.module;
-                } else {
-                    return (mod.module = {
-                        id: mod.map.id,
-                        uri: mod.map.url,
-                        config: function () {
-                            var c,
-                                pkg = getOwn(config.pkgs, mod.map.id);
-                            // For packages, only support config targeted
-                            // at the main module.
-                            c = pkg ? getOwn(config.config, mod.map.id + '/' + pkg.main) :
-                                      getOwn(config.config, mod.map.id);
-                            return  c || {};
-                        },
-                        exports: defined[mod.map.id]
-                    });
-                }
-            }
-        };
-
-        function cleanRegistry(id) {
-            //Clean up machinery used for waiting modules.
-            delete registry[id];
-            delete enabledRegistry[id];
-        }
-
-        function breakCycle(mod, traced, processed) {
-            var id = mod.map.id;
-
-            if (mod.error) {
-                mod.emit('error', mod.error);
-            } else {
-                traced[id] = true;
-                each(mod.depMaps, function (depMap, i) {
-                    var depId = depMap.id,
-                        dep = getOwn(registry, depId);
-
-                    //Only force things that have not completed
-                    //being defined, so still in the registry,
-                    //and only if it has not been matched up
-                    //in the module already.
-                    if (dep && !mod.depMatched[i] && !processed[depId]) {
-                        if (getOwn(traced, depId)) {
-                            mod.defineDep(i, defined[depId]);
-                            mod.check(); //pass false?
-                        } else {
-                            breakCycle(dep, traced, processed);
-                        }
-                    }
-                });
-                processed[id] = true;
-            }
-        }
-
-        function checkLoaded() {
-            var map, modId, err, usingPathFallback,
-                waitInterval = config.waitSeconds * 1000,
-                //It is possible to disable the wait interval by using waitSeconds of 0.
-                expired = waitInterval && (context.startTime + waitInterval) < new Date().getTime(),
-                noLoads = [],
-                reqCalls = [],
-                stillLoading = false,
-                needCycleCheck = true;
-
-            //Do not bother if this call was a result of a cycle break.
-            if (inCheckLoaded) {
-                return;
-            }
-
-            inCheckLoaded = true;
-
-            //Figure out the state of all the modules.
-            eachProp(enabledRegistry, function (mod) {
-                map = mod.map;
-                modId = map.id;
-
-                //Skip things that are not enabled or in error state.
-                if (!mod.enabled) {
-                    return;
-                }
-
-                if (!map.isDefine) {
-                    reqCalls.push(mod);
-                }
-
-                if (!mod.error) {
-                    //If the module should be executed, and it has not
-                    //been inited and time is up, remember it.
-                    if (!mod.inited && expired) {
-                        if (hasPathFallback(modId)) {
-                            usingPathFallback = true;
-                            stillLoading = true;
-                        } else {
-                            noLoads.push(modId);
-                            removeScript(modId);
-                        }
-                    } else if (!mod.inited && mod.fetched && map.isDefine) {
-                        stillLoading = true;
-                        if (!map.prefix) {
-                            //No reason to keep looking for unfinished
-                            //loading. If the only stillLoading is a
-                            //plugin resource though, keep going,
-                            //because it may be that a plugin resource
-                            //is waiting on a non-plugin cycle.
-                            return (needCycleCheck = false);
-                        }
-                    }
-                }
-            });
-
-            if (expired && noLoads.length) {
-                //If wait time expired, throw error of unloaded modules.
-                err = makeError('timeout', 'Load timeout for modules: ' + noLoads, null, noLoads);
-                err.contextName = context.contextName;
-                return onError(err);
-            }
-
-            //Not expired, check for a cycle.
-            if (needCycleCheck) {
-                each(reqCalls, function (mod) {
-                    breakCycle(mod, {}, {});
-                });
-            }
-
-            //If still waiting on loads, and the waiting load is something
-            //other than a plugin resource, or there are still outstanding
-            //scripts, then just try back later.
-            if ((!expired || usingPathFallback) && stillLoading) {
-                //Something is still waiting to load. Wait for it, but only
-                //if a timeout is not already in effect.
-                if ((isBrowser || isWebWorker) && !checkLoadedTimeoutId) {
-                    checkLoadedTimeoutId = setTimeout(function () {
-                        checkLoadedTimeoutId = 0;
-                        checkLoaded();
-                    }, 50);
-                }
-            }
-
-            inCheckLoaded = false;
-        }
-
-        Module = function (map) {
-            this.events = getOwn(undefEvents, map.id) || {};
-            this.map = map;
-            this.shim = getOwn(config.shim, map.id);
-            this.depExports = [];
-            this.depMaps = [];
-            this.depMatched = [];
-            this.pluginMaps = {};
-            this.depCount = 0;
-
-            /* this.exports this.factory
-               this.depMaps = [],
-               this.enabled, this.fetched
-            */
-        };
-
-        Module.prototype = {
-            init: function (depMaps, factory, errback, options) {
-                options = options || {};
-
-                //Do not do more inits if already done. Can happen if there
-                //are multiple define calls for the same module. That is not
-                //a normal, common case, but it is also not unexpected.
-                if (this.inited) {
-                    return;
-                }
-
-                this.factory = factory;
-
-                if (errback) {
-                    //Register for errors on this module.
-                    this.on('error', errback);
-                } else if (this.events.error) {
-                    //If no errback already, but there are error listeners
-                    //on this module, set up an errback to pass to the deps.
-                    errback = bind(this, function (err) {
-                        this.emit('error', err);
-                    });
-                }
-
-                //Do a copy of the dependency array, so that
-                //source inputs are not modified. For example
-                //"shim" deps are passed in here directly, and
-                //doing a direct modification of the depMaps array
-                //would affect that config.
-                this.depMaps = depMaps && depMaps.slice(0);
-
-                this.errback = errback;
-
-                //Indicate this module has be initialized
-                this.inited = true;
-
-                this.ignore = options.ignore;
-
-                //Could have option to init this module in enabled mode,
-                //or could have been previously marked as enabled. However,
-                //the dependencies are not known until init is called. So
-                //if enabled previously, now trigger dependencies as enabled.
-                if (options.enabled || this.enabled) {
-                    //Enable this module and dependencies.
-                    //Will call this.check()
-                    this.enable();
-                } else {
-                    this.check();
-                }
-            },
-
-            defineDep: function (i, depExports) {
-                //Because of cycles, defined callback for a given
-                //export can be called more than once.
-                if (!this.depMatched[i]) {
-                    this.depMatched[i] = true;
-                    this.depCount -= 1;
-                    this.depExports[i] = depExports;
-                }
-            },
-
-            fetch: function () {
-                if (this.fetched) {
-                    return;
-                }
-                this.fetched = true;
-
-                context.startTime = (new Date()).getTime();
-
-                var map = this.map;
-
-                //If the manager is for a plugin managed resource,
-                //ask the plugin to load it now.
-                if (this.shim) {
-                    context.makeRequire(this.map, {
-                        enableBuildCallback: true
-                    })(this.shim.deps || [], bind(this, function () {
-                        return map.prefix ? this.callPlugin() : this.load();
-                    }));
-                } else {
-                    //Regular dependency.
-                    return map.prefix ? this.callPlugin() : this.load();
-                }
-            },
-
-            load: function () {
-                var url = this.map.url;
-
-                //Regular dependency.
-                if (!urlFetched[url]) {
-                    urlFetched[url] = true;
-                    context.load(this.map.id, url);
-                }
-            },
-
-            /**
-             * Checks if the module is ready to define itself, and if so,
-             * define it.
-             */
-            check: function () {
-                if (!this.enabled || this.enabling) {
-                    return;
-                }
-
-                var err, cjsModule,
-                    id = this.map.id,
-                    depExports = this.depExports,
-                    exports = this.exports,
-                    factory = this.factory;
-
-                if (!this.inited) {
-                    this.fetch();
-                } else if (this.error) {
-                    this.emit('error', this.error);
-                } else if (!this.defining) {
-                    //The factory could trigger another require call
-                    //that would result in checking this module to
-                    //define itself again. If already in the process
-                    //of doing that, skip this work.
-                    this.defining = true;
-
-                    if (this.depCount < 1 && !this.defined) {
-                        if (isFunction(factory)) {
-                            //If there is an error listener, favor passing
-                            //to that instead of throwing an error. However,
-                            //only do it for define()'d  modules. require
-                            //errbacks should not be called for failures in
-                            //their callbacks (#699). However if a global
-                            //onError is set, use that.
-                            if ((this.events.error && this.map.isDefine) ||
-                                req.onError !== defaultOnError) {
-                                try {
-                                    exports = context.execCb(id, factory, depExports, exports);
-                                } catch (e) {
-                                    err = e;
-                                }
-                            } else {
-                                exports = context.execCb(id, factory, depExports, exports);
-                            }
-
-                            if (this.map.isDefine) {
-                                //If setting exports via 'module' is in play,
-                                //favor that over return value and exports. After that,
-                                //favor a non-undefined return value over exports use.
-                                cjsModule = this.module;
-                                if (cjsModule &&
-                                        cjsModule.exports !== undefined &&
-                                        //Make sure it is not already the exports value
-                                        cjsModule.exports !== this.exports) {
-                                    exports = cjsModule.exports;
-                                } else if (exports === undefined && this.usingExports) {
-                                    //exports already set the defined value.
-                                    exports = this.exports;
-                                }
-                            }
-
-                            if (err) {
-                                err.requireMap = this.map;
-                                err.requireModules = this.map.isDefine ? [this.map.id] : null;
-                                err.requireType = this.map.isDefine ? 'define' : 'require';
-                                return onError((this.error = err));
-                            }
-
-                        } else {
-                            //Just a literal value
-                            exports = factory;
-                        }
-
-                        this.exports = exports;
-
-                        if (this.map.isDefine && !this.ignore) {
-                            defined[id] = exports;
-
-                            if (req.onResourceLoad) {
-                                req.onResourceLoad(context, this.map, this.depMaps);
-                            }
-                        }
-
-                        //Clean up
-                        cleanRegistry(id);
-
-                        this.defined = true;
-                    }
-
-                    //Finished the define stage. Allow calling check again
-                    //to allow define notifications below in the case of a
-                    //cycle.
-                    this.defining = false;
-
-                    if (this.defined && !this.defineEmitted) {
-                        this.defineEmitted = true;
-                        this.emit('defined', this.exports);
-                        this.defineEmitComplete = true;
-                    }
-
-                }
-            },
-
-            callPlugin: function () {
-                var map = this.map,
-                    id = map.id,
-                    //Map already normalized the prefix.
-                    pluginMap = makeModuleMap(map.prefix);
-
-                //Mark this as a dependency for this plugin, so it
-                //can be traced for cycles.
-                this.depMaps.push(pluginMap);
-
-                on(pluginMap, 'defined', bind(this, function (plugin) {
-                    var load, normalizedMap, normalizedMod,
-                        name = this.map.name,
-                        parentName = this.map.parentMap ? this.map.parentMap.name : null,
-                        localRequire = context.makeRequire(map.parentMap, {
-                            enableBuildCallback: true
-                        });
-
-                    //If current map is not normalized, wait for that
-                    //normalized name to load instead of continuing.
-                    if (this.map.unnormalized) {
-                        //Normalize the ID if the plugin allows it.
-                        if (plugin.normalize) {
-                            name = plugin.normalize(name, function (name) {
-                                return normalize(name, parentName, true);
-                            }) || '';
-                        }
-
-                        //prefix and name should already be normalized, no need
-                        //for applying map config again either.
-                        normalizedMap = makeModuleMap(map.prefix + '!' + name,
-                                                      this.map.parentMap);
-                        on(normalizedMap,
-                            'defined', bind(this, function (value) {
-                                this.init([], function () { return value; }, null, {
-                                    enabled: true,
-                                    ignore: true
-                                });
-                            }));
-
-                        normalizedMod = getOwn(registry, normalizedMap.id);
-                        if (normalizedMod) {
-                            //Mark this as a dependency for this plugin, so it
-                            //can be traced for cycles.
-                            this.depMaps.push(normalizedMap);
-
-                            if (this.events.error) {
-                                normalizedMod.on('error', bind(this, function (err) {
-                                    this.emit('error', err);
-                                }));
-                            }
-                            normalizedMod.enable();
-                        }
-
-                        return;
-                    }
-
-                    load = bind(this, function (value) {
-                        this.init([], function () { return value; }, null, {
-                            enabled: true
-                        });
-                    });
-
-                    load.error = bind(this, function (err) {
-                        this.inited = true;
-                        this.error = err;
-                        err.requireModules = [id];
-
-                        //Remove temp unnormalized modules for this module,
-                        //since they will never be resolved otherwise now.
-                        eachProp(registry, function (mod) {
-                            if (mod.map.id.indexOf(id + '_unnormalized') === 0) {
-                                cleanRegistry(mod.map.id);
-                            }
-                        });
-
-                        onError(err);
-                    });
-
-                    //Allow plugins to load other code without having to know the
-                    //context or how to 'complete' the load.
-                    load.fromText = bind(this, function (text, textAlt) {
-                        /*jslint evil: true */
-                        var moduleName = map.name,
-                            moduleMap = makeModuleMap(moduleName),
-                            hasInteractive = useInteractive;
-
-                        //As of 2.1.0, support just passing the text, to reinforce
-                        //fromText only being called once per resource. Still
-                        //support old style of passing moduleName but discard
-                        //that moduleName in favor of the internal ref.
-                        if (textAlt) {
-                            text = textAlt;
-                        }
-
-                        //Turn off interactive script matching for IE for any define
-                        //calls in the text, then turn it back on at the end.
-                        if (hasInteractive) {
-                            useInteractive = false;
-                        }
-
-                        //Prime the system by creating a module instance for
-                        //it.
-                        getModule(moduleMap);
-
-                        //Transfer any config to this other module.
-                        if (hasProp(config.config, id)) {
-                            config.config[moduleName] = config.config[id];
-                        }
-
-                        try {
-                            req.exec(text);
-                        } catch (e) {
-                            return onError(makeError('fromtexteval',
-                                             'fromText eval for ' + id +
-                                            ' failed: ' + e,
-                                             e,
-                                             [id]));
-                        }
-
-                        if (hasInteractive) {
-                            useInteractive = true;
-                        }
-
-                        //Mark this as a dependency for the plugin
-                        //resource
-                        this.depMaps.push(moduleMap);
-
-                        //Support anonymous modules.
-                        context.completeLoad(moduleName);
-
-                        //Bind the value of that module to the value for this
-                        //resource ID.
-                        localRequire([moduleName], load);
-                    });
-
-                    //Use parentName here since the plugin's name is not reliable,
-                    //could be some weird string with no path that actually wants to
-                    //reference the parentName's path.
-                    plugin.load(map.name, localRequire, load, config);
-                }));
-
-                context.enable(pluginMap, this);
-                this.pluginMaps[pluginMap.id] = pluginMap;
-            },
-
-            enable: function () {
-                enabledRegistry[this.map.id] = this;
-                this.enabled = true;
-
-                //Set flag mentioning that the module is enabling,
-                //so that immediate calls to the defined callbacks
-                //for dependencies do not trigger inadvertent load
-                //with the depCount still being zero.
-                this.enabling = true;
-
-                //Enable each dependency
-                each(this.depMaps, bind(this, function (depMap, i) {
-                    var id, mod, handler;
-
-                    if (typeof depMap === 'string') {
-                        //Dependency needs to be converted to a depMap
-                        //and wired up to this module.
-                        depMap = makeModuleMap(depMap,
-                                               (this.map.isDefine ? this.map : this.map.parentMap),
-                                               false,
-                                               !this.skipMap);
-                        this.depMaps[i] = depMap;
-
-                        handler = getOwn(handlers, depMap.id);
-
-                        if (handler) {
-                            this.depExports[i] = handler(this);
-                            return;
-                        }
-
-                        this.depCount += 1;
-
-                        on(depMap, 'defined', bind(this, function (depExports) {
-                            this.defineDep(i, depExports);
-                            this.check();
-                        }));
-
-                        if (this.errback) {
-                            on(depMap, 'error', bind(this, this.errback));
-                        }
-                    }
-
-                    id = depMap.id;
-                    mod = registry[id];
-
-                    //Skip special modules like 'require', 'exports', 'module'
-                    //Also, don't call enable if it is already enabled,
-                    //important in circular dependency cases.
-                    if (!hasProp(handlers, id) && mod && !mod.enabled) {
-                        context.enable(depMap, this);
-                    }
-                }));
-
-                //Enable each plugin that is used in
-                //a dependency
-                eachProp(this.pluginMaps, bind(this, function (pluginMap) {
-                    var mod = getOwn(registry, pluginMap.id);
-                    if (mod && !mod.enabled) {
-                        context.enable(pluginMap, this);
-                    }
-                }));
-
-                this.enabling = false;
-
-                this.check();
-            },
-
-            on: function (name, cb) {
-                var cbs = this.events[name];
-                if (!cbs) {
-                    cbs = this.events[name] = [];
-                }
-                cbs.push(cb);
-            },
-
-            emit: function (name, evt) {
-                each(this.events[name], function (cb) {
-                    cb(evt);
-                });
-                if (name === 'error') {
-                    //Now that the error handler was triggered, remove
-                    //the listeners, since this broken Module instance
-                    //can stay around for a while in the registry.
-                    delete this.events[name];
-                }
-            }
-        };
-
-        function callGetModule(args) {
-            //Skip modules already defined.
-            if (!hasProp(defined, args[0])) {
-                getModule(makeModuleMap(args[0], null, true)).init(args[1], args[2]);
-            }
-        }
-
-        function removeListener(node, func, name, ieName) {
-            //Favor detachEvent because of IE9
-            //issue, see attachEvent/addEventListener comment elsewhere
-            //in this file.
-            if (node.detachEvent && !isOpera) {
-                //Probably IE. If not it will throw an error, which will be
-                //useful to know.
-                if (ieName) {
-                    node.detachEvent(ieName, func);
-                }
-            } else {
-                node.removeEventListener(name, func, false);
-            }
-        }
-
-        /**
-         * Given an event from a script node, get the requirejs info from it,
-         * and then removes the event listeners on the node.
-         * @param {Event} evt
-         * @returns {Object}
-         */
-        function getScriptData(evt) {
-            //Using currentTarget instead of target for Firefox 2.0's sake. Not
-            //all old browsers will be supported, but this one was easy enough
-            //to support and still makes sense.
-            var node = evt.currentTarget || evt.srcElement;
-
-            //Remove the listeners once here.
-            removeListener(node, context.onScriptLoad, 'load', 'onreadystatechange');
-            removeListener(node, context.onScriptError, 'error');
-
-            return {
-                node: node,
-                id: node && node.getAttribute('data-requiremodule')
-            };
-        }
-
-        function intakeDefines() {
-            var args;
-
-            //Any defined modules in the global queue, intake them now.
-            takeGlobalQueue();
-
-            //Make sure any remaining defQueue items get properly processed.
-            while (defQueue.length) {
-                args = defQueue.shift();
-                if (args[0] === null) {
-                    return onError(makeError('mismatch', 'Mismatched anonymous define() module: ' + args[args.length - 1]));
-                } else {
-                    //args are id, deps, factory. Should be normalized by the
-                    //define() function.
-                    callGetModule(args);
-                }
-            }
-        }
-
-        context = {
-            config: config,
-            contextName: contextName,
-            registry: registry,
-            defined: defined,
-            urlFetched: urlFetched,
-            defQueue: defQueue,
-            Module: Module,
-            makeModuleMap: makeModuleMap,
-            nextTick: req.nextTick,
-            onError: onError,
-
-            /**
-             * Set a configuration for the context.
-             * @param {Object} cfg config object to integrate.
-             */
-            configure: function (cfg) {
-                //Make sure the baseUrl ends in a slash.
-                if (cfg.baseUrl) {
-                    if (cfg.baseUrl.charAt(cfg.baseUrl.length - 1) !== '/') {
-                        cfg.baseUrl += '/';
-                    }
-                }
-
-                //Save off the paths and packages since they require special processing,
-                //they are additive.
-                var pkgs = config.pkgs,
-                    shim = config.shim,
-                    objs = {
-                        paths: true,
-                        config: true,
-                        map: true
-                    };
-
-                eachProp(cfg, function (value, prop) {
-                    if (objs[prop]) {
-                        if (prop === 'map') {
-                            if (!config.map) {
-                                config.map = {};
-                            }
-                            mixin(config[prop], value, true, true);
-                        } else {
-                            mixin(config[prop], value, true);
-                        }
-                    } else {
-                        config[prop] = value;
-                    }
-                });
-
-                //Merge shim
-                if (cfg.shim) {
-                    eachProp(cfg.shim, function (value, id) {
-                        //Normalize the structure
-                        if (isArray(value)) {
-                            value = {
-                                deps: value
-                            };
-                        }
-                        if ((value.exports || value.init) && !value.exportsFn) {
-                            value.exportsFn = context.makeShimExports(value);
-                        }
-                        shim[id] = value;
-                    });
-                    config.shim = shim;
-                }
-
-                //Adjust packages if necessary.
-                if (cfg.packages) {
-                    each(cfg.packages, function (pkgObj) {
-                        var location;
-
-                        pkgObj = typeof pkgObj === 'string' ? { name: pkgObj } : pkgObj;
-                        location = pkgObj.location;
-
-                        //Create a brand new object on pkgs, since currentPackages can
-                        //be passed in again, and config.pkgs is the internal transformed
-                        //state for all package configs.
-                        pkgs[pkgObj.name] = {
-                            name: pkgObj.name,
-                            location: location || pkgObj.name,
-                            //Remove leading dot in main, so main paths are normalized,
-                            //and remove any trailing .js, since different package
-                            //envs have different conventions: some use a module name,
-                            //some use a file name.
-                            main: (pkgObj.main || 'main')
-                                  .replace(currDirRegExp, '')
-                                  .replace(jsSuffixRegExp, '')
-                        };
-                    });
-
-                    //Done with modifications, assing packages back to context config
-                    config.pkgs = pkgs;
-                }
-
-                //If there are any "waiting to execute" modules in the registry,
-                //update the maps for them, since their info, like URLs to load,
-                //may have changed.
-                eachProp(registry, function (mod, id) {
-                    //If module already has init called, since it is too
-                    //late to modify them, and ignore unnormalized ones
-                    //since they are transient.
-                    if (!mod.inited && !mod.map.unnormalized) {
-                        mod.map = makeModuleMap(id);
-                    }
-                });
-
-                //If a deps array or a config callback is specified, then call
-                //require with those args. This is useful when require is defined as a
-                //config object before require.js is loaded.
-                if (cfg.deps || cfg.callback) {
-                    context.require(cfg.deps || [], cfg.callback);
-                }
-            },
-
-            makeShimExports: function (value) {
-                function fn() {
-                    var ret;
-                    if (value.init) {
-                        ret = value.init.apply(global, arguments);
-                    }
-                    return ret || (value.exports && getGlobal(value.exports));
-                }
-                return fn;
-            },
-
-            makeRequire: function (relMap, options) {
-                options = options || {};
-
-                function localRequire(deps, callback, errback) {
-                    var id, map, requireMod;
-
-                    if (options.enableBuildCallback && callback && isFunction(callback)) {
-                        callback.__requireJsBuild = true;
-                    }
-
-                    if (typeof deps === 'string') {
-                        if (isFunction(callback)) {
-                            //Invalid call
-                            return onError(makeError('requireargs', 'Invalid require call'), errback);
-                        }
-
-                        //If require|exports|module are requested, get the
-                        //value for them from the special handlers. Caveat:
-                        //this only works while module is being defined.
-                        if (relMap && hasProp(handlers, deps)) {
-                            return handlers[deps](registry[relMap.id]);
-                        }
-
-                        //Synchronous access to one module. If require.get is
-                        //available (as in the Node adapter), prefer that.
-                        if (req.get) {
-                            return req.get(context, deps, relMap, localRequire);
-                        }
-
-                        //Normalize module name, if it contains . or ..
-                        map = makeModuleMap(deps, relMap, false, true);
-                        id = map.id;
-
-                        if (!hasProp(defined, id)) {
-                            return onError(makeError('notloaded', 'Module name "' +
-                                        id +
-                                        '" has not been loaded yet for context: ' +
-                                        contextName +
-                                        (relMap ? '' : '. Use require([])')));
-                        }
-                        return defined[id];
-                    }
-
-                    //Grab defines waiting in the global queue.
-                    intakeDefines();
-
-                    //Mark all the dependencies as needing to be loaded.
-                    context.nextTick(function () {
-                        //Some defines could have been added since the
-                        //require call, collect them.
-                        intakeDefines();
-
-                        requireMod = getModule(makeModuleMap(null, relMap));
-
-                        //Store if map config should be applied to this require
-                        //call for dependencies.
-                        requireMod.skipMap = options.skipMap;
-
-                        requireMod.init(deps, callback, errback, {
-                            enabled: true
-                        });
-
-                        checkLoaded();
-                    });
-
-                    return localRequire;
-                }
-
-                mixin(localRequire, {
-                    isBrowser: isBrowser,
-
-                    /**
-                     * Converts a module name + .extension into an URL path.
-                     * *Requires* the use of a module name. It does not support using
-                     * plain URLs like nameToUrl.
-                     */
-                    toUrl: function (moduleNamePlusExt) {
-                        var ext,
-                            index = moduleNamePlusExt.lastIndexOf('.'),
-                            segment = moduleNamePlusExt.split('/')[0],
-                            isRelative = segment === '.' || segment === '..';
-
-                        //Have a file extension alias, and it is not the
-                        //dots from a relative path.
-                        if (index !== -1 && (!isRelative || index > 1)) {
-                            ext = moduleNamePlusExt.substring(index, moduleNamePlusExt.length);
-                            moduleNamePlusExt = moduleNamePlusExt.substring(0, index);
-                        }
-
-                        return context.nameToUrl(normalize(moduleNamePlusExt,
-                                                relMap && relMap.id, true), ext,  true);
-                    },
-
-                    defined: function (id) {
-                        return hasProp(defined, makeModuleMap(id, relMap, false, true).id);
-                    },
-
-                    specified: function (id) {
-                        id = makeModuleMap(id, relMap, false, true).id;
-                        return hasProp(defined, id) || hasProp(registry, id);
-                    }
-                });
-
-                //Only allow undef on top level require calls
-                if (!relMap) {
-                    localRequire.undef = function (id) {
-                        //Bind any waiting define() calls to this context,
-                        //fix for #408
-                        takeGlobalQueue();
-
-                        var map = makeModuleMap(id, relMap, true),
-                            mod = getOwn(registry, id);
-
-                        delete defined[id];
-                        delete urlFetched[map.url];
-                        delete undefEvents[id];
-
-                        if (mod) {
-                            //Hold on to listeners in case the
-                            //module will be attempted to be reloaded
-                            //using a different config.
-                            if (mod.events.defined) {
-                                undefEvents[id] = mod.events;
-                            }
-
-                            cleanRegistry(id);
-                        }
-                    };
-                }
-
-                return localRequire;
-            },
-
-            /**
-             * Called to enable a module if it is still in the registry
-             * awaiting enablement. A second arg, parent, the parent module,
-             * is passed in for context, when this method is overriden by
-             * the optimizer. Not shown here to keep code compact.
-             */
-            enable: function (depMap) {
-                var mod = getOwn(registry, depMap.id);
-                if (mod) {
-                    getModule(depMap).enable();
-                }
-            },
-
-            /**
-             * Internal method used by environment adapters to complete a load event.
-             * A load event could be a script load or just a load pass from a synchronous
-             * load call.
-             * @param {String} moduleName the name of the module to potentially complete.
-             */
-            completeLoad: function (moduleName) {
-                var found, args, mod,
-                    shim = getOwn(config.shim, moduleName) || {},
-                    shExports = shim.exports;
-
-                takeGlobalQueue();
-
-                while (defQueue.length) {
-                    args = defQueue.shift();
-                    if (args[0] === null) {
-                        args[0] = moduleName;
-                        //If already found an anonymous module and bound it
-                        //to this name, then this is some other anon module
-                        //waiting for its completeLoad to fire.
-                        if (found) {
-                            break;
-                        }
-                        found = true;
-                    } else if (args[0] === moduleName) {
-                        //Found matching define call for this script!
-                        found = true;
-                    }
-
-                    callGetModule(args);
-                }
-
-                //Do this after the cycle of callGetModule in case the result
-                //of those calls/init calls changes the registry.
-                mod = getOwn(registry, moduleName);
-
-                if (!found && !hasProp(defined, moduleName) && mod && !mod.inited) {
-                    if (config.enforceDefine && (!shExports || !getGlobal(shExports))) {
-                        if (hasPathFallback(moduleName)) {
-                            return;
-                        } else {
-                            return onError(makeError('nodefine',
-                                             'No define call for ' + moduleName,
-                                             null,
-                                             [moduleName]));
-                        }
-                    } else {
-                        //A script that does not call define(), so just simulate
-                        //the call for it.
-                        callGetModule([moduleName, (shim.deps || []), shim.exportsFn]);
-                    }
-                }
-
-                checkLoaded();
-            },
-
-            /**
-             * Converts a module name to a file path. Supports cases where
-             * moduleName may actually be just an URL.
-             * Note that it **does not** call normalize on the moduleName,
-             * it is assumed to have already been normalized. This is an
-             * internal API, not a public one. Use toUrl for the public API.
-             */
-            nameToUrl: function (moduleName, ext, skipExt) {
-                var paths, pkgs, pkg, pkgPath, syms, i, parentModule, url,
-                    parentPath;
-
-                //If a colon is in the URL, it indicates a protocol is used and it is just
-                //an URL to a file, or if it starts with a slash, contains a query arg (i.e. ?)
-                //or ends with .js, then assume the user meant to use an url and not a module id.
-                //The slash is important for protocol-less URLs as well as full paths.
-                if (req.jsExtRegExp.test(moduleName)) {
-                    //Just a plain path, not module name lookup, so just return it.
-                    //Add extension if it is included. This is a bit wonky, only non-.js things pass
-                    //an extension, this method probably needs to be reworked.
-                    url = moduleName + (ext || '');
-                } else {
-                    //A module that needs to be converted to a path.
-                    paths = config.paths;
-                    pkgs = config.pkgs;
-
-                    syms = moduleName.split('/');
-                    //For each module name segment, see if there is a path
-                    //registered for it. Start with most specific name
-                    //and work up from it.
-                    for (i = syms.length; i > 0; i -= 1) {
-                        parentModule = syms.slice(0, i).join('/');
-                        pkg = getOwn(pkgs, parentModule);
-                        parentPath = getOwn(paths, parentModule);
-                        if (parentPath) {
-                            //If an array, it means there are a few choices,
-                            //Choose the one that is desired
-                            if (isArray(parentPath)) {
-                                parentPath = parentPath[0];
-                            }
-                            syms.splice(0, i, parentPath);
-                            break;
-                        } else if (pkg) {
-                            //If module name is just the package name, then looking
-                            //for the main module.
-                            if (moduleName === pkg.name) {
-                                pkgPath = pkg.location + '/' + pkg.main;
-                            } else {
-                                pkgPath = pkg.location;
-                            }
-                            syms.splice(0, i, pkgPath);
-                            break;
-                        }
-                    }
-
-                    //Join the path parts together, then figure out if baseUrl is needed.
-                    url = syms.join('/');
-                    url += (ext || (/\?/.test(url) || skipExt ? '' : '.js'));
-                    url = (url.charAt(0) === '/' || url.match(/^[\w\+\.\-]+:/) ? '' : config.baseUrl) + url;
-                }
-
-                return config.urlArgs ? url +
-                                        ((url.indexOf('?') === -1 ? '?' : '&') +
-                                         config.urlArgs) : url;
-            },
-
-            //Delegates to req.load. Broken out as a separate function to
-            //allow overriding in the optimizer.
-            load: function (id, url) {
-                req.load(context, id, url);
-            },
-
-            /**
-             * Executes a module callback function. Broken out as a separate function
-             * solely to allow the build system to sequence the files in the built
-             * layer in the right sequence.
-             *
-             * @private
-             */
-            execCb: function (name, callback, args, exports) {
-                return callback.apply(exports, args);
-            },
-
-            /**
-             * callback for script loads, used to check status of loading.
-             *
-             * @param {Event} evt the event from the browser for the script
-             * that was loaded.
-             */
-            onScriptLoad: function (evt) {
-                //Using currentTarget instead of target for Firefox 2.0's sake. Not
-                //all old browsers will be supported, but this one was easy enough
-                //to support and still makes sense.
-                if (evt.type === 'load' ||
-                        (readyRegExp.test((evt.currentTarget || evt.srcElement).readyState))) {
-                    //Reset interactive script so a script node is not held onto for
-                    //to long.
-                    interactiveScript = null;
-
-                    //Pull out the name of the module and the context.
-                    var data = getScriptData(evt);
-                    context.completeLoad(data.id);
-                }
-            },
-
-            /**
-             * Callback for script errors.
-             */
-            onScriptError: function (evt) {
-                var data = getScriptData(evt);
-                if (!hasPathFallback(data.id)) {
-                    return onError(makeError('scripterror', 'Script error for: ' + data.id, evt, [data.id]));
-                }
-            }
-        };
-
-        context.require = context.makeRequire();
-        return context;
+    return 'function' === typeof fn ? fn() : newInstance;
+  };
+
+  $.fn.parsley.Constructor = ParsleyForm;
+
+  /**
+  * Parsley plugin configuration
+  *
+  * @property $.fn.parsley.defaults
+  * @type {Object}
+  */
+  $.fn.parsley.defaults = {
+    // basic data-api overridable properties here..
+    inputs: 'input, textarea, select'           // Default supported inputs.
+    , excluded: 'input[type=hidden], :disabled' // Do not validate input[type=hidden] & :disabled.
+    , trigger: false                            // $.Event() that will trigger validation. eg: keyup, change..
+    , animate: true                             // fade in / fade out error messages
+    , animateDuration: 300                      // fadein/fadout ms time
+    , focus: 'first'                            // 'fist'|'last'|'none' which error field would have focus first on form validation
+    , validationMinlength: 3                    // If trigger validation specified, only if value.length > validationMinlength
+    , successClass: 'parsley-success'           // Class name on each valid input
+    , errorClass: 'parsley-error'               // Class name on each invalid input
+    , errorMessage: false                       // Customize an unique error message showed if one constraint fails
+    , validators: {}                            // Add your custom validators functions
+    , showErrors: true                          // Set to false if you don't want Parsley to display error messages
+    , messages: {}                              // Add your own error messages here
+
+    //some quite advanced configuration here..
+    , validateIfUnchanged: false                                          // false: validate once by field value change
+    , errors: {
+        classHandler: function ( elem, isRadioOrCheckbox ) {}             // specify where parsley error-success classes are set
+      , container: function ( elem, isRadioOrCheckbox ) {}                // specify an elem where errors will be **apened**
+      , errorsWrapper: '<ul></ul>'                                        // do not set an id for this elem, it would have an auto-generated id
+      , errorElem: '<li></li>'                                            // each field constraint fail in an li
+      }
+    , listeners: {
+        onFieldValidate: function ( elem, ParsleyForm ) { return false; } // Executed on validation. Return true to ignore field validation
+      , onFormSubmit: function ( isFormValid, event, ParsleyForm ) {}     // Executed once on form validation
+      , onFieldError: function ( elem, constraints, ParsleyField ) {}     // Executed when a field is detected as invalid
+      , onFieldSuccess: function ( elem, constraints, ParsleyField ) {}   // Executed when a field passes validation
     }
+  };
 
-    /**
-     * Main entry point.
-     *
-     * If the only argument to require is a string, then the module that
-     * is represented by that string is fetched for the appropriate context.
-     *
-     * If the first argument is an array, then it will be treated as an array
-     * of dependency string names to fetch. An optional function callback can
-     * be specified to execute when all of those dependencies are available.
-     *
-     * Make a local req variable to help Caja compliance (it assumes things
-     * on a require that are not standardized), and to give a short
-     * name for minification/local scope use.
-     */
-    req = requirejs = function (deps, callback, errback, optional) {
+  /* PARSLEY auto-bind DATA-API + Global config retrieving
+  * =================================================== */
+  $( window ).on( 'load', function () {
+    $( '[data-validate="parsley"]' ).each( function () {
+      $( this ).parsley();
+    } );
+  } );
 
-        //Find the right context, use default
-        var context, config,
-            contextName = defContextName;
-
-        // Determine if have config object in the call.
-        if (!isArray(deps) && typeof deps !== 'string') {
-            // deps is a config object
-            config = deps;
-            if (isArray(callback)) {
-                // Adjust args if there are dependencies
-                deps = callback;
-                callback = errback;
-                errback = optional;
-            } else {
-                deps = [];
-            }
-        }
-
-        if (config && config.context) {
-            contextName = config.context;
-        }
-
-        context = getOwn(contexts, contextName);
-        if (!context) {
-            context = contexts[contextName] = req.s.newContext(contextName);
-        }
-
-        if (config) {
-            context.configure(config);
-        }
-
-        return context.require(deps, callback, errback);
-    };
-
-    /**
-     * Support require.config() to make it easier to cooperate with other
-     * AMD loaders on globally agreed names.
-     */
-    req.config = function (config) {
-        return req(config);
-    };
-
-    /**
-     * Execute something after the current tick
-     * of the event loop. Override for other envs
-     * that have a better solution than setTimeout.
-     * @param  {Function} fn function to execute later.
-     */
-    req.nextTick = typeof setTimeout !== 'undefined' ? function (fn) {
-        setTimeout(fn, 4);
-    } : function (fn) { fn(); };
-
-    /**
-     * Export require as a global, but only if it does not already exist.
-     */
-    if (!require) {
-        require = req;
-    }
-
-    req.version = version;
-
-    //Used to filter out dependencies that are already paths.
-    req.jsExtRegExp = /^\/|:|\?|\.js$/;
-    req.isBrowser = isBrowser;
-    s = req.s = {
-        contexts: contexts,
-        newContext: newContext
-    };
-
-    //Create default context.
-    req({});
-
-    //Exports some context-sensitive methods on global require.
-    each([
-        'toUrl',
-        'undef',
-        'defined',
-        'specified'
-    ], function (prop) {
-        //Reference from contexts instead of early binding to default context,
-        //so that during builds, the latest instance of the default context
-        //with its config gets used.
-        req[prop] = function () {
-            var ctx = contexts[defContextName];
-            return ctx.require[prop].apply(ctx, arguments);
-        };
-    });
-
-    if (isBrowser) {
-        head = s.head = document.getElementsByTagName('head')[0];
-        //If BASE tag is in play, using appendChild is a problem for IE6.
-        //When that browser dies, this can be removed. Details in this jQuery bug:
-        //http://dev.jquery.com/ticket/2709
-        baseElement = document.getElementsByTagName('base')[0];
-        if (baseElement) {
-            head = s.head = baseElement.parentNode;
-        }
-    }
-
-    /**
-     * Any errors that require explicitly generates will be passed to this
-     * function. Intercept/override it if you want custom error handling.
-     * @param {Error} err the error object.
-     */
-    req.onError = defaultOnError;
-
-    /**
-     * Does the request to load a module for the browser case.
-     * Make this a separate function to allow other environments
-     * to override it.
-     *
-     * @param {Object} context the require context to find state.
-     * @param {String} moduleName the name of the module.
-     * @param {Object} url the URL to the module.
-     */
-    req.load = function (context, moduleName, url) {
-        var config = (context && context.config) || {},
-            node;
-        if (isBrowser) {
-            //In the browser so use a script tag
-            node = config.xhtml ?
-                    document.createElementNS('http://www.w3.org/1999/xhtml', 'html:script') :
-                    document.createElement('script');
-            node.type = config.scriptType || 'text/javascript';
-            node.charset = 'utf-8';
-            node.async = true;
-
-            node.setAttribute('data-requirecontext', context.contextName);
-            node.setAttribute('data-requiremodule', moduleName);
-
-            //Set up load listener. Test attachEvent first because IE9 has
-            //a subtle issue in its addEventListener and script onload firings
-            //that do not match the behavior of all other browsers with
-            //addEventListener support, which fire the onload event for a
-            //script right after the script execution. See:
-            //https://connect.microsoft.com/IE/feedback/details/648057/script-onload-event-is-not-fired-immediately-after-script-execution
-            //UNFORTUNATELY Opera implements attachEvent but does not follow the script
-            //script execution mode.
-            if (node.attachEvent &&
-                    //Check if node.attachEvent is artificially added by custom script or
-                    //natively supported by browser
-                    //read https://github.com/jrburke/requirejs/issues/187
-                    //if we can NOT find [native code] then it must NOT natively supported.
-                    //in IE8, node.attachEvent does not have toString()
-                    //Note the test for "[native code" with no closing brace, see:
-                    //https://github.com/jrburke/requirejs/issues/273
-                    !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code') < 0) &&
-                    !isOpera) {
-                //Probably IE. IE (at least 6-8) do not fire
-                //script onload right after executing the script, so
-                //we cannot tie the anonymous define call to a name.
-                //However, IE reports the script as being in 'interactive'
-                //readyState at the time of the define call.
-                useInteractive = true;
-
-                node.attachEvent('onreadystatechange', context.onScriptLoad);
-                //It would be great to add an error handler here to catch
-                //404s in IE9+. However, onreadystatechange will fire before
-                //the error handler, so that does not help. If addEventListener
-                //is used, then IE will fire error before load, but we cannot
-                //use that pathway given the connect.microsoft.com issue
-                //mentioned above about not doing the 'script execute,
-                //then fire the script load event listener before execute
-                //next script' that other browsers do.
-                //Best hope: IE10 fixes the issues,
-                //and then destroys all installs of IE 6-9.
-                //node.attachEvent('onerror', context.onScriptError);
-            } else {
-                node.addEventListener('load', context.onScriptLoad, false);
-                node.addEventListener('error', context.onScriptError, false);
-            }
-            node.src = url;
-
-            //For some cache cases in IE 6-8, the script executes before the end
-            //of the appendChild execution, so to tie an anonymous define
-            //call to the module name (which is stored on the node), hold on
-            //to a reference to this node, but clear after the DOM insertion.
-            currentlyAddingScript = node;
-            if (baseElement) {
-                head.insertBefore(node, baseElement);
-            } else {
-                head.appendChild(node);
-            }
-            currentlyAddingScript = null;
-
-            return node;
-        } else if (isWebWorker) {
-            try {
-                //In a web worker, use importScripts. This is not a very
-                //efficient use of importScripts, importScripts will block until
-                //its script is downloaded and evaluated. However, if web workers
-                //are in play, the expectation that a build has been done so that
-                //only one script needs to be loaded anyway. This may need to be
-                //reevaluated if other use cases become common.
-                importScripts(url);
-
-                //Account for anonymous modules
-                context.completeLoad(moduleName);
-            } catch (e) {
-                context.onError(makeError('importscripts',
-                                'importScripts failed for ' +
-                                    moduleName + ' at ' + url,
-                                e,
-                                [moduleName]));
-            }
-        }
-    };
-
-    function getInteractiveScript() {
-        if (interactiveScript && interactiveScript.readyState === 'interactive') {
-            return interactiveScript;
-        }
-
-        eachReverse(scripts(), function (script) {
-            if (script.readyState === 'interactive') {
-                return (interactiveScript = script);
-            }
-        });
-        return interactiveScript;
-    }
-
-    //Look for a data-main script attribute, which could also adjust the baseUrl.
-    if (isBrowser) {
-        //Figure out baseUrl. Get it from the script tag with require.js in it.
-        eachReverse(scripts(), function (script) {
-            //Set the 'head' where we can append children by
-            //using the script's parent.
-            if (!head) {
-                head = script.parentNode;
-            }
-
-            //Look for a data-main attribute to set main script for the page
-            //to load. If it is there, the path to data main becomes the
-            //baseUrl, if it is not already set.
-            dataMain = script.getAttribute('data-main');
-            if (dataMain) {
-                //Preserve dataMain in case it is a path (i.e. contains '?')
-                mainScript = dataMain;
-
-                //Set final baseUrl if there is not already an explicit one.
-                if (!cfg.baseUrl) {
-                    //Pull off the directory of data-main for use as the
-                    //baseUrl.
-                    src = mainScript.split('/');
-                    mainScript = src.pop();
-                    subPath = src.length ? src.join('/')  + '/' : './';
-
-                    cfg.baseUrl = subPath;
-                }
-
-                //Strip off any trailing .js since mainScript is now
-                //like a module name.
-                mainScript = mainScript.replace(jsSuffixRegExp, '');
-
-                 //If mainScript is still a path, fall back to dataMain
-                if (req.jsExtRegExp.test(mainScript)) {
-                    mainScript = dataMain;
-                }
-
-                //Put the data-main script in the files to load.
-                cfg.deps = cfg.deps ? cfg.deps.concat(mainScript) : [mainScript];
-
-                return true;
-            }
-        });
-    }
-
-    /**
-     * The function that handles definitions of modules. Differs from
-     * require() in that a string for the module should be the first argument,
-     * and the function to execute after dependencies are loaded should
-     * return a value to define the module corresponding to the first argument's
-     * name.
-     */
-    define = function (name, deps, callback) {
-        var node, context;
-
-        //Allow for anonymous modules
-        if (typeof name !== 'string') {
-            //Adjust args appropriately
-            callback = deps;
-            deps = name;
-            name = null;
-        }
-
-        //This module may not have dependencies
-        if (!isArray(deps)) {
-            callback = deps;
-            deps = null;
-        }
-
-        //If no name, and callback is a function, then figure out if it a
-        //CommonJS thing with dependencies.
-        if (!deps && isFunction(callback)) {
-            deps = [];
-            //Remove comments from the callback string,
-            //look for require calls, and pull them into the dependencies,
-            //but only if there are function args.
-            if (callback.length) {
-                callback
-                    .toString()
-                    .replace(commentRegExp, '')
-                    .replace(cjsRequireRegExp, function (match, dep) {
-                        deps.push(dep);
-                    });
-
-                //May be a CommonJS thing even without require calls, but still
-                //could use exports, and module. Avoid doing exports and module
-                //work though if it just needs require.
-                //REQUIRES the function to expect the CommonJS variables in the
-                //order listed below.
-                deps = (callback.length === 1 ? ['require'] : ['require', 'exports', 'module']).concat(deps);
-            }
-        }
-
-        //If in IE 6-8 and hit an anonymous define() call, do the interactive
-        //work.
-        if (useInteractive) {
-            node = currentlyAddingScript || getInteractiveScript();
-            if (node) {
-                if (!name) {
-                    name = node.getAttribute('data-requiremodule');
-                }
-                context = contexts[node.getAttribute('data-requirecontext')];
-            }
-        }
-
-        //Always save off evaluating the def call until the script onload handler.
-        //This allows multiple modules to be in a file without prematurely
-        //tracing dependencies, and allows for anonymous module support,
-        //where the module name is not known until the script onload event
-        //occurs. If no context, use the global queue, and get it processed
-        //in the onscript load callback.
-        (context ? context.defQueue : globalDefQueue).push([name, deps, callback]);
-    };
-
-    define.amd = {
-        jQuery: true
-    };
-
-
-    /**
-     * Executes the text. Normally just uses eval, but can be modified
-     * to use a better, environment-specific call. Only used for transpiling
-     * loader plugins, not for plain JS modules.
-     * @param {String} text the text to execute/evaluate.
-     */
-    req.exec = function (text) {
-        /*jslint evil: true */
-        return eval(text);
-    };
-
-    //Set up with config info.
-    req(cfg);
-}(this));
+// This plugin works with jQuery or Zepto (with data extension built for Zepto.)
+}(window.jQuery || window.Zepto);

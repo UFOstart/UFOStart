@@ -41,9 +41,5 @@ define([], function(){
         $('input[placeholder], textarea[placeholder]').placeholder();
     }
 
-    jQuery.validator.addMethod("tagsearch-required", function (value, element) {
-        return $(element).closest(".tagsearch-container").find(".tag").length > 0;
-    }, hnc.translate("Please add at least one tag."));
-
     return {NATIVE_PLACEHOLDER:NATIVE_PLACEHOLDER}
 });

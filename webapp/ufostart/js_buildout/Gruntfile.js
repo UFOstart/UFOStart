@@ -9,12 +9,23 @@ module.exports = function(grunt) {
         dist: {
             // the files to concatenate
             src: [
-                './bootstrap/*.js',
+                './bootstrap/transition.js',
+                './bootstrap/alert.js',
+                './bootstrap/button.js',
+                './bootstrap/carousel.js',
+                './bootstrap/collapse.js',
+                './bootstrap/dropdown.js',
+                './bootstrap/modal.js',
+                './bootstrap/tooltip.js',
+                './bootstrap/popover.js',
+                './bootstrap/scrollspy.js',
+                './bootstrap/tab.js',
+                './bootstrap/affix.js',
                 './bower_components/json3/lib/json3.js',
+                './bower_components/store/store.js',
                 './bower_components/underscore/underscore.js',
                 './bower_components/backbone/backbone.js',
-                './bower_components/parsleyjs/parsley.min.js',
-                './bower_components/requirejs/require.js',
+                './bower_components/parsleyjs/parsley.js'
             ],
             // the location of the resulting JS file
             dest: '../static/scripts/dist/libs.js'
@@ -34,7 +45,11 @@ module.exports = function(grunt) {
     , copy: {
       main: {
         files: [
-          {src: ['./bower_components/less.js/dist/less-1.4.0-beta.js'], dest: '../static/scripts/dist/less.js'},
+          {expand:true, src: ['./bower_components/hncajax/tools/*.js'], dest: '../static/scripts/', rename: function(dest, src) {
+              return dest + src.replace('./bower_components/hncajax/', '');
+            }},
+          {src: ['./bower_components/less.js/dist/less-1.4.0-beta.js'], dest: '../static/scripts/dev/less.js'},
+          {src: ['./bower_components/requirejs/require.js'], dest: '../static/scripts/dev/require.js'}
         ]
       }
     }
@@ -43,7 +58,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
-
-  grunt.registerTask('development', ['concat', 'uglify', "copy"]);
+  grunt.loadNpmTasks('grunt-bower-task');
+  
+  grunt.registerTask('default', ['concat', 'uglify', "copy"]);
   grunt.registerTask('production', ['concat', 'uglify']);
 }
