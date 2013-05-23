@@ -1,0 +1,9 @@
+{
+  "name": "hncajax",
+  "version": "0.0.0",
+  "commit": "d96148985d3f16cba07ea804415444b1fcca10be",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:MartinPeschke/hncajax.git"
+  }
+}

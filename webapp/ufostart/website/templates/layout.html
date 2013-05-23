@@ -1,0 +1,26 @@
+<%inherit file="base.html"/>
+
+<%block name="layoutscripts"></%block>
+
+<div id="global-frame" class="${self.page_class()}">
+    <%block name="header">
+        <div class="navbar">
+        <div class="container">
+            <div class="row">
+                <div class="col-span-12">
+                    <a class="navbar-brand" href="${url("website_index")}"><img src="${ROOT_STATIC_URL}img/logo.png?${VERSION_TOKEN}" alt="${g.project_name}"/></a>
+                </div>
+            </div>
+       </div>
+       </div>
+    </%block>
+    <%block name="contentwrapper">
+        ${self.header_messages()}
+        <div class="page-wrapper">
+            ${next.content()}
+        </div>
+    </%block>
+    <%block name="footer">
+    <footer class="footer page-body shaded"></footer>
+    </%block>
+</div>

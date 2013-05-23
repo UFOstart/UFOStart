@@ -29,7 +29,7 @@ requires = [
     "redis",
     "httplib2",
     'hncapiclient>=0.1.0dev',
-    'hnctools>=0.1.3dev',
+    'hnctools>=0.1.4dev',
     'hncforms>=0.1.2dev'
     ]
 
