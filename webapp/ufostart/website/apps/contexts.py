@@ -1,5 +1,7 @@
 from pyramid.decorator import reify
 from ufostart.lib.baseviews import RootContext
+from ufostart.website.apps.auth import LoginForm
+from ufostart.website.apps.models.auth import AnonUser
 
 USER_SESSION_KEY = 'WEBSITE_USER'
 
@@ -19,8 +21,6 @@ class logged_in(object):
         return wrapped_f
 
 
-LoginForm = None
-
 class WebsiteRootContext(RootContext):
     static_prefix = "/web/static/"
     app_label = 'website'
@@ -32,19 +32,17 @@ class WebsiteRootContext(RootContext):
 
     @reify
     def user(self):
-        return None
+        return self.request.session.get(USER_SESSION_KEY, AnonUser())
     def setUser(self, user):
-        self.user = user
-        self.request.session[USER_SESSION_KEY] = user
+        self.request.session[USER_SESSION_KEY] = self.user = user
         return user
     def logout(self):
         if USER_SESSION_KEY in self.request.session:
             del self.request.session[USER_SESSION_KEY]
-
+        self.user = AnonUser()
 
 stdRequireLogin = logged_in(lambda req: req.fwd_url("website_signup", _query=[("furl", req.url)]))
 fwdRequireLogin = lambda route: logged_in(lambda req: req.fwd_url("website_signup", _query=[("furl", route(req))]))
-
 
 class WebsiteAuthedContext(WebsiteRootContext):
     def is_allowed(self, request):

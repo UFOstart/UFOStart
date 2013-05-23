@@ -1,6 +1,6 @@
 import logging, os, random
 from dogpile.cache import make_region
-from hncapiclient.backend import VersionedBackend
+from hnc.apiclient.backend import VersionedBackend
 
 log = logging.getLogger(__name__)
 

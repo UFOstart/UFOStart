@@ -1,11 +1,10 @@
 from datetime import datetime, date
 from pyramid.config import Configurator
-from pyramid.i18n import TranslationStringFactory
 from pyramid.mako_templating import renderer_factory
 from pyramid.renderers import JSON
 from pyramid_beaker import session_factory_from_settings
 
-from hnctools import request
+from hnc.tools import request
 from .lib.subscribers import context_authorization, add_renderer_variables
 from .lib.globals import Globals
 
@@ -14,7 +13,6 @@ def format_datetime(val, request): return val.strftime('%Y-%m-%dT%H-%M-%S')
 jsonRenderer = JSON()
 jsonRenderer.add_adapter(datetime, format_datetime)
 jsonRenderer.add_adapter(date, format_date)
-
 
 
 def main(global_config, **settings):
@@ -29,6 +27,11 @@ def main(global_config, **settings):
     config.add_renderer(".html", renderer_factory)
     config.add_renderer(".xml", renderer_factory)
     config.add_renderer('json', jsonRenderer)
+
+    def _(request, string):
+        return string
+    config.add_request_method(_, '_')
+
 
     config.add_subscriber(context_authorization, 'pyramid.events.ContextFound')
     config.add_subscriber(add_renderer_variables, 'pyramid.events.BeforeRender')

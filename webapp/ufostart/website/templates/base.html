@@ -45,7 +45,7 @@
 <%def name="layout_scripts()"></%def>
 <%def name="jsoptions()">
     <script>
-        window.__options__ = {fb : { appId : "${vctxt.settings.fbAppId}", user : {}, connect : true }
+        window.__options__ = {fb : { appId : "${vctxt.settings.fbAppId}", user : ${vctxt.user.toJSON(True)|n}, connect : true }
             , messagingContainer: "#message-container"
             , staticPrefix: '${ROOT_STATIC_URL}'
             , loadingHtml : '<div class="show-loading"><img src="${ROOT_STATIC_URL}/img/ajax-loader-light.gif"/></div>'
@@ -65,7 +65,7 @@
     </script>
     ${self.jsoptions()}
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="${ROOT_STATIC_URL}scripts/dist/libs.min.js"></script>
+    <script src="${ROOT_STATIC_URL}scripts/dist/libs.min.js"></script><script>_.templateSettings = {interpolate : /\{\{ (.+?) \}\}/g, evaluate: /\{% (.+?) %\}/g};</script>
     ${self.pre_scripts()}
     <script data-main="site"  src="${ROOT_STATIC_URL}scripts/dev/require.js" type="text/javascript"></script>
     ${self.layout_scripts()}

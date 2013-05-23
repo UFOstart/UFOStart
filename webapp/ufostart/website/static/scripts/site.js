@@ -1,11 +1,6 @@
 require(["misc", "fb"], function(misc, fb){
     var options = window.__options__, root = window;
 
-    _.templateSettings = {
-        interpolate : /\{\{ (.+?) \}\}/g
-        , evaluate: /\{% (.+?) %\}/g
-    };
-
     // IE<9
     if(typeof String.prototype.trim !== 'function') {
         String.prototype.trim = function() {

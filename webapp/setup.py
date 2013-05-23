@@ -28,9 +28,7 @@ requires = [
     "dogpile.cache>=0.4.1",
     "redis",
     "httplib2",
-    'hncapiclient>=0.1.0dev',
-    'hnctools>=0.1.4dev',
-    'hncforms>=0.1.2dev'
+    'hnc>=0.0.1dev'
     ]
 
 setup(name='ufostart',
@@ -63,7 +61,5 @@ setup(name='ufostart',
       entry_points="""\
       [paste.app_factory]
       main = ufostart:main
-      [paste.paster_command]
-      buildapp = ufostart.commands:BuildStatics
       """,
       )
