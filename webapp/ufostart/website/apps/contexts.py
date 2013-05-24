@@ -29,13 +29,14 @@ class WebsiteRootContext(RootContext):
     def loginFormWithValues(self):
         return LoginForm, {}, {}
 
-
     @reify
     def user(self):
         return self.request.session.get(USER_SESSION_KEY) or AnonUser()
+
     def setUser(self, user):
         self.request.session[USER_SESSION_KEY] = self.user = user
         return user
+
     def logout(self):
         if USER_SESSION_KEY in self.request.session:
             del self.request.session[USER_SESSION_KEY]

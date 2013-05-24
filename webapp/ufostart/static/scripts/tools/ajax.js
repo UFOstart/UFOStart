@@ -14,7 +14,8 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
                     xhr.redirection = resp.redirect;
                     window.location.href = resp.redirect;
                   } else if(resp.reload) {
-                    window.location.href = hnc.options.furl;
+                    if(options.furl)window.location.href = options.furl;
+                    else window.location.reload(true);
                   } else if (resp.dbMessage){
                     if(options.error){options.error(resp.dbMessage, resp, data);}
                     else {messaging.addError({message:resp.dbMessage})}

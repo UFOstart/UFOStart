@@ -16,7 +16,7 @@ Style = namedtuple("Style", ["list", "hasBuster"])
 
 PROJECTNAME="friendfund"
 SUBSITES = [
-    SubSite(location = 'website', scripts=['setup.js', 'fb.js'], styles=Style(['site.less', 'datepicker.less'], True))
+    SubSite(location = 'website', scripts=['setup.js', 'facebook.js'], styles=Style(['site.less', 'datepicker.less'], True))
   ]
 PROCESS_GROUPS = ['p1', 'jobs']
 CLEAN_SESSIONS = False

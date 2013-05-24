@@ -1,4 +1,4 @@
-require(["misc", "fb"], function(misc, fb){
+require(["tools/ajax", "misc"], function(ajax, misc){
     var options = window.__options__, root = window;
 
     // IE<9
@@ -86,7 +86,26 @@ require(["misc", "fb"], function(misc, fb){
 
     if(_.isEmpty(root.hnc)){
         var hnc = new HNC(options);
-        hnc.fb = fb.setup(hnc, options);
+
+
+        var socials = _.keys(options.socials), i= 0;
+        if(socials.length){
+            hnc.socials = {};
+            require(_.map(socials, function(e){return "networks/"+e}), function(){
+                var name, lib;
+                for(i;i<socials.length;i++){
+                    name = socials[i];
+                    lib = arguments[i];
+                    hnc[name] = new lib.AuthHandler(options.socials[name], options.user, '/user/login/social');
+                }
+            });
+        }
+//      global login form (pull down style, if it exists, connect it up
+        var form = $("#login-pull-down-form");
+        if(!options.user.token && form.length){
+            ajax.ifyForm({root:form});
+        }
+
         root.hnc = hnc;
     }
 });

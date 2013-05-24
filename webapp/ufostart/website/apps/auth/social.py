@@ -1,8 +1,11 @@
-import logging
+import base64, logging
 from hnc.apiclient.backend import DBNotification, DBException
 from ufostart.website.apps.models.auth import RefreshAccessTokenProc, SocialConnectProc
 
 log = logging.getLogger(__name__)
+
+
+class InvalidSignatureException(Exception):pass
 
 
 def fb_accept_requests(context, request):
@@ -23,38 +26,26 @@ def fb_token_refresh(context, request):
             pass
     return {"success":True, "isLogin": isLogin}
 
-def extract_fb_data(request):
-    profile = request.json_body['profile']
-    try:
-        values = {
-            'name': profile['name']
-            , 'pwd': 'Popov2010'
-            , 'email': profile['email']
-            , 'Profile': [{
-                'id': profile['id']
-                , 'type':'FB'
-                , 'picture': profile['picture']
-                , 'accessToken': request.json_body['authResponse']['accessToken']
-                , 'email': profile['email']
-                , 'name': profile['name']
-            }]
-        }
-    except KeyError, e:
-        return None
-    else:
-        user = request.root.user
-        if not user.isAnon():
-            values['name'] = user.name
-            values['email'] = user.email
-        return values
 
+def base64_url_decode(inp):
+    padding_factor = (4 - len(inp) % 4) % 4
+    inp += "="*padding_factor
+    return base64.b64decode(unicode(inp).translate(dict(zip(map(ord, u'-_'), u'+/'))))
 
-def fb_login(context, request):
+def social_login(context, request):
     result = {'success': False}
-    values = extract_fb_data(request)
-    if not values: return result
+    profile = request.json_body['profile']
+    network = profile.get('type')
+    networkSettings = context.settings.networks.get(network)
+    if networkSettings and networkSettings.requiresAction():
+        try:
+            profile = networkSettings.action(request, profile)
+        except InvalidSignatureException, e:
+            return {'success':False, 'message':"Invalid Signature!"}
+
+    if not profile: return result
     try:
-        user = SocialConnectProc(request, values)
+        user = SocialConnectProc(request, {'Profile': [profile]})
     except DBNotification, e:
         log.error("UNHANDLED DB MESSAGE: %s", e.message)
         return {'success':False, 'message': e.message}
