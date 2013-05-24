@@ -1,22 +1,37 @@
 <%inherit file="../../layout.html"/>
 
+<%def name="pageTitle()"><div class="page-header">${template.name} <span class="template-icon ${vctxt.user.Company.Template.getStyleKey()}"></span> </div></%def>
+
+
 <%def name="content()">
     <div class="container centered auth-page">
         <div class="row">
             <div class="col col-lg-8">
+                <h6>Needs to be fulfilled in 90 days</h6>
                 %for need in template.Need:
-                    <div class="single-need">
-                        ${need.name}
-                    </div>
+                    ${self.renderNeed(need)}
                 %endfor
             </div>
             <div class="col col-lg-4">
                 %for need in needs:
-                    <div class="single-need">
-                        ${need.name}
-                    </div>
+                    ${self.renderNeed(need, True)}
                 %endfor
             </div>
         </div>
     </div>
+</%def>
+
+<%def name="renderNeed(need, isAdd = False)">
+<div class="single-need">
+    %if isAdd:
+        <a class="add">+</a>
+    %else:
+        <a class="remove">×</a>
+    %endif
+
+    <div class="need-title">${need.name}</div>
+    <div class="need-details">
+        <div class="need-detail">Detail 1</div><div class="need-detail">Detail 2</div><div class="need-detail">Detail 3</div>
+    </div>
+</div>
 </%def>

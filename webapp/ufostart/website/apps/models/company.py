@@ -1,6 +1,15 @@
 from hnc.apiclient import TextField, Mapping, ListField, DictField
 from hnc.apiclient.backend import ClientTokenProc
 
+TEMPLATE_STYLE_KEYS = {
+    'EARLY_STAGE_ECOMMERCE':'ecommerce'
+    , 'HI-TECH':'hitech'
+    , 'INTERNATIONALISING':'internat'
+    , 'JUST_GETTING_STARTED':'started'
+    , 'SEED_STAGE':'seed'
+    , 'SERIES_B':'seriesb'
+}
+
 
 
 class NeedModel(Mapping):
@@ -14,7 +23,7 @@ class TemplateModel(Mapping):
     Need = ListField(DictField(NeedModel))
 
     def getStyleKey(self):
-        return self.key.lower()
+        return TEMPLATE_STYLE_KEYS[self.key]
 
 
 GetAllCompanyTemplatesProc = ClientTokenProc("/web/template/list", result_cls=TemplateModel, root_key="Templates", result_list=True)

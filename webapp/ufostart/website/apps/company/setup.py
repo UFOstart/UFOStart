@@ -3,8 +3,7 @@ from ufostart.website.apps.models.company import GetAllCompanyTemplatesProc, Get
 
 
 def basic(context, request):
-    templateName = context.user.Company.Template.name
-    if templateName: request.fwd("website_company_setup_round")
+    if context.user.Company.Template: request.fwd("website_company_setup_round")
     templates = GetAllCompanyTemplatesProc(request)
     return {'templates': group_by_n(templates)}
 
