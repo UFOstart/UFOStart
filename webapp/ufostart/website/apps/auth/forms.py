@@ -5,6 +5,9 @@ from hnc.forms.messages import GenericSuccessMessage
 from ufostart.website.apps.models.auth import WebLoginEmailProc, WebSignupEmailProc, ResendRequestProc, PasswordRequestProc, UpdatePasswordProc
 
 
+class PasswordLoginField(PasswordField):
+    template ="ufostart:website/templates/auth/controls/password.html"
+
 class SignupForm(BaseForm):
     id="signup"
     label = "Signup"
@@ -12,7 +15,7 @@ class SignupForm(BaseForm):
     fields = [
         StringField("name", "Name", REQUIRED)
         , EmailField("email", "Email", HtmlAttrs(required = True, data_validation_url = '/signup/checkemail'))
-        , PasswordField("pwd", "Password", REQUIRED)
+        , PasswordField("pwd", "Password", REQUIRED, html_help="Min. 6 characters. Letters and numbers only.")
         , PasswordField("pwdconfirm", "Confirm password", REQUIRED)
         , CheckboxPostField("agreeTOS", 'I accept the <a class="link" target="_blank" href="/terms">terms of use</a>', REQUIRED)
     ]
@@ -37,7 +40,7 @@ class LoginForm(BaseForm):
     action_label = "Login"
     fields = [
         EmailField("email", "Email Address", REQUIRED)
-        , PasswordField("pwd", "Password", REQUIRED)
+        , PasswordLoginField("pwd", "Password", REQUIRED)
     ]
 
     @classmethod

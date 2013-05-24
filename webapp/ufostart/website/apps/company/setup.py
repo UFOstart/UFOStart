@@ -3,6 +3,8 @@ from ufostart.website.apps.models.company import GetAllCompanyTemplatesProc, Get
 
 
 def basic(context, request):
+    templateName = context.user.Company.Template.name
+    if templateName: request.fwd("website_company_setup_round")
     templates = GetAllCompanyTemplatesProc(request)
     return {'templates': group_by_n(templates)}
 
@@ -18,4 +20,5 @@ def round(context, request):
     template = GetTemplateDetailsProc(request, {'name': templateName})
     needs = GetAllNeedsProc(request)
     return {'template': template, 'needs':needs}
+
 

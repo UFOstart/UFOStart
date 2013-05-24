@@ -309,10 +309,13 @@ select:focus:invalid {
 
 .help-block {
   display: block; // account for any element using help-block
-  margin-top: 5px;
-  margin-bottom: 10px;
+  margin-top: 2px;
+  font-weight:600;
+  font-size:@font-size-small;
   color: lighten(@text-color, 25%); // lighten the text some for contrast
-}
+  line-height: 1em;
+  margin-bottom: -1em;
+  + .help-inline {margin-top:@font-size-small;display: inline-block;}}
 
 
 
