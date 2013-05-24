@@ -5592,1327 +5592,1234 @@
   };
 
 }).call(this);
-;/*
- * Parsley.js allows you to verify your form inputs frontend side, without writing a line of javascript. Or so..
+;/*!
+ * jQuery Validation Plugin 1.11.1
  *
- * Author: Guillaume Potier - @guillaumepotier
-*/
-
-!function ($) {
-
-  'use strict';
-
-  /**
-  * Validator class stores all constraints functions and associated messages.
-  * Provides public interface to add, remove or modify them
-  *
-  * @class Validator
-  * @constructor
-  */
-  var Validator = function ( options ) {
-    /**
-    * Error messages
-    *
-    * @property messages
-    * @type {Object}
-    */
-    this.messages = {
-        defaultMessage: "This value seems to be invalid."
-      , type: {
-            email:      "This value should be a valid email."
-          , url:        "This value should be a valid url."
-          , urlstrict:  "This value should be a valid url."
-          , number:     "This value should be a valid number."
-          , digits:     "This value should be digits."
-          , dateIso:    "This value should be a valid date (YYYY-MM-DD)."
-          , alphanum:   "This value should be alphanumeric."
-          , phone:      "This value should be a valid phone number."
-        }
-      , notnull:        "This value should not be null."
-      , notblank:       "This value should not be blank."
-      , required:       "This value is required."
-      , regexp:         "This value seems to be invalid."
-      , min:            "This value should be greater than or equal to %s."
-      , max:            "This value should be lower than or equal to %s."
-      , range:          "This value should be between %s and %s."
-      , minlength:      "This value is too short. It should have %s characters or more."
-      , maxlength:      "This value is too long. It should have %s characters or less."
-      , rangelength:    "This value length is invalid. It should be between %s and %s characters long."
-      , mincheck:       "You must select at least %s choices."
-      , maxcheck:       "You must select %s choices or less."
-      , rangecheck:     "You must select between %s and %s choices."
-      , equalto:        "This value should be the same."
-    },
-
-    this.init( options );
-  };
-
-  Validator.prototype = {
-
-    constructor: Validator
-
-    /**
-    * Validator list. Built-in validators functions
-    *
-    * @property validators
-    * @type {Object}
-    */
-    , validators: {
-      notnull: function ( val ) {
-        return val.length > 0;
-      }
-
-      , notblank: function ( val ) {
-        return 'string' === typeof val && '' !== val.replace( /^\s+/g, '' ).replace( /\s+$/g, '' );
-      }
-
-      // Works on all inputs. val is object for checkboxes
-      , required: function ( val ) {
-
-        // for checkboxes and select multiples. Check there is at least one required value
-        if ( 'object' === typeof val ) {
-          for ( var i in val ) {
-            if ( this.required( val[ i ] ) ) {
-              return true;
-            }
-          }
-
-          return false;
-        }
-
-        return this.notnull( val ) && this.notblank( val );
-      }
-
-      , type: function ( val, type ) {
-        var regExp;
-
-        switch ( type ) {
-          case 'number':
-            regExp = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/;
-            break;
-          case 'digits':
-            regExp = /^\d+$/;
-            break;
-          case 'alphanum':
-            regExp = /^\w+$/;
-            break;
-          case 'email':
-            regExp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
-            break;
-          case 'url':
-            val = new RegExp( '(https?|s?ftp|git)', 'i' ).test( val ) ? val : 'http://' + val;
-            /* falls through */
-          case 'urlstrict':
-            regExp = /^(https?|s?ftp|git):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
-            break;
-          case 'dateIso':
-            regExp = /^(\d{4})\D?(0[1-9]|1[0-2])\D?([12]\d|0[1-9]|3[01])$/;
-            break;
-          case 'phone':
-            regExp = /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/;
-            break;
-          default:
-            return false;
-        }
-
-        // test regExp if not null
-        return '' !== val ? regExp.test( val ) : false;
-      }
-
-      , regexp: function ( val, regExp, self ) {
-        return new RegExp( regExp, self.options.regexpFlag || '' ).test( val );
-      }
-
-      , minlength: function ( val, min ) {
-        return val.length >= min;
-      }
-
-      , maxlength: function ( val, max ) {
-        return val.length <= max;
-      }
-
-      , rangelength: function ( val, arrayRange ) {
-        return this.minlength( val, arrayRange[ 0 ] ) && this.maxlength( val, arrayRange[ 1 ] );
-      }
-
-      , min: function ( val, min ) {
-        return Number( val ) >= min;
-      }
-
-      , max: function ( val, max ) {
-        return Number( val ) <= max;
-      }
-
-      , range: function ( val, arrayRange ) {
-        return val >= arrayRange[ 0 ] && val <= arrayRange[ 1 ];
-      }
-
-      , equalto: function ( val, elem, self ) {
-        self.options.validateIfUnchanged = true;
-
-        return val === $( elem ).val();
-      }
-
-      , remote: function ( val, url, self ) {
-        var result = null
-          , data = {}
-          , dataType = {};
-
-        data[ self.$element.attr( 'name' ) ] = val;
-
-        if ( 'undefined' !== typeof self.options.remoteDatatype ) {
-          dataType = { dataType: self.options.remoteDatatype };
-        }
-
-        var manage = function ( isConstraintValid, message ) {
-          // remove error message if we got a server message, different from previous message
-          if ( 'undefined' !== typeof message && 'undefined' !== typeof self.Validator.messages.remote && message !== self.Validator.messages.remote ) {
-            $( self.ulError + ' .remote' ).remove();
-          }
-
-          self.updtConstraint( { name: 'remote', valid: isConstraintValid }, message );
-          self.manageValidationResult();
-        };
-
-        // transform string response into object
-        var handleResponse = function ( response ) {
-          if ( 'object' === typeof response ) {
-            return response;
-          }
-
-          try {
-            response = $.parseJSON( response );
-          } catch ( err ) {}
-
-          return response;
-        }
-
-        var manageErrorMessage = function ( response ) {
-          return 'object' === typeof response && null !== response ? ( 'undefined' !== typeof response.error ? response.error : ( 'undefined' !== typeof response.message ? response.message : null ) ) : null;
-        }
-
-        $.ajax( $.extend( {}, {
-            url: url
-          , data: data
-          , type: self.options.remoteMethod || 'GET'
-          , success: function ( response ) {
-            response = handleResponse( response );
-            manage( 1 === response || true === response || ( 'object' === typeof response && null !== response && 'undefined' !== typeof response.success ), manageErrorMessage( response )
-            );
-          }
-          , error: function ( response ) {
-            response = handleResponse( response );
-            manage( false, manageErrorMessage( response ) );
-          }
-        }, dataType ) );
-
-        return result;
-      }
-
-      /**
-      * Aliases for checkboxes constraints
-      */
-      , mincheck: function ( obj, val ) {
-        return this.minlength( obj, val );
-      }
-
-      , maxcheck: function ( obj, val ) {
-        return this.maxlength( obj, val);
-      }
-
-      , rangecheck: function ( obj, arrayRange ) {
-        return this.rangelength( obj, arrayRange );
-      }
-    }
-
-    /*
-    * Register custom validators and messages
-    */
-    , init: function ( options ) {
-      var customValidators = options.validators
-        , customMessages = options.messages;
-
-      var key;
-      for ( key in customValidators ) {
-        this.addValidator(key, customValidators[ key ]);
-      }
-
-      for ( key in customMessages ) {
-        this.addMessage(key, customMessages[ key ]);
-      }
-    }
-
-    /**
-    * Replace %s placeholders by values
-    *
-    * @method formatMesssage
-    * @param {String} message Message key
-    * @param {Mixed} args Args passed by validators functions. Could be string, number or object
-    * @return {String} Formatted string
-    */
-    , formatMesssage: function ( message, args ) {
-
-      if ( 'object' === typeof args ) {
-        for ( var i in args ) {
-          message = this.formatMesssage( message, args[ i ] );
-        }
-
-        return message;
-      }
-
-      return 'string' === typeof message ? message.replace( new RegExp( '%s', 'i' ), args ) : '';
-    }
-
-    /**
-    * Add / override a validator in validators list
-    *
-    * @method addValidator
-    * @param {String} name Validator name. Will automatically bindable through data-name=''
-    * @param {Function} fn Validator function. Must return {Boolean}
-    */
-    , addValidator: function ( name, fn ) {
-      this.validators[ name ] = fn;
-    }
-
-    /**
-    * Add / override error message
-    *
-    * @method addMessage
-    * @param {String} name Message name. Will automatically be binded to validator with same name
-    * @param {String} message Message
-    */
-    , addMessage: function ( key, message, type ) {
-
-      if ( 'undefined' !== typeof type && true === type ) {
-        this.messages.type[ key ] = message;
-        return;
-      }
-
-      // custom types messages are a bit tricky cuz' nested ;)
-      if ( 'type' === key ) {
-        for ( var i in message ) {
-          this.messages.type[ i ] = message[ i ];
-        }
-
-        return;
-      }
-
-      this.messages[ key ] = message;
-    }
-  };
-
-  /**
-  * ParsleyField class manage each form field inside a validated Parsley form.
-  * Returns if field valid or not depending on its value and constraints
-  * Manage field error display and behavior, event triggers and more
-  *
-  * @class ParsleyField
-  * @constructor
-  */
-  var ParsleyField = function ( element, options, type ) {
-    this.options = options;
-    this.Validator = new Validator( options );
-
-    // if type is ParsleyFieldMultiple, just return this. used for clone
-    if ( type === 'ParsleyFieldMultiple' ) {
-      return this;
-    }
-
-    this.init( element, type || 'ParsleyField' );
-  };
-
-  ParsleyField.prototype = {
-
-    constructor: ParsleyField
-
-    /**
-    * Set some properties, bind constraint validators and validation events
-    *
-    * @method init
-    * @param {Object} element
-    * @param {Object} options
-    */
-    , init: function ( element, type ) {
-      this.type = type;
-      this.valid = true;
-      this.element = element;
-      this.validatedOnce = false;
-      this.$element = $( element );
-      this.val = this.$element.val();
-      this.isRequired = false;
-      this.constraints = {};
-
-      // overriden by ParsleyItemMultiple if radio or checkbox input
-      if ( 'undefined' === typeof this.isRadioOrCheckbox ) {
-        this.isRadioOrCheckbox = false;
-        this.hash = this.generateHash();
-        this.errorClassHandler = this.options.errors.classHandler( element, this.isRadioOrCheckbox ) || this.$element;
-      }
-
-      // error ul dom management done only once at init
-      this.ulErrorManagement();
-
-      // bind some html5 properties
-      this.bindHtml5Constraints();
-
-      // bind validators to field
-      this.addConstraints();
-
-      // bind parsley events if validators have been registered
-      if ( this.hasConstraints() ) {
-        this.bindValidationEvents();
-      }
-    }
-
-    , setParent: function ( elem ) {
-      this.$parent = $( elem );
-    }
-
-    , getParent: function () {
-      return this.$parent;
-    }
-
-    /**
-    * Bind some extra html5 types / validators
-    *
-    * @private
-    * @method bindHtml5Constraints
-    */
-    , bindHtml5Constraints: function () {
-      // add html5 required support + class required support
-      if ( this.$element.hasClass( 'required' ) || this.$element.prop( 'required' ) ) {
-        this.options.required = true;
-      }
-
-      // add html5 supported types & options
-      if ( 'undefined' !== typeof this.$element.attr( 'type' ) && new RegExp( this.$element.attr( 'type' ), 'i' ).test( 'email url number range' ) ) {
-        this.options.type = this.$element.attr( 'type' );
-
-        // number and range types could have min and/or max values
-        if ( new RegExp( this.options.type, 'i' ).test( 'number range' ) ) {
-          this.options.type = 'number';
-
-          // double condition to support jQuery and Zepto.. :(
-          if ( 'undefined' !== typeof this.$element.attr( 'min' ) && this.$element.attr( 'min' ).length ) {
-            this.options.min = this.$element.attr( 'min' );
-          }
-
-          if ( 'undefined' !== typeof this.$element.attr( 'max' ) && this.$element.attr( 'max' ).length ) {
-            this.options.max = this.$element.attr( 'max' );
-          }
-        }
-      }
-
-      if ( 'string' === typeof this.$element.attr( 'pattern' ) && this.$element.attr( 'pattern' ).length ) {
-          this.options.regexp = this.$element.attr( 'pattern' );
-      }
-
-    }
-
-    /**
-    * Attach field validators functions passed through data-api
-    *
-    * @private
-    * @method addConstraints
-    */
-    , addConstraints: function () {
-      for ( var constraint in this.options ) {
-        var addConstraint = {};
-        addConstraint[ constraint ] = this.options[ constraint ];
-        this.addConstraint( addConstraint, true );
-      }
-    }
-
-    /**
-    * Dynamically add a new constraint to a field
-    *
-    * @method addConstraint
-    * @param {Object} constraint { name: requirements }
-    */
-    , addConstraint: function ( constraint, doNotUpdateValidationEvents ) {
-        for ( var name in constraint ) {
-          name = name.toLowerCase();
-
-          if ( 'function' === typeof this.Validator.validators[ name ] ) {
-            this.constraints[ name ] = {
-                name: name
-              , requirements: constraint[ name ]
-              , valid: null
-            }
-
-            if ( name === 'required' ) {
-              this.isRequired = true;
-            }
-
-            this.addCustomConstraintMessage( name );
-          }
-        }
-
-        // force field validation next check and reset validation events
-        if ( 'undefined' === typeof doNotUpdateValidationEvents ) {
-          this.bindValidationEvents();
-        }
-    }
-
-    /**
-    * Dynamically update an existing constraint to a field.
-    * Simple API: { name: requirements }
-    *
-    * @method updtConstraint
-    * @param {Object} constraint
-    */
-    , updateConstraint: function ( constraint, message ) {
-      for ( var name in constraint ) {
-        this.updtConstraint( { name: name, requirements: constraint[ name ], valid: null }, message );
-      }
-    }
-
-    /**
-    * Dynamically update an existing constraint to a field.
-    * Complex API: { name: name, requirements: requirements, valid: boolean }
-    *
-    * @method updtConstraint
-    * @param {Object} constraint
-    */
-    , updtConstraint: function ( constraint, message ) {
-      this.constraints[ constraint.name ] = $.extend( true, this.constraints[ constraint.name ], constraint );
-
-      if ( 'string' === typeof message ) {
-        this.Validator.messages[ constraint.name ] = message ;
-      }
-
-      // force field validation next check and reset validation events
-      this.bindValidationEvents();
-    }
-
-    /**
-    * Dynamically remove an existing constraint to a field.
-    *
-    * @method removeConstraint
-    * @param {String} constraintName
-    */
-    , removeConstraint: function ( constraintName ) {
-      var constraintName = constraintName.toLowerCase();
-
-      delete this.constraints[ constraintName ];
-
-      if ( constraintName === 'required' ) {
-        this.isRequired = false;
-      }
-
-      // if there are no more constraint, destroy parsley instance for this field
-      if ( !this.hasConstraints() ) {
-        // in a form context, remove item from parent
-        if ( 'ParsleyForm' === typeof this.getParent() ) {
-          this.getParent().removeItem( this.$element );
-          return;
-        }
-
-        this.destroy();
-        return;
-      }
-
-      this.bindValidationEvents();
-    }
-
-    /**
-    * Add custom constraint message, passed through data-API
-    *
-    * @private
-    * @method addCustomConstraintMessage
-    * @param constraint
-    */
-    , addCustomConstraintMessage: function ( constraint ) {
-      // custom message type data-type-email-message -> typeEmailMessage | data-minlength-error => minlengthMessage
-      var customMessage = constraint
-        + ( 'type' === constraint && 'undefined' !== typeof this.options[ constraint ] ? this.options[ constraint ].charAt( 0 ).toUpperCase() + this.options[ constraint ].substr( 1 ) : '' )
-        + 'Message';
-
-      if ( 'undefined' !== typeof this.options[ customMessage ] ) {
-        this.Validator.addMessage( 'type' === constraint ? this.options[ constraint ] : constraint, this.options[ customMessage ], 'type' === constraint );
-      }
-    }
-
-    /**
-    * Bind validation events on a field
-    *
-    * @private
-    * @method bindValidationEvents
-    */
-    , bindValidationEvents: function () {
-      // this field has validation events, that means it has to be validated
-      this.valid = null;
-      this.$element.addClass( 'parsley-validated' );
-
-      // remove eventually already binded events
-      this.$element.off( '.' + this.type );
-
-      // force add 'change' event if async remote validator here to have result before form submitting
-      if ( this.options.remote && !new RegExp( 'change', 'i' ).test( this.options.trigger ) ) {
-        this.options.trigger = !this.options.trigger ? 'change' : ' change';
-      }
-
-      // alaways bind keyup event, for better UX when a field is invalid
-      var triggers = ( !this.options.trigger ? '' : this.options.trigger )
-        + ( new RegExp( 'key', 'i' ).test( this.options.trigger ) ? '' : ' keyup' );
-
-      // alaways bind change event, for better UX when a select is invalid
-      if ( this.$element.is( 'select' ) ) {
-        triggers += new RegExp( 'change', 'i' ).test( triggers ) ? '' : ' change';
-      }
-
-      // trim triggers to bind them correctly with .on()
-      triggers = triggers.replace( /^\s+/g , '' ).replace( /\s+$/g , '' );
-
-      this.$element.on( ( triggers + ' ' ).split( ' ' ).join( '.' + this.type + ' ' ), false, $.proxy( this.eventValidation, this ) );
-    }
-
-    /**
-    * Hash management. Used for ul error
-    *
-    * @method generateHash
-    * @returns {String} 5 letters unique hash
-    */
-    , generateHash: function () {
-      return 'parsley-' + ( Math.random() + '' ).substring( 2 );
-    }
-
-    /**
-    * Public getHash accessor
-    *
-    * @method getHash
-    * @returns {String} hash
-    */
-    , getHash: function () {
-      return this.hash;
-    }
-
-    /**
-    * Returns field val needed for validation
-    * Special treatment for radio & checkboxes
-    *
-    * @method getVal
-    * @returns {String} val
-    */
-    , getVal: function () {
-      return this.$element.data('value') || this.$element.val();
-    }
-
-    /**
-    * Called when validation is triggered by an event
-    * Do nothing if val.length < this.options.validationMinlength
-    *
-    * @method eventValidation
-    * @param {Object} event jQuery event
-    */
-    , eventValidation: function ( event ) {
-      var val = this.getVal();
-
-      // do nothing on keypress event if not explicitely passed as data-trigger and if field has not already been validated once
-      if ( event.type === 'keyup' && !/keyup/i.test( this.options.trigger ) && !this.validatedOnce ) {
-        return true;
-      }
-
-      // do nothing on change event if not explicitely passed as data-trigger and if field has not already been validated once
-      if ( event.type === 'change' && !/change/i.test( this.options.trigger ) && !this.validatedOnce ) {
-        return true;
-      }
-
-      // start validation process only if field has enough chars and validation never started
-      if ( !this.isRadioOrCheckbox && val.length < this.options.validationMinlength && !this.validatedOnce ) {
-        return true;
-      }
-
-      this.validate();
-    }
-
-    /**
-    * Return if field verify its constraints
-    *
-    * @method isValid
-    * @return {Boolean} Is field valid or not
-    */
-    , isValid: function () {
-      return this.validate( false );
-    }
-
-    /**
-    * Return if field has constraints
-    *
-    * @method hasConstraints
-    * @return {Boolean} Is field has constraints or not
-    */
-    , hasConstraints: function () {
-      for ( var constraint in this.constraints ) {
-        return true;
-      }
-
-      return false;
-    }
-
-    /**
-    * Validate a field & display errors
-    *
-    * @method validate
-    * @param {Boolean} errorBubbling set to false if you just want valid boolean without error bubbling next to fields
-    * @return {Boolean} Is field valid or not
-    */
-    , validate: function ( errorBubbling ) {
-      var val = this.getVal()
-        , valid = null;
-
-      // do not even bother trying validating a field w/o constraints
-      if ( !this.hasConstraints() ) {
-        return null;
-      }
-
-      // reset Parsley validation if onFieldValidate returns true, or if field is empty and not required
-      if ( this.options.listeners.onFieldValidate( this.element, this ) || ( '' === val && !this.isRequired ) ) {
-        this.reset();
-        return null;
-      }
-
-      // do not validate a field already validated and unchanged !
-      if ( !this.needsValidation( val ) ) {
-        return this.valid;
-      }
-
-      valid = this.applyValidators();
-
-      if ( 'undefined' !== typeof errorBubbling ? errorBubbling : this.options.showErrors ) {
-        this.manageValidationResult();
-      }
-
-      return valid;
-    }
-
-    /**
-    * Check if value has changed since previous validation
-    *
-    * @method needsValidation
-    * @param value
-    * @return {Boolean}
-    */
-    , needsValidation: function ( val ) {
-      if ( !this.options.validateIfUnchanged && this.valid !== null && this.val === val && this.validatedOnce ) {
-        return false;
-      }
-
-      this.val = val;
-      return this.validatedOnce = true;
-    }
-
-    /**
-    * Loop through every fields validators
-    * Adds errors after unvalid fields
-    *
-    * @method applyValidators
-    * @return {Mixed} {Boolean} If field valid or not, null if not validated
-    */
-    , applyValidators: function () {
-      var valid = null;
-
-      for ( var constraint in this.constraints ) {
-        var result = this.Validator.validators[ this.constraints[ constraint ].name ]( this.val, this.constraints[ constraint ].requirements, this );
-
-        if ( false === result ) {
-          valid = false;
-          this.constraints[ constraint ].valid = valid;
-          this.options.listeners.onFieldError( this.element, this.constraints, this );
-        } else if ( true === result ) {
-          this.constraints[ constraint ].valid = true;
-          valid = false !== valid;
-          this.options.listeners.onFieldSuccess( this.element, this.constraints, this );
-        }
-      }
-
-      return valid;
-    }
-
-    /**
-    * Fired when all validators have be executed
-    * Returns true or false if field is valid or not
-    * Display errors messages below failed fields
-    * Adds parsley-success or parsley-error class on fields
-    *
-    * @method manageValidationResult
-    * @return {Boolean} Is field valid or not
-    */
-    , manageValidationResult: function () {
-      var valid = null;
-
-      for ( var constraint in this.constraints ) {
-        if ( false === this.constraints[ constraint ].valid ) {
-          this.manageError( this.constraints[ constraint ] );
-          valid = false;
-        } else if ( true === this.constraints[ constraint ].valid ) {
-          this.removeError( this.constraints[ constraint ].name );
-          valid = false !== valid;
-        }
-      }
-
-      this.valid = valid;
-
-      if ( true === this.valid ) {
-        this.removeErrors();
-        this.errorClassHandler.removeClass( this.options.errorClass ).addClass( this.options.successClass );
-        return true;
-      } else if ( false === this.valid ) {
-        this.errorClassHandler.removeClass( this.options.successClass ).addClass( this.options.errorClass );
-        return false;
-      }
-
-      return valid;
-    }
-
-    /**
-    * Manage ul error Container
-    *
-    * @private
-    * @method ulErrorManagement
-    */
-    , ulErrorManagement: function () {
-      this.ulError = '#' + this.hash;
-      this.ulTemplate = $( this.options.errors.errorsWrapper ).attr( 'id', this.hash ).addClass( 'parsley-error-list' );
-    }
-
-    /**
-    * Remove li / ul error
-    *
-    * @method removeError
-    * @param {String} constraintName Method Name
-    */
-    , removeError: function ( constraintName ) {
-      var liError = this.ulError + ' .' + constraintName
-        , that = this;
-
-      this.options.animate ? $( liError ).fadeOut( this.options.animateDuration, function () {
-        $( this ).remove();
-
-        if ( that.ulError && $( that.ulError ).children().length === 0 ) {
-          that.removeErrors();
-        } } ) : $( liError ).remove();
-
-      // remove li error, and ul error if no more li inside
-      if ( this.ulError && $( this.ulError ).children().length === 0 ) {
-        this.removeErrors();
-      }
-    }
-
-    /**
-    * Add li error
-    *
-    * @method addError
-    * @param {Object} { minlength: "error message for minlength constraint" }
-    */
-    , addError: function ( error ) {
-      for ( var constraint in error ) {
-        var liTemplate = $( this.options.errors.errorElem ).addClass( constraint );
-
-        $( this.ulError ).append( this.options.animate ? $( liTemplate ).html( error[ constraint ] ).hide().fadeIn( this.options.animateDuration ) : $( liTemplate ).html( error[ constraint ] ) );
-      }
-    }
-
-    /**
-    * Remove all ul / li errors
-    *
-    * @method removeErrors
-    */
-    , removeErrors: function () {
-      this.options.animate ? $( this.ulError ).fadeOut( this.options.animateDuration, function () { $( this ).remove(); } ) : $( this.ulError ).remove();
-    }
-
-    /**
-    * Remove ul errors and parsley error or success classes
-    *
-    * @method reset
-    */
-    , reset: function () {
-      this.valid = null;
-      this.removeErrors();
-      this.validatedOnce = false;
-      this.errorClassHandler.removeClass( this.options.successClass ).removeClass( this.options.errorClass );
-
-      for ( var constraint in this.constraints ) {
-        this.constraints[ constraint ].valid = null;
-      }
-
-      return this;
-    }
-
-    /**
-    * Add li / ul errors messages
-    *
-    * @method manageError
-    * @param {Object} constraint
-    */
-    , manageError: function ( constraint ) {
-      // display ulError container if it has been removed previously (or never shown)
-      if ( !$( this.ulError ).length ) {
-        this.manageErrorContainer();
-      }
-
-      // TODO: refacto properly
-      // if required constraint but field is not null, do not display
-      if ( 'required' === constraint.name && null !== this.getVal() && this.getVal().length > 0 ) {
-        return;
-      // if empty required field and non required constraint fails, do not display
-      } else if ( this.isRequired && 'required' !== constraint.name && ( null === this.getVal() || 0 === this.getVal().length ) ) {
-        return;
-      }
-
-      // TODO: refacto error name w/ proper & readable function
-      var constraintName = constraint.name
-        , liClass = false !== this.options.errorMessage ? 'custom-error-message' : constraintName
-        , liError = {}
-        , message = false !== this.options.errorMessage ? this.options.errorMessage : ( constraint.name === 'type' ?
-            this.Validator.messages[ constraintName ][ constraint.requirements ] : ( 'undefined' === typeof this.Validator.messages[ constraintName ] ?
-              this.Validator.messages.defaultMessage : this.Validator.formatMesssage( this.Validator.messages[ constraintName ], constraint.requirements ) ) );
-
-      // add liError if not shown. Do not add more than once custom errorMessage if exist
-      if ( !$( this.ulError + ' .' + liClass ).length ) {
-        liError[ liClass ] = message;
-        this.addError( liError );
-      }
-    }
-
-    /**
-    * Create ul error container
-    *
-    * @method manageErrorContainer
-    */
-    , manageErrorContainer: function () {
-      var errorContainer = this.options.errorContainer || this.options.errors.container( this.element, this.isRadioOrCheckbox )
-        , ulTemplate = this.options.animate ? this.ulTemplate.show() : this.ulTemplate;
-
-      if ( 'undefined' !== typeof errorContainer ) {
-        $( errorContainer ).append( ulTemplate );
-        return;
-      }
-
-      !this.isRadioOrCheckbox ? this.$element.after( ulTemplate ) : this.$element.parent().after( ulTemplate );
-    }
-
-    /**
-    * Add custom listeners
-    *
-    * @param {Object} { listener: function () {} }, eg { onFormSubmit: function ( valid, event, focus ) { ... } }
-    */
-    , addListener: function ( object ) {
-      for ( var listener in object ) {
-        this.options.listeners[ listener ] = object[ listener ];
-      }
-    }
-
-    /**
-    * Destroy parsley field instance
-    *
-    * @private
-    * @method destroy
-    */
-    , destroy: function () {
-      this.$element.removeClass( 'parsley-validated' );
-      this.reset().$element.off( '.' + this.type ).removeData( this.type );
-    }
-  };
-
-  /**
-  * ParsleyFieldMultiple override ParsleyField for checkbox and radio inputs
-  * Pseudo-heritance to manage divergent behavior from ParsleyItem in dedicated methods
-  *
-  * @class ParsleyFieldMultiple
-  * @constructor
-  */
-  var ParsleyFieldMultiple = function ( element, options, type ) {
-    this.initMultiple( element, options );
-    this.inherit( element, options );
-    this.Validator = new Validator( options );
-
-    // call ParsleyField constructor
-    this.init( element, type || 'ParsleyFieldMultiple' );
-  };
-
-  ParsleyFieldMultiple.prototype = {
-
-    constructor: ParsleyFieldMultiple
-
-    /**
-    * Set some specific properties, call some extra methods to manage radio / checkbox
-    *
-    * @method init
-    * @param {Object} element
-    * @param {Object} options
-    */
-    , initMultiple: function ( element, options ) {
-      this.element = element;
-      this.$element = $( element );
-      this.group = options.group || false;
-      this.hash = this.getName();
-      this.siblings = this.group ? '[data-group="' + this.group + '"]' : 'input[name="' + this.$element.attr( 'name' ) + '"]';
-      this.isRadioOrCheckbox = true;
-      this.isRadio = this.$element.is( 'input[type=radio]' );
-      this.isCheckbox = this.$element.is( 'input[type=checkbox]' );
-      this.errorClassHandler = options.errors.classHandler( element, this.isRadioOrCheckbox ) || this.$element.parent();
-    }
-
-    /**
-    * Set specific constraints messages, do pseudo-heritance
-    *
-    * @private
-    * @method inherit
-    * @param {Object} element
-    * @param {Object} options
-    */
-    , inherit: function ( element, options ) {
-      var clone = new ParsleyField( element, options, 'ParsleyFieldMultiple' );
-
-      for ( var property in clone ) {
-        if ( 'undefined' === typeof this[ property ] ) {
-          this[ property ] = clone [ property ];
-        }
-      }
-    }
-
-    /**
-    * Set specific constraints messages, do pseudo-heritance
-    *
-    * @method getName
-    * @returns {String} radio / checkbox hash is cleaned 'name' or data-group property
-    */
-   , getName: function () {
-     if ( this.group ) {
-       return 'parsley-' + this.group;
-     }
-
-     if ( 'undefined' === typeof this.$element.attr( 'name' ) ) {
-       throw "A radio / checkbox input must have a data-group attribute or a name to be Parsley validated !";
-     }
-
-     return 'parsley-' + this.$element.attr( 'name' ).replace( /(:|\.|\[|\])/g, '' );
-   }
-
-   /**
-   * Special treatment for radio & checkboxes
-   * Returns checked radio or checkboxes values
-   *
-   * @method getVal
-   * @returns {String} val
-   */
-   , getVal: function () {
-      if ( this.isRadio ) {
-        return $( this.siblings + ':checked' ).val() || '';
-      }
-
-      if ( this.isCheckbox ) {
-        var values = [];
-
-        $( this.siblings + ':checked' ).each( function () {
-          values.push( $( this ).val() );
-        } );
-
-        return values;
-      }
-   }
-
-   /**
-   * Bind validation events on a field
-   *
-   * @private
-   * @method bindValidationEvents
-   */
-   , bindValidationEvents: function () {
-     // this field has validation events, that means it has to be validated
-     this.valid = null;
-     this.$element.addClass( 'parsley-validated' );
-
-     // remove eventually already binded events
-     this.$element.off( '.' + this.type );
-
-      // alaways bind keyup event, for better UX when a field is invalid
-      var self = this
-        , triggers = ( !this.options.trigger ? '' : this.options.trigger )
-        + ( new RegExp( 'change', 'i' ).test( this.options.trigger ) ? '' : ' change' );
-
-      // trim triggers to bind them correctly with .on()
-      triggers = triggers.replace( /^\s+/g , '' ).replace( /\s+$/g ,'' );
-
-     // bind trigger event on every siblings
-     $( this.siblings ).each(function () {
-       $( this ).on( triggers.split( ' ' ).join( '.' + self.type + ' ' ) , false, $.proxy( self.eventValidation, self ) );
-     } )
-   }
-  };
-
-  /**
-  * ParsleyForm class manage Parsley validated form.
-  * Manage its fields and global validation
-  *
-  * @class ParsleyForm
-  * @constructor
-  */
-  var ParsleyForm = function ( element, options, type ) {
-    this.init( element, options, type || 'parsleyForm' );
-  };
-
-  ParsleyForm.prototype = {
-
-    constructor: ParsleyForm
-
-    /* init data, bind jQuery on() actions */
-    , init: function ( element, options, type ) {
-      this.type = type;
-      this.items = [];
-      this.$element = $( element );
-      this.options = options;
-      var self = this;
-
-      this.$element.find( options.inputs ).each( function () {
-        self.addItem( this );
-      });
-
-      this.$element.on( 'submit.' + this.type , false, $.proxy( this.validate, this ) );
-    }
-
-    /**
-    * Add custom listeners
-    *
-    * @param {Object} { listener: function () {} }, eg { onFormSubmit: function ( valid, event, focus ) { ... } }
-    */
-    , addListener: function ( object ) {
-      for ( var listener in object ) {
-        if ( new RegExp( 'Field' ).test( listener ) ) {
-          for ( var item = 0; item < this.items.length; item++ ) {
-            this.items[ item ].addListener( object );
-          }
-        } else {
-          this.options.listeners[ listener ] = object[ listener ];
-        }
-      }
-    }
-
-    /**
-    * Adds a new parsleyItem child to ParsleyForm
-    *
-    * @method addItem
-    * @param elem
-    */
-    , addItem: function ( elem ) {
-      if ( $( elem ).is( this.options.excluded ) ) {
-        return false;
-      }
-
-      var ParsleyField = $( elem ).parsley( this.options );
-      ParsleyField.setParent( this );
-
-      this.items.push( ParsleyField );
-    }
-
-    /**
-    * Removes a parsleyItem child from ParsleyForm
-    *
-    * @method removeItem
-    * @param elem
-    * @return {Boolean}
-    */
-    , removeItem: function ( elem ) {
-      var parsleyItem = $( elem ).parsley();
-
-      // identify & remove item if same Parsley hash
-      for ( var i = 0; i < this.items.length; i++ ) {
-        if ( this.items[ i ].hash === parsleyItem.hash ) {
-          this.items[ i ].destroy();
-          this.items.splice( i, 1 );
-          return true;
-        }
-      }
-
-      return false;
-    }
-
-    /**
-    * Process each form field validation
-    * Display errors, call custom onFormSubmit() function
-    *
-    * @method validate
-    * @param {Object} event jQuery Event
-    * @return {Boolean} Is form valid or not
-    */
-    , validate: function ( event ) {
-      var valid = true;
-      this.focusedField = false;
-
-      for ( var item = 0; item < this.items.length; item++ ) {
-        if ( 'undefined' !== typeof this.items[ item ] && false === this.items[ item ].validate() ) {
-          valid = false;
-
-          if ( !this.focusedField && 'first' === this.options.focus || 'last' === this.options.focus ) {
-            this.focusedField = this.items[ item ].$element;
-          }
-        }
-      }
-
-      // form is invalid, focus an error field depending on focus policy
-      if ( this.focusedField && !valid ) {
-        this.focusedField.focus();
-      }
-
-      this.options.listeners.onFormSubmit( valid, event, this );
-
-      return valid;
-    }
-
-    , isValid: function () {
-      for ( var item = 0; item < this.items.length; item++ ) {
-        if ( false === this.items[ item ].isValid() ) {
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    /**
-    * Remove all errors ul under invalid fields
-    *
-    * @method removeErrors
-    */
-    , removeErrors: function () {
-      for ( var item = 0; item < this.items.length; item++ ) {
-        this.items[ item ].parsley( 'reset' );
-      }
-    }
-
-    /**
-    * destroy Parsley binded on the form and its fields
-    *
-    * @method destroy
-    */
-    , destroy: function () {
-      for ( var item = 0; item < this.items.length; item++ ) {
-        this.items[ item ].destroy();
-      }
-
-      this.$element.off( '.' + this.type ).removeData( this.type );
-    }
-
-    /**
-    * reset Parsley binded on the form and its fields
-    *
-    * @method reset
-    */
-    , reset: function () {
-      for ( var item = 0; item < this.items.length; item++ ) {
-        this.items[ item ].reset();
-      }
-    }
-  };
-
-  /**
-  * Parsley plugin definition
-  * Provides an interface to access public Validator, ParsleyForm and ParsleyField functions
-  *
-  * @class Parsley
-  * @constructor
-  * @param {Mixed} Options. {Object} to configure Parsley or {String} method name to call a public class method
-  * @param {Function} Callback function
-  * @return {Mixed} public class method return
-  */
-  $.fn.parsley = function ( option, fn ) {
-    var options = $.extend( true, {}, $.fn.parsley.defaults, 'undefined' !== typeof window.ParsleyConfig ? window.ParsleyConfig : {}, option, this.data() )
-      , newInstance = null;
-
-    function bind ( self, type ) {
-      var parsleyInstance = $( self ).data( type );
-
-      // if data never binded or we want to clone a build (for radio & checkboxes), bind it right now!
-      if ( !parsleyInstance ) {
-        switch ( type ) {
-          case 'parsleyForm':
-            parsleyInstance = new ParsleyForm( self, options, 'parsleyForm' );
-            break;
-          case 'parsleyField':
-            parsleyInstance = new ParsleyField( self, options, 'parsleyField' );
-            break;
-          case 'parsleyFieldMultiple':
-            parsleyInstance = new ParsleyFieldMultiple( self, options, 'parsleyFieldMultiple' );
-            break;
-          default:
-            return;
-        }
-
-        $( self ).data( type, parsleyInstance );
-      }
-
-      // here is our parsley public function accessor
-      if ( 'string' === typeof option && 'function' === typeof parsleyInstance[ option ] ) {
-        var response = parsleyInstance[ option ]( fn );
-
-        return 'undefined' !== typeof response ? response : $( self );
-      }
-
-      return parsleyInstance;
-    }
-
-    // if a form elem is given, bind all its input children
-    if ( $( this ).is( 'form' ) ) {
-      newInstance = bind ( $( this ), 'parsleyForm' );
-
-    // if it is a Parsley supported single element, bind it too, except inputs type hidden
-    // add here a return instance, cuz' we could call public methods on single elems with data[ option ]() above
-    } else if ( $( this ).is( options.inputs ) && !$( this ).is( options.excluded ) ) {
-      newInstance = bind( $( this ), !$( this ).is( 'input[type=radio], input[type=checkbox]' ) ? 'parsleyField' : 'parsleyFieldMultiple' );
-    }
-
-    return 'function' === typeof fn ? fn() : newInstance;
-  };
-
-  $.fn.parsley.Constructor = ParsleyForm;
-
-  /**
-  * Parsley plugin configuration
-  *
-  * @property $.fn.parsley.defaults
-  * @type {Object}
-  */
-  $.fn.parsley.defaults = {
-    // basic data-api overridable properties here..
-    inputs: 'input, textarea, select'           // Default supported inputs.
-    , excluded: 'input[type=hidden], :disabled' // Do not validate input[type=hidden] & :disabled.
-    , trigger: false                            // $.Event() that will trigger validation. eg: keyup, change..
-    , animate: true                             // fade in / fade out error messages
-    , animateDuration: 300                      // fadein/fadout ms time
-    , focus: 'first'                            // 'fist'|'last'|'none' which error field would have focus first on form validation
-    , validationMinlength: 3                    // If trigger validation specified, only if value.length > validationMinlength
-    , successClass: 'parsley-success'           // Class name on each valid input
-    , errorClass: 'parsley-error'               // Class name on each invalid input
-    , errorMessage: false                       // Customize an unique error message showed if one constraint fails
-    , validators: {}                            // Add your custom validators functions
-    , showErrors: true                          // Set to false if you don't want Parsley to display error messages
-    , messages: {}                              // Add your own error messages here
-
-    //some quite advanced configuration here..
-    , validateIfUnchanged: false                                          // false: validate once by field value change
-    , errors: {
-        classHandler: function ( elem, isRadioOrCheckbox ) {}             // specify where parsley error-success classes are set
-      , container: function ( elem, isRadioOrCheckbox ) {}                // specify an elem where errors will be **apened**
-      , errorsWrapper: '<ul></ul>'                                        // do not set an id for this elem, it would have an auto-generated id
-      , errorElem: '<li></li>'                                            // each field constraint fail in an li
-      }
-    , listeners: {
-        onFieldValidate: function ( elem, ParsleyForm ) { return false; } // Executed on validation. Return true to ignore field validation
-      , onFormSubmit: function ( isFormValid, event, ParsleyForm ) {}     // Executed once on form validation
-      , onFieldError: function ( elem, constraints, ParsleyField ) {}     // Executed when a field is detected as invalid
-      , onFieldSuccess: function ( elem, constraints, ParsleyField ) {}   // Executed when a field passes validation
-    }
-  };
-
-  /* PARSLEY auto-bind DATA-API + Global config retrieving
-  * =================================================== */
-  $( window ).on( 'load', function () {
-    $( '[data-validate="parsley"]' ).each( function () {
-      $( this ).parsley();
-    } );
-  } );
-
-// This plugin works with jQuery or Zepto (with data extension built for Zepto.)
-}(window.jQuery || window.Zepto);
+ * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
+ * http://docs.jquery.com/Plugins/Validation
+ *
+ * Copyright 2013 Jörn Zaefferer
+ * Released under the MIT license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ */
+
+(function($) {
+
+$.extend($.fn, {
+	// http://docs.jquery.com/Plugins/Validation/validate
+	validate: function( options ) {
+
+		// if nothing is selected, return nothing; can't chain anyway
+		if ( !this.length ) {
+			if ( options && options.debug && window.console ) {
+				console.warn( "Nothing selected, can't validate, returning nothing." );
+			}
+			return;
+		}
+
+		// check if a validator for this form was already created
+		var validator = $.data( this[0], "validator" );
+		if ( validator ) {
+			return validator;
+		}
+
+		// Add novalidate tag if HTML5.
+		this.attr( "novalidate", "novalidate" );
+
+		validator = new $.validator( options, this[0] );
+		$.data( this[0], "validator", validator );
+
+		if ( validator.settings.onsubmit ) {
+
+			this.validateDelegate( ":submit", "click", function( event ) {
+				if ( validator.settings.submitHandler ) {
+					validator.submitButton = event.target;
+				}
+				// allow suppressing validation by adding a cancel class to the submit button
+				if ( $(event.target).hasClass("cancel") ) {
+					validator.cancelSubmit = true;
+				}
+
+				// allow suppressing validation by adding the html5 formnovalidate attribute to the submit button
+				if ( $(event.target).attr("formnovalidate") !== undefined ) {
+					validator.cancelSubmit = true;
+				}
+			});
+
+			// validate the form on submit
+			this.submit( function( event ) {
+				if ( validator.settings.debug ) {
+					// prevent form submit to be able to see console output
+					event.preventDefault();
+				}
+				function handle() {
+					var hidden;
+					if ( validator.settings.submitHandler ) {
+						if ( validator.submitButton ) {
+							// insert a hidden input as a replacement for the missing submit button
+							hidden = $("<input type='hidden'/>").attr("name", validator.submitButton.name).val( $(validator.submitButton).val() ).appendTo(validator.currentForm);
+						}
+						validator.settings.submitHandler.call( validator, validator.currentForm, event );
+						if ( validator.submitButton ) {
+							// and clean up afterwards; thanks to no-block-scope, hidden can be referenced
+							hidden.remove();
+						}
+						return false;
+					}
+					return true;
+				}
+
+				// prevent submit for invalid forms or custom submit handlers
+				if ( validator.cancelSubmit ) {
+					validator.cancelSubmit = false;
+					return handle();
+				}
+				if ( validator.form() ) {
+					if ( validator.pendingRequest ) {
+						validator.formSubmitted = true;
+						return false;
+					}
+					return handle();
+				} else {
+					validator.focusInvalid();
+					return false;
+				}
+			});
+		}
+
+		return validator;
+	},
+	// http://docs.jquery.com/Plugins/Validation/valid
+	valid: function() {
+		if ( $(this[0]).is("form")) {
+			return this.validate().form();
+		} else {
+			var valid = true;
+			var validator = $(this[0].form).validate();
+			this.each(function() {
+				valid = valid && validator.element(this);
+			});
+			return valid;
+		}
+	},
+	// attributes: space seperated list of attributes to retrieve and remove
+	removeAttrs: function( attributes ) {
+		var result = {},
+			$element = this;
+		$.each(attributes.split(/\s/), function( index, value ) {
+			result[value] = $element.attr(value);
+			$element.removeAttr(value);
+		});
+		return result;
+	},
+	// http://docs.jquery.com/Plugins/Validation/rules
+	rules: function( command, argument ) {
+		var element = this[0];
+
+		if ( command ) {
+			var settings = $.data(element.form, "validator").settings;
+			var staticRules = settings.rules;
+			var existingRules = $.validator.staticRules(element);
+			switch(command) {
+			case "add":
+				$.extend(existingRules, $.validator.normalizeRule(argument));
+				// remove messages from rules, but allow them to be set separetely
+				delete existingRules.messages;
+				staticRules[element.name] = existingRules;
+				if ( argument.messages ) {
+					settings.messages[element.name] = $.extend( settings.messages[element.name], argument.messages );
+				}
+				break;
+			case "remove":
+				if ( !argument ) {
+					delete staticRules[element.name];
+					return existingRules;
+				}
+				var filtered = {};
+				$.each(argument.split(/\s/), function( index, method ) {
+					filtered[method] = existingRules[method];
+					delete existingRules[method];
+				});
+				return filtered;
+			}
+		}
+
+		var data = $.validator.normalizeRules(
+		$.extend(
+			{},
+			$.validator.classRules(element),
+			$.validator.attributeRules(element),
+			$.validator.dataRules(element),
+			$.validator.staticRules(element)
+		), element);
+
+		// make sure required is at front
+		if ( data.required ) {
+			var param = data.required;
+			delete data.required;
+			data = $.extend({required: param}, data);
+		}
+
+		return data;
+	}
+});
+
+// Custom selectors
+$.extend($.expr[":"], {
+	// http://docs.jquery.com/Plugins/Validation/blank
+	blank: function( a ) { return !$.trim("" + $(a).val()); },
+	// http://docs.jquery.com/Plugins/Validation/filled
+	filled: function( a ) { return !!$.trim("" + $(a).val()); },
+	// http://docs.jquery.com/Plugins/Validation/unchecked
+	unchecked: function( a ) { return !$(a).prop("checked"); }
+});
+
+// constructor for validator
+$.validator = function( options, form ) {
+	this.settings = $.extend( true, {}, $.validator.defaults, options );
+	this.currentForm = form;
+	this.init();
+};
+
+$.validator.format = function( source, params ) {
+	if ( arguments.length === 1 ) {
+		return function() {
+			var args = $.makeArray(arguments);
+			args.unshift(source);
+			return $.validator.format.apply( this, args );
+		};
+	}
+	if ( arguments.length > 2 && params.constructor !== Array  ) {
+		params = $.makeArray(arguments).slice(1);
+	}
+	if ( params.constructor !== Array ) {
+		params = [ params ];
+	}
+	$.each(params, function( i, n ) {
+		source = source.replace( new RegExp("\\{" + i + "\\}", "g"), function() {
+			return n;
+		});
+	});
+	return source;
+};
+
+$.extend($.validator, {
+
+	defaults: {
+		messages: {},
+		groups: {},
+		rules: {},
+		errorClass: "error",
+		validClass: "valid",
+		errorElement: "label",
+		focusInvalid: true,
+		errorContainer: $([]),
+		errorLabelContainer: $([]),
+		onsubmit: true,
+		ignore: ":hidden",
+		ignoreTitle: false,
+		onfocusin: function( element, event ) {
+			this.lastActive = element;
+
+			// hide error label and remove error class on focus if enabled
+			if ( this.settings.focusCleanup && !this.blockFocusCleanup ) {
+				if ( this.settings.unhighlight ) {
+					this.settings.unhighlight.call( this, element, this.settings.errorClass, this.settings.validClass );
+				}
+				this.addWrapper(this.errorsFor(element)).hide();
+			}
+		},
+		onfocusout: function( element, event ) {
+			if ( !this.checkable(element) && (element.name in this.submitted || !this.optional(element)) ) {
+				this.element(element);
+			}
+		},
+		onkeyup: function( element, event ) {
+			if ( event.which === 9 && this.elementValue(element) === "" ) {
+				return;
+			} else if ( element.name in this.submitted || element === this.lastElement ) {
+				this.element(element);
+			}
+		},
+		onclick: function( element, event ) {
+			// click on selects, radiobuttons and checkboxes
+			if ( element.name in this.submitted ) {
+				this.element(element);
+			}
+			// or option elements, check parent select in that case
+			else if ( element.parentNode.name in this.submitted ) {
+				this.element(element.parentNode);
+			}
+		},
+		highlight: function( element, errorClass, validClass ) {
+			if ( element.type === "radio" ) {
+				this.findByName(element.name).addClass(errorClass).removeClass(validClass);
+			} else {
+				$(element).addClass(errorClass).removeClass(validClass);
+			}
+		},
+		unhighlight: function( element, errorClass, validClass ) {
+			if ( element.type === "radio" ) {
+				this.findByName(element.name).removeClass(errorClass).addClass(validClass);
+			} else {
+				$(element).removeClass(errorClass).addClass(validClass);
+			}
+		}
+	},
+
+	// http://docs.jquery.com/Plugins/Validation/Validator/setDefaults
+	setDefaults: function( settings ) {
+		$.extend( $.validator.defaults, settings );
+	},
+
+	messages: {
+		required: "This field is required.",
+		remote: "Please fix this field.",
+		email: "Please enter a valid email address.",
+		url: "Please enter a valid URL.",
+		date: "Please enter a valid date.",
+		dateISO: "Please enter a valid date (ISO).",
+		number: "Please enter a valid number.",
+		digits: "Please enter only digits.",
+		creditcard: "Please enter a valid credit card number.",
+		equalTo: "Please enter the same value again.",
+		maxlength: $.validator.format("Please enter no more than {0} characters."),
+		minlength: $.validator.format("Please enter at least {0} characters."),
+		rangelength: $.validator.format("Please enter a value between {0} and {1} characters long."),
+		range: $.validator.format("Please enter a value between {0} and {1}."),
+		max: $.validator.format("Please enter a value less than or equal to {0}."),
+		min: $.validator.format("Please enter a value greater than or equal to {0}.")
+	},
+
+	autoCreateRanges: false,
+
+	prototype: {
+
+		init: function() {
+			this.labelContainer = $(this.settings.errorLabelContainer);
+			this.errorContext = this.labelContainer.length && this.labelContainer || $(this.currentForm);
+			this.containers = $(this.settings.errorContainer).add( this.settings.errorLabelContainer );
+			this.submitted = {};
+			this.valueCache = {};
+			this.pendingRequest = 0;
+			this.pending = {};
+			this.invalid = {};
+			this.reset();
+
+			var groups = (this.groups = {});
+			$.each(this.settings.groups, function( key, value ) {
+				if ( typeof value === "string" ) {
+					value = value.split(/\s/);
+				}
+				$.each(value, function( index, name ) {
+					groups[name] = key;
+				});
+			});
+			var rules = this.settings.rules;
+			$.each(rules, function( key, value ) {
+				rules[key] = $.validator.normalizeRule(value);
+			});
+
+			function delegate(event) {
+				var validator = $.data(this[0].form, "validator"),
+					eventType = "on" + event.type.replace(/^validate/, "");
+				if ( validator.settings[eventType] ) {
+					validator.settings[eventType].call(validator, this[0], event);
+				}
+			}
+			$(this.currentForm)
+				.validateDelegate(":text, [type='password'], [type='file'], select, textarea, " +
+					"[type='number'], [type='search'] ,[type='tel'], [type='url'], " +
+					"[type='email'], [type='datetime'], [type='date'], [type='month'], " +
+					"[type='week'], [type='time'], [type='datetime-local'], " +
+					"[type='range'], [type='color'] ",
+					"focusin focusout keyup", delegate)
+				.validateDelegate("[type='radio'], [type='checkbox'], select, option", "click", delegate);
+
+			if ( this.settings.invalidHandler ) {
+				$(this.currentForm).bind("invalid-form.validate", this.settings.invalidHandler);
+			}
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Validator/form
+		form: function() {
+			this.checkForm();
+			$.extend(this.submitted, this.errorMap);
+			this.invalid = $.extend({}, this.errorMap);
+			if ( !this.valid() ) {
+				$(this.currentForm).triggerHandler("invalid-form", [this]);
+			}
+			this.showErrors();
+			return this.valid();
+		},
+
+		checkForm: function() {
+			this.prepareForm();
+			for ( var i = 0, elements = (this.currentElements = this.elements()); elements[i]; i++ ) {
+				this.check( elements[i] );
+			}
+			return this.valid();
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Validator/element
+		element: function( element ) {
+			element = this.validationTargetFor( this.clean( element ) );
+			this.lastElement = element;
+			this.prepareElement( element );
+			this.currentElements = $(element);
+			var result = this.check( element ) !== false;
+			if ( result ) {
+				delete this.invalid[element.name];
+			} else {
+				this.invalid[element.name] = true;
+			}
+			if ( !this.numberOfInvalids() ) {
+				// Hide error containers on last error
+				this.toHide = this.toHide.add( this.containers );
+			}
+			this.showErrors();
+			return result;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Validator/showErrors
+		showErrors: function( errors ) {
+			if ( errors ) {
+				// add items to error list and map
+				$.extend( this.errorMap, errors );
+				this.errorList = [];
+				for ( var name in errors ) {
+					this.errorList.push({
+						message: errors[name],
+						element: this.findByName(name)[0]
+					});
+				}
+				// remove items from success list
+				this.successList = $.grep( this.successList, function( element ) {
+					return !(element.name in errors);
+				});
+			}
+			if ( this.settings.showErrors ) {
+				this.settings.showErrors.call( this, this.errorMap, this.errorList );
+			} else {
+				this.defaultShowErrors();
+			}
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Validator/resetForm
+		resetForm: function() {
+			if ( $.fn.resetForm ) {
+				$(this.currentForm).resetForm();
+			}
+			this.submitted = {};
+			this.lastElement = null;
+			this.prepareForm();
+			this.hideErrors();
+			this.elements().removeClass( this.settings.errorClass ).removeData( "previousValue" );
+		},
+
+		numberOfInvalids: function() {
+			return this.objectLength(this.invalid);
+		},
+
+		objectLength: function( obj ) {
+			var count = 0;
+			for ( var i in obj ) {
+				count++;
+			}
+			return count;
+		},
+
+		hideErrors: function() {
+			this.addWrapper( this.toHide ).hide();
+		},
+
+		valid: function() {
+			return this.size() === 0;
+		},
+
+		size: function() {
+			return this.errorList.length;
+		},
+
+		focusInvalid: function() {
+			if ( this.settings.focusInvalid ) {
+				try {
+					$(this.findLastActive() || this.errorList.length && this.errorList[0].element || [])
+					.filter(":visible")
+					.focus()
+					// manually trigger focusin event; without it, focusin handler isn't called, findLastActive won't have anything to find
+					.trigger("focusin");
+				} catch(e) {
+					// ignore IE throwing errors when focusing hidden elements
+				}
+			}
+		},
+
+		findLastActive: function() {
+			var lastActive = this.lastActive;
+			return lastActive && $.grep(this.errorList, function( n ) {
+				return n.element.name === lastActive.name;
+			}).length === 1 && lastActive;
+		},
+
+		elements: function() {
+			var validator = this,
+				rulesCache = {};
+
+			// select all valid inputs inside the form (no submit or reset buttons)
+			return $(this.currentForm)
+			.find("input, select, textarea")
+			.not(":submit, :reset, :image, [disabled]")
+			.not( this.settings.ignore )
+			.filter(function() {
+				if ( !this.name && validator.settings.debug && window.console ) {
+					console.error( "%o has no name assigned", this);
+				}
+
+				// select only the first element for each name, and only those with rules specified
+				if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
+					return false;
+				}
+
+				rulesCache[this.name] = true;
+				return true;
+			});
+		},
+
+		clean: function( selector ) {
+			return $(selector)[0];
+		},
+
+		errors: function() {
+			var errorClass = this.settings.errorClass.replace(" ", ".");
+			return $(this.settings.errorElement + "." + errorClass, this.errorContext);
+		},
+
+		reset: function() {
+			this.successList = [];
+			this.errorList = [];
+			this.errorMap = {};
+			this.toShow = $([]);
+			this.toHide = $([]);
+			this.currentElements = $([]);
+		},
+
+		prepareForm: function() {
+			this.reset();
+			this.toHide = this.errors().add( this.containers );
+		},
+
+		prepareElement: function( element ) {
+			this.reset();
+			this.toHide = this.errorsFor(element);
+		},
+
+		elementValue: function( element ) {
+			var type = $(element).attr("type"),
+				val = $(element).val();
+
+			if ( type === "radio" || type === "checkbox" ) {
+				return $("input[name='" + $(element).attr("name") + "']:checked").val();
+			}
+
+			if ( typeof val === "string" ) {
+				return val.replace(/\r/g, "");
+			}
+			return val;
+		},
+
+		check: function( element ) {
+			element = this.validationTargetFor( this.clean( element ) );
+
+			var rules = $(element).rules();
+			var dependencyMismatch = false;
+			var val = this.elementValue(element);
+			var result;
+
+			for (var method in rules ) {
+				var rule = { method: method, parameters: rules[method] };
+				try {
+
+					result = $.validator.methods[method].call( this, val, element, rule.parameters );
+
+					// if a method indicates that the field is optional and therefore valid,
+					// don't mark it as valid when there are no other rules
+					if ( result === "dependency-mismatch" ) {
+						dependencyMismatch = true;
+						continue;
+					}
+					dependencyMismatch = false;
+
+					if ( result === "pending" ) {
+						this.toHide = this.toHide.not( this.errorsFor(element) );
+						return;
+					}
+
+					if ( !result ) {
+						this.formatAndAdd( element, rule );
+						return false;
+					}
+				} catch(e) {
+					if ( this.settings.debug && window.console ) {
+						console.log( "Exception occurred when checking element " + element.id + ", check the '" + rule.method + "' method.", e );
+					}
+					throw e;
+				}
+			}
+			if ( dependencyMismatch ) {
+				return;
+			}
+			if ( this.objectLength(rules) ) {
+				this.successList.push(element);
+			}
+			return true;
+		},
+
+		// return the custom message for the given element and validation method
+		// specified in the element's HTML5 data attribute
+		customDataMessage: function( element, method ) {
+			return $(element).data("msg-" + method.toLowerCase()) || (element.attributes && $(element).attr("data-msg-" + method.toLowerCase()));
+		},
+
+		// return the custom message for the given element name and validation method
+		customMessage: function( name, method ) {
+			var m = this.settings.messages[name];
+			return m && (m.constructor === String ? m : m[method]);
+		},
+
+		// return the first defined argument, allowing empty strings
+		findDefined: function() {
+			for(var i = 0; i < arguments.length; i++) {
+				if ( arguments[i] !== undefined ) {
+					return arguments[i];
+				}
+			}
+			return undefined;
+		},
+
+		defaultMessage: function( element, method ) {
+			return this.findDefined(
+				this.customMessage( element.name, method ),
+				this.customDataMessage( element, method ),
+				// title is never undefined, so handle empty string as undefined
+				!this.settings.ignoreTitle && element.title || undefined,
+				$.validator.messages[method],
+				"<strong>Warning: No message defined for " + element.name + "</strong>"
+			);
+		},
+
+		formatAndAdd: function( element, rule ) {
+			var message = this.defaultMessage( element, rule.method ),
+				theregex = /\$?\{(\d+)\}/g;
+			if ( typeof message === "function" ) {
+				message = message.call(this, rule.parameters, element);
+			} else if (theregex.test(message)) {
+				message = $.validator.format(message.replace(theregex, "{$1}"), rule.parameters);
+			}
+			this.errorList.push({
+				message: message,
+				element: element
+			});
+
+			this.errorMap[element.name] = message;
+			this.submitted[element.name] = message;
+		},
+
+		addWrapper: function( toToggle ) {
+			if ( this.settings.wrapper ) {
+				toToggle = toToggle.add( toToggle.parent( this.settings.wrapper ) );
+			}
+			return toToggle;
+		},
+
+		defaultShowErrors: function() {
+			var i, elements;
+			for ( i = 0; this.errorList[i]; i++ ) {
+				var error = this.errorList[i];
+				if ( this.settings.highlight ) {
+					this.settings.highlight.call( this, error.element, this.settings.errorClass, this.settings.validClass );
+				}
+				this.showLabel( error.element, error.message );
+			}
+			if ( this.errorList.length ) {
+				this.toShow = this.toShow.add( this.containers );
+			}
+			if ( this.settings.success ) {
+				for ( i = 0; this.successList[i]; i++ ) {
+					this.showLabel( this.successList[i] );
+				}
+			}
+			if ( this.settings.unhighlight ) {
+				for ( i = 0, elements = this.validElements(); elements[i]; i++ ) {
+					this.settings.unhighlight.call( this, elements[i], this.settings.errorClass, this.settings.validClass );
+				}
+			}
+			this.toHide = this.toHide.not( this.toShow );
+			this.hideErrors();
+			this.addWrapper( this.toShow ).show();
+		},
+
+		validElements: function() {
+			return this.currentElements.not(this.invalidElements());
+		},
+
+		invalidElements: function() {
+			return $(this.errorList).map(function() {
+				return this.element;
+			});
+		},
+
+		showLabel: function( element, message ) {
+			var label = this.errorsFor( element );
+			if ( label.length ) {
+				// refresh error/success class
+				label.removeClass( this.settings.validClass ).addClass( this.settings.errorClass );
+				// replace message on existing label
+				label.html(message);
+			} else {
+				// create label
+				label = $("<" + this.settings.errorElement + ">")
+					.attr("for", this.idOrName(element))
+					.addClass(this.settings.errorClass)
+					.html(message || "");
+				if ( this.settings.wrapper ) {
+					// make sure the element is visible, even in IE
+					// actually showing the wrapped element is handled elsewhere
+					label = label.hide().show().wrap("<" + this.settings.wrapper + "/>").parent();
+				}
+				if ( !this.labelContainer.append(label).length ) {
+					if ( this.settings.errorPlacement ) {
+						this.settings.errorPlacement(label, $(element) );
+					} else {
+						label.insertAfter(element);
+					}
+				}
+			}
+			if ( !message && this.settings.success ) {
+				label.text("");
+				if ( typeof this.settings.success === "string" ) {
+					label.addClass( this.settings.success );
+				} else {
+					this.settings.success( label, element );
+				}
+			}
+			this.toShow = this.toShow.add(label);
+		},
+
+		errorsFor: function( element ) {
+			var name = this.idOrName(element);
+			return this.errors().filter(function() {
+				return $(this).attr("for") === name;
+			});
+		},
+
+		idOrName: function( element ) {
+			return this.groups[element.name] || (this.checkable(element) ? element.name : element.id || element.name);
+		},
+
+		validationTargetFor: function( element ) {
+			// if radio/checkbox, validate first element in group instead
+			if ( this.checkable(element) ) {
+				element = this.findByName( element.name ).not(this.settings.ignore)[0];
+			}
+			return element;
+		},
+
+		checkable: function( element ) {
+			return (/radio|checkbox/i).test(element.type);
+		},
+
+		findByName: function( name ) {
+			return $(this.currentForm).find("[name='" + name + "']");
+		},
+
+		getLength: function( value, element ) {
+			switch( element.nodeName.toLowerCase() ) {
+			case "select":
+				return $("option:selected", element).length;
+			case "input":
+				if ( this.checkable( element) ) {
+					return this.findByName(element.name).filter(":checked").length;
+				}
+			}
+			return value.length;
+		},
+
+		depend: function( param, element ) {
+			return this.dependTypes[typeof param] ? this.dependTypes[typeof param](param, element) : true;
+		},
+
+		dependTypes: {
+			"boolean": function( param, element ) {
+				return param;
+			},
+			"string": function( param, element ) {
+				return !!$(param, element.form).length;
+			},
+			"function": function( param, element ) {
+				return param(element);
+			}
+		},
+
+		optional: function( element ) {
+			var val = this.elementValue(element);
+			return !$.validator.methods.required.call(this, val, element) && "dependency-mismatch";
+		},
+
+		startRequest: function( element ) {
+			if ( !this.pending[element.name] ) {
+				this.pendingRequest++;
+				this.pending[element.name] = true;
+			}
+		},
+
+		stopRequest: function( element, valid ) {
+			this.pendingRequest--;
+			// sometimes synchronization fails, make sure pendingRequest is never < 0
+			if ( this.pendingRequest < 0 ) {
+				this.pendingRequest = 0;
+			}
+			delete this.pending[element.name];
+			if ( valid && this.pendingRequest === 0 && this.formSubmitted && this.form() ) {
+				$(this.currentForm).submit();
+				this.formSubmitted = false;
+			} else if (!valid && this.pendingRequest === 0 && this.formSubmitted) {
+				$(this.currentForm).triggerHandler("invalid-form", [this]);
+				this.formSubmitted = false;
+			}
+		},
+
+		previousValue: function( element ) {
+			return $.data(element, "previousValue") || $.data(element, "previousValue", {
+				old: null,
+				valid: true,
+				message: this.defaultMessage( element, "remote" )
+			});
+		}
+
+	},
+
+	classRuleSettings: {
+		required: {required: true},
+		email: {email: true},
+		url: {url: true},
+		date: {date: true},
+		dateISO: {dateISO: true},
+		number: {number: true},
+		digits: {digits: true},
+		creditcard: {creditcard: true}
+	},
+
+	addClassRules: function( className, rules ) {
+		if ( className.constructor === String ) {
+			this.classRuleSettings[className] = rules;
+		} else {
+			$.extend(this.classRuleSettings, className);
+		}
+	},
+
+	classRules: function( element ) {
+		var rules = {};
+		var classes = $(element).attr("class");
+		if ( classes ) {
+			$.each(classes.split(" "), function() {
+				if ( this in $.validator.classRuleSettings ) {
+					$.extend(rules, $.validator.classRuleSettings[this]);
+				}
+			});
+		}
+		return rules;
+	},
+
+	attributeRules: function( element ) {
+		var rules = {};
+		var $element = $(element);
+		var type = $element[0].getAttribute("type");
+
+		for (var method in $.validator.methods) {
+			var value;
+
+			// support for <input required> in both html5 and older browsers
+			if ( method === "required" ) {
+				value = $element.get(0).getAttribute(method);
+				// Some browsers return an empty string for the required attribute
+				// and non-HTML5 browsers might have required="" markup
+				if ( value === "" ) {
+					value = true;
+				}
+				// force non-HTML5 browsers to return bool
+				value = !!value;
+			} else {
+				value = $element.attr(method);
+			}
+
+			// convert the value to a number for number inputs, and for text for backwards compability
+			// allows type="date" and others to be compared as strings
+			if ( /min|max/.test( method ) && ( type === null || /number|range|text/.test( type ) ) ) {
+				value = Number(value);
+			}
+
+			if ( value ) {
+				rules[method] = value;
+			} else if ( type === method && type !== 'range' ) {
+				// exception: the jquery validate 'range' method
+				// does not test for the html5 'range' type
+				rules[method] = true;
+			}
+		}
+
+		// maxlength may be returned as -1, 2147483647 (IE) and 524288 (safari) for text inputs
+		if ( rules.maxlength && /-1|2147483647|524288/.test(rules.maxlength) ) {
+			delete rules.maxlength;
+		}
+
+		return rules;
+	},
+
+	dataRules: function( element ) {
+		var method, value,
+			rules = {}, $element = $(element);
+		for (method in $.validator.methods) {
+			value = $element.data("rule-" + method.toLowerCase());
+			if ( value !== undefined ) {
+				rules[method] = value;
+			}
+		}
+		return rules;
+	},
+
+	staticRules: function( element ) {
+		var rules = {};
+		var validator = $.data(element.form, "validator");
+		if ( validator.settings.rules ) {
+			rules = $.validator.normalizeRule(validator.settings.rules[element.name]) || {};
+		}
+		return rules;
+	},
+
+	normalizeRules: function( rules, element ) {
+		// handle dependency check
+		$.each(rules, function( prop, val ) {
+			// ignore rule when param is explicitly false, eg. required:false
+			if ( val === false ) {
+				delete rules[prop];
+				return;
+			}
+			if ( val.param || val.depends ) {
+				var keepRule = true;
+				switch (typeof val.depends) {
+				case "string":
+					keepRule = !!$(val.depends, element.form).length;
+					break;
+				case "function":
+					keepRule = val.depends.call(element, element);
+					break;
+				}
+				if ( keepRule ) {
+					rules[prop] = val.param !== undefined ? val.param : true;
+				} else {
+					delete rules[prop];
+				}
+			}
+		});
+
+		// evaluate parameters
+		$.each(rules, function( rule, parameter ) {
+			rules[rule] = $.isFunction(parameter) ? parameter(element) : parameter;
+		});
+
+		// clean number parameters
+		$.each(['minlength', 'maxlength'], function() {
+			if ( rules[this] ) {
+				rules[this] = Number(rules[this]);
+			}
+		});
+		$.each(['rangelength', 'range'], function() {
+			var parts;
+			if ( rules[this] ) {
+				if ( $.isArray(rules[this]) ) {
+					rules[this] = [Number(rules[this][0]), Number(rules[this][1])];
+				} else if ( typeof rules[this] === "string" ) {
+					parts = rules[this].split(/[\s,]+/);
+					rules[this] = [Number(parts[0]), Number(parts[1])];
+				}
+			}
+		});
+
+		if ( $.validator.autoCreateRanges ) {
+			// auto-create ranges
+			if ( rules.min && rules.max ) {
+				rules.range = [rules.min, rules.max];
+				delete rules.min;
+				delete rules.max;
+			}
+			if ( rules.minlength && rules.maxlength ) {
+				rules.rangelength = [rules.minlength, rules.maxlength];
+				delete rules.minlength;
+				delete rules.maxlength;
+			}
+		}
+
+		return rules;
+	},
+
+	// Converts a simple string to a {string: true} rule, e.g., "required" to {required:true}
+	normalizeRule: function( data ) {
+		if ( typeof data === "string" ) {
+			var transformed = {};
+			$.each(data.split(/\s/), function() {
+				transformed[this] = true;
+			});
+			data = transformed;
+		}
+		return data;
+	},
+
+	// http://docs.jquery.com/Plugins/Validation/Validator/addMethod
+	addMethod: function( name, method, message ) {
+		$.validator.methods[name] = method;
+		$.validator.messages[name] = message !== undefined ? message : $.validator.messages[name];
+		if ( method.length < 3 ) {
+			$.validator.addClassRules(name, $.validator.normalizeRule(name));
+		}
+	},
+
+	methods: {
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/required
+		required: function( value, element, param ) {
+			// check if dependency is met
+			if ( !this.depend(param, element) ) {
+				return "dependency-mismatch";
+			}
+			if ( element.nodeName.toLowerCase() === "select" ) {
+				// could be an array for select-multiple or a string, both are fine this way
+				var val = $(element).val();
+				return val && val.length > 0;
+			}
+			if ( this.checkable(element) ) {
+				return this.getLength(value, element) > 0;
+			}
+			return $.trim(value).length > 0;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/email
+		email: function( value, element ) {
+			// contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
+			return this.optional(element) || /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i.test(value);
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/url
+		url: function( value, element ) {
+			// contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
+			return this.optional(element) || /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/date
+		date: function( value, element ) {
+			return this.optional(element) || !/Invalid|NaN/.test(new Date(value).toString());
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/dateISO
+		dateISO: function( value, element ) {
+			return this.optional(element) || /^\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2}$/.test(value);
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/number
+		number: function( value, element ) {
+			return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value);
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/digits
+		digits: function( value, element ) {
+			return this.optional(element) || /^\d+$/.test(value);
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/creditcard
+		// based on http://en.wikipedia.org/wiki/Luhn
+		creditcard: function( value, element ) {
+			if ( this.optional(element) ) {
+				return "dependency-mismatch";
+			}
+			// accept only spaces, digits and dashes
+			if ( /[^0-9 \-]+/.test(value) ) {
+				return false;
+			}
+			var nCheck = 0,
+				nDigit = 0,
+				bEven = false;
+
+			value = value.replace(/\D/g, "");
+
+			for (var n = value.length - 1; n >= 0; n--) {
+				var cDigit = value.charAt(n);
+				nDigit = parseInt(cDigit, 10);
+				if ( bEven ) {
+					if ( (nDigit *= 2) > 9 ) {
+						nDigit -= 9;
+					}
+				}
+				nCheck += nDigit;
+				bEven = !bEven;
+			}
+
+			return (nCheck % 10) === 0;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/minlength
+		minlength: function( value, element, param ) {
+			var length = $.isArray( value ) ? value.length : this.getLength($.trim(value), element);
+			return this.optional(element) || length >= param;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/maxlength
+		maxlength: function( value, element, param ) {
+			var length = $.isArray( value ) ? value.length : this.getLength($.trim(value), element);
+			return this.optional(element) || length <= param;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/rangelength
+		rangelength: function( value, element, param ) {
+			var length = $.isArray( value ) ? value.length : this.getLength($.trim(value), element);
+			return this.optional(element) || ( length >= param[0] && length <= param[1] );
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/min
+		min: function( value, element, param ) {
+			return this.optional(element) || value >= param;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/max
+		max: function( value, element, param ) {
+			return this.optional(element) || value <= param;
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/range
+		range: function( value, element, param ) {
+			return this.optional(element) || ( value >= param[0] && value <= param[1] );
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/equalTo
+		equalTo: function( value, element, param ) {
+			// bind to the blur event of the target in order to revalidate whenever the target field is updated
+			// TODO find a way to bind the event just once, avoiding the unbind-rebind overhead
+			var target = $(param);
+			if ( this.settings.onfocusout ) {
+				target.unbind(".validate-equalTo").bind("blur.validate-equalTo", function() {
+					$(element).valid();
+				});
+			}
+			return value === target.val();
+		},
+
+		// http://docs.jquery.com/Plugins/Validation/Methods/remote
+		remote: function( value, element, param ) {
+			if ( this.optional(element) ) {
+				return "dependency-mismatch";
+			}
+
+			var previous = this.previousValue(element);
+			if (!this.settings.messages[element.name] ) {
+				this.settings.messages[element.name] = {};
+			}
+			previous.originalMessage = this.settings.messages[element.name].remote;
+			this.settings.messages[element.name].remote = previous.message;
+
+			param = typeof param === "string" && {url:param} || param;
+
+			if ( previous.old === value ) {
+				return previous.valid;
+			}
+
+			previous.old = value;
+			var validator = this;
+			this.startRequest(element);
+			var data = {};
+			data[element.name] = value;
+			$.ajax($.extend(true, {
+				url: param,
+				mode: "abort",
+				port: "validate" + element.name,
+				dataType: "json",
+				data: data,
+				success: function( response ) {
+					validator.settings.messages[element.name].remote = previous.originalMessage;
+					var valid = response === true || response === "true";
+					if ( valid ) {
+						var submitted = validator.formSubmitted;
+						validator.prepareElement(element);
+						validator.formSubmitted = submitted;
+						validator.successList.push(element);
+						delete validator.invalid[element.name];
+						validator.showErrors();
+					} else {
+						var errors = {};
+						var message = response || validator.defaultMessage( element, "remote" );
+						errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
+						validator.invalid[element.name] = true;
+						validator.showErrors(errors);
+					}
+					previous.valid = valid;
+					validator.stopRequest(element, valid);
+				}
+			}, param));
+			return "pending";
+		}
+
+	}
+
+});
+
+// deprecated, use $.validator.format instead
+$.format = $.validator.format;
+
+}(jQuery));
+
+// ajax mode: abort
+// usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
+// if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort()
+(function($) {
+	var pendingRequests = {};
+	// Use a prefilter if available (1.5+)
+	if ( $.ajaxPrefilter ) {
+		$.ajaxPrefilter(function( settings, _, xhr ) {
+			var port = settings.port;
+			if ( settings.mode === "abort" ) {
+				if ( pendingRequests[port] ) {
+					pendingRequests[port].abort();
+				}
+				pendingRequests[port] = xhr;
+			}
+		});
+	} else {
+		// Proxy ajax
+		var ajax = $.ajax;
+		$.ajax = function( settings ) {
+			var mode = ( "mode" in settings ? settings : $.ajaxSettings ).mode,
+				port = ( "port" in settings ? settings : $.ajaxSettings ).port;
+			if ( mode === "abort" ) {
+				if ( pendingRequests[port] ) {
+					pendingRequests[port].abort();
+				}
+				pendingRequests[port] = ajax.apply(this, arguments);
+				return pendingRequests[port];
+			}
+			return ajax.apply(this, arguments);
+		};
+	}
+}(jQuery));
+
+// provides delegate(type: String, delegate: Selector, handler: Callback) plugin for easier event delegation
+// handler is only called when $(event.target).is(delegate), in the scope of the jquery-object for event.target
+(function($) {
+	$.extend($.fn, {
+		validateDelegate: function( delegate, type, handler ) {
+			return this.bind(type, function( event ) {
+				var target = $(event.target);
+				if ( target.is(delegate) ) {
+					return handler.apply(target, arguments);
+				}
+			});
+		}
+	});
+}(jQuery));

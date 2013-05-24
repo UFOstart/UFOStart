@@ -1,18 +1,49 @@
 define([], function(){
   var validate = function(params){
-        var form = params.root.is("form.form-validated") ? params.root : params.root.find("form.form-validated");
+        var form = params.root.is("form.form-validated") ? params.root : params.root.find("form.form-validated")
         var opts = _.extend({
-            errors: {
-                classHandler: function ( elem, isRadioOrCheckbox ) {
-                    return $( elem ).closest(".control-group");
+                errorClass: "help-inline"
+                , errorElement: "span"
+                , validClass:"valid"
+                , onkeyup: false
+                , highlight: function (element, errorClass, validClass) {
+                    $(element).closest(".control-group").addClass("has-error").removeClass(validClass).removeClass(validClass);
                 }
-            }
-        }, params);
-        return $(form).parsley(opts);
+                , unhighlight: function (element, errorClass, validClass) {
+                    var name = $(element).attr("name");
+                    if(name && $(element).closest(".controls").find('[for='+name.replace(/\./g,"\\.")+']').filter("[generated]").remove().length)
+                        $(element).closest(".control-group").removeClass("has-error").addClass(validClass);
+                }
+                , errorPlacement: function(error, element) {
+                    if(element.parent().find("."+this.errorClass+"[generated=true]").length)return;
+                    if (element.parent().is(".input-append"))
+                        error.insertAfter(element.parent());
+                    else
+                        error.appendTo(element.closest(".controls,.control-group"));
+                }
+            }, params)
+            , validator = $(form).validate(opts)
+            , view = this;
+
+        $(form).find("input[type=reset], button[type=reset]").click(function(e) {
+            view.resetForm(form);
+        });
+
+        $(form).find("[data-validation-url]").each(function(idx, elem){
+            var $elem = $(elem);
+            $elem.rules("add", {remote: $elem.data("validationUrl")});
+        });
+
+        if(params.focus){
+            form.find("input,select,textarea").filter(":visible").first().focus();
+        }
+        return validator;
     }
-    , resetForm = function(form){
-        var $f = $(form);
-        console.warn("NOT IMPLEMENTED PARSLEY VALIDATION YET");
+    , resetForm= function(form){
+        var $f = $(form)
+        $f.validate().resetForm();
+        $f.find(".has-error").removeClass("has-error");
+        $f.find("[generated]").remove();
     }
     , showFormEncodeErrors = function($form, errors, values){
         var formId = $form.find("[name=type]").val();
@@ -22,14 +53,12 @@ define([], function(){
               if(_.isEmpty(errors[k]))delete errors[k];
             }
         }
-        for(var attr in errors){
-            $form.find("#"+attr.replace(".", "\\.")).parsley("addError", {'server': errors[attr]});
-        }
-        for(var attr in values){
-            $form.find("#"+formId+"\\."+attr).val(values[attr]);
+        validator.showErrors(resp.errors);
+        for(var attr in resp.values){
+          $form.find("#"+formId+"\\."+attr).val(resp.values[attr]);
         }
         $form.find(".error-hidden").hide(); // show any additional hints/elems
         $form.find(".error-shown").fadeIn(); // show any additional hints/elems
-  }
+    }
   return {validate: validate, resetForm: resetForm, showFormEncodeErrors: showFormEncodeErrors};
 });

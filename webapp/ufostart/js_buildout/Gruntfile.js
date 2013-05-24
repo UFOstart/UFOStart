@@ -25,7 +25,7 @@ module.exports = function(grunt) {
                 './bower_components/store/store.js',
                 './bower_components/underscore/underscore.js',
                 './bower_components/backbone/backbone.js',
-                './bower_components/parsleyjs/parsley.js'
+                './bower_components/jquery-validation/jquery.validate.js'
             ],
             // the location of the resulting JS file
             dest: '../static/scripts/dist/libs.js'

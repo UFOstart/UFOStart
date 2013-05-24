@@ -96,11 +96,16 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
           return this.serializeArray(form.serializeArray());
       }
       , ifyForm: function(params, validationParams){
-          var form = params.form||params.root
-              , noop = function(e){e.preventDefault();e.stopPropagation();return false;}
-              , baseFormsOnSubmit = function(form){
-                  var $form = $(form), validator = $form.validate()
-                      , data = ajax.serializeJSON($form);
+          var form = params.form||params.root, noop = function(e){e.preventDefault();e.stopPropagation();return false;};
+          if($(form).is("form.form-validated"))form = $(form)
+          else form = $(form).find("form.form-validated");
+          form.on({submit: noop, 'change':function(e, mod){ if(mod!='private')form.addClass("data-dirty")}});
+
+          validationParams = validationParams||{};
+          return formlib.validate(_.extend(validationParams, {root: form, listeners : {
+                onFormSubmit : function(isValid, event, parsForm){
+                  if(!isValid)return false;
+                  var $form = $(form), data = ajax.serializeJSON($form);
                   $form.find("button.btn,a.btn").button("loading");
                   if(params.submit)params.submit($form);
                   ajax.submit({
@@ -109,7 +114,7 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
                       , error: params.error
                       , success: function(resp, status, xhr, data){
                           if(resp.success === false && resp.errors) {
-                            formlib.showFormEncodeErrors($form, resp.errors);
+                            formlib.showFormEncodeErrors($form, resp.errors, resp.values);
                             if(params.error)params.error(resp, status, xhr, data)
                           } else {
                             if(resp.message){
@@ -130,14 +135,10 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
                           if (params.complete) params.complete.apply(this, arguments);
                       }
                   });
-              };
-          if($(form).is("form.form-validated"))form = $(form)
-          else form = $(form).find("form.form-validated");
-          form.on({submit: noop, 'change':function(e, mod){ if(mod!='private')form.addClass("data-dirty")}});
-          validationParams = validationParams||{};
-          return formlib.validate(_.extend(validationParams, {root: form, submitHandler : baseFormsOnSubmit}));
-        }
-    };
+                }
+            }
+        }));
+    }}
     ajax.Model = Backbone.Model.extend({
           shallowClear : function(options){
               var clearance = {}, options=options||{};
