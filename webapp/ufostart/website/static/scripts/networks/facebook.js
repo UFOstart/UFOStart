@@ -74,7 +74,8 @@ define(["tools/ajax"], function(ajax){
             params = params||{};
             var success = params.success, _t = this
             , data = {
-                id:profile.id
+                type: "facebook"
+                , id:profile.id
                 , accessToken:authResponse.accessToken
                 , picture : _t.getPicFromUserID(profile.id)
                 , email: profile.email

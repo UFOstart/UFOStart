@@ -27,7 +27,7 @@ class SignupForm(BaseForm):
                 return {'success':False, 'errors':{'email': "Email already registered!"}}
             else:
                 return {'success':False, 'errors':{'email': e.message}}
-        return {'success':True, 'redirect':request.fwd_url("website_index_member")}
+        return {'success':True, 'redirect':request.fwd_url("website_index")}
 
 
 

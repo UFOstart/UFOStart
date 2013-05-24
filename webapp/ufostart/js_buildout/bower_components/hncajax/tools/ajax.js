@@ -102,9 +102,7 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
           form.on({submit: noop, 'change':function(e, mod){ if(mod!='private')form.addClass("data-dirty")}});
 
           validationParams = validationParams||{};
-          return formlib.validate(_.extend(validationParams, {root: form, listeners : {
-                onFormSubmit : function(isValid, event, parsForm){
-                  if(!isValid)return false;
+          return formlib.validate(_.extend(validationParams, {root: form, submitHandler : function(form){
                   var $form = $(form), data = ajax.serializeJSON($form);
                   $form.find("button.btn,a.btn").button("loading");
                   if(params.submit)params.submit($form);
@@ -137,7 +135,7 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
                   });
                 }
             }
-        }));
+        ));
     }}
     ajax.Model = Backbone.Model.extend({
           shallowClear : function(options){

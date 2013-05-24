@@ -96,7 +96,7 @@ require(["tools/ajax", "misc"], function(ajax, misc){
                 for(i;i<socials.length;i++){
                     name = socials[i];
                     lib = arguments[i];
-                    hnc[name] = new lib.AuthHandler(options.socials[name], options.user, '/user/login/social');
+                    hnc[name] = new lib.AuthHandler(options.socials[name], options.user[name], '/user/login/social');
                 }
             });
         }

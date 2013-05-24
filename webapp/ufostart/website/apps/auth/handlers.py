@@ -7,6 +7,8 @@ from ufostart.website.apps.models.auth import CheckEmailExistsProc, PasswordToke
 
 
 def join_checkemail(context, request):
+    return True
+    # TODO: make work, pending API
     try:
         CheckEmailExistsProc(request, {"email": request.params.get('signup.email')})
     except DBNotification, e:

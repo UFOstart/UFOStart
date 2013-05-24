@@ -1,0 +1,15 @@
+<%inherit file="../../layout.html"/>
+
+<%def name="content()">
+    <div class="container centered auth-page">
+        %for row in templates:
+            <div class="row template-list">
+            %for i, t in enumerate(row):
+                <div class="col col-sm-4 ${'' if i else 'col-offset-2'}">
+                    <a class="single-template" href="${url("website_company_set_template", template = t['name'])}">${t['name']}</a>
+                </div>
+            %endfor
+            </div>
+        %endfor
+    </div>
+</%def>

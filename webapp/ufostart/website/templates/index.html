@@ -1,19 +1,29 @@
 <%inherit file="layout.html"/>
 
 <%def name="content()">
-    <div class="container">
-        <div class="row">
-            <div class="col col-sm-6 text-center">
-                <a href="/" class="link fbconnect">Facebook</a>
+    %if vctxt.user.isAnon():
+        <div class="container">
+            <div class="row">
+                <div class="col col-sm-6 text-center">
+                    <a href="/" class="link fbconnect">Facebook</a>
+                </div>
+                <div class="col col-sm-6 text-center">
+                    <a href="/" class="link linkedin-connect">Linked in</a>
+                </div>
             </div>
-            <div class="col col-sm-6 text-center">
-                <a href="/" class="link linkedin-connect">Linked in</a>
+            <div class="row">
+                <div class="col col-sm-12 text-center">
+                    <a href="${url("website_signup")}" class="link">Signup with email</a>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col col-sm-12 text-center">
-                <a href="${url("website_signup")}" class="link">Signup with email</a>
+    %else:
+        <div class="container">
+            <div class="row">
+                <div class="col col-sm-12 text-center">
+                    <h1>Welcome ${vctxt.user.name}</h1>
+                </div>
             </div>
         </div>
-    </div>
+    %endif
 </%def>

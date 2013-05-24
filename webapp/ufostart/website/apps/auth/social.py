@@ -1,6 +1,6 @@
 import base64, logging
 from hnc.apiclient.backend import DBNotification, DBException
-from ufostart.website.apps.models.auth import RefreshAccessTokenProc, SocialConnectProc
+from ufostart.website.apps.models.auth import RefreshAccessTokenProc, SocialConnectProc, SOCIAL_NETWORK_TYPES_REVERSE
 
 log = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ def base64_url_decode(inp):
 def social_login(context, request):
     result = {'success': False}
     profile = request.json_body['profile']
-    network = profile.get('type')
+    network = profile.pop('type')
     networkSettings = context.settings.networks.get(network)
     if networkSettings and networkSettings.requiresAction():
         try:
@@ -44,6 +44,7 @@ def social_login(context, request):
             return {'success':False, 'message':"Invalid Signature!"}
 
     if not profile: return result
+    profile['type'] = SOCIAL_NETWORK_TYPES_REVERSE[network]
     try:
         user = SocialConnectProc(request, {'Profile': [profile]})
     except DBNotification, e:

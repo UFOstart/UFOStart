@@ -46,16 +46,16 @@ define([], function(){
         $f.find("[generated]").remove();
     }
     , showFormEncodeErrors = function($form, errors, values){
-        var formId = $form.find("[name=type]").val();
+        var formId = $form.find("[name=type]").val(), validator = $form.validate();
         for(var k in errors){
             if(/--repetitions$/.test(k))delete errors[k];
             else { // formencode sends null errors into the list, needs stripping for jquery validate
               if(_.isEmpty(errors[k]))delete errors[k];
             }
         }
-        validator.showErrors(resp.errors);
-        for(var attr in resp.values){
-          $form.find("#"+formId+"\\."+attr).val(resp.values[attr]);
+        validator.showErrors(errors);
+        for(var attr in values){
+          $form.find("#"+formId+"\\."+attr).val(values[attr]);
         }
         $form.find(".error-hidden").hide(); // show any additional hints/elems
         $form.find(".error-shown").fadeIn(); // show any additional hints/elems

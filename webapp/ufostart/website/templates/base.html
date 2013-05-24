@@ -46,7 +46,7 @@
 <%def name="jsoptions()">
     <script>
         window.__options__ = {
-            socials : ${vctxt.settings.toPublicJson(True) |n }
+            socials : ${vctxt.settings.toPublicJSON(True) |n }
             , user : ${vctxt.user.toJSON(True)|n}
             , messagingContainer: "#message-container"
             , staticPrefix: '${ROOT_STATIC_URL}'
@@ -57,7 +57,8 @@
 
 <%def name="scripts()">
     <script>
-        var require = {   urlArgs: "${VERSION_TOKEN}"
+        var require = {
+            urlArgs: "${VERSION_TOKEN}"
             , baseUrl: "${STATIC_URL}scripts"
             , paths : {
                 "tools"     :"${ROOT_STATIC_URL}scripts/tools"

@@ -14,8 +14,7 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
                     xhr.redirection = resp.redirect;
                     window.location.href = resp.redirect;
                   } else if(resp.reload) {
-                    if(options.furl)window.location.href = options.furl;
-                    else window.location.reload(true);
+                    window.location.href = hnc.options.furl;
                   } else if (resp.dbMessage){
                     if(options.error){options.error(resp.dbMessage, resp, data);}
                     else {messaging.addError({message:resp.dbMessage})}
@@ -103,9 +102,7 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
           form.on({submit: noop, 'change':function(e, mod){ if(mod!='private')form.addClass("data-dirty")}});
 
           validationParams = validationParams||{};
-          return formlib.validate(_.extend(validationParams, {root: form, listeners : {
-                onFormSubmit : function(isValid, event, parsForm){
-                  if(!isValid)return false;
+          return formlib.validate(_.extend(validationParams, {root: form, submitHandler : function(form){
                   var $form = $(form), data = ajax.serializeJSON($form);
                   $form.find("button.btn,a.btn").button("loading");
                   if(params.submit)params.submit($form);
@@ -138,7 +135,7 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
                   });
                 }
             }
-        }));
+        ));
     }}
     ajax.Model = Backbone.Model.extend({
           shallowClear : function(options){
