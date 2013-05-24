@@ -2,9 +2,21 @@
 // Variables
 // --------------------------------------------------
 
-
+@corp-color: #ef6c26;
+@corp-color-semi: rgba(239, 108, 39, .6);
 // Global values
 // --------------------------------------------------
+
+@color-facebook: #3B5998;
+@color-flickr: #FE0883;
+@color-foursquare: #8FD400;
+@color-googlep: #C63D2D;
+@color-instagram: #4E433C;
+@color-linkedin: #4875B4;
+@color-tumblr: #2B4964;
+@color-twitter: #33CCFF;
+@color-vimeo: #86B32D;
+@color-youtube: #FF3333;
 
 
 // Grays
@@ -28,7 +40,7 @@
 // Scaffolding
 // -------------------------
 
-@body-bg:               #fff;
+@body-bg:               #e5e5e5;
 @text-color:            @gray-dark;
 
 // Links
@@ -40,20 +52,20 @@
 // Typography
 // -------------------------
 
-@font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family-sans-serif:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 @font-family-serif:       Georgia, "Times New Roman", Times, serif;
 @font-family-monospace:   Monaco, Menlo, Consolas, "Courier New", monospace;
 @font-family-base:        @font-family-sans-serif;
 
 @font-size-base:          14px;
-@font-size-large:         ceil(@font-size-base * 1.25); // ~18px
+@font-size-large:         ceil(@font-size-base + 2px);
 @font-size-small:         ceil(@font-size-base * 0.85); // ~12px
 @font-size-mini:          ceil(@font-size-base * 0.75); // ~11px
 
 @line-height-base:        1.428571429; // 20/14
 @line-height-computed:    floor(@font-size-base * @line-height-base); // ~20px
 
-@headings-font-weight:    500;
+@headings-font-weight:    300;
 @headings-line-height:    1.1;
 
 
@@ -176,9 +188,10 @@
 // -------------------------
 
 // Basics of a navbar
-@navbar-height:                    96px;
+@navbar-height:                    50px;
 @navbar-color:                     #777;
-@navbar-bg:                        #eee;
+@navbar-bg:                        #000000;
+@navbar-bg-highlight:              #434343;
 
 // Navbar links
 @navbar-link-color:                #777;

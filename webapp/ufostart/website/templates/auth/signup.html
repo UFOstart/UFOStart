@@ -5,10 +5,10 @@
 <%def name="content()">
     <div class="container centered auth-page">
         <div class="row">
-            <div class="col col-sm-6">
+            <div class="col col-lg-6">
                 ${self.buildForm(view.schemas['signup'], values.get('signup'), errors.get('signup'))}
             </div>
-            <div class="col col-sm-6">
+            <div class="col col-lg-6">
                 ${self.buildForm(view.schemas['login'], values.get('login'), errors.get('login'))}
             </div>
         </div>

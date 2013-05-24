@@ -3,14 +3,14 @@
 <%def name="content()">
     <div class="container centered auth-page">
         <div class="row">
-            <div class="col col-sm-8">
+            <div class="col col-lg-8">
                 %for need in template.Need:
                     <div class="single-need">
                         ${need.name}
                     </div>
                 %endfor
             </div>
-            <div class="col col-sm-4">
+            <div class="col col-lg-4">
                 %for need in needs:
                     <div class="single-need">
                         ${need.name}

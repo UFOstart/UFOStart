@@ -4,15 +4,16 @@
 
 <div id="global-frame" class="${self.page_class()}">
     <%block name="header">
+        ${self.menu(vctxt.user)}
         <div class="navbar navbar-static-top">
-        <div class="container">
-            <div class="row">
-                <div class="col-span-12">
-                    <a class="navbar-brand" href="${url("website_index")}"><img src="${ROOT_STATIC_URL}img/logo.png?${VERSION_TOKEN}" alt="${g.project_name}"/></a>
-                    ${self.menu(vctxt.user)}
+            <div class="container">
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <a class="navbar-brand" href="${url("website_index")}"><img src="${ROOT_STATIC_URL}img/logo.png?${VERSION_TOKEN}" alt="${g.project_name}"/></a>
+                        <div class="page-header site-slogan">${g.site_slogan}</div>
+                    </div>
                 </div>
-            </div>
-       </div>
+           </div>
        </div>
     </%block>
     <%block name="contentwrapper">
@@ -22,18 +23,62 @@
         </div>
     </%block>
     <%block name="footer">
-    <footer class="footer page-body shaded"></footer>
+    <footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-3 footer-link">
+                <h5 class="footer-links-title">About ${g.project_name}</h5>
+                <ul class="list-unstyled">
+                    <li><a class="footer-link" href="#">Company</a></li>
+                    <li><a class="footer-link" href="#">Founders</a></li>
+                    <li><a class="footer-link" href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col col-lg-3 footer-link">
+                <h5 class="footer-links-title">Learn More</h5>
+                <ul class="list-unstyled">
+                    <li><a class="footer-link" href="#">Homepage</a></li>
+                    <li><a class="footer-link" href="#">Startups</a></li>
+                    <li><a class="footer-link" href="#">Investors</a></li>
+                    <li><a class="footer-link" href="#">Experts</a></li>
+                </ul>
+            </div>
+            <div class="col col-lg-3 footer-link">
+                <h5 class="footer-links-title">Get Started</h5>
+                <ul class="list-unstyled">
+                    <li><a class="footer-link" href="${url("website_index")}" class="fbconnect">Connect with Facebook</a></li>
+                    <li><a class="footer-link" href="${url("website_signup")}">Sign In</a></li>
+                    <li><a class="footer-link" href="#">Help</a></li>
+                </ul>
+            </div>
+            <div class="col col-lg-3 footer-link">
+                <h5 class="footer-links-title">Connect</h5>
+                <ul class="list-unstyled">
+                    <li><a class="footer-link logo-prefixed facebook" href="#">Like us on Facebook</a></li>
+                    <li><a class="footer-link logo-prefixed twitter" href="#">Follow us on Twitter</a></li>
+                    <li><a class="footer-link logo-prefixed rss" href="#">Subscribe to our Blog</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    </footer>
     </%block>
 </div>
 
 
 <%def name="menu(user)">
-    <ul class="navbar-nav list-unstyled pull-right">
-    %if user.isAnon():
-        <li><span>Welcome!</span></li>
-    %else:
-        <li><span>Welcome ${user.name}</span></li>
-        <li><a href="${url("website_logout")}">Logout</a></li>
+    %if not user.isAnon():
+        <div class="page-header-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col col-sm 12">
+                    <ul class="page-header-bar-menu">
+                        <li><span>Welcome ${user.name}</span></li>
+                        <li><a href="${url("website_logout")}">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
     %endif
-    </ul>
 </%def>
