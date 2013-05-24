@@ -59,6 +59,7 @@ def fb_login(context, request):
         log.error("UNHANDLED DB MESSAGE: %s", e.message)
         return {'success':False, 'message': e.message}
     result['success'] = True
+    result['user'] = user.toJSON()
     return result
 
 

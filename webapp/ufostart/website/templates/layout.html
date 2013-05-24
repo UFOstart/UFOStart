@@ -4,11 +4,12 @@
 
 <div id="global-frame" class="${self.page_class()}">
     <%block name="header">
-        <div class="navbar">
+        <div class="navbar navbar-static-top">
         <div class="container">
             <div class="row">
                 <div class="col-span-12">
                     <a class="navbar-brand" href="${url("website_index")}"><img src="${ROOT_STATIC_URL}img/logo.png?${VERSION_TOKEN}" alt="${g.project_name}"/></a>
+                    ${self.menu(vctxt.user)}
                 </div>
             </div>
        </div>
@@ -24,3 +25,15 @@
     <footer class="footer page-body shaded"></footer>
     </%block>
 </div>
+
+
+<%def name="menu(user)">
+    <ul class="navbar-nav list-unstyled pull-right">
+    %if user.isAnon():
+        <li><span>Welcome!</span></li>
+    %else:
+        <li><span>Welcome ${user.name}</span></li>
+        <li><a href="${url("website_logout")}">Logout</a></li>
+    %endif
+    </ul>
+</%def>

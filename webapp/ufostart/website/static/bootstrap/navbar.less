@@ -23,13 +23,17 @@
   // and outdent nav links so text lines up with logo.
   margin-top: 10px;
   margin-bottom: 15px;
-
-  > li > a {
-    padding-top: ((@navbar-height - @line-height-computed) / 2);
-    padding-bottom: ((@navbar-height - @line-height-computed) / 2);
-    color: @navbar-link-color;
-    line-height: 20px;
-    border-radius: @border-radius-base;
+  > li {
+      float:left;
+      >a, >span {
+      margin:0 10px;
+      padding-top: ((@navbar-height - @line-height-computed - 25px) / 2);
+      padding-bottom: ((@navbar-height - @line-height-computed - 25px) / 2);
+      color: @navbar-link-color;
+      line-height: 20px;
+      border-radius: @border-radius-base;
+      display: block;
+    }
   }
   > li > a:hover,
   > li > a:focus {

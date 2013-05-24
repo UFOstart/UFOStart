@@ -19,7 +19,7 @@ def logout(context, request):
     if request.params.get('furl'):
         request.fwd_raw(request.params.get('furl'))
     else:
-        request.home()
+        request.fwd("website_index")
 
 
 class SignupHandler(FormHandler):

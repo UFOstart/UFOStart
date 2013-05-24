@@ -32,7 +32,7 @@ class WebsiteRootContext(RootContext):
 
     @reify
     def user(self):
-        return self.request.session.get(USER_SESSION_KEY, AnonUser())
+        return self.request.session.get(USER_SESSION_KEY) or AnonUser()
     def setUser(self, user):
         self.request.session[USER_SESSION_KEY] = self.user = user
         return user
