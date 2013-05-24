@@ -1,30 +1,33 @@
 <%inherit file="../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
+<%def name="pageTitle()"><div class="page-header">e-mail Sign Up / Log In</div></%def>
 
 <%def name="content()">
     <div class="container centered auth-page">
         <div class="row">
             <div class="col col-lg-6">
-                ${self.buildForm(view.schemas['signup'], values.get('signup'), errors.get('signup'))}
+                ${self.buildForm(view.schemas['signup'], values.get('signup'), errors.get('signup'), btnClass='btn-primary')}
             </div>
             <div class="col col-lg-6">
-                ${self.buildForm(view.schemas['login'], values.get('login'), errors.get('login'))}
+                ${self.buildForm(view.schemas['login'], values.get('login'), errors.get('login'), btnClass='btn-default')}
             </div>
         </div>
     </div>
 </%def>
 
-<%def name="buildForm(form, values, errors)">
-    <h4 class="box-title">${form.label}</h4>
+<%def name="buildForm(form, values, errors, btnClass='btn-primary')">
+    <h4 class="col col-lg-8 col-offset-4 box-title">${form.label}</h4>
     <div class="form-fields">
         <form class="${form.classes}" method="post" id="${form.id}">
             ${baseform.prelims(form)}
             %for field in form.fields:
                 ${field.render(form.id, request, values, errors, view)|n}
             %endfor
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">${form.action_label}</button>
+            <div class="form-actions row">
+                <div class="col col-lg-8 col-offset-4">
+                    <button type="submit" class="btn ${btnClass} col col-lg-12">${form.action_label}</button>
+                </div>
             </div>
         </form>
     </div>

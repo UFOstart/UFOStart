@@ -33,7 +33,6 @@ class SignupForm(BaseForm):
 
 class LoginForm(BaseForm):
     id="login"
-    classes = "form-validated"
     label = "Login"
     action_label = "Login"
     fields = [

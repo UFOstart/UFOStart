@@ -9,8 +9,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col col-lg-12">
-                        <a class="navbar-brand" href="${url("website_index")}"><img src="${ROOT_STATIC_URL}img/logo.png?${VERSION_TOKEN}" alt="${g.project_name}"/></a>
-                        <div class="page-header site-slogan">${g.site_slogan}</div>
+                        <a class="navbar-brand col col-lg-4" href="${url("website_index")}"><img src="${ROOT_STATIC_URL}img/logo.png?${VERSION_TOKEN}" alt="${g.project_name}"/></a>
+                        <div class="page-header tag-line">${g.site_slogan}</div>
+                        ${self.pageTitle()}
                     </div>
                 </div>
            </div>
@@ -66,6 +67,7 @@
 </div>
 
 
+<%def name="pageTitle()"></%def>
 <%def name="menu(user)">
     %if not user.isAnon():
         <div class="page-header-bar">
