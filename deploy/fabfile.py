@@ -14,18 +14,17 @@ Style = namedtuple("Style", ["list", "hasBuster"])
 
 ############## CONFIG #########################
 
-PROJECTNAME="friendfund"
+PROJECTNAME="ufostart"
 SUBSITES = [
-    SubSite(location = 'website', scripts=['setup.js', 'facebook.js'], styles=Style(['site.less', 'datepicker.less'], True))
+    SubSite(location = 'website', scripts=[], styles=Style(['site.less'], True))
   ]
-PROCESS_GROUPS = ['p1', 'jobs']
+PROCESS_GROUPS = ['p1']
 CLEAN_SESSIONS = False
 
 
 CREATE_CMDS = {
-    'dev':"git clone git@github.com:HarryMcCarney/friendfund.git ."
+    'dev':"git clone git@github.com:HarryMcCarney/UFOStart.git ."
 }
-
 
 
 EXTRA_SETUP = [
@@ -59,7 +58,9 @@ def create_env(env):
 
   clean_remote(env)
   cfg_template = Template(filename='supervisor.cfg.mako')
+
   with cd(get_deploy_path(env)):
+    if(files.exists("supervisor.cfg")): run("rm supervisor.cfg")
     files.append("supervisor.cfg", cfg_template.render(env = env), escape=False)
     run("env/bin/supervisord -c supervisor.cfg")
     with cd("repo.git"):
@@ -100,32 +101,15 @@ def build_statics(env, version):
                 run("~/node_modules/less/bin/lessc {project}/{subsite}/static/less/{stylesheet} --yui-compress {project}/{subsite}/static/css/{outname}.min.css".format(project=PROJECTNAME, subsite=loc, stylesheet=stylesheet, outname = stylesheet.rsplit(".")[0]))
 
 
-        if not files.exists("{project}/static/scripts/build/".format(project=PROJECTNAME)):
-            run("mkdir -p {project}/static/scripts/build/".format(project=PROJECTNAME))
-        run("java -jar ~/resources/compiler.jar --compilation_level SIMPLE_OPTIMIZATIONS \
-            {project}/static/scripts/libs/bootstrap.js \
-            {project}/static/scripts/libs/JSON.js \
-            {project}/static/scripts/libs/store.js \
-            {project}/static/scripts/libs/underscore.js \
-            {project}/static/scripts/libs/backbone.js  \
-            {project}/static/scripts/libs/globalize.js \
-            {project}/static/scripts/libs/cultures/globalize.culture.de.js\
-            {project}/static/scripts/libs/cultures/globalize.culture.es.js\
-            {project}/static/scripts/libs/cultures/globalize.culture.fr.js\
-            {project}/static/scripts/libs/jquery.validate.min.js \
-            {project}/static/scripts/libs/jquery.placeholder.js \
-            {project}/static/scripts/libs/require.js \
-            {project}/static/scripts/setup.js \
-            --warning_level QUIET --js_output_file {project}/static/scripts/build/libs.js".format(project=PROJECTNAME))
-
         for subsite in SUBSITES:
-            if not files.exists("{project}/{subsite}/static/scripts/build/".format(project=PROJECTNAME, subsite=subsite.location)):
-                run("mkdir -p {project}/{subsite}/static/scripts/build/".format(project=PROJECTNAME, subsite=subsite.location))
+            if subsite.scripts:
+                if not files.exists("{project}/{subsite}/static/scripts/build/".format(project=PROJECTNAME, subsite=subsite.location)):
+                    run("mkdir -p {project}/{subsite}/static/scripts/build/".format(project=PROJECTNAME, subsite=subsite.location))
 
-            customs = " ".join(["{project}/{subsite}/static/scripts/{script}".format(project=PROJECTNAME, subsite=subsite.location, script = script) for script in subsite.scripts])
-            run("java -jar ~/resources/compiler.jar --compilation_level SIMPLE_OPTIMIZATIONS \
-                --js {customs} \
-                --warning_level QUIET --js_output_file {project}/{subsite}/static/scripts/build/site.js".format(project=PROJECTNAME, subsite=subsite.location, customs = customs))
+                customs = " ".join(["{project}/{subsite}/static/scripts/{script}".format(project=PROJECTNAME, subsite=subsite.location, script = script) for script in subsite.scripts])
+                run("java -jar ~/resources/compiler.jar --compilation_level SIMPLE_OPTIMIZATIONS \
+                    --js {customs} \
+                    --warning_level QUIET --js_output_file {project}/{subsite}/static/scripts/build/site.js".format(project=PROJECTNAME, subsite=subsite.location, customs = customs))
         run("echo {} > ./VERSION_TOKEN".format(getShortToken(version)))
 
 
