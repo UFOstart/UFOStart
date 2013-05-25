@@ -52,6 +52,11 @@ def social_login(context, request):
         return {'success':False, 'message': e.message}
     result['success'] = True
     result['user'] = user.toJSON()
+
+    if user.Company and not user.Company.Template:
+        result['redirect'] = request.fwd_url("website_company_setup_basic")
+    elif user.Company and user.Company.Rounds:
+        result['redirect'] = request.fwd_url("website_company")
     return result
 
 
