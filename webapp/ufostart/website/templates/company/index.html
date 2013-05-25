@@ -1,0 +1,22 @@
+<%inherit file="../layout.html"/>
+
+<%def name="content()">
+    <div class="container">
+        <div class="row">
+            <div class="col col-offset-1 col-lg-10">
+                ${company.Template}
+                <div class="company-round-list">
+                    %for round in company.Rounds:
+                        ${self.renderRound(round)}
+                    %endfor
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>
+
+<%def name="renderRound(round)">
+    <div class="single-round">
+        ${round}
+    </div>
+</%def>

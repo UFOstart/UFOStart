@@ -1,0 +1,32 @@
+<%inherit file="../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+
+<%def name="content()">
+    <div class="container round-need-setup-page">
+        <div class="row">
+            <div class="col col-offset-1 col-lg-10">
+                <div class="needs-list in-use">
+
+                %for need in latestRound.Needs:
+                    ${self.renderNeed(need)}
+                %endfor
+
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>
+
+<%def name="renderNeed(need)">
+<div class="single-need">
+    <div class="need-title">${need.name}</div>
+    <div class="need-details">
+        <div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+        Detail 1</div><div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+        Detail 2</div><div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+        Detail 3
+        </div>
+    </div>
+</div>
+</%def>

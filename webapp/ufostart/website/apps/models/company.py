@@ -1,4 +1,4 @@
-from hnc.apiclient import TextField, Mapping, ListField, DictField
+from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField
 from hnc.apiclient.backend import ClientTokenProc
 
 TEMPLATE_STYLE_KEYS = {
@@ -31,13 +31,23 @@ GetTemplateDetailsProc = ClientTokenProc("/web/template", result_cls=TemplateMod
 GetAllNeedsProc = ClientTokenProc("/web/need/list", result_cls=NeedModel, root_key="Needs", result_list=True)
 
 
+class RoundModel(Mapping):
+    start = DateTimeField()
+    Needs = ListField(DictField(NeedModel))
+
 
 class CompanyModel(Mapping):
     token = TextField()
     Template = DictField(TemplateModel)
+    Round = DictField(RoundModel)
+    Rounds = ListField(DictField(RoundModel))
+
+
+
+GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)
 
 SetCompanyTemplateProc = ClientTokenProc("/web/company/template")
 GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)
 
-
-
+CreateRoundProc = ClientTokenProc("/web/round/create")
+GetRoundProc = ClientTokenProc("/web/round", root_key="Company", result_cls=CompanyModel)

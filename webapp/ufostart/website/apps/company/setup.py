@@ -1,7 +1,7 @@
 from hnc.forms.handlers import FormHandler
 from ufostart.lib.tools import group_by_n
 from ufostart.website.apps.company.forms import RoundSetupForm
-from ufostart.website.apps.models.company import GetAllCompanyTemplatesProc, GetTemplateDetailsProc, SetCompanyTemplateProc, GetCompanyProc, GetAllNeedsProc
+from ufostart.website.apps.models.company import GetAllCompanyTemplatesProc, GetTemplateDetailsProc, SetCompanyTemplateProc, GetCompanyProc, GetAllNeedsProc, GetRoundProc
 
 
 def basic(context, request):
@@ -30,3 +30,8 @@ class RoundHandler(FormHandler):
 
         result.update({'template': template, 'needs':needs_library})
         return super(RoundHandler, self).pre_fill_values(request, result)
+
+
+def show_latest_round(context, request):
+    company = GetRoundProc(request, {'token':context.user.Company.token})
+    return {'latestRound': company.Round}
