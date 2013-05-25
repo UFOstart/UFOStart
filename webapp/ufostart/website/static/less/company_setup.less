@@ -1,3 +1,6 @@
+.round-need-setup-page {
+  padding-bottom: 70px;
+}
 .template-list {
   text-align: center;
 }
@@ -60,11 +63,11 @@
     border-radius: 100%;
     transition: all .2s ease-in-out;
     &:hover {
-      -webkit-transform: rotate(180deg) scale(2) translate(-4px, 4px);
-         -moz-transform: rotate(180deg) scale(2) translate(-4px, 4px);
-          -ms-transform: rotate(180deg) scale(2) translate(-4px, 4px);
-           -o-transform: rotate(180deg) scale(2) translate(-4px, 4px);
-              transform: rotate(180deg) scale(2) translate(-4px, 4px);
+      -webkit-transform: scale(1.7);
+         -moz-transform: scale(1.7);
+          -ms-transform: scale(1.7);
+           -o-transform: scale(1.7);
+              transform: scale(1.7);
       text-decoration: none;
     }
   }
@@ -84,12 +87,24 @@
     border-radius: 100%;
     transition: all .2s ease-in-out;
     &:hover {
-      -webkit-transform: rotate(180deg) scale(2) translate(-4px, 4px);
-         -moz-transform: rotate(180deg) scale(2) translate(-4px, 4px);
-          -ms-transform: rotate(180deg) scale(2) translate(-4px, 4px);
-           -o-transform: rotate(180deg) scale(2) translate(-4px, 4px);
-              transform: rotate(180deg) scale(2) translate(-4px, 4px);
+      -webkit-transform: scale(1.7);
+         -moz-transform: scale(1.7);
+          -ms-transform: scale(1.7);
+           -o-transform: scale(1.7);
+              transform: scale(1.7);
       text-decoration: none;
     }
   }
+}
+
+
+.needs-list.library{
+  .need-details {display: none;}
+}
+
+
+.btn-start-round {
+  margin-top:70px;
+  .clearfix;
+   + .text-center {padding-top:15px;font-weight: 700;}
 }
