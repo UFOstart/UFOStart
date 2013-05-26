@@ -43,10 +43,10 @@
   background-color: @btn-default-bg;
   border-radius: @border-radius-large;
   .box-shadow(1px 3px 4px rgba(0,0,0,.4));
-  padding: 10px 20px;
+  padding: 15px;
   position: relative;
-  > .need-title {font-weight: 700;}
-  > .need-details {
+  .need-title {font-weight: 700;}
+  .need-details {
    >.need-detail {
     display: inline-block;
     +.need-detail {margin-left: 20px;}
@@ -116,9 +116,34 @@
   .need-details {display: none;}
 }
 
-
 .btn-start-round {
   margin-top:70px;
   .clearfix;
    + .text-center {padding-top:15px;font-weight: 700;}
+}
+
+
+.round-need-setup-outer > .need-details{
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+}
+.round-need-setup{
+  .expert-title {font-weight:700;}
+  .expert-title, .expert-name {
+    font-size: @font-size-small;
+  }
+  .use-service-btn {margin-top:52px;margin-left: -10px;}
+  .need-expert-btn {
+    height: 77px;
+    margin-left: -10px;
+    background-position: center bottom;
+    &:hover {color:transparent;text-decoration: none;}
+  }
+  &.expert {
+    border-bottom: 1px solid @corp-color-semi;
+  }
+  &.services {
+    margin-top:10px;
+  }
 }

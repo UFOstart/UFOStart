@@ -1,17 +1,17 @@
 <%inherit file="../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
+<%def name="pageTitle()"><div class="page-header">Round 1</div></%def>
+
 
 <%def name="content()">
-    <div class="container round-need-setup-page">
+    <div class="container container-constricted round-need-setup-page">
         <div class="row">
-            <div class="col col-offset-1 col-lg-10">
+            <div class="col col-lg-12">
                 <div class="needs-list in-use">
-
                 %for need in latestRound.Needs:
                     ${self.renderNeed(need)}
                 %endfor
-
                 </div>
             </div>
         </div>
@@ -20,12 +20,45 @@
 
 <%def name="renderNeed(need)">
 <div class="single-need">
-    <div class="need-title">${need.name}</div>
-    <div class="need-details">
-        <div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-        Detail 1</div><div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-        Detail 2</div><div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-        Detail 3
+    <div class="single-need-inner round-need-setup-outer">
+        <div class="need-details">
+            <div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+            Detail 1</div><div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+            Detail 2</div><div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+            Detail 3
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col col-lg-6">
+                <div class="need-title">${need.name}</div>
+            </div>
+            <div class="col col-lg-6 text-center">
+                <div class="row round-need-setup expert">
+                    <div class="col col-sm-5 need-expert-box">
+                        <img src="${STATIC_URL}img/dummy/avatar1.png" class="img-thumbnail mini"/>
+                        <div class="expert-title">Introducer</div>
+                        <p class="expert-name">Martin Mustermann</p>
+                    </div>
+                    <span class="linking-arrow"></span>
+                    <div class="col col-sm-5 need-expert-box">
+                        <img src="${STATIC_URL}img/dummy/avatar2.png" class="img-thumbnail mini"/>
+                        <div class="expert-title">Expert</div>
+                        <p class="expert-name">Martins Mustermann</p>
+                    </div>
+                    <div class="col col-sm-2"><a href="#" class="envelop-btn need-expert-btn">Go</a> </div>
+                </div>
+                <div class="row round-need-setup services">
+                    <div class="col col-sm-5 col-offset-5">
+                        <img src="${STATIC_URL}img/cloudservices.png" class=""/>
+                        <div class="expert-title">Services</div>
+                        <p class="expert-name">Martin Mustermann</p>
+                    </div>
+                    <div class="col col-sm-2">
+                        <a href="" class="btn btn-primary btn-small use-service-btn">Go</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

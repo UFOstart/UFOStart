@@ -5,9 +5,9 @@
 
 
 <%def name="content()">
-    <div class="container round-need-setup-page">
+    <div class="container container-constricted round-need-setup-page">
         <div class="row">
-            <div class="col col-offset-1 col-lg-6">
+            <div class="col col-lg-8">
                 <h6>Needs to be fulfilled in 90 days</h6>
                 ${self.buildForm(view.form, values.get(view.form.id), errors.get(view.form.id), btnClass='btn btn-primary col col-lg-12')}
             </div>
