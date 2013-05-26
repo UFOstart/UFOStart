@@ -45,6 +45,11 @@ class WebsiteRootContext(RootContext):
 stdRequireLogin = logged_in(lambda req: req.fwd_url("website_signup", _query=[("furl", req.url)]))
 fwdRequireLogin = lambda route: logged_in(lambda req: req.fwd_url("website_signup", _query=[("furl", route(req))]))
 
+class WebsiteAuthContext(WebsiteRootContext):
+    def is_allowed(self, request):
+        if not self.user.isAnon():
+            request.fwd_raw(request.furl)
+
 class WebsiteAuthedContext(WebsiteRootContext):
     def is_allowed(self, request):
         if self.user.isAnon():
