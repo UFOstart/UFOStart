@@ -26,7 +26,7 @@ ROUTE_LIST = [
 
     , ClassRoute   ('website_company_setup_basic'          , '/company/setup/basic', contexts.WebsiteAuthedContext, company.setup.BasicHandler, "company/setup/basic.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute   ('website_company_setup_round'          , '/company/setup/round', contexts.WebsiteAuthedContext, company.setup.RoundHandler, "company/setup/template.html", view_attrs = JSON_FORM_ATTRS)
-    , FunctionRoute('website_company_round_latest'         , '/company/round/latest', contexts.WebsiteAuthedContext, company.setup.show_latest_round, "company/round.html")
+    , FunctionRoute('website_company_round_view'           , '/company/round/:token', contexts.WebsiteAuthedContext, company.setup.show_latest_round, "company/round.html")
 
     , FunctionRoute('website_company'                      , '/company', contexts.WebsiteAuthedContext, company.general.index, "company/index.html")
 ]

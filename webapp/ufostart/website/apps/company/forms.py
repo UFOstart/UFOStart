@@ -1,3 +1,4 @@
+from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm
 from ufostart.website.apps.models.company import CreateRoundProc, SetCompanyTemplateProc, GetCompanyProc
 
@@ -20,7 +21,11 @@ class RoundSetupForm(BaseForm):
     @classmethod
     def on_success(cls, request, values):
         user = request.root.user
-        # values = {"User": {"token": user.token, "Company": { "token": user.Company.token, "Round": {"Needs": [{ "name": k } for k in values['needKey']]}}}}
-        values = {"Company": { "token": user.Company.token, "Round": {"Needs": [{ "name": k } for k in values['needKey']]}}}
-        result = CreateRoundProc(request, values)
-        return {'success': True, 'redirect': request.fwd_url("website_company_round_latest")}
+        needs = [values['needKey']] if isinstance(values['needKey'], basestring) else values['needKey']
+        values = {"Company": { "token": user.Company.token, "Round": {"Needs": [{ "name": k } for k in needs]}}}
+        try:
+            round = CreateRoundProc(request, values)
+        except DBNotification, e:
+            raise e
+        else:
+            return {'success': True, 'redirect': request.fwd_url("website_company_round_view", token = round.token)}

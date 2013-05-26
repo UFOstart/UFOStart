@@ -33,6 +33,7 @@ GetAllNeedsProc = ClientTokenProc("/web/need/list", result_cls=NeedModel, root_k
 
 class RoundModel(Mapping):
     start = DateTimeField()
+    token = TextField()
     Needs = ListField(DictField(NeedModel))
 
 
@@ -49,5 +50,5 @@ GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=
 SetCompanyTemplateProc = ClientTokenProc("/web/company/template")
 GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)
 
-CreateRoundProc = ClientTokenProc("/web/round/create")
-GetRoundProc = ClientTokenProc("/web/round", root_key="Company", result_cls=CompanyModel)
+CreateRoundProc = ClientTokenProc("/web/round/create", root_key="Round", result_cls=RoundModel)
+GetRoundProc = ClientTokenProc("/web/round", root_key="Round", result_cls=RoundModel)

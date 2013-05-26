@@ -31,5 +31,5 @@ class RoundHandler(FormHandler):
 
 
 def show_latest_round(context, request):
-    company = GetRoundProc(request, {'token':context.user.Company.token})
-    return {'latestRound': company.Round}
+    companyRound = GetRoundProc(request, {'token':request.matchdict['token']})
+    return {'companyRound': companyRound}
