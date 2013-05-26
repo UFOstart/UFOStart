@@ -93,7 +93,10 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
       , serializeJSON : function(form) {
           if($(form).is("form"))form = $(form)
           else form = $(form).find("form");
-          return this.serializeArray(form.serializeArray());
+          var btn = form.data("submitButton"), params = form.serializeArray();
+
+          if(btn && !~_.pluck(params, "name").indexOf(btn.name)) params.push([btn;
+          return this.serializeArray(params);
       }
       , ifyForm: function(params, validationParams){
           var form = params.form||params.root, noop = function(e){e.preventDefault();e.stopPropagation();return false;};
@@ -106,7 +109,7 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
                   var $form = $(form), data = ajax.serializeJSON($form);
                   $form.find("button.btn,a.btn").button("loading");
                   if(params.submit)params.submit($form);
-                  alert(form.data("submitButtonValue"));
+
                   ajax.submit({
                       url: params.url||$form.attr("action")
                       , data: data
