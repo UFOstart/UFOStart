@@ -14,8 +14,8 @@
                     <div class="homepage-signup-bar">
                         <p class="intro">Sign Up now, start your engines and may the best woman win</p>
                         <p>
-                            <a href="/" class="btn-social btn-facebook fbconnect">Sign Up with Facebook</a>
-                            <a href="/" class="btn-social btn-linkedin linkedin-connect">Sign Up with Linkedin</a>
+                            <a href="${request.fwd_url("website_social_login_start", network = 'facebook')}?furl=${request.furl}" class="btn-social btn-facebook">Sign Up with Facebook</a>
+                            <a href="${request.fwd_url("website_social_login_start", network = 'linkedin')}?furl=${request.furl}" class="btn-social btn-linkedin">Sign Up with Linkedin</a>
                         </p>
                         <small><strong class="text-muted">or use your e-mail address to <a href="${url("website_signup")}" class="text-muted">Sign Up / Log In</a></strong></small>
                     </div>

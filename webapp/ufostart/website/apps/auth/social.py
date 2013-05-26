@@ -1,11 +1,13 @@
 import base64, logging
 from hnc.apiclient.backend import DBNotification, DBException
+from hnc.forms.messages import GenericErrorMessage
+from ufostart.website.apps.auth.network_settings import InvalidSignatureException, UserRejectedNotice
 from ufostart.website.apps.models.auth import RefreshAccessTokenProc, SocialConnectProc, SOCIAL_NETWORK_TYPES_REVERSE
 
 log = logging.getLogger(__name__)
 
 
-class InvalidSignatureException(Exception):pass
+
 
 
 def fb_accept_requests(context, request):
@@ -60,3 +62,26 @@ def social_login(context, request):
     return result
 
 
+
+
+
+
+def social_login_start(context, request):
+    network = request.matchdict['network']
+    networkSettings = context.settings.networks.get(network)
+    return networkSettings.loginStart(request)
+
+def social_login_callback(context, request):
+    network = request.matchdict['network']
+    networkSettings = context.settings.networks.get(network)
+    try:
+        user = networkSettings.loginCallback(request)
+    except UserRejectedNotice, e:
+        request.session.flash(GenericErrorMessage("You need to accept {} permissions to use {}.".format(network.title(), request.globals.project_name)), "generic_messages")
+        request.fwd("website_index")
+    else:
+        if not user:
+            request.session.flash(GenericErrorMessage("{} login failed. It seems the request expired. Please try again".format(network.title())), "generic_messages")
+            request.fwd("website_index")
+        else:
+            request.fwd("website_index")
