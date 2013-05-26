@@ -1,22 +1,20 @@
 from hnc.forms.handlers import FormHandler
 from ufostart.lib.tools import group_by_n
-from ufostart.website.apps.company.forms import RoundSetupForm
+from ufostart.website.apps.company.forms import RoundSetupForm, CompanyTemplateForm
 from ufostart.website.apps.models.company import GetAllCompanyTemplatesProc, GetTemplateDetailsProc, SetCompanyTemplateProc, GetCompanyProc, GetAllNeedsProc, GetRoundProc
 
 
-def basic(context, request):
-    if context.user.Company.Template: request.fwd("website_company_setup_round")
-    templates = GetAllCompanyTemplatesProc(request)
-    return {'templates': group_by_n(templates)}
+class BasicHandler(FormHandler):
+    form = CompanyTemplateForm
 
+    def __init__(self, context=None, request=None):
+        # if context.user.Company.Template: request.fwd("website_company_setup_round")
+        super(BasicHandler, self).__init__(context, request)
 
-def set_template(context, request):
-    templateName = request.matchdict['template']
-    SetCompanyTemplateProc(request, {"token":context.user.Company.token,"Template":{"name":templateName}})
-    context.user.Company = GetCompanyProc(request, {"token":context.user.Company.token})
-    request.fwd("website_company_setup_round")
-
-
+    def pre_fill_values(self, request, result):
+        templates = GetAllCompanyTemplatesProc(request)
+        result['templates'] = group_by_n(templates)
+        return super(BasicHandler, self).pre_fill_values(request, result)
 
 class RoundHandler(FormHandler):
     form = RoundSetupForm

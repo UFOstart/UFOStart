@@ -1,7 +1,8 @@
 define([], function(){
   var validate = function(params){
         var form = params.root.is("form.form-validated") ? params.root : params.root.find("form.form-validated")
-        var opts = _.extend({
+        , btnValue
+        , opts = _.extend({
                 errorClass: "help-inline"
                 , errorElement: "span"
                 , validClass:"valid"
@@ -28,7 +29,14 @@ define([], function(){
         $(form).find("input[type=reset], button[type=reset]").click(function(e) {
             view.resetForm(form);
         });
-
+//        saving submit button value for later submitting
+        var saveBtn = function(btn){
+            var params = {name: btn.name, value:btn.value};
+            form.data("submitButton", params);
+        };
+        $(form).find("button[type=submit][value]").on({click: function(e){saveBtn(this)}, keyup: function(){
+            if(e.keycode == 13 || e.keyCode == 32){saveBtn(this)}
+        }});
         $(form).find("[data-validation-url]").each(function(idx, elem){
             var $elem = $(elem);
             $elem.rules("add", {remote: $elem.data("validationUrl")});

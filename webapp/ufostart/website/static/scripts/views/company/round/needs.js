@@ -27,13 +27,18 @@ define(["tools/ajax"], function(ajax){
             });
         }
         , addRemove : function(e){
-            var $el = $(e.target);
+            var $el = $(e.target), $need = $el.closest(".single-need");
             if($el.hasClass("add")){
-                this.sortedInsert(this.$(".needs-list.in-use"), $el.closest(".single-need").detach());
+                this.$(".needs-list.in-use").prepend($need.detach());
                 $el.removeClass("add").addClass("remove").html("×");
+                $need.addClass("added")
+                setTimeout(function(){$need.removeClass("added")}, 0)
+
+
             } else if($el.hasClass("remove")){
-                this.sortedInsert(this.$(".needs-list.library"), $el.closest(".single-need").detach());
+                this.sortedInsert(this.$(".needs-list.library"), $need.detach());
                 $el.removeClass("remove").addClass("add").html("+");
+                $need.removeClass("added")
             }
         }
         , sortedInsert: function(root, el){

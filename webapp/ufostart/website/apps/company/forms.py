@@ -1,5 +1,17 @@
 from hnc.forms.formfields import BaseForm
-from ufostart.website.apps.models.company import CreateRoundProc
+from ufostart.website.apps.models.company import CreateRoundProc, SetCompanyTemplateProc, GetCompanyProc
+
+
+class CompanyTemplateForm(BaseForm):
+    fields = []
+
+    @classmethod
+    def on_success(cls, request, values):
+        user = request.root.user
+        templateName = values['template']
+        SetCompanyTemplateProc(request, {"token":user.Company.token,"Template":{"name":templateName}})
+        user.Company = GetCompanyProc(request, {"token":user.Company.token})
+        return {'redirect': request.fwd_url("website_company_setup_round")}
 
 
 class RoundSetupForm(BaseForm):

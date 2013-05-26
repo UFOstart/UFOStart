@@ -24,11 +24,9 @@ ROUTE_LIST = [
     , FunctionRoute('website_social_login'                 , '/user/login/social', contexts.WebsiteRootContext, social.social_login, "json", route_attrs = {"xhr":True})
     , FunctionRoute('website_fbtokenrefresh'               , '/user/fb/token/refresh', contexts.WebsiteRootContext, social.fb_token_refresh, "json", route_attrs = {"xhr":True})
 
-    , FunctionRoute('website_company_setup_basic'          , '/company/setup/basic', contexts.WebsiteAuthedContext, company.setup.basic, "company/setup/basic.html")
-    , FunctionRoute('website_company_set_template'         , '/company/setup/round/:template', contexts.WebsiteAuthedContext, company.setup.set_template, None)
+    , ClassRoute   ('website_company_setup_basic'          , '/company/setup/basic', contexts.WebsiteAuthedContext, company.setup.BasicHandler, "company/setup/basic.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute   ('website_company_setup_round'          , '/company/setup/round', contexts.WebsiteAuthedContext, company.setup.RoundHandler, "company/setup/round.html", view_attrs = JSON_FORM_ATTRS)
     , FunctionRoute('website_company_round_latest'         , '/company/round/latest', contexts.WebsiteAuthedContext, company.setup.show_latest_round, "company/round.html")
-
 
     , FunctionRoute('website_company'                      , '/company', contexts.WebsiteAuthedContext, company.general.index, "company/index.html")
 ]

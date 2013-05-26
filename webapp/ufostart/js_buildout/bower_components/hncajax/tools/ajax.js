@@ -106,6 +106,7 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
                   var $form = $(form), data = ajax.serializeJSON($form);
                   $form.find("button.btn,a.btn").button("loading");
                   if(params.submit)params.submit($form);
+                  alert(form.data("submitButtonValue"));
                   ajax.submit({
                       url: params.url||$form.attr("action")
                       , data: data
