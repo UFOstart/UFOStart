@@ -10,11 +10,37 @@ TEMPLATE_STYLE_KEYS = {
     , 'SERIES_B':'seriesb'
 }
 
+class ExpertModel(Mapping):
+    linkedinId = TextField()
+    firstName = TextField()
+    lastName = TextField()
+    picture = TextField()
+    introLinkedinId = TextField()
+    introFirstName = TextField()
+    introLastName = TextField()
+    introPicture = TextField()
 
+    def getExpertPicture(self):
+        return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+    def getExpertName(self):
+        return u"{} {}".format(self.firstName, self.lastName)
+
+    def getIntroName(self):
+        return u"{} {}".format(self.introFirstName, self.introLastName)
+    def getIntroPicture(self):
+        return self.introPicture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+
+
+
+class ServiceModel(Mapping):
+    name = TextField()
+    url = TextField()
 
 class NeedModel(Mapping):
     key = TextField()
     name = TextField()
+    Service = DictField(ServiceModel)
+    Expert = DictField(ExpertModel)
 
 
 class TemplateModel(Mapping):

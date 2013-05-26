@@ -35,31 +35,60 @@
             </div>
             <div class="col col-lg-6 text-center">
                 <div class="row round-need-setup expert">
-                    <div class="col col-sm-5 need-expert-box">
-                        <img src="${STATIC_URL}img/dummy/avatar1.png" class="img-thumbnail mini"/>
-                        <div class="expert-title">Introducer</div>
-                        <p class="expert-name">Martin Mustermann</p>
-                    </div>
-                    <span class="linking-arrow"></span>
-                    <div class="col col-sm-5 need-expert-box">
-                        <img src="${STATIC_URL}img/dummy/avatar2.png" class="img-thumbnail mini"/>
-                        <div class="expert-title">Expert</div>
-                        <p class="expert-name">Martins Mustermann</p>
-                    </div>
-                    <div class="col col-sm-2"><a href="#" class="envelop-btn need-expert-btn">Go</a> </div>
+                    ${self.renderExpert(need.Expert)}
                 </div>
                 <div class="row round-need-setup services">
-                    <div class="col col-sm-5 col-offset-5">
-                        <img src="${STATIC_URL}img/cloudservices.png" class=""/>
-                        <div class="expert-title">Services</div>
-                        <p class="expert-name">Martin Mustermann</p>
-                    </div>
-                    <div class="col col-sm-2">
-                        <a href="#" class="btn btn-primary btn-small use-service-btn">Go</a>
-                    </div>
+                    ${self.renderService(need.Service)}
                 </div>
             </div>
         </div>
     </div>
 </div>
+</%def>
+
+
+<%def name="renderExpert(expert)">
+    %if expert:
+        <div class="col col-sm-5 need-expert-box">
+            <img src="${expert.getIntroPicture()}" class="img-thumbnail mini"/>
+            <div class="expert-title">Introducer</div>
+            <p class="expert-name">${expert.getIntroName()}</p>
+        </div>
+        <span class="linking-arrow"></span>
+        <div class="col col-sm-5 need-expert-box">
+            <img src="${expert.getExpertPicture()}" class="img-thumbnail mini"/>
+            <div class="expert-title">Expert</div>
+            <p class="expert-name">${expert.getExpertName()}</p>
+        </div>
+        <div class="col col-sm-2"><a href="#" class="envelop-btn need-expert-btn">Go</a> </div>
+    %else:
+        <div class="col col-sm-5 need-expert-box">
+            <img src="//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm" class="img-thumbnail mini"/>
+            <div class="expert-title">No Introducer</div>
+        </div>
+        <span class="linking-arrow"></span>
+        <div class="col col-sm-5 need-expert-box">
+            <img src="//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm" class="img-thumbnail mini"/>
+            <div class="expert-title">No Expert</div>
+        </div>
+    %endif
+</%def>
+
+<%def name="renderService(service)">
+    %if service:
+        <div class="col col-sm-5 col-offset-5">
+            <img src="${STATIC_URL}img/cloudservices.png" class=""/>
+            <div class="expert-title">Services</div>
+            <div class="service-url" >${service.name}</div>
+        </div>
+        <div class="col col-sm-2">
+            <a href="${service.url}" class="btn btn-primary btn-small use-service-btn">Go</a>
+        </div>
+    %else:
+        <div class="col col-sm-5 col-offset-5">
+            <img src="${STATIC_URL}img/cloudservices.png" class=""/>
+            <div class="expert-title">Services</div>
+            <div class="service-url">No service recommended</div>
+        </div>
+    %endif
 </%def>
