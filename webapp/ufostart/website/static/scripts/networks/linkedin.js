@@ -62,13 +62,15 @@ define(["tools/hash", "tools/ajax"], function(hashlib, ajax){
                                 _t.backendLogin(result.values[0], {success: function(resp, status, xhr){
                                     if(resp.success === true){
                                         window.location.href = $t.prop("href");
+                                    } else {
+                                        rollback();
                                     }
-                                }});
+                                }
+                                , error: rollback});
                             })
                             .error(function(err) {
                                 rollback()
                             });
-                        rollback();
                     });
 
                     e.stopPropagation();

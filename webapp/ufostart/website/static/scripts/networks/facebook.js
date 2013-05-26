@@ -189,6 +189,8 @@ define(["tools/ajax"], function(ajax){
                                 _t.login(aR, {success: function(resp, status, xhr){
                                     if(resp.success === true){
                                         window.location.href = $t.prop("href");
+                                    } else {
+                                    rollback();
                                     }
                                 }});
                             } else {
