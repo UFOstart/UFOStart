@@ -31,7 +31,7 @@ define([], function(){
         });
 //        saving submit button value for later submitting
         var saveBtn = function(btn){
-            form.data({submitButtonValue: btn.value, submitButtonName: btn.name});
+            form.data("submitButton", {value: btn.value, name: btn.name});
         };
         $(form).find("button[type=submit][value]").on({click: function(e){saveBtn(this)}, keyup: function(){
             if(e.keycode == 13 || e.keyCode == 32){saveBtn(this)}
