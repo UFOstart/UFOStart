@@ -95,7 +95,7 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
           else form = $(form).find("form");
           var btn = form.data("submitButton"), params = form.serializeArray();
 
-          if(btn && !~_.pluck(params, "name").indexOf(btn.name)) params.push([btn;
+          if(btn && !~_.pluck(params, "name").indexOf(btn.name)) params.push(btn);
           return this.serializeArray(params);
       }
       , ifyForm: function(params, validationParams){
