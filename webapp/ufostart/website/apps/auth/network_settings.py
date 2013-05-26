@@ -38,6 +38,7 @@ class SocialSettings(object):
         else:
             return user.toJSON()
 
+
 class FacebookSettings(SocialSettings):
     getCodeEndpoint = "https://www.facebook.com/dialog/oauth"
     codeEndpoint = "https://graph.facebook.com/oauth/access_token"
@@ -47,7 +48,7 @@ class FacebookSettings(SocialSettings):
 
 
     def loginStart(self, request):
-        params = {'client_id':self.appid
+        params = {'client_id':self.appid, 'scope':'email'
                     , 'redirect_uri':request.fwd_url("website_social_login_callback", network = self.type)
                  }
         request.fwd_raw("{}?{}".format(self.getCodeEndpoint, urllib.urlencode(params)))
