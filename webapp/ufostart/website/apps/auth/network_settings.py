@@ -99,6 +99,7 @@ class LinkedInSettings(SocialSettings):
                     , 'client_id':self.appid
                     , 'state': request.session.get_csrf_token()
                     , 'redirect_uri':request.fwd_url("website_social_login_callback", network = self.type)
+                    # , 'scope': " ".join(['r_basicprofile', 'r_fullprofile', 'r_emailaddress'])
                  }
         request.fwd_raw("{}?{}".format(self.getCodeEndpoint, urllib.urlencode(params)))
 

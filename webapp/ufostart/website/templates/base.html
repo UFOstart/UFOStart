@@ -47,7 +47,7 @@
 <%def name="jsoptions()">
     <script>
         window.__options__ = {
-            socials : ${vctxt.settings.toPublicJSON(True) |n }
+            socials : {}
             , user : ${vctxt.user.toJSON(True)|n}
             , messagingContainer: "#message-container"
             , staticPrefix: '${ROOT_STATIC_URL}'
