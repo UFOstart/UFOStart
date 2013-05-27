@@ -45,6 +45,9 @@
 .hidden-lg    { display: block !important; }
 
 
+.absolute-lg {position:relative;}
+
+
 // Tablets & small desktops only
 @media (min-width: @screen-tablet) and (max-width: @screen-tablet-max) {
   .visible-sm   { display: none !important; }
@@ -54,6 +57,8 @@
   .hidden-sm    { display: block !important; }
   .hidden-md    { display: none !important; }
   .hidden-lg    { display: block !important; }
+
+  .absolute-lg  {position:absolute;}
 }
 
 // For desktops
@@ -65,6 +70,8 @@
   .hidden-sm    { display: block !important; }
   .hidden-md    { display: block !important; }
   .hidden-lg    { display: none !important; }
+
+  .absolute-lg  {position:absolute;}
 }
 
 // Print utilities

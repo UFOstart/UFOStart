@@ -49,6 +49,8 @@ class TemplateModel(Mapping):
     Need = ListField(DictField(NeedModel))
 
     def getStyleKey(self):
+        if not self.key:
+            self.key = self.name.replace(" ", "_").upper()
         return TEMPLATE_STYLE_KEYS[self.key]
 
 

@@ -1,0 +1,75 @@
+<%inherit file="../../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="pageTitle()"><div class="page-header">${template.name} <span class="template-icon ${template.getStyleKey()}"></span> </div></%def>
+
+
+<%def name="content()">
+    <div class="container container-constricted round-need-setup-page">
+        <div class="row">
+            <div class="col col-lg-8">
+                <h6>Needs to be fulfilled in 90 days</h6>
+                ${self.buildForm(view.form, values.get(view.form.id), errors.get(view.form.id), btnClass='btn btn-primary col col-lg-12')}
+            </div>
+            <div class="col col-lg-3 col-offset-1">
+                <h6>Needs Library</h6>
+                <div class="needs-list library">
+                    %for need in needs:
+                        ${self.renderNeed(view.form.id, need, True)}
+                    %endfor
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>
+
+<%def name="buildForm(form, values, errors, btnClass='btn-primary')">
+    <form class="${form.classes}" method="post" id="${form.id}">
+        ${baseform.prelims(form)}
+        <div class="needs-list in-use">
+        %for need in template.Need:
+            ${self.renderNeed(form.id, need, False)}
+        %endfor
+        </div>
+        <div class="btn-start-round">
+            <button type="submit" class="${btnClass}">Start the Round</button>
+        </div>
+        <p class="text-center">You have 90 days to finish the round</p>
+    </form>
+</%def>
+
+<%def name="renderNeed(prefix, need, isAdd = False)">
+<div class="single-need" data-entity-sort="${need.name}">
+    <div class="single-need-inner">
+    %if isAdd:
+        <a class="need-btn add">+</a>
+    %else:
+        <a class="need-btn remove">×</a>
+    %endif
+
+    <div class="need-title">${need.name}</div>
+    <div class="need-details">
+        <input type="hidden" name="${prefix}.needKey" value="${need.name}"/>
+        <div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+        Detail 1</div><div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+        Detail 2</div><div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+        Detail 3
+        </div>
+    </div>
+    </div>
+</div>
+</%def>
+
+<%def name="extra_head()">
+    <link type="text/css" rel="stylesheet" href="${ROOT_STATIC_URL}scripts/dist/jquery.qtip.min.css" />
+</%def>
+<%def name="pre_scripts()">
+    <script src="${ROOT_STATIC_URL}scripts/dist/jquery.qtip.min.js"></script>
+</%def>
+<%def name="post_scripts()">
+    <script>
+        require(["views/company/round/needs"], function(View){
+            new View({el: $(".round-need-setup-page")})
+        })
+    </script>
+</%def>

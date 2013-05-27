@@ -23,6 +23,7 @@ define(["tools/ajax"], function(ajax){
                 , position: {
                     my: 'bottom center', at: 'top center'
                 }
+                , show:"click"
                 , hide:"unfocus"
             });
         }

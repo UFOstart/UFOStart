@@ -53,6 +53,7 @@
   .need-details {
    >.need-detail {
     display: inline-block;
+    cursor: pointer;
     +.need-detail {margin-left: 20px;}
    }
   }
@@ -131,13 +132,13 @@
 }
 
 
-.round-need-setup-outer > .need-details{
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
+.round-need-setup-outer .need-details{
+  bottom: 0;
+  left: 0;
+  margin-bottom: 15px;
 }
 .round-need-setup{
-  .expert-title {font-weight:700;}
+  .expert-title {font-weight:700;margin-top:4px;}
   .expert-title, .expert-name, .service-url {
     font-size: @font-size-small;
   }
