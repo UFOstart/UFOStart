@@ -25,7 +25,7 @@ class RoundSetupForm(BaseForm):
         values = {"Company": { "token": user.Company.token, "Round": {"Needs": [{ "name": k } for k in needs]}}}
         try:
             round = CreateRoundProc(request, values)
-            if request.root.user and request.root.user.Company and request.root.user.Company.Rounds:
+            if request.root.user and request.root.user.Company:
                 request.root.user.Company.Rounds.append(round)
                 request.session.save()
         except DBNotification, e:
