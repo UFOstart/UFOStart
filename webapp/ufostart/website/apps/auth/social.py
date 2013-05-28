@@ -87,4 +87,5 @@ def social_login_callback(context, request):
             request.session.flash(GenericErrorMessage("{} login failed. It seems the request expired. Please try again".format(network.title())), "generic_messages")
             request.fwd("website_index")
         else:
-            request.fwd("website_index")
+            route, args, kwargs = request.root.getPostLoginUrlParams()
+            request.fwd(route, *args, **kwargs)

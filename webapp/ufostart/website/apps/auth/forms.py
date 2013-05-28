@@ -51,7 +51,8 @@ class LoginForm(BaseForm):
         except DBNotification, e:
             return {"success":False, 'errors':{'email':"Unknown email or password"}}
         request.root.setUser(user)
-        return {'success':True, 'redirect':request.furl}
+        route, args, kwargs = request.root.getPostLoginUrlParams()
+        return {'success':True, 'redirect': request.fwd_url(route, *args, **kwargs) }
 
 
 class PasswordForgotForm(BaseForm):

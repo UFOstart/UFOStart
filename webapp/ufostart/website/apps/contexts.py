@@ -2,6 +2,7 @@ from pyramid.decorator import reify
 from ufostart.lib.baseviews import RootContext
 from ufostart.website.apps.auth import LoginForm
 from ufostart.website.apps.models.auth import AnonUser
+from ufostart.website.apps.models.company import GetCompanyProc
 
 USER_SESSION_KEY = 'WEBSITE_USER'
 
@@ -42,6 +43,16 @@ class WebsiteRootContext(RootContext):
             del self.request.session[USER_SESSION_KEY]
         self.user = AnonUser()
 
+    def getPostLoginUrlParams(self):
+        if self.user.isAnon():
+            return "website_index", [], {}
+        elif self.user.Company and self.user.Company.Rounds:
+            return "website_company", [], {}
+        else:
+            return "website_company_setup_basic", [], {}
+
+
+
 stdRequireLogin = logged_in(lambda req: req.fwd_url("website_signup", _query=[("furl", req.url)]))
 fwdRequireLogin = lambda route: logged_in(lambda req: req.fwd_url("website_signup", _query=[("furl", route(req))]))
 
@@ -59,3 +70,7 @@ class WebsiteAuthedContext(WebsiteRootContext):
         li_profile = self.user.profileMap.get('linkedin')
         if not li_profile or not li_profile.id:
             request.fwd("website_require_li", _query=[('furl', request.url)])
+
+
+
+

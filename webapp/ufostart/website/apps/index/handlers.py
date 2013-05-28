@@ -1,4 +1,5 @@
 def index(context, request):
     if not context.user.isAnon():
-        request.fwd("website_company_setup_basic")
+        route, args, kwargs = context.getPostLoginUrlParams()
+        request.fwd(route, *args, **kwargs)
     return {}
