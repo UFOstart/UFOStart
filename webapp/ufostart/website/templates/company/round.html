@@ -34,9 +34,9 @@
                 </div>
             </div>
             <div class="col col-lg-6 text-center">
-                %if need.Expert:
-                    <div class="row round-need-setup expert">
-                        ${self.renderExpert(need.Expert)}
+                %if need.isExpert:
+                    <div class="row round-need-setup expert loading" data-need="${need.key}">
+                        <img class="show-loading" src="${ROOT_STATIC_URL}img/ajax-loader.gif"/>
                     </div>
                 %endif
                 %if need.Service:
@@ -53,21 +53,6 @@
 </div>
 </%def>
 
-
-<%def name="renderExpert(expert)">
-    <div class="col col-sm-5 need-expert-box">
-        <img src="${expert.getIntroPicture()}" class="img-thumbnail mini"/>
-        <div class="expert-title">Introducer</div>
-        <p class="expert-name">${expert.getIntroName()}</p>
-    </div>
-    <span class="linking-arrow"></span>
-    <div class="col col-sm-5 need-expert-box">
-        <img src="${expert.getExpertPicture()}" class="img-thumbnail mini"/>
-        <div class="expert-title">Expert</div>
-        <p class="expert-name">${expert.getExpertName()}</p>
-    </div>
-    <div class="col col-sm-2"><a class="envelop-btn need-expert-btn">Go</a> </div>
-</%def>
 
 <%def name="renderService(service)">
     <div class="col col-sm-5">
@@ -91,9 +76,25 @@
     <script src="${ROOT_STATIC_URL}scripts/dist/jquery.qtip.min.js"></script>
 </%def>
 <%def name="post_scripts()">
+    <script type="text/template" id="expert-template">
+        <div class="col col-sm-5 need-expert-box">
+            <img src="{{ model.getIntroPicture() }}" class="img-thumbnail mini"/>
+            <div class="expert-title">Introducer</div>
+            <p class="expert-name">{{ model.getIntroName() }}</p>
+        </div>
+        <span class="linking-arrow"></span>
+        <div class="col col-sm-5 need-expert-box">
+            <img src="{{ model.getExpertPicture() }}" class="img-thumbnail mini"/>
+            <div class="expert-title">Expert</div>
+            <p class="expert-name">{{ model.getExpertName() }}</p>
+        </div>
+        <div class="col col-sm-2"><a class="envelop-btn need-expert-btn">Go</a></div>
+    </script>
+
     <script>
         require(["views/company/round/configure"], function(View){
-            new View({el: $(".round-need-setup-page")})
+            var view = new View({el: $(".round-need-setup-page")});
+            view.render('${companyRound.token}');
         })
     </script>
 </%def>

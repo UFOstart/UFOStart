@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from babel.dates import format_date
-from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField
+from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField
 from hnc.apiclient.backend import ClientTokenProc
 from pyramid.decorator import reify
 
@@ -48,6 +48,7 @@ class ServiceModel(Mapping):
 class NeedModel(Mapping):
     key = TextField()
     name = TextField()
+    isExpert = BooleanField()
     Service = DictField(ServiceModel)
     Expert = DictField(ExpertModel)
 
