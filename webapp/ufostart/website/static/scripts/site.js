@@ -1,6 +1,6 @@
 require(["tools/ajax", "misc"], function(ajax, misc){
-    var options = window.__options__, root = window;
 
+    var options = window.__options__, root = window;
     // IE<9
     if(typeof String.prototype.trim !== 'function') {
         String.prototype.trim = function() {
@@ -108,4 +108,5 @@ require(["tools/ajax", "misc"], function(ajax, misc){
 
         root.hnc = hnc;
     }
+    return root.hnc;
 });
