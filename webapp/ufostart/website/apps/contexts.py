@@ -50,7 +50,12 @@ class WebsiteAuthContext(WebsiteRootContext):
         if not self.user.isAnon():
             request.fwd_raw(request.furl)
 
+
+
 class WebsiteAuthedContext(WebsiteRootContext):
     def is_allowed(self, request):
         if self.user.isAnon():
             request.fwd("website_signup", _query=[('furl', request.url)])
+        li_profile = self.user.profileMap.get('linkedin')
+        if not li_profile or not li_profile.id:
+            request.fwd("website_require_li", _query=[('furl', request.url)])

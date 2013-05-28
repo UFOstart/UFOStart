@@ -41,28 +41,26 @@
 <%def name="renderNeed(prefix, need, isAdd = False)">
 <div class="single-need" data-entity-sort="${need.name}">
     <div class="single-need-inner">
-    %if isAdd:
-        <a class="need-btn add">+</a>
-    %else:
-        <a class="need-btn remove">×</a>
-    %endif
+        %if isAdd:
+            <a class="need-btn add">+</a>
+        %else:
+            <a class="need-btn remove">×</a>
+        %endif
 
-    <div class="need-title">${need.name}</div>
-    <div class="need-details">
-        <input type="hidden" name="${prefix}.needKey" value="${need.name}"/>
-        <div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-        Detail 1</div><div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-        Detail 2</div><div class="need-detail" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-        Detail 3
+        <div class="need-title">${need.name}</div>
+        <div class="need-description">Dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. </div>
+        <div class="need-details">
+            <input type="hidden" name="${prefix}.needKey" value="${need.name}"/>
+            <div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+            Detail 1</div><div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+            Detail 2</div><div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+            Detail 3
+            </div>
         </div>
-    </div>
     </div>
 </div>
 </%def>
 
-<%def name="extra_head()">
-    <link type="text/css" rel="stylesheet" href="${ROOT_STATIC_URL}scripts/dist/jquery.qtip.min.css" />
-</%def>
 <%def name="pre_scripts()">
     <script src="${ROOT_STATIC_URL}scripts/dist/jquery.qtip.min.js"></script>
 </%def>

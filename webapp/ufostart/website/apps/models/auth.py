@@ -1,5 +1,6 @@
 from hnc.apiclient import Mapping, TextField, IntegerField, ListField, DictField
 from hnc.apiclient.backend import ClientTokenProc, DBNotification
+from pyramid.decorator import reify
 import simplejson
 from ufostart.website.apps.models.company import CompanyModel
 
@@ -47,6 +48,10 @@ class UserModel(Mapping):
         result = {n.getTypeName():n.unwrap(sparse = True) for n in self.Profile if n.id}
         return simplejson.dumps(result) if stringify else result
 
+    @reify
+    def profileMap(self):
+        return {n.getTypeName():n for n in self.Profile}
+
 def AnonUser():
     return UserModel()
 
@@ -78,6 +83,6 @@ PasswordTokenVerifyProc = ClientTokenProc("/web/user/token", root_key = "User", 
 CheckEmailExistsProc = ClientTokenProc('/web/user/emailavailable')
 
 
-SocialConnectProc = LoggingInProc('/web/user/connect', db_messages={'NEWUSER':NewUserMsg})
+SocialConnectProc = LoggingInProc('/web/user/connect', db_messages={'NEWUSER':NewUserMsg, 'FB_USER_WITH_CHANGED_EMAIL': NewUserMsg})
 RefreshAccessTokenProc= ClientTokenProc('/web/user/refreshAccessToken')
 DisconnectFacebookProc = ClientTokenProc("/web/user/disconnectFb")

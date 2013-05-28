@@ -6,6 +6,10 @@ from ufostart.website.apps.auth.forms import LoginForm, SignupForm, PasswordForg
 from ufostart.website.apps.models.auth import CheckEmailExistsProc, PasswordTokenVerifyProc
 
 
+def require_li(context, request):
+    return {}
+
+
 def join_checkemail(context, request):
     return True
     # TODO: make work, pending API

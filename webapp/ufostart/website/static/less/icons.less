@@ -1,3 +1,18 @@
+.link-pointer {
+  cursor:pointer;
+  &:before {
+    content: ".";
+    color: transparent;
+    border-left: .4em solid #ef6c26;
+    border-top: .4em solid transparent;
+    border-bottom: .4em solid transparent;
+    width: 0;
+    height: 0;
+    display: inline-block;
+  }
+}
+
+
 .template-icon{
   .background-image("../img/templates/breadcrumbs.png");
   background-repeat: no-repeat;

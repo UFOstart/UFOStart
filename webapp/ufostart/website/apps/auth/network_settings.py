@@ -5,7 +5,7 @@ from hnc.apiclient.backend import DBNotification
 from hnc.tools.oauth import Client, Consumer
 from httplib2 import Http
 import uuid
-from ufostart.website.apps.models.auth import SocialConnectProc, SOCIAL_NETWORK_TYPES_REVERSE
+from ufostart.website.apps.models.auth import SocialConnectProc, SOCIAL_NETWORK_TYPES_REVERSE, UserModel
 
 
 log = logging.getLogger(__name__)
@@ -30,8 +30,11 @@ class SocialSettings(object):
         return False
 
     def loginUser(self, request, profile):
+        params = {'Profile': [profile]}
+        if not request.root.user.isAnon():
+            params['token'] = request.root.user.token
         try:
-            user = SocialConnectProc(request, {'Profile': [profile]})
+            user = SocialConnectProc(request, params)
         except DBNotification, e:
             log.error("UNHANDLED DB MESSAGE: %s", e.message)
             return None
@@ -68,7 +71,7 @@ class FacebookSettings(SocialSettings):
         h = Http(**self.http_options)
         url = "{}?{}".format(self.codeEndpoint, urllib.urlencode(params))
 
-        resp, content = h.request(url, method="GET" )
+        resp, content = h.request(url, method="GET")
         if resp.status == 400:
             result = simplejson.loads(content)
             return None

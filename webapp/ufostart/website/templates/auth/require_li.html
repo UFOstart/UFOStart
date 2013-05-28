@@ -1,0 +1,21 @@
+<%inherit file="../layout.html"/>
+
+<%def name="content()">
+    <div class="container homepage">
+        <div class="row">
+            <div class="col col-lg-10 col-offset-2">
+                <h1 class="site-slogan">Get early access & equity,<br/>
+                calculate your startup <br/>
+                value now!</h1>
+                <h2 class="corp-colors">Signup with Linkedin now</h2>
+
+                <div class="homepage-signup-bar">
+                    <p class="intro">To get the most out of ${g.project_name}, you need to sign in with Linkedin</p>
+                    <p>
+                        <a href="${request.fwd_url("website_social_login_start", network = 'linkedin')}?furl=${request.furl}" class="btn-social btn-linkedin">Sign Up with Linkedin</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>

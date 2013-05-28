@@ -19,6 +19,7 @@ requires = [
     'paste',
     'simplejson',
     'dnspython',
+    'pyDNS',
     'turbomail',
     'uuid',
     'pyramid_beaker',

@@ -18,6 +18,7 @@ __author__ = 'Martin'
 ROUTE_LIST = [
     FunctionRoute  ("website_index"                        , "/", contexts.WebsiteRootContext, index.index, "index.html")
     , ClassRoute   ("website_signup"                       , "/signup", contexts.WebsiteAuthContext, auth.SignupHandler, "auth/signup.html", view_attrs = JSON_FORM_ATTRS)
+    , FunctionRoute("website_require_li"                   , "/require/linked", contexts.WebsiteRootContext, auth.require_li, "auth/require_li.html")
     , FunctionRoute('website_logout'                       , '/user/logout', contexts.WebsiteRootContext, auth.logout, None)
     , FunctionRoute('website_join_checkemail'              , '/signup/checkemail', contexts.WebsiteRootContext, auth.join_checkemail, "json", {'xhr':True})
     , ClassRoute   ('website_password_forget'              , '/ajax/templates/password.html', contexts.WebsiteRootContext, auth.WebsitePasswordForgotHandler, "ajax/auth/password.html", view_attrs = JSON_FORM_ATTRS)

@@ -1,0 +1,23 @@
+.company-single-round {
+  color: @btn-default-color;
+  background-color: @btn-default-bg;
+  border-radius: @border-radius-large;
+  .box-shadow(0 3px 4px rgba(0,0,0,.4));
+  padding: 8px 15px 15px;
+  margin-bottom:20px;
+  position: relative;
+}
+.company-round-link {
+  color:white;
+  font-size:ceil(@font-size-base * 1.70);
+  padding-top:6px;
+  display: block;
+  > .template-icon{margin-top:-6px;}
+  &:before {margin-right:10px;top:3px;position: relative;border-width:10px;}
+}
+.round-time-display {
+  float:right;
+  text-align: right;
+  > h3 {margin: 0;line-height: 1.428571429;padding-top:6px;color:@corp-color;}
+  > p {font-size: @font-size-small;}
+}

@@ -1,13 +1,12 @@
 <%inherit file="../layout.html"/>
 
 <%def name="content()">
-    <div class="container">
+    <div class="container container-constricted">
         <div class="row">
             <div class="col col-offset-1 col-lg-10">
-                ${company.Template}
                 <div class="company-round-list">
                     %for round in company.Rounds:
-                        ${self.renderRound(round)}
+                        ${self.renderRound(company.Template, round)}
                     %endfor
                 </div>
             </div>
@@ -15,8 +14,38 @@
     </div>
 </%def>
 
-<%def name="renderRound(round)">
-    <div class="single-round">
-        ${round}
+<%def name="renderRound(template, round)">
+    <div class="company-single-round">
+        <div class="round-time-display">
+            <h3>
+                ${round.getExpiryDays()}
+            </h3>
+            <p>
+                Round closes on ${round.getExpiryDate()}
+            </p>
+        </div>
+        <a class="company-round-link link-pointer" href="${url("website_company_round_view", token = round.token)}">${template.name|n}  <span class="template-icon ${template.getStyleKey()}"></span> </a>
+        <p><strong>Lorem ipsum dolor sit amet consetetur sadipscing</strong></p>
+        <p>Dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+        <div class="need-details">
+            <div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+            Detail 1</div><div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+            Detail 2</div><div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
+            Detail 3
+            </div>
+        </div>
     </div>
+</%def>
+
+
+
+<%def name="pre_scripts()">
+    <script src="${ROOT_STATIC_URL}scripts/dist/jquery.qtip.min.js"></script>
+</%def>
+<%def name="post_scripts()">
+    <script>
+        require(["views/company/round/configure"], function(View){
+            new View({el: $(".round-need-setup-page")})
+        })
+    </script>
 </%def>
