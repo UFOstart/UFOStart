@@ -13,6 +13,7 @@ log = logging.getLogger(__name__)
 class SocialNotice(Exception): pass
 class UserRejectedNotice(SocialNotice): pass
 class InvalidSignatureException(Exception):pass
+class SocialNetworkException(Exception):pass
 
 
 class SocialSettings(object):
@@ -41,6 +42,33 @@ class SocialSettings(object):
         else:
             return user.toJSON()
 
+    def loginCallback(self, request):
+        if request.params.get("error"):
+            if 'denied' in request.params.get("error"):
+                raise UserRejectedNotice()
+            else:
+                return None
+        resp, content = self.getAuthCode(request)
+        if resp.status == 500:
+            raise SocialNetworkException()
+        if resp.status != 200:
+            result = simplejson.loads(content)
+            return None
+        else:
+            token, (resp, data) = self.getTokenProfile(content)
+            if resp.status == 500:
+                raise SocialNetworkException()
+            if resp.status != 200:
+                result = simplejson.loads(data)
+                return None
+            else:
+                profile = self.getProfileFromData(token, data)
+                return self.loginUser(request, profile)
+
+    def getAuthCode(self, request): raise NotImplementedError
+    def getTokenProfile(self, content): raise NotImplementedError
+    def getProfileFromData(self, token, data): raise NotImplementedError
+
 
 class FacebookSettings(SocialSettings):
     getCodeEndpoint = "https://www.facebook.com/dialog/oauth"
@@ -56,40 +84,34 @@ class FacebookSettings(SocialSettings):
                  }
         request.fwd_raw("{}?{}".format(self.getCodeEndpoint, urllib.urlencode(params)))
 
-    def loginCallback(self, request):
-
-        if request.params.get("error"):
-            if 'denied' in request.params.get("error"):
-                raise UserRejectedNotice()
-            else:
-                return None
-
+    def getAuthCode(self, request):
         code = request.params.get("code")
         params = {'client_id':self.appid, 'client_secret':self.appsecret
                     , 'redirect_uri':request.fwd_url("website_social_login_callback", network = self.type)
                     , 'code':code}
         h = Http(**self.http_options)
         url = "{}?{}".format(self.codeEndpoint, urllib.urlencode(params))
+        return h.request(url, method="GET")
 
-        resp, content = h.request(url, method="GET")
-        if resp.status == 400:
-            result = simplejson.loads(content)
-            return None
-        else:
-            result = dict(parse_qsl(content))
-            access_token = result['access_token']
-            resp, content = h.request('{}?{}'.format(self.profileEndpoint, urllib.urlencode({'access_token':access_token})), method="GET" )
-            profile = simplejson.loads(content)
 
-            data = {
-                'type': SOCIAL_NETWORK_TYPES_REVERSE[self.type]
-                , 'id':profile['id']
-                , 'accessToken':access_token
-                , 'picture': self.get_pic_url(profile['id'])
-                , 'email': profile['email']
-                , 'name': profile['name']
-            }
-            return self.loginUser(request, data)
+    def getTokenProfile(self, content):
+        h = Http(**self.http_options)
+        result = dict(parse_qsl(content))
+        access_token = result['access_token']
+        return access_token, h.request('{}?{}'.format(self.profileEndpoint, urllib.urlencode({'access_token':access_token})), method="GET" )
+
+
+    def getProfileFromData(self, token, data):
+        profile = simplejson.loads(data)
+        return {
+                    'type': SOCIAL_NETWORK_TYPES_REVERSE[self.type]
+                    , 'id':profile['id']
+                    , 'accessToken':token
+                    , 'picture': self.get_pic_url(profile['id'])
+                    , 'email': profile['email']
+                    , 'name': profile['name']
+                }
+
 
 
 class LinkedInSettings(SocialSettings):
@@ -106,14 +128,8 @@ class LinkedInSettings(SocialSettings):
                  }
         request.fwd_raw("{}?{}".format(self.getCodeEndpoint, urllib.urlencode(params)))
 
-    def loginCallback(self, request):
 
-        if request.params.get("error"):
-            if 'denied' in request.params.get("error"):
-                raise UserRejectedNotice()
-            else:
-                return None
-
+    def getAuthCode(self, request):
         code = request.params.get("code")
         state = request.params.get("state")
         if not code or state != request.session.get_csrf_token():
@@ -125,25 +141,26 @@ class LinkedInSettings(SocialSettings):
                  }
 
         h = Http(**self.http_options)
-        resp, content = h.request( "{}?{}".format(self.codeEndpoint, urllib.urlencode(params)), method="POST", body = {} )
-        result = simplejson.loads(content)
-        if resp.status == 400:
-            return None
-        else:
-            access_token = result['access_token']
-            resp, content = h.request('{}?{}'.format(self.profileEndpoint, urllib.urlencode({'oauth2_access_token':access_token})), method="GET" , headers = {'x-li-format':'json'})
-            profile = simplejson.loads(content)
+        return h.request( "{}?{}".format(self.codeEndpoint, urllib.urlencode(params)), method="POST", body = {} )
 
-            data = {
+
+    def getTokenProfile(self, content):
+        h = Http(**self.http_options)
+        result = simplejson.loads(content)
+        access_token = result['access_token']
+        return access_token, h.request('{}?{}'.format(self.profileEndpoint, urllib.urlencode({'oauth2_access_token':access_token})), method="GET" , headers = {'x-li-format':'json'})
+
+
+    def getProfileFromData(self, token, data):
+        profile = simplejson.loads(data)
+        return {
                 'type': SOCIAL_NETWORK_TYPES_REVERSE[self.type]
                 , 'id':profile['id']
-                , 'accessToken':access_token
+                , 'accessToken':token
                 , 'picture': profile.get('pictureUrl', "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm")
                 , 'email': profile['emailAddress']
                 , 'name': "{firstName} {lastName}".format(**profile)
             }
-            return self.loginUser(request, data)
-
 
 
     def requiresAction(self):

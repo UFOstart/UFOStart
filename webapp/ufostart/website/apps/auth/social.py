@@ -1,7 +1,7 @@
 import base64, logging
 from hnc.apiclient.backend import DBNotification, DBException
 from hnc.forms.messages import GenericErrorMessage
-from ufostart.website.apps.auth.network_settings import InvalidSignatureException, UserRejectedNotice
+from ufostart.website.apps.auth.network_settings import InvalidSignatureException, UserRejectedNotice, SocialNetworkException
 from ufostart.website.apps.models.auth import RefreshAccessTokenProc, SocialConnectProc, SOCIAL_NETWORK_TYPES_REVERSE
 
 log = logging.getLogger(__name__)
@@ -78,6 +78,9 @@ def social_login_callback(context, request):
         user = networkSettings.loginCallback(request)
     except UserRejectedNotice, e:
         request.session.flash(GenericErrorMessage("You need to accept {} permissions to use {}.".format(network.title(), request.globals.project_name)), "generic_messages")
+        request.fwd("website_index")
+    except SocialNetworkException, e:
+        request.session.flash(GenericErrorMessage("{} login failed.".format(network.title())), "generic_messages")
         request.fwd("website_index")
     else:
         if not user:
