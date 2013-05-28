@@ -3,7 +3,7 @@ define(["tools/ajax"], function(ajax){
 
         events : {}
         , initialize:function(opts){
-            if($("html").is(".touch"))
+            if(window.Modernizr.touch)
                 this.events["touchstart .add-remove-btn"] = "addRemove";
             else
                 this.events["click .add-remove-btn"] = "addRemove";
