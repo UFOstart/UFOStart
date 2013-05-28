@@ -55,10 +55,8 @@ def social_login(context, request):
     result['success'] = True
     result['user'] = user.toJSON()
 
-    if user.Company and not user.Company.Template:
-        result['redirect'] = request.fwd_url("website_company_setup_basic")
-    elif user.Company and user.Company.Rounds:
-        result['redirect'] = request.fwd_url("website_company")
+    route, args, kwargs = request.root.getPostLoginUrlParams()
+    result['redirect'] = request.fwd_url(route, *args, **kwargs)
     return result
 
 

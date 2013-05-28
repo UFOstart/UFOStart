@@ -28,6 +28,7 @@
   display: inline-block;
   border-radius: @border-radius-large;
   background-color: @bg-color;
+  .text-overflow();
   #gradient > .vertical-three-colors(@bg-color, lighten(@bg-color, 2%), 66%, lighten(@bg-color, .5%));
   font-size:@font-size-large;
   font-weight: 600;
@@ -57,4 +58,7 @@
   .social-btn(0, 0, @color-linkedin);
   color:#fff;
 }
-.btn-social + .btn-social {margin-left: 20px;}
+.btn-social-wrapper {
+  margin-left:-20px;
+  .btn-social {margin-left: 20px;}
+}
