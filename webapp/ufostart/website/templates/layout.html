@@ -47,8 +47,11 @@
             <div class="col col-lg-3 footer-link">
                 <h5 class="footer-links-title">Get Started</h5>
                 <ul class="list-unstyled">
-                    <li><a class="footer-link" href="${request.fwd_url("website_social_login_start", network = 'facebook')}?furl=${request.furl}"   >Connect with Facebook</a></li>
-                    <li><a class="footer-link" href="${url("website_signup")}">Sign In</a></li>
+                    %if vctxt.user.isAnon():
+                        <li><a class="footer-link" href="${request.fwd_url("website_social_login_start", network = 'facebook')}?furl=${request.furl}"   >Connect with Facebook</a></li>
+                        <li><a class="footer-link" href="${request.fwd_url("website_social_login_start", network = 'linkedin')}?furl=${request.furl}"   >Connect with Linkedin</a></li>
+                        <li><a class="footer-link" href="${url("website_signup")}">Sign In</a></li>
+                    %endif
                     <li><a class="footer-link" href="#">Help</a></li>
                 </ul>
             </div>
