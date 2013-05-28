@@ -74,7 +74,7 @@ def LoggingInProc(path, db_messages = {}):
     return f
 
 
-WebSignupEmailProc = LoggingInProc("/web/user/emailsignup", db_messages = {'EMAIL_TAKEN':EmailTakenMsg})
+WebSignupEmailProc = LoggingInProc("/web/user/emailsignup")
 WebLoginEmailProc = LoggingInProc("/web/user/login")
 PasswordRequestProc = ClientTokenProc("/web/user/forgotpwd")
 ResendRequestProc = ClientTokenProc("/web/user/resendForgotPwd")

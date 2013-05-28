@@ -3,11 +3,14 @@
 <%def name="content()">
     <div class="container container-constricted">
         <div class="row">
-            <div class="col col-offset-1 col-lg-10">
+            <div class="col col-lg-12">
                 <div class="company-round-list">
                     %for round in company.Rounds:
                         ${self.renderRound(company.Template, round)}
                     %endfor
+                </div>
+                <div class="text-center">
+                    <a href="${url("website_company_setup_basic")}" class="btn btn-primary col col-lg-8 col-offset-2">New Round</a>
                 </div>
             </div>
         </div>

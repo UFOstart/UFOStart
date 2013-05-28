@@ -159,7 +159,7 @@ class LinkedInSettings(SocialSettings):
                 , 'accessToken':token
                 , 'picture': profile.get('pictureUrl', "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm")
                 , 'email': profile['emailAddress']
-                , 'name': "{firstName} {lastName}".format(**profile)
+                , 'name': u"{firstName} {lastName}".format(**profile)
             }
 
 
