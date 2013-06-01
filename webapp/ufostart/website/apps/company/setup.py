@@ -1,7 +1,31 @@
+from hnc.forms.formfields import BaseForm, StringField, TextareaField
 from hnc.forms.handlers import FormHandler
 from ufostart.lib.tools import group_by_n
 from ufostart.website.apps.company.forms import RoundSetupForm, CompanyTemplateForm
-from ufostart.website.apps.models.company import GetAllCompanyTemplatesProc, GetTemplateDetailsProc, SetCompanyTemplateProc, GetCompanyProc, GetAllNeedsProc, GetRoundProc
+from ufostart.website.apps.models.company import GetAllCompanyTemplatesProc, GetTemplateDetailsProc, GetAllNeedsProc, GetRoundProc
+
+
+class SetupCompanyForm(BaseForm):
+    id="SetupCompany"
+    label = ""
+    fields=[
+        StringField("name", "Name")
+        , TextareaField("description", "Description")
+    ]
+    @classmethod
+    def on_success(cls, request, values):
+        return {'success':True, 'redirect': request.fwd_url("")}
+
+class SetupCompanyHandler(FormHandler):
+    form = SetupCompanyForm
+
+
+
+
+
+
+
+# NOTE: DEPRECATED
 
 
 class BasicHandler(FormHandler):

@@ -19,24 +19,9 @@
 
 .social-btn(@x, @y, @bg-color) {
   @spriteSize: 40px;
-  position: relative;
-  min-width:120px;
   padding-left:@spriteSize + 30px;
   padding-right:30px;
-  height:@spriteSize;
-  line-height:@spriteSize;
-  display: inline-block;
-  border-radius: @border-radius-large;
-  background-color: @bg-color;
-  .text-overflow();
-  #gradient > .vertical-three-colors(@bg-color, lighten(@bg-color, 2%), 66%, lighten(@bg-color, .5%));
-  font-size:@font-size-large;
-  font-weight: 600;
-  &:hover {
-    color:#f3f3f3;
-    text-decoration: none;
-    #gradient > .vertical-three-colors(darken(@bg-color, 5%), darken(@bg-color, 1%), 66%, darken(@bg-color, 5%));
-  }
+
   &:before{
       content:".";color:transparent;
       position: absolute;
@@ -52,13 +37,11 @@
 
 .btn-facebook{
   .social-btn(0, -40px, @color-facebook);
-  color:#fff;
 }
 .btn-linkedin{
-  .social-btn(0, 0, @color-linkedin);
-  color:#fff;
+  .social-btn(0, -2px, @color-linkedin);
 }
 .btn-social-wrapper {
   margin-left:-20px;
-  .btn-social {margin-left: 20px;}
+  .btn {margin-left: 20px;}
 }

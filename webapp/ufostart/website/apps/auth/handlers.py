@@ -2,12 +2,24 @@ from hnc.apiclient.backend import DBNotification
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.httpexceptions import HTTPFound
-from ufostart.website.apps.auth.forms import LoginForm, SignupForm, PasswordForgotForm, PasswordResetForm
+from ufostart.website.apps.auth.forms import LoginForm, SignupForm, PasswordForgotForm, PasswordResetForm, DecisionForm
 from ufostart.website.apps.models.auth import CheckEmailExistsProc, PasswordTokenVerifyProc
+
+
+
+
+class DecisionHandler(FormHandler):
+    form = DecisionForm
+
+
+
+
+################### NOTE: DEPRECATED
 
 
 def require_li(context, request):
     return {}
+
 
 
 def join_checkemail(context, request):

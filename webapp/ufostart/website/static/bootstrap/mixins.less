@@ -353,6 +353,7 @@
 .btn-pseudo-states(@color, @background, @border) {
   color: @color;
   background-color: @background;
+  #gradient > .vertical(@background, darken(@background, 10%));
   border-color: @border;
 
   &:hover,

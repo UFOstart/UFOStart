@@ -1,4 +1,7 @@
 .container-constricted {max-width: 768px;}
+.message-container {
+  margin-bottom: @line-height-base;
+}
 .message-container.fixed {
   position: fixed;
   width: 100%;
@@ -6,3 +9,20 @@
   left: 0;
   z-index: 999;
 }
+
+
+// Small grid columns
+.generate-vertical-space(@lines) {
+  .mar-top-X (@index) when (@index > 0) {
+    .mar-top-@{index} { .mar-top-(@index); }
+    .mar-top-X((@index - 1));
+  }
+  .mar-top-X (0) {}
+  // Generate columns
+  .mar-top-X(@lines);
+  // Apply the styles
+  .mar-top-(@rows) {
+    margin-top: @line-height-computed * @rows;
+  }
+}
+.generate-vertical-space(6);

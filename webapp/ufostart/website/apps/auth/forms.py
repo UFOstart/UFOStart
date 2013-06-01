@@ -1,8 +1,33 @@
+import logging
 import formencode
 from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm, EmailField, PasswordField, REQUIRED, StringField, HtmlAttrs, CheckboxPostField
 from hnc.forms.messages import GenericSuccessMessage
 from ufostart.website.apps.models.auth import WebLoginEmailProc, WebSignupEmailProc, ResendRequestProc, PasswordRequestProc, UpdatePasswordProc
+
+log = logging.getLogger(__name__)
+
+class DecisionForm(BaseForm):
+    id="Decision"
+    label = ""
+    fields=[
+        StringField("role", None, REQUIRED)
+    ]
+    @classmethod
+    def on_success(cls, request, values):
+        log.info(values)
+        return {'success':True, 'redirect': request.fwd_url("website_company_basic")}
+
+
+
+
+
+
+
+
+################### NOTE: Deprecated
+
+
 
 
 class PasswordLoginField(PasswordField):

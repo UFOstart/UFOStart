@@ -1,0 +1,57 @@
+<%inherit file="../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="pageTitle()"><div class="page-header"></div></%def>
+
+<%def name="content()">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-12">
+                <div class="row">
+                    <div class="col col-sm-8 col-offset-2">
+                        <h1 class="site-slogan">Set up your Idea/Company/Project's base details</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mar-top-2">
+            <div class="col col-lg-12">
+                ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+            </div>
+        </div>
+    </div>
+</%def>
+
+
+<%def name="build_form(form, values, errors)">
+    <form class="${form.classes}" id="${form.id}" method="POST">
+        <div class="row">
+            <div class="col col-lg-6">
+                ${baseform.prelims(form)}
+                %for field in view.form.fields:
+                    ${field.render(form.id, request, values, errors, view)|n}
+                %endfor
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-6">
+                <div class="row">
+                    <div class="col col-sm-8 col-offset-4">
+                        <button type="submit" class="btn btn-primary btn-block">Start up</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-6">
+                <button type="submit" class="btn btn-default col col-sm-4">Skip</button>
+            </div>
+        </div>
+    </form>
+</%def>
+
+<%def name="post_scripts()">
+    <script>
+        require(["tools/ajax"], function(ajax){
+            ajax.ifyForm({el: $("#${view.form.id}")});
+        });
+    </script>
+</%def>
