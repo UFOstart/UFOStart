@@ -1,19 +1,159 @@
 <%inherit file="../layout.html"/>
 
 <%def name="content()">
-    <div class="container container-constricted">
+    <div class="container">
         <div class="row">
             <div class="col col-lg-12">
-                <div class="company-round-list">
-                    %for round in company.Rounds:
-                        ${self.renderRound(company.Template, round)}
-                    %endfor
-                </div>
-                <div class="text-center">
-                    <a href="${url("website_company_setup_basic")}" class="btn btn-primary col col-lg-8 col-offset-2">New Round</a>
+                <div class="round-dashboard ${'no-rounds' if hasRounds else 'has-rounds'}">
+                    <div class="col col-lg-3">
+                        <div class="round-dashboard-group">
+                            <img src="${STATIC_URL}img/round/tasks.png" />
+                        </div>
+                        <h5 class="text-muted">NEEDS FULFILLED</h5>
+                        <div class="progress">
+                            <div style="width:76%;" class="progress-bar"></div>
+                            <span class="progress-num">76%</span>
+                        </div>
+
+                        <h6 class="mar-top-2 text-muted">Recent events</h6>
+                        <div class="round-event">
+                            <div class="actor-line">
+                                <img src="${STATIC_URL}img/dummy/avatar1.png" class="img-thumbnail"/>
+                                <a href="#">Martin Musterman</a>
+                            </div>
+                            <div class="action-line">
+                                fulfilled the animation needs
+                            </div>
+                            <div class="share-line">
+                                <span class="share-item">2 hours ago</span>
+                                <a href="#" class="share-item">Like</a>
+                                <a href="#" class="share-item">Share</a>
+                            </div>
+                            <a class="more-line" href="#">More...</a>
+                        </div>
+                    </div>
+
+                    <div class="col col-lg-3">
+                        <div class="round-dashboard-group">
+                            <img src="${STATIC_URL}img/round/customers.png" />
+                        </div>
+                        <h5 class="text-muted">PLEDGES</h5>
+                        <h2>235</h2>
+                        <h6 class="mar-top-2 text-muted">Recent pledges</h6>
+
+                        <div class="round-event">
+                            <div class="actor-line">
+                                <img src="${STATIC_URL}img/dummy/avatar1.png" class="img-thumbnail"/>
+                                <a href="#">Dieter Rams Minsfield</a>
+                            </div>
+                            <div class="action-line">
+                                pledged to your project
+                            </div>
+                            <div class="share-line">
+                                <span class="share-item">2 hours ago</span>
+                                <a href="#" class="share-item">Like</a>
+                                <a href="#" class="share-item">Share</a>
+                            </div>
+                            <a class="more-line" href="#">More...</a>
+                        </div>
+
+                    </div>
+
+                    <div class="col col-lg-3">
+                        <div class="round-dashboard-group">
+                            <img src="${STATIC_URL}img/round/assets.png" />
+                        </div>
+                        <h5 class="text-muted">ASSETS VALUE</h5>
+                        <h2>3.256,00 $</h2>
+                        <h6 class="mar-top-2 text-muted">Recent events</h6>
+
+                        <div class="round-event">
+                            <div class="actor-line">
+                                <img src="${STATIC_URL}img/dummy/avatar2.png" class="img-thumbnail"/>
+                                <a href="#">Martina Musterman</a>
+                            </div>
+                            <div class="action-line">
+                                brought a table and a plant
+                            </div>
+                            <div class="share-line">
+                                <span class="share-item">2 hours ago</span>
+                                <a href="#" class="share-item">Like</a>
+                                <a href="#" class="share-item">Share</a>
+                            </div>
+                            <a class="more-line" href="#">More...</a>
+                        </div>
+
+                    </div>
+
+                    <div class="col col-lg-3">
+                        <div class="round-dashboard-group">
+                            <img src="${STATIC_URL}img/round/money.png" />
+                        </div>
+                        <h5 class="text-muted">FUNDED</h5>
+                        <h2>10.000 $</h2>
+
+                        <h6 class="mar-top-2 text-muted">Recent contributions</h6>
+                        <div class="round-event">
+                            <div class="actor-line">
+                                <img src="${STATIC_URL}img/dummy/avatar1.png" class="img-thumbnail"/>
+                                <a href="#">Bruce Momjianbiandan</a>
+                            </div>
+                            <div class="action-line">
+                                chipped in 2.000,00 $
+                            </div>
+                            <div class="share-line">
+                                <span class="share-item">2 hours ago</span>
+                                <a href="#" class="share-item">Like</a>
+                                <a href="#" class="share-item">Share</a>
+                            </div>
+                            <a class="more-line" href="#">More...</a>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="row mar-top-1">
+            <div class="col col-lg-6">
+                <div class="box-shaded">
+                    <h5 class="box-title">History of rounds</h5>
+                    %for round in range(5):
+                        <div class="history-rounds-single">
+                            <div class="round-close-time">Closed on February 10, 2013</div>
+                            <div class="share-line">
+                                <span class="template-name">Get Started</span>
+                                <a href="#" class="share-item">Read more</a>
+                                <a href="#" class="share-item">Like</a>
+                                <a href="#" class="share-item">Share</a>
+                            </div>
+                        </div>
+                    %endfor
+
+                </div>
+            </div>
+            <div class="col col-lg-6">
+                <div class="box-shaded">
+                    <h5 class="box-title">Team Members</h5>
+                    <div class="member-pile">
+                    %for i in range(9):
+                        %if not i%3 and i>0:
+                            <hr/>
+                        %endif
+
+                        <div class="member">
+                            <div class="picture">
+                                <img src="${STATIC_URL}img/dummy/avatar_med.png" class="picture"/>
+                            </div>
+                            <a href="#" class="link">Helga Rapunzel</a>
+                            <div class="subscript">No expert</div>
+                        </div>
+                    %endfor
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </%def>
 
@@ -26,16 +166,6 @@
             <p>
                 Round closes on ${round.getExpiryDate()}
             </p>
-        </div>
-        <a class="company-round-link link-pointer" href="${url("website_company_round_view", token = round.token)}">${template.name|n}  <span class="template-icon ${template.getStyleKey()}"></span> </a>
-        <p><strong>Lorem ipsum dolor sit amet consetetur sadipscing</strong></p>
-        <p>Dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-        <div class="need-details">
-            <div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-            Detail 1</div><div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-            Detail 2</div><div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-            Detail 3
-            </div>
         </div>
     </div>
 </%def>

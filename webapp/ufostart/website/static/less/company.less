@@ -1,23 +1,72 @@
-.company-single-round {
-  color: @btn-default-color;
-  background-color: @btn-default-bg;
-  border-radius: @border-radius-large;
-  .box-shadow(0 3px 4px rgba(0,0,0,.4));
-  padding: 8px 15px 15px;
-  margin-bottom:20px;
-  position: relative;
+.round-dashboard {
+  background-color: #f4f4f4;
+  padding-top:15px;
+  padding-bottom:15px;
+  float:left;
 }
-.company-round-link {
-  color:white;
-  font-size:ceil(@font-size-base * 1.70);
-  padding-top:6px;
-  display: block;
-  > .template-icon{margin-top:-6px;}
-  &:before {margin-right:10px;top:3px;position: relative;border-width:10px;}
+
+.round-event {
+  > .actor-line {
+    > a {vertical-align: bottom;font-weight: @font-weight-bold;}
+  }
+  > .action-line {margin-top: ceil(@line-height-computed / 4);}
+  > .share-line{
+    font-size: @font-size-small;
+    > .share-item{
+      display: inline-block;
+      margin-right:10px;
+    }
+  }
+  > .more-line {
+    font-size: @font-size-small;
+    display: block;
+    margin-top: ceil(@line-height-computed / 2);
+  }
 }
-.round-time-display {
-  float:right;
-  text-align: right;
-  > h3 {margin: 0;line-height: 1.428571429;padding-top:6px;color:@corp-color;}
-  > p {font-size: @font-size-small;}
+
+
+
+.history-rounds-single {
+  padding: 5px 15px;
+  > .round-close-time {
+    text-align: right;
+    color:@corp-color;
+  }
+  > .share-line {
+    text-align: right;
+    padding-top:3px;
+    > .template-name{
+      float:left;
+      color: @text-muted;
+      font-weight: @font-weight-bold;
+    }
+    > .share-item {
+      display: inline-block;
+      margin-left: 10px;
+      font-size:@font-size-small;
+    }
+  }
+  + .history-rounds-single {
+    border-top:1px solid @body-bg;
+  }
+}
+
+
+.member-pile {
+  .clearfix;
+  padding: 5px 15px;
+  > .member {
+    float:left;
+    width:33%;
+    margin-top:ceil(@line-height-computed / 2);
+    margin-bottom:ceil(@line-height-computed / 2);
+    > .link {font-weight: @font-weight-bold;margin-bottom:ceil(@line-height-computed / 4);}
+    > .subscript {font-size: @font-size-small;color:@text-muted;}
+  }
+  > hr {
+    clear:both;
+    margin:5px -15px;
+    border-color:white;
+    border-bottom:none;
+  }
 }
