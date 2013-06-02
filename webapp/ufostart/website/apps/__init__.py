@@ -19,6 +19,8 @@ ROUTE_LIST = [
     FunctionRoute  ("website_index"                        , "/", contexts.WebsiteRootContext, index.index, "index.html")
     , ClassRoute   ("website_signup_decision"              , "/decide", contexts.WebsiteRootContext, auth.DecisionHandler, "auth/decide.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute   ("website_company_basic"                , "/company/basics", contexts.WebsiteRootContext, company.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
+    , ClassRoute   ("website_company_invite"               , "/company/invite", contexts.WebsiteRootContext, company.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
+    , FunctionRoute('website_company'                      , '/company', contexts.WebsiteAuthedContext, company.general.index, "company/index.html")
 
 
     , FunctionRoute('website_logout'                       , '/user/logout', contexts.WebsiteRootContext, auth.logout, None)
@@ -33,7 +35,6 @@ ROUTE_LIST = [
     , ClassRoute   ('website_company_setup_round'          , '/company/setup/round', contexts.WebsiteAuthedContext, company.setup.RoundHandler, "company/setup/needs.html", view_attrs = JSON_FORM_ATTRS)
     , FunctionRoute('website_company_round_view'           , '/company/round/:token', contexts.WebsiteAuthedContext, company.setup.show_latest_round, "company/round.html")
 
-    , FunctionRoute('website_company'                      , '/company', contexts.WebsiteAuthedContext, company.general.index, "company/index.html")
 
 
     # NOTE: DEPRECATED

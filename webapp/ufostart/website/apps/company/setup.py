@@ -1,4 +1,4 @@
-from hnc.forms.formfields import BaseForm, StringField, TextareaField
+from hnc.forms.formfields import BaseForm, StringField, TextareaField, REQUIRED
 from hnc.forms.handlers import FormHandler
 from ufostart.lib.tools import group_by_n
 from ufostart.website.apps.company.forms import RoundSetupForm, CompanyTemplateForm
@@ -9,15 +9,30 @@ class SetupCompanyForm(BaseForm):
     id="SetupCompany"
     label = ""
     fields=[
-        StringField("name", "Name")
-        , TextareaField("description", "Description")
+        StringField("name", "Name", REQUIRED)
+        , TextareaField("description", "Description", REQUIRED, input_classes="x-high")
     ]
+    @classmethod
+    def on_success(cls, request, values):
+        return {'success':True, 'redirect': request.fwd_url("website_company_invite")}
+
+class SetupCompanyHandler(FormHandler):
+    form = SetupCompanyForm
+
+
+
+
+
+class InviteCompanyForm(BaseForm):
+    id="InviteCompany"
+    label = ""
+    fields=[]
     @classmethod
     def on_success(cls, request, values):
         return {'success':True, 'redirect': request.fwd_url("")}
 
-class SetupCompanyHandler(FormHandler):
-    form = SetupCompanyForm
+class InviteCompanyHandler(FormHandler):
+    form = InviteCompanyForm
 
 
 

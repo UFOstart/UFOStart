@@ -1,7 +1,7 @@
 <%inherit file="../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
-<%def name="pageTitle()"><div class="page-header">Get Started</div></%def>
+<%def name="pageTitle()"><div class="page-header">Invite Team Members</div></%def>
 
 <%def name="content()">
     <div class="container">
@@ -9,7 +9,7 @@
             <div class="col col-lg-12">
                 <div class="row">
                     <div class="col col-sm-8 col-offset-2">
-                        <h1 class="site-slogan">Set up your Idea/Company/Project's base details</h1>
+                        <h1 class="site-slogan">Now build your team</h1>
                     </div>
                 </div>
             </div>
@@ -23,35 +23,42 @@
 </%def>
 
 
+
 <%def name="build_form(form, values, errors)">
     <form class="${form.classes}" id="${form.id}" method="POST">
+        ${baseform.prelims(form)}
         <div class="row">
             <div class="col col-lg-6">
-                ${baseform.prelims(form)}
                 %for field in view.form.fields:
-                    ${field.render(form.id, request, values, errors, view)|n}
+                    ${field.render(form.id, request, values, errors, view)}
                 %endfor
             </div>
         </div>
+
         <div class="row">
             <div class="col col-lg-6">
                 <div class="row">
                     <div class="col col-sm-8 col-offset-4">
-                        <button type="submit" class="btn btn-primary btn-block">Start up</button>
+                        <button type="submit" class="btn btn-primary btn-block">Invite members</button>
                     </div>
                 </div>
             </div>
             <div class="col col-lg-6">
-                <a href="${url("website_company_invite")}" class="btn btn-default col col-sm-4">Skip</a>
+                <a href="${url("website_company")}" class="btn btn-default col col-sm-4">Skip</a>
             </div>
         </div>
+
     </form>
 </%def>
 
 <%def name="post_scripts()">
     <script>
         require(["tools/ajax"], function(ajax){
-            ajax.ifyForm({root: $("#${view.form.id}")});
+##            ajax.ifyForm({root: $("#${view.form.id}")});
         });
     </script>
 </%def>
+
+
+
+
