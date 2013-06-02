@@ -17,9 +17,21 @@
            </div>
        </div>
     </%block>
+
+    %if hasattr(next, 'header_buttons'):
+        <div class="container header-btns">
+            <div class="row">
+                <div class="col col-lg-12">
+                    ${next.header_buttons()}
+                </div>
+            </div>
+        </div>
+    %endif
+
     <%block name="contentwrapper">
         ${self.header_messages()}
         <div class="page-wrapper">
+
             ${next.content()}
         </div>
     </%block>

@@ -36,6 +36,24 @@
   }
 }
 
+.header-btns {
+    margin-top:@line-height-computed * -1 + 1px;
+    margin-bottom:@line-height-computed;
+    .btn {
+      border-radius: 3 * @border-radius-large;
+      border-top-left-radius:0;
+      border-top-right-radius:0;
+      border-width:1px;
+      padding-left:45px;
+      padding-right:45px;
+      border-top:none;
+      float:right;
+      + .btn {
+        margin-right:15px;
+      }
+    }
+}
+
 
 .page-wrapper {
   min-height:600px;

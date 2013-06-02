@@ -1,10 +1,17 @@
 <%inherit file="../layout.html"/>
 
+<%def name="header_buttons()">
+    <a href="#" class="btn btn-primary">Invite Team Members</a>
+    <a href="#" class="btn btn-default">Start a New Round</a>
+</%def>
+
+<%def name="pageTitle()"><div class="page-header">Round</div></%def>
+
 <%def name="content()">
     <div class="container">
-        <div class="row">
+        <div class="row mar-top-1">
             <div class="col col-lg-12">
-                <div class="round-dashboard ${'no-rounds' if hasRounds else 'has-rounds'}">
+                <div class="round-dashboard box-shaded ${'no-rounds' if hasRounds else 'has-rounds'}">
                     <div class="col col-lg-3">
                         <div class="round-dashboard-group">
                             <img src="${STATIC_URL}img/round/tasks.png" />
@@ -113,7 +120,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mar-top-1">
+        <div class="row mar-top-2">
             <div class="col col-lg-6">
                 <div class="box-shaded">
                     <h5 class="box-title">History of rounds</h5>
