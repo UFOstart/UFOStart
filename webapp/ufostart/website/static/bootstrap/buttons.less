@@ -10,9 +10,10 @@
 .btn {
   display: inline-block;
   position: relative;
-  padding: @padding-base-vertical @padding-base-horizontal;
+  padding: (@padding-base-vertical - 2px) @padding-base-horizontal;
+  margin-top: -1px; // counteract 2px border width
   margin-bottom: 0; // For input.btn
-  font-size: @font-size-large;
+  font-size: @font-size-base;
   font-weight: 600;
   line-height: @line-height-base;
   text-align: center;
@@ -185,3 +186,6 @@ input[type="button"] {
   padding: 20px 0 25px;
   border-radius: ceil(1.6 * @border-radius-large);
 }
+
+
+

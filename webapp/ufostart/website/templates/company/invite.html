@@ -23,19 +23,14 @@
 </%def>
 
 
-
 <%def name="build_form(form, values, errors)">
     <form class="${form.classes}" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
-        <div class="row">
-            <div class="col col-lg-6">
-                %for field in view.form.fields:
-                    ${field.render(form.id, request, values, errors, view)}
-                %endfor
-            </div>
-        </div>
+        %for field in view.form.fields:
+            ${field.render(form.id, request, values, errors, view)|n}
+        %endfor
 
-        <div class="row">
+        <div class="row mar-top-2">
             <div class="col col-lg-6">
                 <div class="row">
                     <div class="col col-sm-8 col-offset-4">
@@ -54,7 +49,7 @@
 <%def name="post_scripts()">
     <script>
         require(["tools/ajax"], function(ajax){
-##            ajax.ifyForm({root: $("#${view.form.id}")});
+            ajax.ifyForm({root: $("#${view.form.id}")}, {repeatables: true});
         });
     </script>
 </%def>

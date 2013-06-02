@@ -41,6 +41,19 @@ define([], function(){
             $elem.rules("add", {remote: $elem.data("validationUrl")});
         });
 
+        if(params.repeatables){
+            form.on({
+                "click": removeRow
+                , "keyup": removeRow
+            }, ".remove-link")
+            form.on({
+                "click" :addRow
+                , "keyup": addRow
+            }, ".add-more-link");
+
+        }
+
+
         if(params.focus){
             form.find("input,select,textarea").filter(":visible").first().focus();
         }
@@ -67,5 +80,66 @@ define([], function(){
         $form.find(".error-hidden").hide(); // show any additional hints/elems
         $form.find(".error-shown").fadeIn(); // show any additional hints/elems
     }
+
+    , wrapperSelector = '[data-closure="form"], .form-validated'
+    , templateSelector = "[data-sequence], .form-validated"
+    , removeLink = '<a class="remove-link link close">&times;</a>'
+
+    , addRow = function(e){
+        if((!e.keyCode || e.keyCode == 13)){
+            var $target = $(e.target)
+                , templ = $target.closest(wrapperSelector).find(templateSelector).last()
+                , new_node = templ.clone()
+                , new_position = parseInt(templ.data("sequence"), 10) + 1
+                , inc = function(elem, attr){
+                    if(elem.attr(attr))
+                        elem.attr(attr, elem.attr(attr).replace(/-[0-9]+\./g, "-"+new_position+"."))
+                };
+            new_node.find("input,select,textarea").each(function(index, elem){
+                elem = $(elem);
+                inc(elem, "id");
+                inc(elem, "name");
+                if(!elem.is('[type=checkbox],.typehead-token,[readonly]'))elem.val("");
+            });
+            new_node.removeAttr("data-sequence").attr("data-sequence", new_position);
+            if(!new_node.find(".remove-link").length) new_node.append(removeLink);
+            new_node.find(".numbering").html(new_position+1);
+
+            if($target.data("appendFirst")){
+                templ.closest(wrapperSelector).prepend("<hr/>").prepend(new_node);
+                $target.hide();
+            } else {
+                templ.after(new_node);
+            }
+            new_node.trigger("change");
+
+            new_node.find("[generated]").remove();
+            new_node.find(".error").removeClass("error");
+            new_node.find(".valid").removeClass("valid");
+        }
+    }
+    , removeRow = function(e){
+        if(!e.keyCode|| e.keyCode == 13){
+            var $target = $(e.target), $embeddedForm = $target.closest(templateSelector)
+                , siblings = $embeddedForm.siblings(templateSelector)
+                , idx = function(elem, pos){
+                    _.each(['id','name'], function(attr){
+                        if(elem.attr(attr))
+                            elem.attr(attr, elem.attr(attr).replace(/-[0-9]+\./g, "-"+pos+"."))
+                    });
+                };
+            $embeddedForm.trigger("change");
+            $embeddedForm.remove();
+            siblings.each(function(i, elem){
+                $(elem).attr('data-sequence', i).find("input,select,textarea").each(function(k, e){
+                        idx($(e), i);
+                });
+                $(elem).find(".numbering").html(i+1);
+            });
+
+        }
+    }
+
+
   return {validate: validate, resetForm: resetForm, showFormEncodeErrors: showFormEncodeErrors};
 });
