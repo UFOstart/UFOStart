@@ -22,6 +22,7 @@ ROUTE_LIST = [
     , FunctionRoute("website_company_import"               , "/company/import/:network", contexts.WebsiteAuthedContext, company.customers.company_import, "company/customers/list.html")
     , FunctionRoute("website_company_import_list"          , "/company/import/:network/:user_id/:token", contexts.WebsiteAuthedContext, company.customers.company_import_list, "company/customers/list.html")
     , FunctionRoute("website_company_import_confirm"       , "/company/confirm/:network/:company_id/:token", contexts.WebsiteAuthedContext, company.customers.company_import_confirm, "company/customers/with_content_tmp.html")
+    , FunctionRoute("website_company_pledge"               , "/company/pledge", contexts.WebsiteAuthedContext, company.customers.pledge_decide, "company/customers/pledge_decide.html")
 
 
 

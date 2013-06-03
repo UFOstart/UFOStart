@@ -55,6 +55,7 @@
                                             <a href="${role.getPersonUrl()}">${role.getPersonName()}</a>
                                         </div>
                                         <p>${role.getPersonDescr()}</p>
+                                        <a href="${role.getPersonUrl()}"/>More...</a>
                                     </div>
                                 %endfor
                             </div>
@@ -83,7 +84,11 @@
                 </div>
             </div>
         </div>
-
+        <div class="row mar-top-1">
+            <div class="col-lg-12">
+                <a class="btn btn-default btn-humonguous" href="${url("website_pledge_with")}"><span>Pledge Now</span></a>
+            </div>
+        </div>
     </div>
 </%def>
 

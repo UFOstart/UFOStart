@@ -1,7 +1,7 @@
 from operator import attrgetter
 from pyramid.renderers import render_to_response
 import simplejson
-from hnc.forms.messages import GenericErrorMessage
+from hnc.forms.messages import GenericErrorMessage, GenericSuccessMessage
 from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException
 
 
@@ -47,3 +47,13 @@ def index(context, request):
     else:
         template = "index_empty.html"
     return render_to_response("ufostart:website/templates/company/customers/{}".format(template), {'company':company}, request)
+
+
+
+def pledge_decide(context, request):
+    if request.user.isAnon():
+        return {}
+    else:
+        request.session.flash(GenericSuccessMessage("You have pledged successfully!"), "generic_messages")
+        request.fwd("website_company_customers")
+
