@@ -1,3 +1,4 @@
+import simplejson
 from .baseviews import RootContext
 
 def context_authorization(event):
@@ -22,6 +23,7 @@ def add_renderer_variables(event):
             , 'ROOT_STATIC_URL' : request.root.root_statics
             , 'STATIC_URL'      : request.root.static_prefix
             , 'VERSION_TOKEN'   : app_globals.VERSION_TOKEN
+            , 'dumps'           : simplejson.dumps
         })
 
         api = getattr(request, 'template_api', None)

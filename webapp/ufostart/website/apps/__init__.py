@@ -3,8 +3,9 @@ from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSO
 
 from . import contexts, index, auth, company
 import simplejson
-from .auth import social
-from ufostart.website.apps.auth.network_settings import SOCIAL_CONNECTORS_MAP
+from ufostart.website.apps.social.angellist import AngelListSettings
+from ufostart.website.apps.social.facebook import FacebookSettings
+from ufostart.website.apps.social.linkedin import LinkedinSettings
 
 
 __author__ = 'Martin'
@@ -18,16 +19,19 @@ ROUTE_LIST = [
 
 
     , FunctionRoute("website_company_customers"            , "/company/customers", contexts.WebsiteAuthedContext, company.customers.index, "company/customers/index.html")
+    , FunctionRoute("website_company_import"               , "/company/import/:network", contexts.WebsiteAuthedContext, company.customers.company_import, "company/customers/list.html")
+    , FunctionRoute("website_company_import_list"          , "/company/import/:network/:user_id/:token", contexts.WebsiteAuthedContext, company.customers.company_import_list, "company/customers/list.html")
+    , FunctionRoute("website_company_import_confirm"       , "/company/confirm/:network/:company_id/:token", contexts.WebsiteAuthedContext, company.customers.company_import_confirm, "company/customers/with_content_tmp.html")
 
 
 
     , FunctionRoute('website_logout'                       , '/user/logout', contexts.WebsiteRootContext, auth.logout, None)
-    , FunctionRoute('website_social_login'                 , '/user/login/social', contexts.WebsiteRootContext, social.social_login, "json", route_attrs = {"xhr":True})
-    , FunctionRoute('website_social_login_start'           , '/social/:network', contexts.WebsiteRootContext, social.social_login_start, None)
-    , FunctionRoute('website_social_login_callback'        , '/social/cb/:network', contexts.WebsiteRootContext, social.social_login_callback, None)
+    , FunctionRoute('website_social_login'                 , '/user/login/social', contexts.WebsiteRootContext, auth.social.social_login, "json", route_attrs = {"xhr":True})
+    , FunctionRoute('website_social_login_start'           , '/social/:network', contexts.WebsiteRootContext, auth.social.social_login_start, None)
+    , FunctionRoute('website_social_login_callback'        , '/social/cb/:network', contexts.WebsiteRootContext, auth.social.social_login_callback, None)
 
 
-    , FunctionRoute('website_fbtokenrefresh'               , '/user/fb/token/refresh', contexts.WebsiteRootContext, social.fb_token_refresh, "json", route_attrs = {"xhr":True})
+    , FunctionRoute('website_fbtokenrefresh'               , '/user/fb/token/refresh', contexts.WebsiteRootContext, auth.social.fb_token_refresh, "json", route_attrs = {"xhr":True})
 
     , ClassRoute   ('website_company_setup_basic'          , '/company/setup/basic', contexts.WebsiteAuthedContext, company.setup.BasicHandler, "company/setup/template.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute   ('website_company_setup_round'          , '/company/setup/round', contexts.WebsiteAuthedContext, company.setup.RoundHandler, "company/setup/needs.html", view_attrs = JSON_FORM_ATTRS)
@@ -44,6 +48,8 @@ ROUTE_LIST = [
 ]
 
 
+
+SOCIAL_CONNECTORS_MAP = {'angellist': AngelListSettings, 'facebook': FacebookSettings, 'linkedin': LinkedinSettings}
 
 class WebsiteSettings(object):
     key = "website"

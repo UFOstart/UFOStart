@@ -51,8 +51,8 @@ class WebsiteRootContext(RootContext):
 
 
 
-stdRequireLogin = logged_in(lambda req: req.fwd_url("website_signup", _query=[("furl", req.url)]))
-fwdRequireLogin = lambda route: logged_in(lambda req: req.fwd_url("website_signup", _query=[("furl", route(req))]))
+stdRequireLogin = logged_in(lambda req: req.fwd_url("website_index", _query=[("furl", req.url)]))
+fwdRequireLogin = lambda route: logged_in(lambda req: req.fwd_url("website_index", _query=[("furl", route(req))]))
 
 class WebsiteAuthContext(WebsiteRootContext):
     def is_allowed(self, request):
@@ -64,7 +64,7 @@ class WebsiteAuthContext(WebsiteRootContext):
 class WebsiteAuthedContext(WebsiteRootContext):
     def is_allowed(self, request):
         if self.user.isAnon():
-            request.fwd("website_signup", _query=[('furl', request.url)])
+            request.fwd("website_index", _query=[('furl', request.url)])
         li_profile = self.user.profileMap.get('linkedin')
         if not li_profile or not li_profile.id:
             request.fwd("website_require_li", _query=[('furl', request.url)])

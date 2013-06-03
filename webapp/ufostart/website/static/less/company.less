@@ -1,3 +1,15 @@
+.company-logo {
+    float:left;
+    margin-right:15px;
+    background-color: 3px;
+    &.small {
+      max-width: 50px;
+      max-height: 100px;
+      padding: 3px;
+    }
+}
+
+
 .round-dashboard {
   padding-top:15px;
   padding-bottom:15px;
@@ -12,6 +24,7 @@
     left:0;
     width:100%;
     color:white;
+    font-weight: 600;
     text-align: center;
     height: 0;
     padding-top: 85%;
@@ -50,7 +63,7 @@
   > .share-line {
     text-align: right;
     padding-top:3px;
-    > .template-name{
+    > .name{
       float:left;
       color: @text-muted;
       font-weight: @font-weight-bold;

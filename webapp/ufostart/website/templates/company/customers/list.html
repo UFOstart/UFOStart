@@ -1,0 +1,36 @@
+<%inherit file="../../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="pageTitle()"><div class="page-header">Import your company profile</div></%def>
+
+<%def name="content()">
+    <div class="container container-constricted">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="site-slogan">Select a company and import</h1>
+                <div class="box-shaded">
+                    <h5 class="box-title">Your companies</h5>
+                    %for company in companies:
+                    <div class="company-import">
+                        <a class="btn btn-primary" href="${url("website_company_import_confirm", network=request.matchdict['network'], company_id = company.startup.id, token=request.matchdict['token'])}">Import</a>
+                        <div class="company-logo">
+                            <img src="${company.startup.logo_url}"/>
+                        </div>
+                        <div class="name">${company.startup.name}</div>
+                        <div class="role">${company.role}</div>
+                    </div>
+                    %endfor
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-6">
+
+            </div>
+            <div class="col col-lg-6">
+
+            </div>
+        </div>
+    </div>
+</%def>
+

@@ -11,7 +11,7 @@ class FbIdTakenMsg(DBNotification): pass
 class UnknownUserMsg(DBNotification): pass
 
 
-SOCIAL_NETWORK_TYPES = {'LI':'linkedin', 'FB':'facebook'}
+SOCIAL_NETWORK_TYPES = {'LI':'linkedin', 'FB':'facebook', 'AL':'angellist'}
 SOCIAL_NETWORK_TYPES_REVERSE = {v:k for k,v in SOCIAL_NETWORK_TYPES.items()}
 
 

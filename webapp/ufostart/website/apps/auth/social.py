@@ -1,8 +1,10 @@
 import base64, logging
 from hnc.apiclient.backend import DBNotification, DBException
 from hnc.forms.messages import GenericErrorMessage
-from ufostart.website.apps.auth.network_settings import InvalidSignatureException, UserRejectedNotice, SocialNetworkException
+
 from ufostart.website.apps.models.auth import RefreshAccessTokenProc, SocialConnectProc, SOCIAL_NETWORK_TYPES_REVERSE
+from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException, InvalidSignatureException
+
 
 log = logging.getLogger(__name__)
 

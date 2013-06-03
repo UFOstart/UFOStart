@@ -1,0 +1,25 @@
+<%inherit file="../../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="pageTitle()"><div class="page-header">Promote your company</div></%def>
+
+<%def name="content()">
+    <div class="container container-constricted">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="company-logo">
+                    <img src="${company.logo_url}"/>
+                </div>
+                <h1 class="site-slogan">${company.name}</h1>
+                <h5>${company.high_concept}</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-12">
+                <div class="description">
+                    ${company.product_desc}
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>
