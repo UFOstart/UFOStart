@@ -1,3 +1,4 @@
+from operator import attrgetter
 from pyramid.renderers import render_to_response
 import simplejson
 from hnc.forms.messages import GenericErrorMessage
@@ -35,7 +36,8 @@ def company_import_confirm(context, request):
     token = request.matchdict['token']
     networkSettings = context.settings.networks.get(network)
     company = networkSettings.getCompanyData(company_id, token)
-    return {'company': company}
+    roles = filter(lambda x: 'founder' in x.role, networkSettings.getCompanyRoles(company_id, token))
+    return {'company': company, 'company_roles': roles}
 
 
 def index(context, request):

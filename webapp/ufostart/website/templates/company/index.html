@@ -147,17 +147,7 @@
                     <h5 class="box-title">Team Members</h5>
                     <div class="member-pile">
                     %for i in range(9):
-                        %if not i%3 and i>0:
-                            <hr/>
-                        %endif
-
-                        <div class="member">
-                            <div class="picture">
-                                <img src="${STATIC_URL}img/dummy/avatar_med.png" class="picture"/>
-                            </div>
-                            <a href="#" class="link">Helga Rapunzel</a>
-                            <div class="subscript">No expert</div>
-                        </div>
+                        ${self.renderMember(None)}
                     %endfor
                     </div>
                 </div>
@@ -178,6 +168,16 @@
                 Round closes on ${round.getExpiryDate()}
             </p>
         </div>
+    </div>
+</%def>
+
+<%def name="renderMember()">
+    <div class="member">
+        <div class="picture">
+            <img src="${STATIC_URL}img/dummy/avatar_med.png" class="picture"/>
+        </div>
+        <a href="#" class="link">Helga Rapunzel</a>
+        <div class="subscript">No expert</div>
     </div>
 </%def>
 

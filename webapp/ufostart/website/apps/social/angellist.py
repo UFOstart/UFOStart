@@ -21,11 +21,19 @@ class ScreenShotModel(Mapping):
     thumb = TextField()
     original = TextField()
 
+
+class CompanyRolePerson(Mapping):
+    name = TextField()
+    high_concept = TextField()
+    bio = TextField()
+    angellist_url = TextField()
+    thumb_url = TextField()
+
 class CompanyModel(Mapping):
     id = IntegerField()
     name = TextField()
-    product_desc = TextField()
     high_concept = TextField()
+    product_desc = TextField()
     logo_url = TextField()
     thumb_url = TextField()
     video_url = TextField()
@@ -33,6 +41,8 @@ class CompanyModel(Mapping):
     angellist_url = TextField()
     markets = ListField(DictField(MarketModel))
     screenshots = ListField(DictField(ScreenShotModel))
+
+    pledges = ListField(DictField(ScreenShotModel))
 
     def getDisplayTags(self):
         return ", ".join(map(attrgetter("display_name"), self.markets))
@@ -52,7 +62,16 @@ class CompanyRoleModel(Mapping):
     confirmed = BooleanField()
     role = TextField()
     startup = DictField(CompanyModel)
+    tagged = DictField(CompanyRolePerson)
 
+    def getPicture(self):
+        return self.tagged.thumb_url or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+    def getPersonUrl(self):
+        return self.tagged.angellist_url
+    def getPersonName(self):
+        return self.tagged.name
+    def getPersonDescr(self):
+        return self.tagged.bio or ''
 
 class AngelListSettings(SocialSettings):
     getCodeEndpoint = "https://angel.co/api/oauth/authorize"
@@ -60,6 +79,7 @@ class AngelListSettings(SocialSettings):
     profileEndpoint = "https://api.angel.co/1/me"
     companiesEndpoint = "https://api.angel.co/1/startup_roles"
     companyEndpoint = "https://api.angel.co/1/startups/{company_id}"
+    companyRolesEndpoint = "https://api.angel.co/1/startups/{company_id}/roles"
 
     def loginStart(self, request):
         params = {'response_type':"code"
@@ -170,3 +190,15 @@ class AngelListSettings(SocialSettings):
             return None
         else:
             return CompanyModel.wrap(simplejson.loads(data))
+
+
+    def getCompanyRoles(self, company_id, token):
+        h = Http(**self.http_options)
+        resp, data = h.request(self.companyRolesEndpoint.format(company_id = company_id), method="GET")
+        if resp.status == 500:
+            raise SocialNetworkException()
+        if resp.status != 200:
+            return None
+        else:
+            result = simplejson.loads(data)
+            return map(CompanyRoleModel.wrap, result['startup_roles'])

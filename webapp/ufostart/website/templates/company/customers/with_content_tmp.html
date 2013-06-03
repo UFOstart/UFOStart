@@ -1,5 +1,6 @@
 <%inherit file="../../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="index.html" name="index"/>
 
 <%def name="pageTitle()"><div class="page-header">${company.name}</div></%def>
 
@@ -34,17 +35,30 @@
                     </div>
                     <div class="row mar-top-1">
                         <div class="col col-lg-12">
-                            <div class="col col-lg-3">
-                                <h5 class="box-title dark">Project</h5>
-                                &nbsp;
-                            </div>
-                            <div class="col col-lg-6">
+                            <div class="col col-lg-6 col-offset-3">
                                 <h5 class="box-title dark">About</h5>
-                                &nbsp;
+                                <p>
+                                    ${company.product_desc}
+                                </p>
+                                <div class="company-tags">
+                                %for tag in company.markets:
+                                    <span class="label">
+                                        ${tag.display_name}
+                                    </span>
+                                %endfor
+                                </div>
                             </div>
                             <div class="col col-lg-3">
                                 <h5 class="box-title dark">Founders</h5>
-                                &nbsp;
+                                %for role in company_roles:
+                                    <div class="company-founder">
+                                        <div class="actor-line">
+                                            <img src="${role.getPicture()}" class="img-thumbnail mini"/>
+                                            <a href="${role.getPersonUrl()}">${role.getPersonName()}</a>
+                                        </div>
+                                        <p>${role.getPersonDescr()}</p>
+                                    </div>
+                                %endfor
                             </div>
                         </div>
                     </div>
@@ -54,10 +68,20 @@
         <div class="row mar-top-1">
             <div class="col-lg-12">
                 <div class="box-shaded customer-pledge-section">
-                    <h5 class="box-title">0 Pledges</h5>
+                    <h5 class="box-title">${pluralize("{num} Pledge", "{num} Pledges", 0)}</h5>
+                    %if company.pledges:
+
+                        <div class="member-pile">
+                            %for pledge in company.pledges:
+                                ${index.renderMember(None)}
+                            %endfor
+                        </div>
+
+                    %else:
                         <div class="empty">
                             No Pledges Yet
                         </div>
+                    %endif
                 </div>
             </div>
         </div>
