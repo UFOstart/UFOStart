@@ -81,21 +81,19 @@ class AngelListSettings(SocialSettings):
     companyEndpoint = "https://api.angel.co/1/startups/{company_id}"
     companyRolesEndpoint = "https://api.angel.co/1/startups/{company_id}/roles"
 
-    def loginStart(self, request):
+    def loginStart(self, request, redirect_route):
         params = {'response_type':"code"
                     , 'client_id':self.appid
-                    , 'redirect_uri':request.fwd_url("website_social_login_callback", network = self.type)
                     , 'scope':'email'
                  }
         request.fwd_raw("{}?{}".format(self.getCodeEndpoint, urllib.urlencode(params)))
 
-    def getAuthCode(self, request):
+    def getAuthCode(self, request, redirect_route):
         code = request.params.get("code")
         if not code:
             return False
 
         params = {'grant_type':'authorization_code', 'code':code
-                    , 'redirect_uri':request.fwd_url("website_social_login_callback", network = self.type)
                     , 'client_id':self.appid, 'client_secret':self.appsecret
                  }
 
@@ -151,7 +149,7 @@ class AngelListSettings(SocialSettings):
                 raise UserRejectedNotice()
             else:
                 return None
-        resp, content = self.getAuthCode(request)
+        resp, content = self.getAuthCode(request, None)
         if resp.status == 500:
             raise SocialNetworkException()
         if resp.status != 200:

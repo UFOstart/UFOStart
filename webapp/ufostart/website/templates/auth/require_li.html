@@ -11,7 +11,7 @@
                 <div class="homepage-signup-bar">
                     <p class="intro">To get the most out of ${g.project_name}, you need to sign in with Linkedin</p>
                     <p>
-                        <a href="${request.fwd_url("website_social_login_start", network = 'linkedin')}?furl=${request.furl}" class="btn-social btn-linkedin">Sign Up with Linkedin</a>
+                        <a href="${url("website_social_login", network = 'linkedin')}?furl=${request.furl}" class="btn-social btn-linkedin">Sign Up with Linkedin</a>
                     </p>
                 </div>
             </div>

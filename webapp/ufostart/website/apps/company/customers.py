@@ -2,6 +2,7 @@ from operator import attrgetter
 from pyramid.renderers import render_to_response
 import simplejson
 from hnc.forms.messages import GenericErrorMessage, GenericSuccessMessage
+from ufostart.website.apps.auth.social import get_social_profile
 from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException
 
 
@@ -51,9 +52,24 @@ def index(context, request):
 
 
 def pledge_decide(context, request):
-    if request.user.isAnon():
-        return {}
-    else:
-        request.session.flash(GenericSuccessMessage("You have pledged successfully!"), "generic_messages")
-        request.fwd("website_company_customers")
+    return {}
+    # if request.user.isAnon():
+    #
+    # else:
+    #     request.session.flash(GenericSuccessMessage("You have pledged successfully!"), "generic_messages")
+    #     request.fwd("website_company_customers")
 
+
+
+def login_to_pledge(context, request):
+    network = request.matchdict['network']
+    networkSettings = context.settings.networks.get(network)
+    return networkSettings.loginStart(request, 'website_login_to_pledge_callback')
+
+def login_to_pledge_callback(context, request):
+    network = request.matchdict['network']
+    networkSettings = context.settings.networks.get(network)
+    profile = get_social_profile(request, networkSettings, original_route = 'website_login_to_pledge_callback', error_route = "website_company_pledge_decide")
+
+    request.session.flash(GenericSuccessMessage("You have pledged successfully!"), "generic_messages")
+    request.fwd("website_company_customers")

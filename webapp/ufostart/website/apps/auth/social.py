@@ -9,16 +9,6 @@ from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkExcept
 log = logging.getLogger(__name__)
 
 
-
-
-
-def fb_accept_requests(context, request):
-    # this needs to be client initiated, as we cant decide serverside if user has accepted facebook login, only javascript really knows
-    request.session.pop_flash("fb_requests")
-    return {'success': True}
-
-
-
 def fb_token_refresh(context, request):
     json_body = request.json_body
     isLogin = request.user.facebookId != json_body.get("facebookId")
@@ -31,61 +21,47 @@ def fb_token_refresh(context, request):
     return {"success":True, "isLogin": isLogin}
 
 
-def base64_url_decode(inp):
-    padding_factor = (4 - len(inp) % 4) % 4
-    inp += "="*padding_factor
-    return base64.b64decode(unicode(inp).translate(dict(zip(map(ord, u'-_'), u'+/'))))
-
-def social_login(context, request):
-    result = {'success': False}
-    profile = request.json_body['profile']
-    network = profile.pop('type')
-    networkSettings = context.settings.networks.get(network)
-    if networkSettings and networkSettings.requiresAction():
-        try:
-            profile = networkSettings.action(request, profile)
-        except InvalidSignatureException, e:
-            return {'success':False, 'message':"Invalid Signature!"}
-
-    if not profile: return result
-    profile['type'] = SOCIAL_NETWORK_TYPES_REVERSE[network]
+def login_user(request, profile):
+    params = {'Profile': [profile]}
+    if not request.root.user.isAnon():
+        params['token'] = request.root.user.token
     try:
-        user = SocialConnectProc(request, {'Profile': [profile]})
+        user = SocialConnectProc(request, params)
     except DBNotification, e:
         log.error("UNHANDLED DB MESSAGE: %s", e.message)
-        return {'success':False, 'message': e.message}
-    result['success'] = True
-    result['user'] = user.toJSON()
-
-    route, args, kwargs = request.root.getPostLoginUrlParams()
-    result['redirect'] = request.fwd_url(route, *args, **kwargs)
-    return result
+        return None
+    else:
+        return user.toJSON()
 
 
-
+def get_social_profile(request, networkSettings, original_route, error_route):
+    network = networkSettings.type
+    try:
+        profile = networkSettings.profileCallback(request, original_route)
+    except UserRejectedNotice, e:
+        request.session.flash(GenericErrorMessage("You need to accept {} permissions to use {}.".format(network.title(), request.globals.project_name)), "generic_messages")
+        request.fwd(error_route)
+    except SocialNetworkException, e:
+        request.session.flash(GenericErrorMessage("{} login failed.".format(network.title())), "generic_messages")
+        request.fwd(error_route)
+    else:
+        if not profile:
+            request.session.flash(GenericErrorMessage("{} login failed. It seems the request expired. Please try again".format(network.title())), "generic_messages")
+            request.fwd(error_route)
+        else:
+            return profile
 
 
 
 def social_login_start(context, request):
     network = request.matchdict['network']
     networkSettings = context.settings.networks.get(network)
-    return networkSettings.loginStart(request)
+    return networkSettings.loginStart(request, 'website_social_login_callback')
 
 def social_login_callback(context, request):
     network = request.matchdict['network']
     networkSettings = context.settings.networks.get(network)
-    try:
-        user = networkSettings.loginCallback(request)
-    except UserRejectedNotice, e:
-        request.session.flash(GenericErrorMessage("You need to accept {} permissions to use {}.".format(network.title(), request.globals.project_name)), "generic_messages")
-        request.fwd("website_index")
-    except SocialNetworkException, e:
-        request.session.flash(GenericErrorMessage("{} login failed.".format(network.title())), "generic_messages")
-        request.fwd("website_index")
-    else:
-        if not user:
-            request.session.flash(GenericErrorMessage("{} login failed. It seems the request expired. Please try again".format(network.title())), "generic_messages")
-            request.fwd("website_index")
-        else:
-            route, args, kwargs = request.root.getPostLoginUrlParams()
-            request.fwd(route, *args, **kwargs)
+    profile = get_social_profile(request, networkSettings, original_route = 'website_social_login_callback', error_route = "website_index")
+    user = login_user(request, profile)
+    route, args, kwargs = request.root.getPostLoginUrlParams()
+    request.fwd(route, *args, **kwargs)

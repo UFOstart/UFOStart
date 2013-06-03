@@ -23,25 +23,14 @@ class SocialSettings(object):
     def requiresAction(self):
         return False
 
-    def loginUser(self, request, profile):
-        params = {'Profile': [profile]}
-        if not request.root.user.isAnon():
-            params['token'] = request.root.user.token
-        try:
-            user = SocialConnectProc(request, params)
-        except DBNotification, e:
-            log.error("UNHANDLED DB MESSAGE: %s", e.message)
-            return None
-        else:
-            return user.toJSON()
-
-    def loginCallback(self, request):
+    # EXPOSED Functions
+    def profileCallback(self, request, redirect_route):
         if request.params.get("error"):
             if 'denied' in request.params.get("error"):
                 raise UserRejectedNotice()
             else:
                 return None
-        resp, content = self.getAuthCode(request)
+        resp, content = self.getAuthCode(request, redirect_route)
         if resp.status == 500:
             raise SocialNetworkException()
         if resp.status != 200:
@@ -55,9 +44,9 @@ class SocialSettings(object):
                 result = simplejson.loads(data)
                 return None
             else:
-                profile = self.getProfileFromData(token, data)
-                return self.loginUser(request, profile)
+                return self.getProfileFromData(token, data)
 
-    def getAuthCode(self, request): raise NotImplementedError
+    def loginStart(self, request, redirect_route): raise NotImplementedError
+    def getAuthCode(self, request, redirect_route): raise NotImplementedError
     def getTokenProfile(self, content): raise NotImplementedError
     def getProfileFromData(self, token, data): raise NotImplementedError
