@@ -1,2 +1,2 @@
 from .setup import *
-from .general import *
+import customers, general

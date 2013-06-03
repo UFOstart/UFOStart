@@ -124,7 +124,6 @@ class LinkedInSettings(SocialSettings):
                     , 'client_id':self.appid
                     , 'state': request.session.get_csrf_token()
                     , 'redirect_uri':request.fwd_url("website_social_login_callback", network = self.type)
-                    # , 'scope': " ".join(['r_basicprofile', 'r_fullprofile', 'r_emailaddress'])
                  }
         request.fwd_raw("{}?{}".format(self.getCodeEndpoint, urllib.urlencode(params)))
 
@@ -184,7 +183,38 @@ class LinkedInSettings(SocialSettings):
         return profile
 
 
+class AngelListSettings(SocialSettings):
+    getCodeEndpoint = "https://angel.co/api/oauth/authorize"
+    codeEndpoint = "https://angel.co/api/oauth/token"
+    profileEndpoint = "https://api.angel.co/1/me"
+
+    def loginStart(self, request):
+        params = {'response_type':"code"
+                    , 'client_id':self.appid
+                    , 'redirect_uri':request.fwd_url("website_social_login_callback", network = self.type)
+                    , 'scope':'email'
+                 }
+        request.fwd_raw("{}?{}".format(self.getCodeEndpoint, urllib.urlencode(params)))
+
+    def getAuthCode(self, request):
+        code = request.params.get("code")
+        if not code:
+            return False
+
+        params = {'grant_type':'authorization_code', 'code':code
+                    , 'redirect_uri':request.fwd_url("website_social_login_callback", network = self.type)
+                    , 'client_id':self.appid, 'client_secret':self.appsecret
+                 }
+
+        h = Http(**self.http_options)
+        return h.request( "{}?{}".format(self.codeEndpoint, urllib.urlencode(params)), method="POST", body = {} )
+
+    def getTokenProfile(self, content):
+        h = Http(**self.http_options)
+        result = dict(parse_qsl(content))
+        access_token = result['access_token']
+        return access_token, h.request('{}?{}'.format(self.profileEndpoint, urllib.urlencode({'oauth2_access_token':access_token})), method="GET")
 
 
 
-SOCIAL_CONECTORS_MAP = {'linkedin':LinkedInSettings, "facebook": FacebookSettings}
+SOCIAL_CONNECTORS_MAP = {'linkedin':LinkedInSettings, "facebook": FacebookSettings, 'angellist': AngelListSettings}

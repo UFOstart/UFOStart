@@ -1,7 +1,7 @@
 <%inherit file="../layout.html"/>
 
 <%def name="header_buttons()">
-    <a href="#" class="btn btn-primary">Invite Team Members</a>
+    <a href="${url("website_company_invite")}" class="btn btn-primary">Invite Team Members</a>
     <a href="#" class="btn btn-default">Start a New Round</a>
 </%def>
 
@@ -43,6 +43,7 @@
                     <div class="col col-lg-3">
                         <div class="round-dashboard-group">
                             <img src="${STATIC_URL}img/round/customers.png" />
+                            <a class="link" href="${url("website_company_customers")}">Customers</a>
                         </div>
                         <h5 class="text-muted">PLEDGES</h5>
                         <h2>235</h2>
@@ -61,7 +62,7 @@
                                 <a href="#" class="share-item">Like</a>
                                 <a href="#" class="share-item">Share</a>
                             </div>
-                            <a class="more-line" href="#">More...</a>
+                            <a class="more-line" href="${url("website_company_customers")}">More...</a>
                         </div>
 
                     </div>

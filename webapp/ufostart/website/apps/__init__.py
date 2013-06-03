@@ -1,16 +1,10 @@
-import base64
-import hashlib
-import hmac
 from operator import methodcaller
-import urllib
-from urlparse import parse_qsl
-from hnc.tools.oauth import Consumer, Client
-from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, STANDARD_VIEW_ATTRS, JSON_FORM_ATTRS
+from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSON_FORM_ATTRS
 
 from . import contexts, index, auth, company
 import simplejson
 from .auth import social
-from ufostart.website.apps.auth.network_settings import SOCIAL_CONECTORS_MAP
+from ufostart.website.apps.auth.network_settings import SOCIAL_CONNECTORS_MAP
 
 
 __author__ = 'Martin'
@@ -21,6 +15,10 @@ ROUTE_LIST = [
     , ClassRoute   ("website_company_basic"                , "/company/basics", contexts.WebsiteRootContext, company.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute   ("website_company_invite"               , "/company/invite", contexts.WebsiteRootContext, company.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
     , FunctionRoute('website_company'                      , '/company', contexts.WebsiteAuthedContext, company.general.index, "company/index.html")
+
+
+    , FunctionRoute("website_company_customers"            , "/company/customers", contexts.WebsiteAuthedContext, company.customers.index, "company/customers/index.html")
+
 
 
     , FunctionRoute('website_logout'                       , '/user/logout', contexts.WebsiteRootContext, auth.logout, None)
@@ -55,7 +53,7 @@ class WebsiteSettings(object):
         self.clientToken = settings['apiToken']
         socials = map(methodcaller("strip"), settings['social_networks'].split(","))
         for network in socials:
-            SettingsCls = SOCIAL_CONECTORS_MAP[network]
+            SettingsCls = SOCIAL_CONNECTORS_MAP[network]
             self.networks[network] = SettingsCls(type=network, **settings[network])
 
     def toPublicJSON(self, stringify = True):
