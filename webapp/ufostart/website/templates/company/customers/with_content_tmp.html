@@ -27,9 +27,7 @@
                                 <a href="#" class="btn btn-default col col-sm-8 mar-top-1">Pledge Now</a>
                             </div>
                             <div class="col col-lg-9">
-                                <div class="product-image large">
-                                    ${self.company_media(company)}
-                                </div>
+                                <div class="product-image large">${self.company_media(company)}</div>
                             </div>
                         </div>
                     </div>
@@ -90,7 +88,7 @@
 </%def>
 
 
-<%def name="company_media(company)">
+<%def name="company_media(company)" filter="trim">
     %if company.video_url:
         <div class="you-tube-container" data-video-id="${company.getVideoId()}"></div>
     %elif company.screenshots:
