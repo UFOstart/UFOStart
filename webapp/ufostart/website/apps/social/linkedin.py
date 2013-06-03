@@ -8,7 +8,7 @@ from hnc.tools.oauth import Consumer, Client
 from httplib2 import Http
 import simplejson
 from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE
-from ufostart.website.apps.social import SocialSettings
+from ufostart.website.apps.social import SocialSettings, InvalidSignatureException
 
 log = logging.getLogger(__name__)
 

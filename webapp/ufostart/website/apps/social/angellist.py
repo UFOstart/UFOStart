@@ -1,6 +1,7 @@
 import logging
 from operator import attrgetter
 import urllib
+from urlparse import urlparse, parse_qsl
 from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField, ListField
 from httplib2 import Http
 import simplejson
@@ -15,6 +16,11 @@ class MarketModel(Mapping):
     name = TextField()
     display_name = TextField()
 
+
+class ScreenShotModel(Mapping):
+    thumb = TextField()
+    original = TextField()
+
 class CompanyModel(Mapping):
     id = IntegerField()
     name = TextField()
@@ -22,13 +28,25 @@ class CompanyModel(Mapping):
     high_concept = TextField()
     logo_url = TextField()
     thumb_url = TextField()
+    video_url = TextField()
     company_url = TextField()
     angellist_url = TextField()
     markets = ListField(DictField(MarketModel))
+    screenshots = ListField(DictField(ScreenShotModel))
 
     def getDisplayTags(self):
         return ", ".join(map(attrgetter("display_name"), self.markets))
 
+    def getMedium(self):
+        return self.video
+
+    def getVideoId(self):
+        scheme, netloc, url, params, query, fragment = urlparse(self.video_url)
+        params = dict(parse_qsl(query))
+        return params.get('v')
+
+    def getFirstScreenShot(self):
+        return self.screenshots[0].original
 
 class CompanyRoleModel(Mapping):
     confirmed = BooleanField()
