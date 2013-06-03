@@ -37,7 +37,36 @@
   padding: 0 15px;
   margin:0;
   color: white;
+  &.dark {
+    background-color:@text-muted;
+  }
 }
 .box-shaded {
   background-color: @body-bg-muted;
+}
+
+.empty {
+  padding: @line-height-computed 0;
+  color:@text-muted;
+  font-weight: @font-weight-bold;
+  text-align: center;
+}
+
+
+.disabled-overlay {
+  position: absolute;
+  height:100%;
+  width:100%;
+  background-color:rgba(255,255,255,.7);
+  top:0;
+  left:0;
+  > .overlay-action {
+    position: absolute;
+    top: 50%;
+    margin-top: -50px;
+    left: 50%;
+    margin-left: -175px;
+    width: 350px;
+    text-align: center;
+  }
 }

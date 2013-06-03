@@ -1,0 +1,66 @@
+<%inherit file="../../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="pageTitle()"><div class="page-header"></div></%def>
+
+<%def name="content()">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box-shaded company-customer-dashboard disabled">
+                    <h5 class="box-title">Project</h5>
+                    <div class="row mar-top-1">
+                        <div class="col col-lg-12">
+                            <div class="col col-lg-3">
+                                <div class="company-logo medium">
+                                    <div class="empty">
+                                        Company Logo
+                                    </div>
+                                </div>
+                                <a href="#" class="btn btn-default col col-sm-8 mar-top-2">Pledge Now</a>
+                            </div>
+                            <div class="col col-lg-9">
+                                <div class="product-image large">
+                                    <h1 class="empty">Product Image or Video</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mar-top-1">
+                        <div class="col col-lg-12">
+                            <div class="col col-lg-3">
+                                <h5 class="box-title dark">Project</h5>
+                                &nbsp;
+                            </div>
+                            <div class="col col-lg-6">
+                                <h5 class="box-title dark">About</h5>
+                                &nbsp;
+                            </div>
+                            <div class="col col-lg-3">
+                                <h5 class="box-title dark">Founders</h5>
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                    <div class="disabled-overlay">
+                        <div class="overlay-action">
+                            <a href="${request.fwd_url("website_social_login_start", network = 'angellist')}?furl=${request.furl}" class="btn btn-primary btn-humonguous btn-block">Import your project from AngelList<span>Import Now</span></a>
+                            <p class="mar-top-1">If you don't have a company profile on AngelList yet, please <a href="http://angel.co">create one</a>!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mar-top-1">
+            <div class="col-lg-12">
+                <div class="box-shaded customer-pledge-section">
+                    <h5 class="box-title">0 Pledges</h5>
+                        <div class="empty">
+                            No Pledges Yet
+                        </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</%def>

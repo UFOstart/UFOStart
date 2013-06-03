@@ -18,7 +18,7 @@ ROUTE_LIST = [
     , FunctionRoute('website_company'                      , '/company', contexts.WebsiteAuthedContext, company.general.index, "company/index.html")
 
 
-    , FunctionRoute("website_company_customers"            , "/company/customers", contexts.WebsiteAuthedContext, company.customers.index, "company/customers/index.html")
+    , FunctionRoute("website_company_customers"            , "/company/customers", contexts.WebsiteAuthedContext, company.customers.index, None)
     , FunctionRoute("website_company_import"               , "/company/import/:network", contexts.WebsiteAuthedContext, company.customers.company_import, "company/customers/list.html")
     , FunctionRoute("website_company_import_list"          , "/company/import/:network/:user_id/:token", contexts.WebsiteAuthedContext, company.customers.company_import_list, "company/customers/list.html")
     , FunctionRoute("website_company_import_confirm"       , "/company/confirm/:network/:company_id/:token", contexts.WebsiteAuthedContext, company.customers.company_import_confirm, "company/customers/with_content_tmp.html")

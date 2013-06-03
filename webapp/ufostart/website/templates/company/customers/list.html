@@ -7,19 +7,42 @@
     <div class="container container-constricted">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="site-slogan">Select a company and import</h1>
-                <div class="box-shaded">
-                    <h5 class="box-title">Your companies</h5>
-                    %for company in companies:
-                    <div class="company-import">
-                        <a class="btn btn-primary" href="${url("website_company_import_confirm", network=request.matchdict['network'], company_id = company.startup.id, token=request.matchdict['token'])}">Import</a>
-                        <div class="company-logo">
-                            <img src="${company.startup.logo_url}"/>
+                <h1 class="site-slogan">Select from the list below the company you would like to represent on your UFOstart page</h1>
+                <div class="box-shaded mar-top-2">
+                    <h5 class="box-title">${pluralize("{num} Company Found", "{num} Companies Found", len(companies))}</h5>
+                    %if companies:
+                        %for company in companies:
+                        <div class="company-import">
+                            <div class="col col-sm-3">
+                                <div class="company-logo">
+                                    <img src="${company.startup.logo_url}"/>
+                                </div>
+                            </div>
+                            <div class="col col-sm-6">
+                                <a href="${company.startup.angellist_url}" class="name">${company.startup.name}</a>
+                                <div class="concept">${company.startup.high_concept}</div>
+                            </div>
+                            <div class="col col-lg-3">
+                                <a class="btn btn-primary btn-block" href="${url("website_company_import_confirm", network=request.matchdict['network'], company_id = company.startup.id, token=request.matchdict['token'])}">Import</a>
+                            </div>
                         </div>
-                        <div class="name">${company.startup.name}</div>
-                        <div class="role">${company.role}</div>
-                    </div>
-                    %endfor
+                        %endfor
+
+                    %else:
+                        <div class="company-import text-center">
+                            <div class="row">
+                                <div class="col col-lg-10 col-offset-1">
+                                    <h2>Sorry, you do not have any companies published on AngelList yet.</h2>
+                                    <p class="text-muted">If you already have a company profile on AngelList, please make sure it is published.</p>
+                                    <p class="text-muted">If you don't have a company profile on AngelList yet, please create one.</p>
+                                </div>
+                            </div>
+                            <div class="col col-lg-3 col-offset-9">
+                                <a class="btn btn-block btn-default" href="${url("website_company_customers")}">&laquo; Back</a>
+                            </div>
+
+                        </div>
+                    %endif
                 </div>
             </div>
         </div>

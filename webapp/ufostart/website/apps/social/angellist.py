@@ -1,6 +1,7 @@
 import logging
+from operator import attrgetter
 import urllib
-from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField
+from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField, ListField
 from httplib2 import Http
 import simplejson
 from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE
@@ -8,6 +9,11 @@ from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkExcept
 
 log = logging.getLogger(__name__)
 
+class MarketModel(Mapping):
+    id = IntegerField()
+    tag_type = TextField()
+    name = TextField()
+    display_name = TextField()
 
 class CompanyModel(Mapping):
     id = IntegerField()
@@ -18,6 +24,10 @@ class CompanyModel(Mapping):
     thumb_url = TextField()
     company_url = TextField()
     angellist_url = TextField()
+    markets = ListField(DictField(MarketModel))
+
+    def getDisplayTags(self):
+        return ", ".join(map(attrgetter("display_name"), self.markets))
 
 
 class CompanyRoleModel(Mapping):

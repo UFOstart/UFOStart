@@ -1,3 +1,4 @@
+from pyramid.renderers import render_to_response
 import simplejson
 from hnc.forms.messages import GenericErrorMessage
 from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException
@@ -38,5 +39,9 @@ def company_import_confirm(context, request):
 
 
 def index(context, request):
-    social_imports = request.session.setdefault("social_imports", {})
-    return {'social_imports':social_imports.get('angellist')}
+    company = None
+    if company:
+        template = "index.html"
+    else:
+        template = "index_empty.html"
+    return render_to_response("ufostart:website/templates/company/customers/{}".format(template), {'company':company}, request)
