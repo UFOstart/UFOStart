@@ -1,23 +1,19 @@
 <%inherit file="../../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
+
+<%def name="header_buttons()">
+    <a href="${url("website_need_library", token = "NOTOKEN")}" class="btn btn-primary">Add a Need</a>
+</%def>
+
 <%def name="pageTitle()"><div class="page-header">${template.name} <span class="template-icon ${template.getStyleKey()}"></span> </div></%def>
 
 
 <%def name="content()">
-    <div class="container container-constricted round-need-setup-page">
+    <div class="container round-need-setup-page">
         <div class="row">
-            <div class="col col-lg-8">
                 <h6>Needs to be fulfilled in 90 days</h6>
                 ${self.buildForm(view.form, values.get(view.form.id), errors.get(view.form.id), btnClass='btn btn-primary col col-lg-12')}
-            </div>
-            <div class="col col-lg-3 col-offset-1">
-                <h6>Needs Library</h6>
-                <div class="needs-list library">
-                    %for need in needs:
-                        ${self.renderNeed(view.form.id, need, True)}
-                    %endfor
-                </div>
             </div>
         </div>
     </div>
@@ -26,15 +22,23 @@
 <%def name="buildForm(form, values, errors, btnClass='btn-primary')">
     <form class="${form.classes}" method="post" id="${form.id}">
         ${baseform.prelims(form)}
-        <div class="needs-list in-use">
-        %for need in template.Need:
-            ${self.renderNeed(form.id, need, False)}
+
+        %for category in view.getTaskCategories():
+            <div class="col col-lg-3">
+                <h5 class="box-title">${category.name}</h5>
+                <div class="needs-list box-shaded">
+                %for need in template.Need:
+                    ${self.renderNeed(form.id, need, False)}
+                %endfor
+                </div>
+            </div>
         %endfor
+
+
+        <div class="col col-lg-4 col-offset-4 mar-top-2">
+            <button type="submit" class="btn btn-primary btn-humonguous"><span>Start the Round</span></button>
+            <p class="text-center">You have 90 days to finish the round</p>
         </div>
-        <div class="btn-start-round">
-            <button type="submit" class="${btnClass}">Start the Round</button>
-        </div>
-        <p class="text-center">You have 90 days to finish the round</p>
     </form>
 </%def>
 
@@ -49,14 +53,6 @@
 
         <div class="need-title">${need.name}</div>
         <div class="need-description">Dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. </div>
-        <div class="need-details">
-            <input type="hidden" name="${prefix}.needKey" value="${need.name}"/>
-            <div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-            Detail 1</div><div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-            Detail 2</div><div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-            Detail 3
-            </div>
-        </div>
     </div>
 </div>
 </%def>

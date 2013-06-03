@@ -1,2 +1,2 @@
-from .setup import *
-import customers, general
+from .tasks import *
+import customers, general, invite_team

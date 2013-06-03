@@ -11,61 +11,13 @@
     <div class="container">
         <div class="row mar-top-1">
             <div class="col col-lg-12">
-                <div class="round-dashboard box-shaded ${'no-rounds' if hasRounds else 'has-rounds'}">
+                <div class="round-dashboard box-shaded ${'no-rounds' if currentRound else 'has-rounds'}">
                     <div class="col col-lg-3">
-                        <div class="round-dashboard-group">
-                            <img src="${STATIC_URL}img/round/tasks.png" />
-                            <a class="link" href="#">Tasks</a>
-                        </div>
-                        <h5 class="text-muted">NEEDS FULFILLED</h5>
-                        <div class="progress">
-                            <div style="width:76%;" class="progress-bar"></div>
-                            <span class="progress-num">76%</span>
-                        </div>
-
-                        <h6 class="mar-top-2 text-muted">Recent events</h6>
-                        <div class="round-event">
-                            <div class="actor-line">
-                                <img src="${STATIC_URL}img/dummy/avatar1.png" class="img-thumbnail"/>
-                                <a href="#">Martin Musterman</a>
-                            </div>
-                            <div class="action-line">
-                                fulfilled the animation needs
-                            </div>
-                            <div class="share-line">
-                                <span class="share-item">2 hours ago</span>
-                                <a href="#" class="share-item">Like</a>
-                                <a href="#" class="share-item">Share</a>
-                            </div>
-                            <a class="more-line" href="#">More...</a>
-                        </div>
+                        ${self.buildTaskPillar(currentRound)}
                     </div>
 
                     <div class="col col-lg-3">
-                        <div class="round-dashboard-group">
-                            <img src="${STATIC_URL}img/round/customers.png" />
-                            <a class="link" href="${url("website_company_customers")}">Customers</a>
-                        </div>
-                        <h5 class="text-muted">PLEDGES</h5>
-                        <h2>235</h2>
-                        <h6 class="mar-top-2 text-muted">Recent pledges</h6>
-
-                        <div class="round-event">
-                            <div class="actor-line">
-                                <img src="${STATIC_URL}img/dummy/avatar1.png" class="img-thumbnail"/>
-                                <a href="#">Dieter Rams Minsfield</a>
-                            </div>
-                            <div class="action-line">
-                                pledged to your project
-                            </div>
-                            <div class="share-line">
-                                <span class="share-item">2 hours ago</span>
-                                <a href="#" class="share-item">Like</a>
-                                <a href="#" class="share-item">Share</a>
-                            </div>
-                            <a class="more-line" href="${url("website_company_customers")}">More...</a>
-                        </div>
-
+                        ${self.buildCustomerPillar(currentRound)}
                     </div>
 
                     <div class="col col-lg-3">
@@ -180,6 +132,68 @@
         <div class="subscript">No expert</div>
     </div>
 </%def>
+
+
+
+<%def name="buildTaskPillar(round)">
+    <%
+        taskUrl = url("website_company_round_view" if round else "website_company_setup_basic")
+    %>
+    <div class="round-dashboard-group">
+        <img src="${STATIC_URL}img/round/tasks.png" />
+        <a class="link" href="${taskUrl}">Tasks</a>
+    </div>
+    <h5 class="text-muted">NEEDS FULFILLED</h5>
+    <div class="progress">
+        <div style="width:76%;" class="progress-bar"></div>
+        <span class="progress-num">76%</span>
+    </div>
+
+    <h6 class="mar-top-2 text-muted">Recent events</h6>
+    <div class="round-event">
+        <div class="actor-line">
+            <img src="${STATIC_URL}img/dummy/avatar1.png" class="img-thumbnail"/>
+            <a href="#">Martin Musterman</a>
+        </div>
+        <div class="action-line">
+            fulfilled the animation needs
+        </div>
+        <div class="share-line">
+            <span class="share-item">2 hours ago</span>
+            <a href="#" class="share-item">Like</a>
+            <a href="#" class="share-item">Share</a>
+        </div>
+        <a class="more-line" href="${taskUrl}">More...</a>
+    </div>
+</%def>
+
+
+<%def name="buildCustomerPillar(round)">
+    <div class="round-dashboard-group">
+        <img src="${STATIC_URL}img/round/customers.png" />
+        <a class="link" href="${url("website_company_customers")}">Customers</a>
+    </div>
+    <h5 class="text-muted">PLEDGES</h5>
+    <h2>235</h2>
+    <h6 class="mar-top-2 text-muted">Recent pledges</h6>
+
+    <div class="round-event">
+        <div class="actor-line">
+            <img src="${STATIC_URL}img/dummy/avatar1.png" class="img-thumbnail"/>
+            <a href="#">Dieter Rams Minsfield</a>
+        </div>
+        <div class="action-line">
+            pledged to your project
+        </div>
+        <div class="share-line">
+            <span class="share-item">2 hours ago</span>
+            <a href="#" class="share-item">Like</a>
+            <a href="#" class="share-item">Share</a>
+        </div>
+        <a class="more-line" href="${url("website_company_customers")}">More...</a>
+    </div>
+</%def>
+
 
 
 

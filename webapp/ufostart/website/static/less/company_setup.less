@@ -1,17 +1,12 @@
 .round-need-setup-page {
   padding-bottom: 70px;
 }
-.template-list {
-  text-align: center;
-}
 
 .single-template {
   margin-bottom:30px;
-  text-align: center;
    >.description {
     max-width: 277px;
     text-align: left;
-    margin: 0px auto;
     margin-top: 15px;
    }
 }
@@ -61,9 +56,8 @@
 }
 
 .single-need {
-  border-radius: @border-radius-large;
   + .single-need {
-    margin-top:15px;
+    border-top:1px solid @corp-color;
   }
 }
 .need-details {
@@ -75,10 +69,6 @@
   }
 
 .single-need-inner {
-  color: @btn-default-color;
-  background-color: @btn-default-bg;
-  border-radius: @border-radius-large;
-  .box-shadow(0 3px 4px rgba(0,0,0,.4));
   padding: 8px 15px 15px;
   position: relative;
   .need-title {font-weight: 700;}

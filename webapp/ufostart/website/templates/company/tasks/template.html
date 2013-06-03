@@ -1,15 +1,23 @@
 <%inherit file="../../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
+<%def name="pageTitle()"><div class="page-header">Setup Tasks</div></%def>
+
 <%def name="content()">
-    <div class="container centered auth-page">
+    <div class="container container-constricted">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="site-slogan">Pick a template, that might best describe your company's current stage and trajectory.</h1>
+                <h2>No worries, everything can be customized later.</h2>
+            </div>
+        </div>
         %for row in templates:
             <div class="row template-list">
             <form class="${view.form.classes}" method="post" id="${view.form.id}">
                 ${baseform.prelims(view.form)}
 
                 %for i, t in enumerate(row):
-                    <div class="col col-lg-4 ${'' if i else 'col-offset-2'}">
+                    <div class="col col-lg-6">
                         <div class="single-template">
                             <button type="submit" name="${view.form.id}.template" value="${t.name}" class="single-template-button ${t.getStyleKey()} no-btn">
                                 <img src="${STATIC_URL}img/templates/${t.getStyleKey()}.png"/>
