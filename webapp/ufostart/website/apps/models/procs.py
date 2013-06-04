@@ -70,3 +70,6 @@ GetAllNeedsProc = ClientTokenProc("/web/need/list", result_cls=NeedModel, root_k
 
 SetCompanyAngelListPitchProc = ClientTokenProc("/web/company/angellist")
 CreateNeedProc = ClientTokenProc("/web/need/create")
+
+
+InviteToCompanyProc = ClientTokenProc("/web/company/invite")

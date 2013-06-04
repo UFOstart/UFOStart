@@ -1,8 +1,9 @@
 from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, MultipleFormField, EmailField
 from hnc.forms.handlers import FormHandler
+from hnc.forms.messages import GenericSuccessMessage
 from pyramid.renderers import render_to_response
-from ufostart.website.apps.models.procs import CreateCompanyProc, CreateRoundProc
+from ufostart.website.apps.models.procs import CreateCompanyProc, CreateRoundProc, InviteToCompanyProc
 
 
 def index(context, request):
@@ -67,7 +68,17 @@ class InviteCompanyForm(BaseForm):
     ]
     @classmethod
     def on_success(cls, request, values):
-            return {'success':True, 'redirect': request.fwd_url("website_company", slug = request.matchdict['slug'])}
+        data = []
+        user = request.root.user
+        company = request.root.company
+        for inv in values.get('Invitees'):
+            inv['invitorToken'] = user.token
+            inv['invitorName'] = user.name
+            inv['companySlug'] = company.slug
+            data.append(inv)
+        InviteToCompanyProc(request, data)
+        request.session.flash(GenericSuccessMessage("You successfully invited{} users to your company!".format(len(data))), "generic_messages")
+        return {'success':True, 'redirect': request.fwd_url("website_company", slug = request.matchdict['slug'], _query = [('s', '1')])}
 
 class InviteCompanyHandler(FormHandler):
     form = InviteCompanyForm
