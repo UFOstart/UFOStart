@@ -6,11 +6,18 @@
     <a href="#" class="btn btn-primary switchLibrary">Add a Need</a>
 </%def>
 
-<%def name="pageTitle()"><div class="page-header">${view.template.name} <span class="template-icon ${view.template.getStyleKey()}"></span> </div></%def>
+<%def name="pageTitle()"><div class="page-header">Task Setup</div></%def>
 
 
 <%def name="content()">
     <div id="round-need-setup-page">
+        <div class="container">
+            <div class="row">
+                <div class="col col-lg-12">
+                    <h1>${view.template.name} <span class="template-icon ${view.template.getStyleKey()}"></span></h1>
+                </div>
+            </div>
+        </div>
         <div class="container tasks-used">
             <div class="row">
                 ${self.buildForm(view.form, values.get(view.form.id), errors.get(view.form.id), btnClass='btn btn-primary col col-lg-12')}

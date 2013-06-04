@@ -11,17 +11,17 @@ from ufostart.website.apps.social.linkedin import LinkedinSettings
 __author__ = 'Martin'
 
 ROUTE_LIST = [
-    FunctionRoute  ("website_index"                        , "/", contexts.WebsiteRootContext                       , index.index, "index.html")
+    FunctionRoute  ("website_index"                        , "/", contexts.WebsiteRootContext                                                , index.index, "index.html")
 
-    , ClassRoute   ("website_signup_decision"              , "/decide", contexts.WebsiteRootContext                 , auth.DecisionHandler, "auth/decide.html", view_attrs = JSON_FORM_ATTRS)
-    , FunctionRoute('website_social_login'                 , '/social/:network', contexts.WebsiteRootContext        , auth.social.social_login_start, None)
-    , FunctionRoute('website_social_login_callback'        , '/social/cb/:network', contexts.WebsiteRootContext     , auth.social.social_login_callback, None)
+    , ClassRoute   ("website_signup_decision"              , "/decide", contexts.WebsiteRootContext                                          , auth.DecisionHandler, "auth/decide.html", view_attrs = JSON_FORM_ATTRS)
+    , FunctionRoute('website_social_login'                 , '/social/:network', contexts.WebsiteRootContext                                 , auth.social.social_login_start, None)
+    , FunctionRoute('website_social_login_callback'        , '/social/cb/:network', contexts.WebsiteRootContext                              , auth.social.social_login_callback, None)
 
 
-    , ClassRoute   ("website_company_basic"                , "/company/setup", contexts.WebsiteRootContext          , company.general.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
-    , ClassRoute   ("website_company_invite"               , "/c/:slug/invite", contexts.WebsiteCompanyContext      , company.general.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
-    , FunctionRoute('website_company'                      , '/c/:slug', contexts.WebsiteCompanyContext             , company.general.index, None)
-    , FunctionRoute('website_company_round_create'         , '/c/:slug/create/round', contexts.WebsiteCompanyContext, company.general.create_round, None)
+    , ClassRoute   ("website_company_basic"                , "/company/setup", contexts.WebsiteRootContext                                   , company.general.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
+    , ClassRoute   ("website_company_invite"               , "/c/:slug/invite", contexts.WebsiteCompanyContext                               , company.general.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
+    , FunctionRoute('website_company'                      , '/c/:slug', contexts.WebsiteCompanyContext                                      , company.general.index, None)
+    , FunctionRoute('website_company_round_create'         , '/c/:slug/create/round', contexts.WebsiteCompanyContext                         , company.general.create_round, None)
 
 
     , FunctionRoute("website_company_customers"            , "/c/:slug/customers", contexts.WebsiteCompanyContext                            , company.customers.index, None)
@@ -35,8 +35,8 @@ ROUTE_LIST = [
 
 
     , FunctionRoute('website_company_setup_basic'          , '/c/:slug/tasks/template', contexts.WebsiteCompanyContext                       , company.tasks.needs_template_select, "company/tasks/template.html")
-    , FunctionRoute('website_company_round_view'           , '/c/:slug/tasks', contexts.WebsiteCompanyContext                                , company.tasks.show_round_tasks, "company/round.html")
     , ClassRoute   ('website_company_setup_round'          , '/c/:slug/tasks/:template', contexts.WebsiteCompanyContext                      , company.tasks.TasksHandler, "company/tasks/needs.html", view_attrs = JSON_FORM_ATTRS)
+    , FunctionRoute('website_company_round_view'           , '/c/:slug/tasks', contexts.WebsiteCompanyContext                                , company.tasks.index, "company/tasks/index.html")
 
 
 
@@ -45,8 +45,6 @@ ROUTE_LIST = [
 
 
     , FunctionRoute('website_fbtokenrefresh'               , '/user/fb/token/refresh', contexts.WebsiteRootContext, auth.social.fb_token_refresh, "json", route_attrs = {"xhr":True})
-
-
 
 
     # NOTE: DEPRECATED

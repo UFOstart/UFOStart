@@ -66,13 +66,6 @@
     border-top:1px solid @corp-color;
   }
 }
-.need-details {
-   >.need-detail {
-    display: inline-block;
-    cursor: pointer;
-    +.need-detail {margin-left: 20px;}
-   }
-  }
 
 .single-need-inner {
   padding: 8px 15px 15px;
@@ -144,10 +137,6 @@
     }
   }
 }
-.needs-list.library{
-  .need-description{display:none}
-  .need-details {display: none;}
-}
 
 .btn-start-round {
   margin-top:70px;
@@ -155,23 +144,22 @@
    + .text-center {padding-top:15px;font-weight: 700;}
 }
 
+// ===================== ROUND TASKS INDEX VIEW =====================
+
+.single-task {
+  padding: 8px 15px 15px;
+  .need-title {font-weight: 700;}
+  + .single-task {border-top: 1px solid @text-muted;}
+}
+
 
 .round-need-setup{
+  .need-box {clear:both;min-height:60px;}
+  .profile-picture {float:left;margin-right: 10px;width: 60px;}
   .expert-title {font-weight:700;margin-top:4px;}
   .expert-title, .expert-name, .service-url {
     font-size: @font-size-small;
   }
-  .use-service-btn {margin-top:52px;margin-left: -10px;}
-  .need-expert-btn {
-    height: 77px;
-    margin-left: -10px;
-    background-position: center bottom;
-    &:hover {color:transparent;text-decoration: none;}
-  }
-  &:first-child {
-    margin-top: 5px;
-  }
-  + .round-need-setup {border-top: 1px solid @corp-color-semi;padding-top:10px;}
 }
 
 

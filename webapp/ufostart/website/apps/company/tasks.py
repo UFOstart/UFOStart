@@ -65,9 +65,9 @@ class TasksHandler(FormHandler):
 
 
 
-def show_round_tasks(context, request):
-    companyRound = context.company.getCurrentRound()
-    return {'companyRound': companyRound}
+def index(context, request):
+    currentRound = context.company.getCurrentRound()
+    return {'currentRound': currentRound}
 
 
 def need_library(context, request):
