@@ -93,11 +93,11 @@ def pledge_decide(context, request):
 def login_to_pledge(context, request):
     network = request.matchdict['network']
     networkSettings = context.settings.networks.get(network)
-    return networkSettings.loginStart(request, 'website_login_to_pledge_callback', redirect_kwargs = request.matchdict)
+    return networkSettings.loginStart(request, 'website_login_to_pledge_callback', redirect_kwargs = {'slug' : request.matchdict['slug']})
 
 def login_to_pledge_callback(context, request):
     network = request.matchdict['network']
     networkSettings = context.settings.networks.get(network)
-    profile = get_social_profile(request, networkSettings, original_route = 'website_login_to_pledge_callback', redirect_kwargs = request.matchdict, error_route = "website_company_pledge_decide", error_kwargs = request.matchdict)
+    profile = get_social_profile(request, networkSettings, original_route = 'website_login_to_pledge_callback', redirect_kwargs = {'slug' : request.matchdict['slug']}, error_route = "website_company_pledge_decide", error_kwargs = {'slug' : request.matchdict['slug']})
 
     pledge(request, context.company, {'name': profile['name'], 'network':network, 'networkId': profile['id'], 'picture':profile['picture']})
