@@ -12,12 +12,12 @@
         </div>
         <div class="row mar-top-3">
             <div class="col col-lg-4 col-offset-4">
-                <a href="${url("website_login_to_pledge", network = 'facebook')}?furl=${request.furl}" class="btn btn-primary btn-facebook">Connect with Facebook</a>
+                <a href="${url("website_login_to_pledge", network = 'facebook', **vctxt.urlArgs)}?furl=${request.furl}" class="btn btn-primary btn-facebook">Connect with Facebook</a>
             </div>
         </div>
         <div class="row mar-top-2">
             <div class="col col-lg-4 col-offset-4">
-                <a href="${url("website_login_to_pledge", network = 'linkedin')}?furl=${request.furl}" class="btn btn-primary btn-linkedin">Connect with Linkedin</a>
+                <a href="${url("website_login_to_pledge", network = 'linkedin', **vctxt.urlArgs)}?furl=${request.furl}" class="btn btn-primary btn-linkedin">Connect with Linkedin</a>
             </div>
         </div>
     </div>

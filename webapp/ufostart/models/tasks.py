@@ -8,8 +8,8 @@ class TaskCategoriesModel(Mapping):
 
 
 TASK_CATEGORIES = [
-    TaskCategoriesModel(name = 'Operation')
-    , TaskCategoriesModel(name = 'Marketing')
-    , TaskCategoriesModel(name = 'Sales')
-    , TaskCategoriesModel(name = 'Technology')
+    TaskCategoriesModel(name = 'OPERATIONS')
+    , TaskCategoriesModel(name = 'MARKETING')
+    , TaskCategoriesModel(name = 'SALES')
+    , TaskCategoriesModel(name = 'TECH')
 ]

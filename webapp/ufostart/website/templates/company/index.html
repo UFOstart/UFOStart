@@ -1,8 +1,7 @@
 <%inherit file="../layout.html"/>
 
 <%def name="header_buttons()">
-    <a href="${url("website_company_invite")}" class="btn btn-primary">Invite Team Members</a>
-    <a href="#" class="btn btn-default">Start a New Round</a>
+    <a href="${url("website_company_invite", **vctxt.urlArgs)}" class="btn btn-primary">Invite Team Members</a>
 </%def>
 
 <%def name="pageTitle()"><div class="page-header">Round</div></%def>
@@ -21,57 +20,11 @@
                     </div>
 
                     <div class="col col-lg-3">
-                        <div class="round-dashboard-group">
-                            <img src="${STATIC_URL}img/round/assets.png" />
-                            <a class="link" href="#">Assets</a>
-                        </div>
-                        <h5 class="text-muted">ASSETS VALUE</h5>
-                        <h2>3.256,00 $</h2>
-                        <h6 class="mar-top-2 text-muted">Recent events</h6>
-
-                        <div class="round-event">
-                            <div class="actor-line">
-                                <img src="${STATIC_URL}img/dummy/avatar2.png" class="img-thumbnail"/>
-                                <a href="#">Martina Musterman</a>
-                            </div>
-                            <div class="action-line">
-                                brought a table and a plant
-                            </div>
-                            <div class="share-line">
-                                <span class="share-item">2 hours ago</span>
-                                <a href="#" class="share-item">Like</a>
-                                <a href="#" class="share-item">Share</a>
-                            </div>
-                            <a class="more-line" href="#">More...</a>
-                        </div>
-
+                        ${self.buildAssetsPillar(currentRound)}
                     </div>
 
                     <div class="col col-lg-3">
-                        <div class="round-dashboard-group">
-                            <img src="${STATIC_URL}img/round/money.png" />
-                            <a class="link" href="#">Money</a>
-                        </div>
-                        <h5 class="text-muted">FUNDED</h5>
-                        <h2>10.000 $</h2>
-
-                        <h6 class="mar-top-2 text-muted">Recent contributions</h6>
-                        <div class="round-event">
-                            <div class="actor-line">
-                                <img src="${STATIC_URL}img/dummy/avatar1.png" class="img-thumbnail"/>
-                                <a href="#">Bruce Momjianbiandan</a>
-                            </div>
-                            <div class="action-line">
-                                chipped in 2.000,00 $
-                            </div>
-                            <div class="share-line">
-                                <span class="share-item">2 hours ago</span>
-                                <a href="#" class="share-item">Like</a>
-                                <a href="#" class="share-item">Share</a>
-                            </div>
-                            <a class="more-line" href="#">More...</a>
-                        </div>
-
+                        ${self.buildMoneyPillar(currentRound)}
                     </div>
                 </div>
             </div>
@@ -137,7 +90,7 @@
 
 <%def name="buildTaskPillar(round)">
     <%
-        taskUrl = url("website_company_round_view" if round else "website_company_setup_basic")
+        taskUrl = url("website_company_round_view" if round.Needs else "website_company_setup_basic", **vctxt.urlArgs)
     %>
     <div class="round-dashboard-group">
         <img src="${STATIC_URL}img/round/tasks.png" />
@@ -145,52 +98,79 @@
     </div>
     <h5 class="text-muted">NEEDS FULFILLED</h5>
     <div class="progress">
-        <div style="width:76%;" class="progress-bar"></div>
-        <span class="progress-num">76%</span>
+        <div style="width:${round.getTaskProgress()}%;" class="progress-bar"></div>
+        <span class="progress-num">${round.getTaskProgress()}%</span>
     </div>
 
     <h6 class="mar-top-2 text-muted">Recent events</h6>
-    <div class="round-event">
-        <div class="actor-line">
-            <img src="${STATIC_URL}img/dummy/avatar1.png" class="img-thumbnail"/>
-            <a href="#">Martin Musterman</a>
-        </div>
-        <div class="action-line">
-            fulfilled the animation needs
-        </div>
-        <div class="share-line">
-            <span class="share-item">2 hours ago</span>
-            <a href="#" class="share-item">Like</a>
-            <a href="#" class="share-item">Share</a>
-        </div>
-        <a class="more-line" href="${taskUrl}">More...</a>
-    </div>
+    %if round.getTaskEvents():
+        <% event = round.getTaskEvents()[0] %>
+        ${self.buildRoundEvent(event, taskUrl)}
+    %endif
 </%def>
 
 
 <%def name="buildCustomerPillar(round)">
     <div class="round-dashboard-group">
         <img src="${STATIC_URL}img/round/customers.png" />
-        <a class="link" href="${url("website_company_customers")}">Customers</a>
+        <a class="link" href="${url("website_company_customers", **vctxt.urlArgs)}">Customers</a>
     </div>
     <h5 class="text-muted">PLEDGES</h5>
-    <h2>235</h2>
+    <h2>${len(round.Pledges)}</h2>
     <h6 class="mar-top-2 text-muted">Recent pledges</h6>
+    %if round.getPledgeEvents():
+        <% event = round.getPledgeEvents()[0] %>
+        ${self.buildRoundEvent(event, url("website_company_customers", **vctxt.urlArgs))}
+    %endif
+</%def>
 
+
+<%def name="buildAssetsPillar(round)">
+    <div class="round-dashboard-group">
+        <img src="${STATIC_URL}img/round/assets.png" />
+        <a class="link" href="#">Assets</a>
+    </div>
+    <h5 class="text-muted">ASSETS VALUE</h5>
+    <h2>0 $</h2>
+    <h6 class="mar-top-2 text-muted">Recent events</h6>
+    %if round.getAssetsEvents():
+        <% event = round.getAssetsEvents()[0] %>
+        ${self.buildRoundEvent(event, "#")}
+    %endif
+</%def>
+
+<%def name="buildMoneyPillar(round)">
+    <div class="round-dashboard-group">
+        <img src="${STATIC_URL}img/round/money.png" />
+        <a class="link" href="#">Money</a>
+    </div>
+    <h5 class="text-muted">FUNDED</h5>
+    <h2>0 $</h2>
+
+    <h6 class="mar-top-2 text-muted">Recent contributions</h6>
+    %if round.getMoneyEvents():
+        <% event = round.getMoneyEvents()[0] %>
+        ${self.buildRoundEvent(event, "#")}
+    %endif
+</%def>
+
+
+
+<%def name="buildRoundEvent(event, moreLink)">
     <div class="round-event">
         <div class="actor-line">
-            <img src="${STATIC_URL}img/dummy/avatar1.png" class="img-thumbnail"/>
-            <a href="#">Dieter Rams Minsfield</a>
+            <img src="${event.picture}" class="img-thumbnail"/>
+            <a href="#">${event.name}</a>
         </div>
         <div class="action-line">
-            pledged to your project
+            ${event.text}
         </div>
         <div class="share-line">
-            <span class="share-item">2 hours ago</span>
+            <span class="share-item">${event.recency}</span>
             <a href="#" class="share-item">Like</a>
             <a href="#" class="share-item">Share</a>
         </div>
-        <a class="more-line" href="${url("website_company_customers")}">More...</a>
+        <a class="more-line" href="${moreLink}">More...</a>
     </div>
 </%def>
 
@@ -204,6 +184,6 @@
     <script>
         require(["views/company/round/configure"], function(View){
             new View({el: $(".round-need-setup-page")})
-        })
+        });
     </script>
 </%def>

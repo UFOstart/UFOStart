@@ -91,8 +91,8 @@
                 <div class="col col-sm 12">
                     <ul class="page-header-bar-menu">
                         <li><span>Welcome ${user.name}</span></li>
-                        %if user.Company.Rounds:
-                            <li><a href="${url("website_company")}">Dashboard</a></li>
+                        %if user.Company:
+                            <li><a href="${url("website_company", slug = user.Company.slug)}">Dashboard</a></li>
                         %endif
                         <li><a href="${url("website_logout")}">Logout</a></li>
                     </ul>

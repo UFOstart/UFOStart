@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from babel.dates import format_date
-from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField
+from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField
 from hnc.apiclient.backend import ClientTokenProc
 from pyramid.decorator import reify
 
@@ -48,9 +48,13 @@ class ServiceModel(Mapping):
 class NeedModel(Mapping):
     key = TextField()
     name = TextField()
+    category = TextField()
+    description = TextField()
     Service = DictField(ServiceModel)
     Expert = DictField(ExpertModel)
 
+
+    _inUse = BooleanField()
 
 class TemplateModel(Mapping):
     key = TextField()
@@ -63,15 +67,33 @@ class TemplateModel(Mapping):
         return TEMPLATE_STYLE_KEYS[self.key]
 
 
-GetAllCompanyTemplatesProc = ClientTokenProc("/web/template/list", result_cls=TemplateModel, root_key="Templates", result_list=True)
-GetTemplateDetailsProc = ClientTokenProc("/web/template", result_cls=TemplateModel, root_key="Template")
-GetAllNeedsProc = ClientTokenProc("/web/need/list", result_cls=NeedModel, root_key="Needs", result_list=True)
+class PledgeModel(Mapping):
+    name = TextField()
+    network = TextField()
+    networkId = TextField()
+    picture = TextField()
+
+
+class CompanyUserModel(Mapping):
+    token = TextField()
+    name = TextField()
+    picture = TextField()
+
+
+class EventModel(Mapping):
+    name = TextField()
+    picture = TextField()
+    text = TextField()
+    recency =TextField()
 
 
 class RoundModel(Mapping):
     start = DateTimeField()
     token = TextField()
     Needs = ListField(DictField(NeedModel))
+    Users = ListField(DictField(CompanyUserModel))
+    Pledges = ListField(DictField(PledgeModel))
+
 
     @reify
     def expiry(self):
@@ -89,9 +111,26 @@ class RoundModel(Mapping):
         return format_date(self.start+timedelta(90), format="medium", locale='en')
 
 
+    def getPledgeEvents(self):
+        return [EventModel(name = "Dieter Rams Minsfield", picture='/web/static/img/dummy/avatar1.png', text = "fulfilled the animation needs", recency = "1 hour ago")]
+    def getTaskProgress(self):
+        return 0
+    def getTaskEvents(self):
+        return [EventModel(name = "Martin Musterman", picture='/web/static/img/dummy/avatar1.png', text = "fulfilled the animation needs", recency = "2 hour ago")]
+    def getAssetsEvents(self):
+        return []
+        # return [EventModel(name = "Martina Musterman", picture='/web/static/img/dummy/avatar2.png', text = "brought a table and a plant", recency = "3 hour ago")]
+    def getMoneyEvents(self):
+        return []
+        # return [EventModel(name = "Bruce Momjianbiandan", picture='/web/static/img/dummy/avatar2.png', text = "chipped in 2.000,00 $", recency = "4 hour ago")]
+
+
 class CompanyModel(Mapping):
     token = TextField()
+    slug = TextField()
     Template = DictField(TemplateModel)
     Round = DictField(RoundModel)
     Rounds = ListField(DictField(RoundModel))
 
+    def getCurrentRound(self):
+        return self.Round

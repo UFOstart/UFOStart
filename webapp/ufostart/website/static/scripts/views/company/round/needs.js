@@ -3,69 +3,66 @@ define(["tools/ajax"], function(ajax){
 
         events : {}
         , initialize:function(opts){
-            if(window.Modernizr.touch)
-                this.events["touchstart .add-remove-btn"] = "addRemove";
-            else
-                this.events["click .add-remove-btn"] = "addRemove";
+            var evt = window.Modernizr.touch?'touchstart':'click', view = this;
+            this.events[evt+" .add-remove-btn"] = "addRemove";
+            this.events[evt+" .in-library"] = "addRemove";
+            this.events[evt+" .addNeedsBtn"] = "doAddNeeds";
+
             this.$(".form-validated").each(function(idx, elem){
                 ajax.ifyForm({root: elem})
             });
-            $(".need-detail").qtip({
-                content: {
-                    title: function(api) {
-                        return $(this).text()
-                    }
-                    , text: function(api) {
-                        return $(this).data("description")
-                    }
+
+
+            var f = function(e){
+                if(!e.keyCode|| e.keyCode == 13){
+                    view.switchPanes();
                 }
-                , style: {
-                    tip: {
-                        width: 20,
-                        height: 20
-                    }
-                }
-                , position: {
-                    my: 'bottom center', at: 'top center'
-                    , viewport: $(window)
-                }
-                , show:"click"
-                , hide:"unfocus"
-            });
+            };
+            $(document).on({ click:f , keyup:f}, ".switchLibrary");
+
+            this.$library = this.$(".task-library");
+            this.$tasks = this.$(".tasks-used");
         }
         , addRemove : function(e){
-            var $el = $(e.currentTarget), $need = $el.closest(".single-need");
-            if($el.hasClass("add")){
-                this.$(".needs-list.in-use").prepend($need.detach());
-                $el.removeClass("add").addClass("remove").children().html("×");
-                $need.addClass("added")
-                setTimeout(function(){$need.removeClass("added")}, 0)
+            var $el = $(e.currentTarget)
+                , $need = $el.closest(".single-need")
+                , taskId = $need.data("entityId")
+                , $category = $need.closest(".category-task-list")
+                , catId = $category.data("entityId");
 
-
+            if($el.hasClass("in-library")){
+                if($need.hasClass("in-use"))return;
+                $need.toggleClass("marked-for-use");
             } else if($el.hasClass("remove")){
-                this.sortedInsert(this.$(".needs-list.library"), $need.detach());
-                $el.removeClass("remove").addClass("add").children().html("+");
-                $need.removeClass("added")
+                this.$library
+                    .find(".category-task-list")
+                    .filter("[data-entity-id="+catId+"]")
+                        .children()
+                        .filter("[data-entity-id="+taskId+"]")
+                        .removeClass("in-use");
+                $need.remove();
             }
         }
-        , sortedInsert: function(root, el){
-            var i=0 , tmp
-                , sortIndex = el.data("entitySort")
-                , nodes = root.children()
-                , len = nodes.length
-                , inserted = false;
-            for(;i<len;i++){
-                tmp = nodes.eq(i);
-                if(tmp.data("entitySort")>sortIndex){
-                    tmp.before(el);
-                    inserted = true;
-                    break;
-                }
-            }
-            if(!inserted){
-              root.append(el);
-            }
-            el.addClass("inserted")
+        , doAddNeeds: function(e){
+            var view = this;
+            this.$library.find(".category-task-list").each(function(idx, libCat){
+                var catId = $(libCat).data("entityId")
+                    , $targetCat = view.$tasks
+                            .find(".category-task-list")
+                            .filter("[data-entity-id="+catId+"]");
+                $(libCat).find(".marked-for-use").each(function(idx, libNeed){
+                    $(libNeed).addClass("in-use").removeClass("marked-for-use");
+                    $targetCat.append($(libNeed).clone().removeClass("in-library"));
+                });
+            });
+            this.switchPanes();
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+        , switchPanes: function(){
+            this.$library.toggleClass("hide")
+            this.$tasks.toggleClass("hide")
         }
         , render: function(){
 

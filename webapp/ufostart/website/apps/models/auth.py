@@ -28,6 +28,7 @@ class UserModel(Mapping):
     name = TextField()
     pwd = TextField()
     email = TextField()
+    picture = TextField()
     Profile = ListField(DictField(SocialNetworkProfileModel))
     Company = DictField(CompanyModel)
 

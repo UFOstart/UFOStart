@@ -34,20 +34,20 @@ def login_user(request, profile):
         return user.toJSON()
 
 
-def get_social_profile(request, networkSettings, original_route, error_route):
+def get_social_profile(request, networkSettings, original_route, redirect_kwargs, error_route, error_kwargs):
     network = networkSettings.type
     try:
-        profile = networkSettings.profileCallback(request, original_route)
+        profile = networkSettings.profileCallback(request, original_route, redirect_kwargs)
     except UserRejectedNotice, e:
         request.session.flash(GenericErrorMessage("You need to accept {} permissions to use {}.".format(network.title(), request.globals.project_name)), "generic_messages")
-        request.fwd(error_route)
+        request.fwd(error_route, **error_kwargs)
     except SocialNetworkException, e:
         request.session.flash(GenericErrorMessage("{} login failed.".format(network.title())), "generic_messages")
-        request.fwd(error_route)
+        request.fwd(error_route, **error_kwargs)
     else:
         if not profile:
             request.session.flash(GenericErrorMessage("{} login failed. It seems the request expired. Please try again".format(network.title())), "generic_messages")
-            request.fwd(error_route)
+            request.fwd(error_route, **error_kwargs)
         else:
             return profile
 
@@ -56,12 +56,12 @@ def get_social_profile(request, networkSettings, original_route, error_route):
 def social_login_start(context, request):
     network = request.matchdict['network']
     networkSettings = context.settings.networks.get(network)
-    return networkSettings.loginStart(request, 'website_social_login_callback')
+    return networkSettings.loginStart(request, 'website_social_login_callback', redirect_kwargs = {})
 
 def social_login_callback(context, request):
     network = request.matchdict['network']
     networkSettings = context.settings.networks.get(network)
-    profile = get_social_profile(request, networkSettings, original_route = 'website_social_login_callback', error_route = "website_index")
+    profile = get_social_profile(request, networkSettings, original_route = 'website_social_login_callback', redirect_kwargs = {}, error_route = "website_index", error_kwargs = {})
     user = login_user(request, profile)
     route, args, kwargs = request.root.getPostLoginUrlParams()
     request.fwd(route, *args, **kwargs)

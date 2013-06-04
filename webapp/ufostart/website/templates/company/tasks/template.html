@@ -13,23 +13,19 @@
         </div>
         %for row in templates:
             <div class="row template-list">
-            <form class="${view.form.classes}" method="post" id="${view.form.id}">
-                ${baseform.prelims(view.form)}
-
                 %for i, t in enumerate(row):
                     <div class="col col-lg-6">
                         <div class="single-template">
-                            <button type="submit" name="${view.form.id}.template" value="${t.name}" class="single-template-button ${t.getStyleKey()} no-btn">
+                            <a href="${url("website_company_setup_round", template=t.name, **vctxt.urlArgs)}" class="single-template-button ${t.getStyleKey()} no-btn">
                                 <img src="${STATIC_URL}img/templates/${t.getStyleKey()}.png"/>
                                 <span class="name">${t.name}</span>
-                            </button>
+                            </a>
                             <p class="description">
                                 <strong>${t.name}</strong> is lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
                             </p>
                         </div>
                     </div>
                 %endfor
-                </form>
             </div>
         %endfor
     </div>

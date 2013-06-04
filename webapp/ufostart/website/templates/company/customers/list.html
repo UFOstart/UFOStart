@@ -23,7 +23,7 @@
                                 <div class="concept">${company.startup.high_concept}</div>
                             </div>
                             <div class="col col-lg-3">
-                                <a class="btn btn-primary btn-block" href="${url("website_company_import_confirm", network=request.matchdict['network'], company_id = company.startup.id, token=request.matchdict['token'])}">Import</a>
+                                <a class="btn btn-primary btn-block" href="${url("website_company_import_confirm", network=request.matchdict['network'], company_id = company.startup.id, token=request.matchdict['token'], **vctxt.urlArgs)}">Import</a>
                             </div>
                         </div>
                         %endfor
@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                             <div class="col col-lg-3 col-offset-9">
-                                <a class="btn btn-block btn-default" href="${url("website_company_customers")}">&laquo; Back</a>
+                                <a class="btn btn-block btn-default" href="${url("website_company_customers", **vctxt.urlArgs)}">&laquo; Back</a>
                             </div>
 
                         </div>

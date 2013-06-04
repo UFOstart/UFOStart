@@ -2,6 +2,7 @@ from pyramid.decorator import reify
 from ufostart.lib.baseviews import RootContext
 from ufostart.website.apps.auth import LoginForm
 from ufostart.website.apps.models.auth import AnonUser
+from ufostart.website.apps.models.procs import GetCompanyProc
 
 USER_SESSION_KEY = 'WEBSITE_USER'
 
@@ -71,3 +72,11 @@ class WebsiteAuthedContext(WebsiteRootContext):
 
 
 
+class WebsiteCompanyContext(WebsiteRootContext):
+    @reify
+    def company(self):
+        return GetCompanyProc(self.request, {'slug': self.request.matchdict['slug']})
+
+    @reify
+    def urlArgs(self):
+        return {'slug': self.request.matchdict['slug']}

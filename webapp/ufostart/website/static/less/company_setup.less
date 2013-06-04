@@ -1,6 +1,3 @@
-.round-need-setup-page {
-  padding-bottom: 70px;
-}
 
 .single-template {
   margin-bottom:30px;
@@ -18,6 +15,7 @@
   padding: 0;
   transition: opacity .05s linear;
   border-radius: 4px;
+  text-align: center;
   &:hover {
     &:before {
       content: ".";color:transparent;
@@ -56,6 +54,14 @@
 }
 
 .single-need {
+  &.in-library {cursor: pointer;}
+  &.in-library.in-use {
+    cursor: default;
+    background-color: #CACACA;
+  }
+  &.in-library.marked-for-use {
+    background-color: #249199;
+  }
   + .single-need {
     border-top:1px solid @corp-color;
   }
@@ -75,6 +81,7 @@
 }
 
 .add-remove-btn {
+    display:none;
     position: absolute;
     cursor:pointer;
     width: 25px;
@@ -112,7 +119,9 @@
     color:white;
   }
 }
-
+.tasks-used {
+  .add-remove-btn {display:block;}
+}
 
 
 

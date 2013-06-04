@@ -1,6 +1,6 @@
 from hnc.apiclient.backend import ClientTokenProc, DBNotification
 from ufostart.website.apps.models.auth import UserModel
-from ufostart.website.apps.models.company import RoundModel, CompanyModel
+from ufostart.website.apps.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel
 
 
 class NewUserMsg(DBNotification): pass
@@ -46,7 +46,6 @@ SocialConnectProc = LoggingInProc('/web/user/connect', db_messages={'NEWUSER':Ne
 RefreshAccessTokenProc= ClientTokenProc('/web/user/refreshAccessToken')
 DisconnectFacebookProc = ClientTokenProc("/web/user/disconnectFb")
 
-
 #
 ################# COMPANY
 #
@@ -54,9 +53,16 @@ DisconnectFacebookProc = ClientTokenProc("/web/user/disconnectFb")
 CreateCompanyProc = LoggingInProc("/web/company/create")
 GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)
 
-SetCompanyTemplateProc = ClientTokenProc("/web/company/template")
-GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)
-
 CreateRoundProc = ClientTokenProc("/web/round/create", root_key="Round", result_cls=RoundModel)
 GetRoundProc = ClientTokenProc("/web/round", root_key="Round", result_cls=RoundModel)
 
+SetRoundTasksProc = ClientTokenProc("/web/round/needs")
+
+SetCompanyTemplateProc = ClientTokenProc("/web/company/template")
+GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)
+
+PledgeCompanyProc = ClientTokenProc("/web/pledge/create")
+
+GetAllCompanyTemplatesProc = ClientTokenProc("/web/template/list", result_cls=TemplateModel, root_key="Templates", result_list=True)
+GetTemplateDetailsProc = ClientTokenProc("/web/template", result_cls=TemplateModel, root_key="Template")
+GetAllNeedsProc = ClientTokenProc("/web/need/list", result_cls=NeedModel, root_key="Needs", result_list=True)

@@ -18,28 +18,25 @@ ROUTE_LIST = [
     , FunctionRoute('website_social_login_callback'        , '/social/cb/:network', contexts.WebsiteRootContext     , auth.social.social_login_callback, None)
 
 
-    , ClassRoute   ("website_company_basic"                , "/company/setup", contexts.WebsiteRootContext          , company.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
-    , ClassRoute   ("website_company_invite"               , "/company/invite", contexts.WebsiteRootContext         , company.invite_team.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
-    , FunctionRoute('website_company'                      , '/company', contexts.WebsiteAuthedContext              , company.general.index, "company/index.html")
-    , FunctionRoute('website_company_empty'                , '/company/empty', contexts.WebsiteAuthedContext        , company.general.index, "company/index_empty.html")
+    , ClassRoute   ("website_company_basic"                , "/company/setup", contexts.WebsiteRootContext          , company.general.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
+    , ClassRoute   ("website_company_invite"               , "/c/:slug/invite", contexts.WebsiteCompanyContext      , company.general.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
+    , FunctionRoute('website_company'                      , '/c/:slug', contexts.WebsiteCompanyContext             , company.general.index, None)
+    , FunctionRoute('website_company_round_create'         , '/c/:slug/create/round', contexts.WebsiteCompanyContext, company.general.create_round, None)
 
 
-    , FunctionRoute("website_company_customers"            , "/company/customers", contexts.WebsiteAuthedContext                            , company.customers.index, None)
-    , FunctionRoute("website_company_import"               , "/company/import/:network", contexts.WebsiteAuthedContext                      , company.customers.company_import, "company/customers/list.html")
-    , FunctionRoute("website_company_import_list"          , "/company/import/:network/:user_id/:token", contexts.WebsiteAuthedContext      , company.customers.company_import_list, "company/customers/list.html")
-    , FunctionRoute("website_company_import_confirm"       , "/company/confirm/:network/:company_id/:token", contexts.WebsiteAuthedContext  , company.customers.company_import_confirm, "company/customers/with_content_tmp.html")
+    , FunctionRoute("website_company_customers"            , "/c/:slug/customers", contexts.WebsiteCompanyContext                            , company.customers.index, None)
+    , FunctionRoute("website_company_import"               , "/c/:slug/import/:network", contexts.WebsiteCompanyContext                      , company.customers.company_import, "company/customers/list.html")
+    , FunctionRoute("website_company_import_list"          , "/c/:slug/import/:network/:user_id/:token", contexts.WebsiteCompanyContext      , company.customers.company_import_list, "company/customers/list.html")
+    , FunctionRoute("website_company_import_confirm"       , "/c/:slug/confirm/:network/:company_id/:token", contexts.WebsiteCompanyContext  , company.customers.company_import_confirm, "company/customers/with_content_tmp.html")
 
-    , FunctionRoute("website_company_pledge_decide"        , "/company/pledge", contexts.WebsiteAuthedContext                               , company.customers.pledge_decide, "company/customers/pledge_decide.html")
-    , FunctionRoute('website_login_to_pledge'              , '/company/pledge/:network', contexts.WebsiteRootContext                        , company.customers.login_to_pledge, None)
-    , FunctionRoute('website_login_to_pledge_callback'     , '/company/pledge/cb/:network', contexts.WebsiteRootContext                     , company.customers.login_to_pledge_callback, None)
-
-
-    , ClassRoute   ('website_company_setup_basic'          , '/company/tasks/template', contexts.WebsiteAuthedContext                       , company.tasks.TemplateHandler, "company/tasks/template.html", view_attrs = JSON_FORM_ATTRS)
-    , ClassRoute   ('website_company_setup_round'          , '/company/round/needs', contexts.WebsiteAuthedContext                          , company.tasks.NeedsHandler, "company/tasks/needs.html", view_attrs = JSON_FORM_ATTRS)
-    , FunctionRoute('website_company_round_view'           , '/company/round/:token', contexts.WebsiteAuthedContext                         , company.tasks.show_latest_round, "company/round.html")
+    , FunctionRoute("website_company_pledge_decide"        , "/c/:slug/pledge", contexts.WebsiteCompanyContext                               , company.customers.pledge_decide, "company/customers/pledge_decide.html")
+    , FunctionRoute('website_login_to_pledge'              , '/c/:slug/pledge/:network', contexts.WebsiteCompanyContext                      , company.customers.login_to_pledge, None)
+    , FunctionRoute('website_login_to_pledge_callback'     , '/c/:slug/pledge/cb/:network', contexts.WebsiteCompanyContext                   , company.customers.login_to_pledge_callback, None)
 
 
-    , FunctionRoute('website_need_library'                 , '/need/library/:token', contexts.WebsiteAuthedContext                          , company.tasks.need_library, "company/tasks/needs_library.html")
+    , FunctionRoute('website_company_setup_basic'          , '/c/:slug/tasks/template', contexts.WebsiteCompanyContext                       , company.tasks.needs_template_select, "company/tasks/template.html")
+    , FunctionRoute('website_company_round_view'           , '/c/:slug/tasks', contexts.WebsiteCompanyContext                                , company.tasks.show_round_tasks, "company/round.html")
+    , ClassRoute   ('website_company_setup_round'          , '/c/:slug/tasks/:template', contexts.WebsiteCompanyContext                      , company.tasks.TasksHandler, "company/tasks/needs.html", view_attrs = JSON_FORM_ATTRS)
 
 
 

@@ -1,7 +1,7 @@
 <%inherit file="../layout.html"/>
 
 <%def name="header_buttons()">
-    <a href="${url("website_company_invite")}" class="btn btn-primary">Invite Team Members</a>
+    <a href="${url("website_company_invite", **vctxt.urlArgs)}" class="btn btn-primary">Invite Team Members</a>
 </%def>
 
 <%def name="pageTitle()"><div class="page-header">Round</div></%def>
@@ -27,7 +27,7 @@
                     <div class="col col-lg-3">
                         <div class="round-dashboard-group">
                             <img src="${STATIC_URL}img/round/customers.png" />
-                            <a class="link" href="${url("website_company_customers")}">Customers</a>
+                            <a class="link" href="${url("website_company_customers", **vctxt.urlArgs)}">Customers</a>
                         </div>
                         <h5 class="text-muted">PLEDGES</h5>
                         <h2>0</h2>
@@ -56,7 +56,7 @@
 
                     <div class="disabled-overlay">
                         <div class="overlay-action larger">
-                            <a href="${url("website_company")}" class="btn btn-primary btn-humonguous btn-block"><span>Create a Round</span></a>
+                            <a href="${url("website_company_round_create", **vctxt.urlArgs)}" class="btn btn-primary btn-humonguous btn-block"><span>Create a Round</span></a>
                         </div>
                     </div>
 
