@@ -3,7 +3,7 @@ from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.httpexceptions import HTTPFound
 from ufostart.website.apps.auth.forms import LoginForm, SignupForm, PasswordForgotForm, PasswordResetForm, DecisionForm
-from ufostart.website.apps.models.auth import CheckEmailExistsProc, PasswordTokenVerifyProc
+from ufostart.website.apps.models.procs import CheckEmailExistsProc, PasswordTokenVerifyProc
 
 
 

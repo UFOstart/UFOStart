@@ -1,6 +1,4 @@
-from operator import attrgetter
 from pyramid.renderers import render_to_response
-import simplejson
 from hnc.forms.messages import GenericErrorMessage, GenericSuccessMessage
 from ufostart.website.apps.auth.social import get_social_profile
 from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException

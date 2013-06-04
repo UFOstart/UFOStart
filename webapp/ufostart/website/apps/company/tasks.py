@@ -3,7 +3,8 @@ from hnc.forms.formfields import BaseForm, StringField, TextareaField, REQUIRED
 from hnc.forms.handlers import FormHandler
 from ufostart.lib.tools import group_by_n
 from ufostart.models.tasks import TASK_CATEGORIES
-from ufostart.website.apps.models.company import GetAllCompanyTemplatesProc, GetTemplateDetailsProc, GetAllNeedsProc, GetRoundProc, SetCompanyTemplateProc, GetCompanyProc, CreateRoundProc
+from ufostart.website.apps.models.procs import CreateCompanyProc, GetRoundProc, SetCompanyTemplateProc, GetCompanyProc, CreateRoundProc
+from ufostart.website.apps.models.company import GetAllCompanyTemplatesProc, GetTemplateDetailsProc, GetAllNeedsProc
 
 
 class SetupCompanyForm(BaseForm):
@@ -11,10 +12,19 @@ class SetupCompanyForm(BaseForm):
     label = ""
     fields=[
         StringField("name", "Name", REQUIRED)
-        , TextareaField("description", "Description", REQUIRED, input_classes="x-high")
+        , TextareaField("description", "Description", input_classes="x-high")
     ]
     @classmethod
     def on_success(cls, request, values):
+        data = {
+                "token": request.root.user.token,
+                "Company": values
+            }
+        try:
+            company = CreateCompanyProc(request,  data)
+        except DBNotification, e:
+            raise e
+
         return {'success':True, 'redirect': request.fwd_url("website_company_invite")}
 
 class SetupCompanyHandler(FormHandler):

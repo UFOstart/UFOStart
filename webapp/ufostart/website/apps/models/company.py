@@ -95,12 +95,3 @@ class CompanyModel(Mapping):
     Round = DictField(RoundModel)
     Rounds = ListField(DictField(RoundModel))
 
-
-
-GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)
-
-SetCompanyTemplateProc = ClientTokenProc("/web/company/template")
-GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)
-
-CreateRoundProc = ClientTokenProc("/web/round/create", root_key="Round", result_cls=RoundModel)
-GetRoundProc = ClientTokenProc("/web/round", root_key="Round", result_cls=RoundModel)

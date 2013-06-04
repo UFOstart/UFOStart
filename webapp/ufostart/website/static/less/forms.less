@@ -1,4 +1,13 @@
-.control-group {margin-bottom:@line-height-base * @font-size-base;}
+
+.control-group {
+  margin-bottom:@line-height-base * @font-size-base;
+  &.required {
+    > .control-label {font-weight: @font-weight-bold;}
+  }
+}
+
+
+
 .form-horizontal .row + .row.form-actions {margin-top:30px;}
 .forgot-password-link {margin-bottom:0;}
 

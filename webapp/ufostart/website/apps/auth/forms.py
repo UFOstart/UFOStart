@@ -3,7 +3,7 @@ import formencode
 from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm, EmailField, PasswordField, REQUIRED, StringField, HtmlAttrs, CheckboxPostField
 from hnc.forms.messages import GenericSuccessMessage
-from ufostart.website.apps.models.auth import WebLoginEmailProc, WebSignupEmailProc, ResendRequestProc, PasswordRequestProc, UpdatePasswordProc
+from ufostart.website.apps.models.procs import WebLoginEmailProc, WebSignupEmailProc, ResendRequestProc, PasswordRequestProc, UpdatePasswordProc
 
 log = logging.getLogger(__name__)
 

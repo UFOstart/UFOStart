@@ -18,7 +18,7 @@ ROUTE_LIST = [
     , FunctionRoute('website_social_login_callback'        , '/social/cb/:network', contexts.WebsiteRootContext     , auth.social.social_login_callback, None)
 
 
-    , ClassRoute   ("website_company_basic"                , "/company/basics", contexts.WebsiteRootContext         , company.SetupCompanyHandler, "company/tasks.html", view_attrs = JSON_FORM_ATTRS)
+    , ClassRoute   ("website_company_basic"                , "/company/setup", contexts.WebsiteRootContext          , company.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute   ("website_company_invite"               , "/company/invite", contexts.WebsiteRootContext         , company.invite_team.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
     , FunctionRoute('website_company'                      , '/company', contexts.WebsiteAuthedContext              , company.general.index, "company/index.html")
     , FunctionRoute('website_company_empty'                , '/company/empty', contexts.WebsiteAuthedContext        , company.general.index, "company/index_empty.html")

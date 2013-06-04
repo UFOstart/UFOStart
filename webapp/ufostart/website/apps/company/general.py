@@ -1,4 +1,4 @@
-from ufostart.website.apps.models.company import GetCompanyProc
+from ufostart.website.apps.models.procs import GetCompanyProc
 
 
 def index(context, request):

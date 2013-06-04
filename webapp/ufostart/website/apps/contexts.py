@@ -2,7 +2,6 @@ from pyramid.decorator import reify
 from ufostart.lib.baseviews import RootContext
 from ufostart.website.apps.auth import LoginForm
 from ufostart.website.apps.models.auth import AnonUser
-from ufostart.website.apps.models.company import GetCompanyProc
 
 USER_SESSION_KEY = 'WEBSITE_USER'
 

@@ -5,11 +5,6 @@ import simplejson
 from ufostart.website.apps.models.company import CompanyModel
 
 
-class NewUserMsg(DBNotification): pass
-class EmailTakenMsg(DBNotification): pass
-class FbIdTakenMsg(DBNotification): pass
-class UnknownUserMsg(DBNotification): pass
-
 
 SOCIAL_NETWORK_TYPES = {'LI':'linkedin', 'FB':'facebook', 'AL':'angellist'}
 SOCIAL_NETWORK_TYPES_REVERSE = {v:k for k,v in SOCIAL_NETWORK_TYPES.items()}
@@ -55,34 +50,3 @@ class UserModel(Mapping):
 def AnonUser():
     return UserModel()
 
-
-def LoggingInProc(path, db_messages = {}):
-    sproc = ClientTokenProc(path, root_key='User', result_cls=UserModel)
-    def f(request, data):
-        try:
-            result = sproc(request, data)
-        except DBNotification, e:
-            error = db_messages.get(e.message)
-            if error:
-                user = UserModel.wrap(e.result.get("User"))
-                request.root.setUser(user)
-                return user
-            else:
-                raise e
-        request.root.setUser(result)
-        return result
-    return f
-
-
-WebSignupEmailProc = LoggingInProc("/web/user/emailsignup")
-WebLoginEmailProc = LoggingInProc("/web/user/login")
-PasswordRequestProc = ClientTokenProc("/web/user/forgotpwd")
-ResendRequestProc = ClientTokenProc("/web/user/resendForgotPwd")
-UpdatePasswordProc = ClientTokenProc("/web/user/updatePwd")
-PasswordTokenVerifyProc = ClientTokenProc("/web/user/token", root_key = "User", result_cls = UserModel)
-CheckEmailExistsProc = ClientTokenProc('/web/user/emailavailable')
-
-
-SocialConnectProc = LoggingInProc('/web/user/connect', db_messages={'NEWUSER':NewUserMsg, 'FB_USER_WITH_CHANGED_EMAIL': NewUserMsg})
-RefreshAccessTokenProc= ClientTokenProc('/web/user/refreshAccessToken')
-DisconnectFacebookProc = ClientTokenProc("/web/user/disconnectFb")

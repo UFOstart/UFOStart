@@ -1,6 +1,4 @@
 import logging, simplejson
-from hnc.apiclient.backend import DBNotification
-from ufostart.website.apps.models.auth import SocialConnectProc
 
 log = logging.getLogger(__name__)
 
