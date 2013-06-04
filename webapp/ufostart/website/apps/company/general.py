@@ -58,27 +58,3 @@ class InviteeForm(MultipleFormField):
         StringField("name", "Name", REQUIRED)
         , EmailField("email", "email address", REQUIRED)
     ]
-
-
-class InviteCompanyForm(BaseForm):
-    id="InviteCompany"
-    label = ""
-    fields=[
-        InviteeForm('Invitees')
-    ]
-    @classmethod
-    def on_success(cls, request, values):
-        data = []
-        user = request.root.user
-        company = request.root.company
-        for inv in values.get('Invitees'):
-            inv['invitorToken'] = user.token
-            inv['invitorName'] = user.name
-            inv['companySlug'] = company.slug
-            data.append(inv)
-        InviteToCompanyProc(request, data)
-        request.session.flash(GenericSuccessMessage("You successfully invited{} users to your company!".format(len(data))), "generic_messages")
-        return {'success':True, 'redirect': request.fwd_url("website_company", slug = request.matchdict['slug'], _query = [('s', '1')])}
-
-class InviteCompanyHandler(FormHandler):
-    form = InviteCompanyForm

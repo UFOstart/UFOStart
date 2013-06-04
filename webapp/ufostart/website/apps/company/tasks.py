@@ -26,7 +26,7 @@ class TasksForm(BaseForm):
         except DBNotification, e:
             raise e
         else:
-            return {'success': True, 'redirect': request.fwd_url("website_company_round_view", slug = request.matchdict['slug'])}
+            return {'success': True, 'redirect': request.fwd_url("website_company_round_view", slug = request.matchdict['slug'], _query = [('s', '1')])}
 
 class TasksHandler(FormHandler):
     form = TasksForm

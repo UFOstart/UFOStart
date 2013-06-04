@@ -45,7 +45,14 @@ class UserModel(Mapping):
         return simplejson.dumps(result) if stringify else result
 
     def getPicture(self):
-        return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+        if self.picture:
+            return self.picture
+        else:
+            pics = [p.picture for p in self.Profile if p.picture]
+            if len(pics):
+                return pics[0]
+            else:
+                return "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
 
 
     @reify

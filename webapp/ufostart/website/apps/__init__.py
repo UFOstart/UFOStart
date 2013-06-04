@@ -19,7 +19,7 @@ ROUTE_LIST = [
 
 
     , ClassRoute   ("website_company_basic"                , "/company/setup", contexts.WebsiteRootContext                                   , company.general.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
-    , ClassRoute   ("website_company_invite"               , "/c/:slug/invite", contexts.WebsiteCompanyContext                               , company.general.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
+    , ClassRoute   ("website_company_invite"               , "/c/:slug/invite", contexts.WebsiteCompanyContext                               , company.invite.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
     , FunctionRoute('website_company'                      , '/c/:slug', contexts.WebsiteCompanyContext                                      , company.general.index, None)
     , FunctionRoute('website_company_round_create'         , '/c/:slug/create/round', contexts.WebsiteCompanyContext                         , company.general.create_round, None)
 
@@ -44,7 +44,7 @@ ROUTE_LIST = [
 
     , FunctionRoute('website_logout'                       , '/user/logout', contexts.WebsiteRootContext, auth.logout, None)
 
-
+    , FunctionRoute("website_invite_confirm"               , '/invite/:token', contexts.WebsiteRootContext                                   , company.invite.confirm, "company/invite_confirm.html")
 
     , FunctionRoute('website_fbtokenrefresh'               , '/user/fb/token/refresh', contexts.WebsiteRootContext, auth.social.fb_token_refresh, "json", route_attrs = {"xhr":True})
 

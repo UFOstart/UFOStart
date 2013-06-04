@@ -29,8 +29,8 @@ class TaskCreateForm(BaseForm):
         try:
             CreateNeedProc(request, values)
         except DBNotification, e:
-            if e.message == 'ALREADY_EXISTS':
-                return {'success':False, 'errors': {'name': "Already used, please choose another name!"}}
+            if e.message == 'Need_Already_Exists':
+                return {'success':False, 'errors': {'name': "This need already exists, if you intend to create this need, please change its name to something less ambiguous!"}}
             else:
                 raise e
 
