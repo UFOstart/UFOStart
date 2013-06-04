@@ -1,5 +1,6 @@
 <%inherit file="../../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="index.html" name="index"/>
 
 <%def name="pageTitle()"><div class="page-header"></div></%def>
 
@@ -50,10 +51,7 @@
         <div class="row mar-top-1">
             <div class="col-lg-12">
                 <div class="box-shaded customer-pledge-section">
-                    <h5 class="box-title">0 Pledges</h5>
-                    <div class="empty">
-                        No Pledges Yet
-                    </div>
+                    ${index.pledgeBox(vctxt.company.Round.Pledges)}
                 </div>
             </div>
         </div>
