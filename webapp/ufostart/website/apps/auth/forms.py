@@ -15,8 +15,10 @@ class DecisionForm(BaseForm):
     ]
     @classmethod
     def on_success(cls, request, values):
-        log.info(values)
-        return {'success':True, 'redirect': request.fwd_url("website_company_basic")}
+        if values['role'] == 'expert':
+            return {'success':True, 'redirect': request.fwd_url("website_expert_dashboard")}
+        else:
+            return {'success':True, 'redirect': request.fwd_url("website_company_basic")}
 
 
 

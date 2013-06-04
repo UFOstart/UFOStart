@@ -1,0 +1,20 @@
+<%inherit file="../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="pageTitle()"><div class="page-header"></div></%def>
+
+<%def name="content()">
+    <div class="container container-constricted">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="site-slogan">Expert Dashboard</h1>
+                <div class="mar-top-3 col-lg-4">
+                    <a href="#" class="btn btn-default btn-block">Find Companies</a>
+                </div>
+                <div class="mar-top-3 col-lg-4">
+                    <a href="${url("website_expert_taskcreate")}" class="btn btn-primary btn-block glyphicon-plus">Add a Need</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>

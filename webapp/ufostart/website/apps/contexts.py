@@ -47,7 +47,7 @@ class WebsiteRootContext(RootContext):
         user = self.user
         if user.isAnon():
             return "website_index", [], {}
-        elif user.Company.slug:
+        elif user.Company and user.Company.slug:
             return "website_company", [], {'slug':user.Company.slug}
         else:
             return "website_signup_decision", [], {}

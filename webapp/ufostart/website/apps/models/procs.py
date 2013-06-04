@@ -68,4 +68,5 @@ GetTemplateDetailsProc = ClientTokenProc("/web/template", result_cls=TemplateMod
 GetAllNeedsProc = ClientTokenProc("/web/need/list", result_cls=NeedModel, root_key="Needs", result_list=True)
 
 
-SetCompanyAngellListPitchProc = ClientTokenProc("/web/company/angellist")
+SetCompanyAngelListPitchProc = ClientTokenProc("/web/company/angellist")
+CreateNeedProc = ClientTokenProc("/web/need/create")

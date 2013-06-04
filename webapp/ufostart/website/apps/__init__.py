@@ -1,7 +1,7 @@
 from operator import methodcaller
 from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSON_FORM_ATTRS
 
-from . import contexts, index, auth, company
+from . import contexts, index, auth, company, expert
 import simplejson
 from ufostart.website.apps.social.angellist import AngelListSettings
 from ufostart.website.apps.social.facebook import FacebookSettings
@@ -39,6 +39,8 @@ ROUTE_LIST = [
     , FunctionRoute('website_company_round_view'           , '/c/:slug/tasks', contexts.WebsiteCompanyContext                                , company.tasks.index, "company/tasks/index.html")
 
 
+    , FunctionRoute("website_expert_dashboard"             , '/expert/dashboard', contexts.WebsiteAuthedContext                              , expert.index.index, "expert/index.html")
+    , ClassRoute   ("website_expert_taskcreate"            , '/task/create', contexts.WebsiteAuthedContext                                   , expert.index.TaskCreateHandler, "expert/task_create.html", view_attrs = JSON_FORM_ATTRS)
 
     , FunctionRoute('website_logout'                       , '/user/logout', contexts.WebsiteRootContext, auth.logout, None)
 

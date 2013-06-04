@@ -2,7 +2,7 @@ from hnc.apiclient.backend import DBNotification
 from pyramid.renderers import render_to_response
 from hnc.forms.messages import GenericErrorMessage, GenericSuccessMessage
 from ufostart.website.apps.auth.social import get_social_profile
-from ufostart.website.apps.models.procs import PledgeCompanyProc, SetCompanyAngellListPitchProc
+from ufostart.website.apps.models.procs import PledgeCompanyProc, SetCompanyAngelListPitchProc
 from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException
 
 
@@ -36,7 +36,7 @@ def company_import_confirm(context, request):
     company_id = request.matchdict['company_id']
     token = request.matchdict['token']
 
-    SetCompanyAngellListPitchProc(request, {'slug':request.matchdict['slug'], 'angelListId': company_id, 'angelListToken':token })
+    SetCompanyAngelListPitchProc(request, {'slug':request.matchdict['slug'], 'angelListId': company_id, 'angelListToken':token })
     request.fwd("website_company_customers", **context.urlArgs)
 
 

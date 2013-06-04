@@ -38,7 +38,10 @@ class SetupCompanyForm(BaseForm):
             user = CreateCompanyProc(request,  data)
             company = user.Company
         except DBNotification, e:
-            raise e
+            if e.message == 'Company_Already_Exists':
+                return {'success':False, 'errors': {'name': "Already used, please choose another name!"}}
+            else:
+                raise e
 
         return {'success':True, 'redirect': request.fwd_url("website_company_invite", slug = company.slug)}
 

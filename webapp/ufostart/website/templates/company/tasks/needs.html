@@ -38,7 +38,7 @@
         <div class="col col-lg-3">
             <h5 class="box-title dark">${category.name}</h5>
             <div class="category-task-list box-shaded" data-entity-id="${category.name}">
-            %for need in view.categorizedAllTasks[category.name]:
+            %for need in view.categorizedAllTasks.get(category.name, []):
                 ${self.renderNeed(form.id, need, inLibrary = True)}
             %endfor
             </div>
@@ -57,7 +57,7 @@
             <div class="col col-lg-3">
                 <h5 class="box-title">${category.name}</h5>
                 <div class="category-task-list box-shaded" data-entity-id="${category.name}">
-                %for need in view.categorizedTasks[category.name]:
+                %for need in view.categorizedTasks.get(category.name, []):
                     ${self.renderNeed(form.id, need, False)}
                 %endfor
                 </div>
