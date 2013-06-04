@@ -3,9 +3,10 @@
 %>
 
 <div data-closure="form" ${'data-required="true"' if widget.attrs.required else ''|n} class="repeatable-form">
+    <div class="col col-lg-6">
     %for j, (values, errors) in enumerate(izip_longest(value or [{}], getattr(error, "error_list", [{}]), fillvalue = {})):
         <div class="${widget.getClasses()} row" data-sequence="${j}">
-            <div class="col col-lg-6">
+
                 %if widget.label:
                     <span class="embedded-from-label">
                         ${widget.getLabel(request)|n} <span class="numbering">${j+1}</span>
@@ -14,12 +15,12 @@
                 %for field in widget.fields:
                     ${field.render('{}-{}'.format(prefix, j), request, values, errors)|n}
                 %endfor
-            </div>
         </div>
     %endfor
+    </div>
     <div class="row">
-        <div class="col col-lg-4 col-offset-2 add-more">
-            <a class="btn btn-primary glyphicon-plus btn-block add-more-link">${widget.add_more_link_label|n}</a>
+        <div class="col col-lg-6 add-more">
+            <a class="btn btn-default col col-sm-4 glyphicon-plus add-more-link">${widget.add_more_link_label|n}</a>
         </div>
     </div>
 </div>

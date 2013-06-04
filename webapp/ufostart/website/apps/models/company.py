@@ -129,7 +129,7 @@ class RoundModel(Mapping):
                 if need.Expert:
                     evt.name = need.Expert.getIntroName()
                     evt.picture = need.Expert.getIntroPicture()
-                    evt.text = 'can introduce you'
+                    evt.text = 'can introduce you to {}'.format(need.Expert.getExpertName())
             if not evt.name:
                 for need in self.Needs:
                     if need.Service:
