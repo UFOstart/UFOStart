@@ -3,7 +3,7 @@
 
 
 <%def name="header_buttons()">
-    <a href="#" class="btn btn-primary switchLibrary">Add a Need</a>
+    <a href="#" class="btn btn-primary switchLibrary">Task Library</a>
 </%def>
 
 <%def name="pageTitle()">
@@ -18,20 +18,21 @@
 
 <%def name="content()">
     <div id="round-need-setup-page">
-        <div class="container">
-            <div class="row">
-                <div class="col col-lg-12">
-                    <h1>${view.template.name} <span class="template-icon ${view.template.getStyleKey()}"></span></h1>
-                </div>
-            </div>
-        </div>
         <div class="container tasks-used">
             <div class="row">
+                <div class="col col-lg 12">
+                    <h1>${view.template.name} <span class="template-icon ${view.template.getStyleKey()}"></span></h1>
+                    <h2>Here is your task list. Add further tasks from the task library.</h2>
+                </div>
                 ${self.buildForm(view.form, values.get(view.form.id), errors.get(view.form.id), btnClass='btn btn-primary col col-lg-12')}
             </div>
         </div>
         <div class="container task-library hide">
             <div class="row">
+                <div class="col col-lg 12">
+                    <h1>Task Library</h1>
+                    <h2>Select and add tasks from the list below.</h2>
+                </div>
                 ${self.buildLibrary(view.form)}
             </div>
         </div>

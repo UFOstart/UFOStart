@@ -48,7 +48,7 @@ class CompanyModel(Mapping):
         return ", ".join(map(attrgetter("display_name"), self.markets))
 
     def getYoutubeVideoId(self):
-        if 'youtube' in self.video_url:
+        if self.video_url and 'youtube' in self.video_url:
             scheme, netloc, url, params, query, fragment = urlparse(self.video_url)
             params = dict(parse_qsl(query))
             return params.get('v')

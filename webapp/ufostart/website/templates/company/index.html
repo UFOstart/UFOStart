@@ -37,7 +37,17 @@
                         <div class="history-rounds-single">
                             <div class="round-close-time">Closed on February 10, 2013</div>
                             <div class="share-line">
-                                <span class="name">Get Started</span>
+                                <span class="name">
+                                %if round % 3 == 0:
+                                    Get Started
+                                %elif round % 3 == 1:
+                                    HiTech
+                                %elif round % 3 == 2:
+                                    Internationalising
+                                %endif
+
+
+                                </span>
                                 <a href="#" class="share-item">Read more</a>
                                 <a href="#" class="share-item">Like</a>
                                 <a href="#" class="share-item">Share</a>
@@ -165,7 +175,7 @@
             <a href="#">${event.name}</a>
         </div>
         <div class="action-line">
-            ${event.text}
+            ${event.text|n}
         </div>
         <div class="share-line">
             <span class="share-item">${event.recency}</span>

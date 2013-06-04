@@ -121,15 +121,27 @@ class RoundModel(Mapping):
         else: return None
 
     def getTaskProgress(self):
-        return 0
+        return 30 if len(self.Needs) else 0
     def getTaskEvent(self):
-        return EventModel(name = "Martin Musterman", picture='/web/static/img/dummy/avatar1.png', text = "fulfilled the animation needs", recency = "2 hour ago")
+        if len(self.Needs):
+            evt = EventModel(name = None, picture=None, text = "just pledged to this project", recency = "1 hour ago")
+            for need in self.Needs:
+                if need.Expert:
+                    evt.name = need.Expert.getIntroName()
+                    evt.picture = need.Expert.getIntroPicture()
+                    evt.text = 'can introduce you'
+            if not evt.name:
+                for need in self.Needs:
+                    if need.Service:
+                        evt.name = need.Service.getWorkerName()
+                        evt.picture = need.Service.getWorkerPicture()
+                        evt.text = 'can use <a href="{}" target="_blank">{}</a> for you'.format(need.Service.url, need.Service.name)
+            if evt.name: return evt
+
     def getAssetsEvent(self):
         return None
-        # return [EventModel(name = "Martina Musterman", picture='/web/static/img/dummy/avatar2.png', text = "brought a table and a plant", recency = "3 hour ago")]
     def getMoneyEvent(self):
         return None
-        # return [EventModel(name = "Bruce Momjianbiandan", picture='/web/static/img/dummy/avatar2.png', text = "chipped in 2.000,00 $", recency = "4 hour ago")]
 
 
 class CompanyModel(Mapping):
