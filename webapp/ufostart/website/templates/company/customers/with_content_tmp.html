@@ -94,8 +94,13 @@
 
 
 <%def name="company_media(company)" filter="trim">
-    %if company.video_url:
+    <%
+        youtube_url = company.getYoutubeVideoId()
+    %>
+    %if youtube_url:
         <div class="you-tube-container" data-video-id="${company.getVideoId()}"></div>
+    %elif company.video_url:
+        <a href="${company.video_url}">${company.video_url}</a>
     %elif company.screenshots:
         <div class="product-screenshots">
             <img src="${company.getFirstScreenShot()}"/>

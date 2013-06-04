@@ -47,13 +47,12 @@ class CompanyModel(Mapping):
     def getDisplayTags(self):
         return ", ".join(map(attrgetter("display_name"), self.markets))
 
-    def getMedium(self):
-        return self.video
-
-    def getVideoId(self):
-        scheme, netloc, url, params, query, fragment = urlparse(self.video_url)
-        params = dict(parse_qsl(query))
-        return params.get('v')
+    def getYoutubeVideoId(self):
+        if 'youtube' in self.video_url:
+            scheme, netloc, url, params, query, fragment = urlparse(self.video_url)
+            params = dict(parse_qsl(query))
+            return params.get('v')
+        else: return ''
 
     def getFirstScreenShot(self):
         return self.screenshots[0].original
