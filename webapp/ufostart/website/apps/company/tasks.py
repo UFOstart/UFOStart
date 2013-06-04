@@ -18,6 +18,7 @@ class TasksForm(BaseForm):
     @classmethod
     def on_success(cls, request, values):
         company = request.root.company
+        if not company or not company.Round: request.fwd("website_index")
         needs = [values['needKey']] if isinstance(values['needKey'], basestring) else values['needKey']
         values = {"token": company.Round.token, "Needs": [{ "name": k } for k in needs]}
         try:

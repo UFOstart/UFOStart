@@ -22,6 +22,9 @@ define(["tools/ajax"], function(ajax){
 
             this.$library = this.$(".task-library");
             this.$tasks = this.$(".tasks-used");
+
+            this.checkBtnSubmit();
+
         }
         , addRemove : function(e){
             var $el = $(e.currentTarget)
@@ -41,7 +44,11 @@ define(["tools/ajax"], function(ajax){
                         .filter("[data-entity-id="+taskId+"]")
                         .removeClass("in-use");
                 $need.remove();
+                this.checkBtnSubmit();
             }
+        }
+        , checkBtnSubmit: function(){
+            this.$tasks.find(".btn.btn-primary").prop("disabled", this.$tasks.find(".single-need").length == 0);
         }
         , doAddNeeds: function(e){
             var view = this;
@@ -56,6 +63,7 @@ define(["tools/ajax"], function(ajax){
                 });
             });
             this.switchPanes();
+            this.checkBtnSubmit();
             e.preventDefault();
             e.stopPropagation();
             return false;
