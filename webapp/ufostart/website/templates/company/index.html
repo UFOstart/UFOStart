@@ -51,8 +51,8 @@
                 <div class="box-shaded">
                     <h5 class="box-title">Team Members</h5>
                     <div class="picture-pile members">
-                    %for i in range(9):
-                        ${self.renderMember(None)}
+                    %for member in company.Users:
+                        ${self.renderMember(member)}
                     %endfor
                     </div>
                 </div>
@@ -79,10 +79,12 @@
 <%def name="renderMember(member)">
     <div class="member">
         <div class="picture">
-            <img src="${STATIC_URL}img/dummy/avatar_med.png" class="picture"/>
+            <img src="${member.getPicture()}" class="img-thumbnail medium"/>
+            %if member.unconfirmed:
+                <span title="unconfirmed" class="unconfirmed">?</span>
+            %endif
         </div>
-        <a href="#" class="link">Helga Rapunzel</a>
-        <div class="subscript">No expert</div>
+        <a href="#" class="link">${member.name}</a>
     </div>
 </%def>
 

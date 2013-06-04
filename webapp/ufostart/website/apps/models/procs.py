@@ -1,6 +1,6 @@
 from hnc.apiclient.backend import ClientTokenProc, DBNotification
 from ufostart.website.apps.models.auth import UserModel
-from ufostart.website.apps.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel
+from ufostart.website.apps.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel, InviteModel
 
 
 class NewUserMsg(DBNotification): pass
@@ -73,3 +73,5 @@ CreateNeedProc = ClientTokenProc("/web/need/create")
 
 
 InviteToCompanyProc = ClientTokenProc("/web/company/invite")
+GetInviteDetailsProc = ClientTokenProc("/web/company/getInvite", result_cls=InviteModel, root_key="Invite")
+AcceptInviteProc = ClientTokenProc("/web/company/acceptInvite")

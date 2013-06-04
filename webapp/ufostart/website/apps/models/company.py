@@ -78,7 +78,10 @@ class CompanyUserModel(Mapping):
     token = TextField()
     name = TextField()
     picture = TextField()
+    unconfirmed = BooleanField()
 
+    def getPicture(self):
+        return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
 
 class EventModel(Mapping):
     name = TextField()
@@ -132,6 +135,8 @@ class RoundModel(Mapping):
 class CompanyModel(Mapping):
     token = TextField()
     slug = TextField()
+    name = TextField()
+    description = TextField()
     angelListId = TextField()
     angelListToken = TextField()
 
@@ -139,6 +144,18 @@ class CompanyModel(Mapping):
     Template = DictField(TemplateModel)
     Round = DictField(RoundModel)
     Rounds = ListField(DictField(RoundModel))
+    Users = ListField(DictField(CompanyUserModel))
 
     def getCurrentRound(self):
         return self.Round
+
+
+
+
+
+class InviteModel(Mapping):
+    invitorName = TextField()
+    companySlug = TextField()
+    companyName = TextField()
+    name = TextField()
+    inviteToken = TextField()
