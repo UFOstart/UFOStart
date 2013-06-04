@@ -31,7 +31,6 @@
     <%block name="contentwrapper">
         ${self.header_messages()}
         <div class="page-wrapper">
-
             ${next.content()}
         </div>
     </%block>
@@ -91,7 +90,7 @@
                 <div class="col col-sm 12">
                     <ul class="page-header-bar-menu">
                         <li><span>Welcome ${user.name}</span></li>
-                        %if user.Company:
+                        %if user.Company and user.Company.slug:
                             <li><a href="${url("website_company", slug = user.Company.slug)}">Dashboard</a></li>
                         %endif
                         <li><a href="${url("website_logout")}">Logout</a></li>

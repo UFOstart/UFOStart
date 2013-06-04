@@ -60,6 +60,7 @@ class CompanyModel(Mapping):
 class CompanyRoleModel(Mapping):
     confirmed = BooleanField()
     role = TextField()
+    hidden = BooleanField()
     startup = DictField(CompanyModel)
     tagged = DictField(CompanyRolePerson)
 
@@ -166,7 +167,12 @@ class AngelListSettings(SocialSettings):
 
     def unwrapCompanies(self, data):
         result = simplejson.loads(data)
-        return map(CompanyRoleModel.wrap, result['startup_roles'])
+        def wrap(json):
+            if json['startup'].get("hidden"):
+                return None
+            else:
+                return CompanyRoleModel.wrap
+        return filter(None, map(wrap, result['startup_roles']))
 
     def getCompaniesData(self, user_id, token):
         h = Http(**self.http_options)

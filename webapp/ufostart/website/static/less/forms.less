@@ -23,10 +23,12 @@ textarea.x-high {height: 8 * @line-height-computed;}
   display: inline-block;
 }
 
-.remove-link.close {float:left;}
-
-.form-embedded-wrapper.row + .form-embedded-wrapper.row {
-  margin-top:0;
-  padding-top:@line-height-computed;
-  border-top: 1px solid #ccc;
+.remove-link.close {position: absolute;top:0;right:-20px;}
+.form-embedded-wrapper {
+  position: relative;
+  + .form-embedded-wrapper{
+    margin-top:0;
+    padding-top:@line-height-computed;
+    border-top: 1px solid #ccc;
+  }
 }
