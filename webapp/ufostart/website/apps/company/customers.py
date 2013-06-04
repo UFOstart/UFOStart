@@ -9,20 +9,20 @@ from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkExcept
 def company_import(context, request):
     network = 'angellist'
     networkSettings = context.settings.networks.get(network)
+    slug = context.user.Company.slug
     try:
         profile = networkSettings.getProfile(request)
     except UserRejectedNotice, e:
         request.session.flash(GenericErrorMessage("You need to accept {} permissions to import your company profile.".format(network.title(), request.globals.project_name)), "generic_messages")
-        request.fwd("website_company_customers", slug = request.matchdict['slug'])
+        request.fwd("website_company_customers", slug = slug)
     except SocialNetworkException, e:
         request.session.flash(GenericErrorMessage("{} authorization failed.".format(network.title())), "generic_messages")
-        request.fwd("website_company_customers", slug = request.matchdict['slug'])
+        request.fwd("website_company_customers", slug = slug)
     else:
         if not profile:
             request.session.flash(GenericErrorMessage("{} authorization failed. It seems the request expired. Please try again".format(network.title())), "generic_messages")
-            request.fwd("website_company_customers", slug = request.matchdict['slug'])
+            request.fwd("website_company_customers", slug = slug)
         else:
-            slug = context.user.Company.slug
             request.fwd("website_company_import_list", network = network, user_id = profile['id'], token = profile['accessToken'], slug = slug)
 
 def company_import_list(context, request):
