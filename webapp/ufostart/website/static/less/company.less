@@ -111,12 +111,11 @@
 }
 
 
-.member-pile {
+.picture-pile {
   .clearfix;
   padding: 5px 15px;
   > .member {
     float:left;
-    width:33%;
     margin-top:ceil(@line-height-computed / 2);
     margin-bottom:ceil(@line-height-computed / 2);
     > .link {font-weight: @font-weight-bold;margin-bottom:ceil(@line-height-computed / 4);}
@@ -128,4 +127,9 @@
     border-color:white;
     border-bottom:none;
   }
+  &.members > .member {width:33%;}
+  &.pledges {
+    > .member {width:16%;}
+  }
 }
+

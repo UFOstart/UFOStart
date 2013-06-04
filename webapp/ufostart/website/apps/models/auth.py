@@ -44,6 +44,10 @@ class UserModel(Mapping):
         result = {n.getTypeName():n.unwrap(sparse = True) for n in self.Profile if n.id}
         return simplejson.dumps(result) if stringify else result
 
+    def getPicture(self):
+        return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+
+
     @reify
     def profileMap(self):
         return {n.getTypeName():n for n in self.Profile}

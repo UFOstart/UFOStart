@@ -66,3 +66,6 @@ PledgeCompanyProc = ClientTokenProc("/web/pledge/create")
 GetAllCompanyTemplatesProc = ClientTokenProc("/web/template/list", result_cls=TemplateModel, root_key="Templates", result_list=True)
 GetTemplateDetailsProc = ClientTokenProc("/web/template", result_cls=TemplateModel, root_key="Template")
 GetAllNeedsProc = ClientTokenProc("/web/need/list", result_cls=NeedModel, root_key="Needs", result_list=True)
+
+
+SetCompanyAngellListPitchProc = ClientTokenProc("/web/company/angellist")

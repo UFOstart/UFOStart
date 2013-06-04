@@ -50,7 +50,7 @@
             <div class="col col-lg-6">
                 <div class="box-shaded">
                     <h5 class="box-title">Team Members</h5>
-                    <div class="member-pile">
+                    <div class="picture-pile members">
                     %for i in range(9):
                         ${self.renderMember(None)}
                     %endfor
@@ -103,8 +103,8 @@
     </div>
 
     <h6 class="mar-top-2 text-muted">Recent events</h6>
-    %if round.getTaskEvents():
-        <% event = round.getTaskEvents()[0] %>
+    %if round.getTaskEvent():
+        <% event = round.getTaskEvent() %>
         ${self.buildRoundEvent(event, taskUrl)}
     %endif
 </%def>
@@ -118,8 +118,8 @@
     <h5 class="text-muted">PLEDGES</h5>
     <h2>${len(round.Pledges)}</h2>
     <h6 class="mar-top-2 text-muted">Recent pledges</h6>
-    %if round.getPledgeEvents():
-        <% event = round.getPledgeEvents()[0] %>
+    %if round.getPledgeEvent():
+        <% event = round.getPledgeEvent() %>
         ${self.buildRoundEvent(event, url("website_company_customers", **vctxt.urlArgs))}
     %endif
 </%def>
@@ -133,8 +133,8 @@
     <h5 class="text-muted">ASSETS VALUE</h5>
     <h2>0 $</h2>
     <h6 class="mar-top-2 text-muted">Recent events</h6>
-    %if round.getAssetsEvents():
-        <% event = round.getAssetsEvents()[0] %>
+    %if round.getAssetsEvent():
+        <% event = round.getAssetsEvent() %>
         ${self.buildRoundEvent(event, "#")}
     %endif
 </%def>
@@ -148,8 +148,8 @@
     <h2>0 $</h2>
 
     <h6 class="mar-top-2 text-muted">Recent contributions</h6>
-    %if round.getMoneyEvents():
-        <% event = round.getMoneyEvents()[0] %>
+    %if round.getMoneyEvent():
+        <% event = round.getMoneyEvent() %>
         ${self.buildRoundEvent(event, "#")}
     %endif
 </%def>
@@ -159,7 +159,7 @@
 <%def name="buildRoundEvent(event, moreLink)">
     <div class="round-event">
         <div class="actor-line">
-            <img src="${event.picture}" class="img-thumbnail"/>
+            <img src="${event.picture}" class="img-thumbnail mini"/>
             <a href="#">${event.name}</a>
         </div>
         <div class="action-line">

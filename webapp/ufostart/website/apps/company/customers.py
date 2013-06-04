@@ -1,7 +1,8 @@
+from hnc.apiclient.backend import DBNotification
 from pyramid.renderers import render_to_response
 from hnc.forms.messages import GenericErrorMessage, GenericSuccessMessage
 from ufostart.website.apps.auth.social import get_social_profile
-from ufostart.website.apps.models.procs import PledgeCompanyProc
+from ufostart.website.apps.models.procs import PledgeCompanyProc, SetCompanyAngellListPitchProc
 from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException
 
 
@@ -21,7 +22,8 @@ def company_import(context, request):
             request.session.flash(GenericErrorMessage("{} authorization failed. It seems the request expired. Please try again".format(network.title())), "generic_messages")
             request.fwd("website_company_customers", slug = request.matchdict['slug'])
         else:
-            request.fwd("website_company_import_list", network = network, user_id = profile['id'], token = profile['accessToken'], slug = request.matchdict['slug'])
+            slug = context.user.Company.slug
+            request.fwd("website_company_import_list", network = network, user_id = profile['id'], token = profile['accessToken'], slug = slug)
 
 def company_import_list(context, request):
     network = request.matchdict['network']
@@ -31,22 +33,34 @@ def company_import_list(context, request):
     return {'companies':networkSettings.getCompaniesData(user_id, token)}
 
 def company_import_confirm(context, request):
-    network = request.matchdict['network']
     company_id = request.matchdict['company_id']
     token = request.matchdict['token']
-    networkSettings = context.settings.networks.get(network)
-    company = networkSettings.getCompanyData(company_id, token)
-    roles = filter(lambda x: 'founder' in x.role, networkSettings.getCompanyRoles(company_id, token))
-    return {'company': company, 'company_roles': roles}
+
+    SetCompanyAngellListPitchProc(request, {'slug':request.matchdict['slug'], 'angelListId': company_id, 'angelListToken':token })
+    request.fwd("website_company_customers", **context.urlArgs)
+
 
 
 def index(context, request):
-    company = None
-    if company:
-        template = "index.html"
+    company = context.company
+    if not company.Round: request.fwd("website_company", **context.urlArgs)
+
+    angelListId = company.angelListId if company.angelListId != 'asdfasdf' else ''
+    angelListToken = company.angelListToken
+    data = {'company': company}
+
+    if angelListId:
+        networkSettings = context.settings.networks.get('angellist')
+        company = networkSettings.getCompanyData(angelListId, angelListToken)
+        if company:
+            roles = filter(lambda x: 'founder' in x.role, networkSettings.getCompanyRoles(angelListId, angelListToken))
+            data.update({'company': company, 'company_roles': roles})
+            template = "index.html"
+        else:
+            template = "index_empty.html"
     else:
         template = "index_empty.html"
-    return render_to_response("ufostart:website/templates/company/customers/{}".format(template), {'company':company}, request)
+    return render_to_response("ufostart:website/templates/company/customers/{}".format(template), data, request)
 
 
 
@@ -58,7 +72,12 @@ def pledge(request, company, values):
         'token': company.Round.token
         , 'Pledge': values
     }
-    PledgeCompanyProc(request, data)
+    try:
+        PledgeCompanyProc(request, data)
+    except DBNotification, e:
+        if e.message == 'AlreadyPledged':
+            pass
+        else: raise e
     request.session.flash(GenericSuccessMessage("You have pledged successfully!"), "generic_messages")
     request.fwd("website_company_customers", slug = request.matchdict['slug'])
 
@@ -68,7 +87,7 @@ def pledge_decide(context, request):
     if user.isAnon():
         return {}
     else:
-        pledge(request, context.company, {'name': user.name, 'network':'ufo', 'networkId': user.token, 'picture':user.picture})
+        pledge(request, context.company, {'name': user.name, 'network':'ufo', 'networkId': user.token, 'picture':user.getPicture()})
 
 
 def login_to_pledge(context, request):

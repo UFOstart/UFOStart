@@ -148,7 +148,7 @@ class AngelListSettings(SocialSettings):
                 raise UserRejectedNotice()
             else:
                 return None
-        resp, content = self.getAuthCode(request, None)
+        resp, content = self.getAuthCode(request, None, None)
         if resp.status == 500:
             raise SocialNetworkException()
         if resp.status != 200:

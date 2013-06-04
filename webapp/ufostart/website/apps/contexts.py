@@ -44,8 +44,11 @@ class WebsiteRootContext(RootContext):
         self.user = AnonUser()
 
     def getPostLoginUrlParams(self):
-        if self.user.isAnon():
+        user = self.user
+        if user.isAnon():
             return "website_index", [], {}
+        elif user.Company.slug:
+            return "website_company", [], {'slug':user.Company.slug}
         else:
             return "website_signup_decision", [], {}
 

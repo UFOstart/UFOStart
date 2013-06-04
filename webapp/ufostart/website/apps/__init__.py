@@ -25,9 +25,9 @@ ROUTE_LIST = [
 
 
     , FunctionRoute("website_company_customers"            , "/c/:slug/customers", contexts.WebsiteCompanyContext                            , company.customers.index, None)
-    , FunctionRoute("website_company_import"               , "/c/:slug/import/:network", contexts.WebsiteCompanyContext                      , company.customers.company_import, "company/customers/list.html")
+    , FunctionRoute("website_company_import"               , "/company/import/:network", contexts.WebsiteAuthedContext                       , company.customers.company_import, "company/customers/list.html")
     , FunctionRoute("website_company_import_list"          , "/c/:slug/import/:network/:user_id/:token", contexts.WebsiteCompanyContext      , company.customers.company_import_list, "company/customers/list.html")
-    , FunctionRoute("website_company_import_confirm"       , "/c/:slug/confirm/:network/:company_id/:token", contexts.WebsiteCompanyContext  , company.customers.company_import_confirm, "company/customers/with_content_tmp.html")
+    , FunctionRoute("website_company_import_confirm"       , "/c/:slug/confirm/:network/:company_id/:token", contexts.WebsiteCompanyContext  , company.customers.company_import_confirm, None)
 
     , FunctionRoute("website_company_pledge_decide"        , "/c/:slug/pledge", contexts.WebsiteCompanyContext                               , company.customers.pledge_decide, "company/customers/pledge_decide.html")
     , FunctionRoute('website_login_to_pledge'              , '/c/:slug/pledge/:network', contexts.WebsiteCompanyContext                      , company.customers.login_to_pledge, None)

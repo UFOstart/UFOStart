@@ -111,23 +111,31 @@ class RoundModel(Mapping):
         return format_date(self.start+timedelta(90), format="medium", locale='en')
 
 
-    def getPledgeEvents(self):
-        return [EventModel(name = "Dieter Rams Minsfield", picture='/web/static/img/dummy/avatar1.png', text = "fulfilled the animation needs", recency = "1 hour ago")]
+    def getPledgeEvent(self):
+        if len(self.Pledges):
+            event = self.Pledges[0]
+            return EventModel(name = event.name, picture=event.picture, text = "just pledged to this project", recency = "1 hour ago")
+        else: return None
+
     def getTaskProgress(self):
         return 0
-    def getTaskEvents(self):
-        return [EventModel(name = "Martin Musterman", picture='/web/static/img/dummy/avatar1.png', text = "fulfilled the animation needs", recency = "2 hour ago")]
-    def getAssetsEvents(self):
-        return []
+    def getTaskEvent(self):
+        return EventModel(name = "Martin Musterman", picture='/web/static/img/dummy/avatar1.png', text = "fulfilled the animation needs", recency = "2 hour ago")
+    def getAssetsEvent(self):
+        return None
         # return [EventModel(name = "Martina Musterman", picture='/web/static/img/dummy/avatar2.png', text = "brought a table and a plant", recency = "3 hour ago")]
-    def getMoneyEvents(self):
-        return []
+    def getMoneyEvent(self):
+        return None
         # return [EventModel(name = "Bruce Momjianbiandan", picture='/web/static/img/dummy/avatar2.png', text = "chipped in 2.000,00 $", recency = "4 hour ago")]
 
 
 class CompanyModel(Mapping):
     token = TextField()
     slug = TextField()
+    angelListId = TextField()
+    angelListToken = TextField()
+
+
     Template = DictField(TemplateModel)
     Round = DictField(RoundModel)
     Rounds = ListField(DictField(RoundModel))
