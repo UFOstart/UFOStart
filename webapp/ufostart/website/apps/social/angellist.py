@@ -171,7 +171,7 @@ class AngelListSettings(SocialSettings):
             if json['startup'].get("hidden"):
                 return None
             else:
-                return CompanyRoleModel.wrap
+                return CompanyRoleModel.wrap(json)
         return filter(None, map(wrap, result['startup_roles']))
 
     def getCompaniesData(self, user_id, token):
