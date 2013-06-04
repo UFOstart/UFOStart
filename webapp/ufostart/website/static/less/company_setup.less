@@ -163,3 +163,23 @@
 }
 
 
+
+
+
+.breadcrumbs {
+  margin: 0 10px;
+  > .crumb {
+    float:left;
+    width:130px;
+    height:50px;
+    margin-right:-25px;
+    line-height: 50px;
+    font-size:28px;
+    text-align: center;
+    .background-image("../img/crumbs.png");
+    background-position: 0 -50px;
+    background-repeat: no-repeat;
+    color:@text-muted;
+    &.active {background-position: 0 0px;color:white;}
+  }
+}
