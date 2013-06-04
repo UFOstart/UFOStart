@@ -113,9 +113,14 @@
 <%def name="company_media(company)" filter="trim">
     <%
         youtube_id = company.getYoutubeVideoId()
+        vimeo_id = company.getVimeoVideoId()
     %>
     %if youtube_id:
         <div class="you-tube-container" data-video-id="${youtube_id}"></div>
+    %elif vimeo_id:
+        <div class="vimeo-container">
+        <iframe src="http://player.vimeo.com/video/${vimeo_id}" width="847" height="400" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+        </div>
     %elif company.video_url:
         <a href="${company.video_url}">${company.video_url}</a>
     %elif company.screenshots:

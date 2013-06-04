@@ -1,5 +1,6 @@
 import logging
 from operator import attrgetter
+import re
 import urllib
 from urlparse import urlparse, parse_qsl
 from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField, ListField
@@ -9,6 +10,8 @@ from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE
 from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException, SocialSettings
 
 log = logging.getLogger(__name__)
+
+
 
 class MarketModel(Mapping):
     id = IntegerField()
@@ -53,6 +56,15 @@ class CompanyModel(Mapping):
             params = dict(parse_qsl(query))
             return params.get('v')
         else: return ''
+
+    def getVimeoVideoId(self):
+        if self.video_url and 'vimeo' in self.video_url:
+            scheme, netloc, url, params, query, fragment = urlparse(self.video_url)
+            for e in url.split("/"):
+                try:
+                    return int(e)
+                except: pass
+        return ''
 
     def getFirstScreenShot(self):
         return self.screenshots[0].original
