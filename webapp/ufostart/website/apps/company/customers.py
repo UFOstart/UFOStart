@@ -90,14 +90,22 @@ def pledge_decide(context, request):
         pledge(request, context.company, {'name': user.name, 'network':'ufo', 'networkId': user.token, 'picture':user.getPicture()})
 
 
+
+
+
 def login_to_pledge(context, request):
     network = request.matchdict['network']
     networkSettings = context.settings.networks.get(network)
-    return networkSettings.loginStart(request, 'website_login_to_pledge_callback', redirect_kwargs = {'slug' : request.matchdict['slug']})
+    return networkSettings.loginStart(request
+                , request.fwd_url('website_login_to_pledge_callback', network=network, slug = request.matchdict['slug'])
+            )
 
 def login_to_pledge_callback(context, request):
     network = request.matchdict['network']
     networkSettings = context.settings.networks.get(network)
-    profile = get_social_profile(request, networkSettings, original_route = 'website_login_to_pledge_callback', redirect_kwargs = {'slug' : request.matchdict['slug']}, error_route = "website_company_pledge_decide", error_kwargs = {'slug' : request.matchdict['slug']})
+    profile = get_social_profile(request, networkSettings
+                    , request.fwd_url('website_login_to_pledge_callback', network=network, slug = request.matchdict['slug'])
+                    , request.fwd_url("website_company_pledge_decide", slug = request.matchdict['slug'])
+                )
 
     pledge(request, context.company, {'name': profile['name'], 'network':network, 'networkId': profile['id'], 'picture':profile['picture']})

@@ -14,16 +14,16 @@ class FacebookSettings(SocialSettings):
         return "https://graph.facebook.com/%s/picture" % network_id
 
 
-    def loginStart(self, request, redirect_route, redirect_kwargs):
+    def loginStart(self, request, redirect_route):
         params = {'client_id':self.appid, 'scope':'email'
-                    , 'redirect_uri':request.fwd_url(redirect_route, network = self.type, **redirect_kwargs)
+                    , 'redirect_uri':redirect_route
                  }
         request.fwd_raw("{}?{}".format(self.getCodeEndpoint, urllib.urlencode(params)))
 
-    def getAuthCode(self, request, redirect_route, redirect_kwargs):
+    def getAuthCode(self, request, redirect_route):
         code = request.params.get("code")
         params = {'client_id':self.appid, 'client_secret':self.appsecret
-                    , 'redirect_uri':request.fwd_url(redirect_route, network = self.type, **redirect_kwargs)
+                    , 'redirect_uri':redirect_route
                     , 'code':code}
         h = Http(**self.http_options)
         url = "{}?{}".format(self.codeEndpoint, urllib.urlencode(params))

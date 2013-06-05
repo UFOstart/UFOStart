@@ -57,11 +57,16 @@ def confirm(context, request):
 def social_login_start(context, request):
     network = request.matchdict['network']
     networkSettings = context.settings.networks.get(network)
-    return networkSettings.loginStart(request, 'website_invite_login_callback', redirect_kwargs = {'token': request.matchdict['token']})
+    return networkSettings.loginStart(request,
+                request.fwd_url('website_invite_login_callback', network=network, token=request.matchdict['token'])
+           )
 
 def social_login_callback(context, request):
     network = request.matchdict['network']
     networkSettings = context.settings.networks.get(network)
-    profile = get_social_profile(request, networkSettings, original_route = 'website_invite_login_callback', redirect_kwargs = {'token': request.matchdict['token']}, error_route = "website_invite_answer", error_kwargs = {'token': request.matchdict['token']})
+    profile = get_social_profile(request, networkSettings
+                    , request.fwd_url('website_invite_login_callback', network=network, token=request.matchdict['token'])
+                    , request.fwd_url("website_invite_answer", token=request.matchdict['token'])
+                )
     login_user(request, profile)
     request.fwd("website_invite_answer", token = request.matchdict['token'])

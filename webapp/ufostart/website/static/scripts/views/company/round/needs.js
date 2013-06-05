@@ -29,7 +29,7 @@ define(["tools/ajax"], function(ajax){
         , addRemove : function(e){
             var $el = $(e.currentTarget)
                 , $need = $el.closest(".single-need")
-                , taskId = $need.data("entityId")
+                , taskId = $need.data('entityId')
                 , $category = $need.closest(".category-task-list")
                 , catId = $category.data("entityId");
 

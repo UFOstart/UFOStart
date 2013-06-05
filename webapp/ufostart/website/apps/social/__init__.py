@@ -22,13 +22,13 @@ class SocialSettings(object):
         return False
 
     # EXPOSED Functions
-    def profileCallback(self, request, redirect_route, redirect_kwargs):
+    def profileCallback(self, request, redirect_route):
         if request.params.get("error"):
             if 'denied' in request.params.get("error"):
                 raise UserRejectedNotice()
             else:
                 return None
-        resp, content = self.getAuthCode(request, redirect_route, redirect_kwargs)
+        resp, content = self.getAuthCode(request, redirect_route)
         if resp.status == 500:
             raise SocialNetworkException()
         if resp.status != 200:
@@ -44,7 +44,7 @@ class SocialSettings(object):
             else:
                 return self.getProfileFromData(token, data)
 
-    def loginStart(self, request, redirect_route, redirect_kwargs): raise NotImplementedError
-    def getAuthCode(self, request, redirect_route, redirect_kwargs): raise NotImplementedError
+    def loginStart(self, request, redirect_route): raise NotImplementedError
+    def getAuthCode(self, request, redirect_route): raise NotImplementedError
     def getTokenProfile(self, content): raise NotImplementedError
     def getProfileFromData(self, token, data): raise NotImplementedError

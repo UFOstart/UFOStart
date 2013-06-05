@@ -93,14 +93,14 @@ class AngelListSettings(SocialSettings):
     companyEndpoint = "https://api.angel.co/1/startups/{company_id}"
     companyRolesEndpoint = "https://api.angel.co/1/startups/{company_id}/roles"
 
-    def loginStart(self, request, redirect_route, redirect_kwargs):
+    def loginStart(self, request, redirect_route):
         params = {'response_type':"code"
                     , 'client_id':self.appid
                     , 'scope':'email'
                  }
         request.fwd_raw("{}?{}".format(self.getCodeEndpoint, urllib.urlencode(params)))
 
-    def getAuthCode(self, request, redirect_route, redirect_kwargs):
+    def getAuthCode(self, request, redirect_route):
         code = request.params.get("code")
         if not code:
             return False

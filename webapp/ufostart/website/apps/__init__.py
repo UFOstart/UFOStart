@@ -46,8 +46,8 @@ ROUTE_LIST = [
 
     , FunctionRoute("website_invite_answer"                , '/invite/:token', contexts.WebsiteRootContext                                   , company.invite.answer, "company/invite_confirm.html")
     , FunctionRoute("website_invite_confirm"               , '/invite/:token/confirm', contexts.WebsiteAuthedContext                         , company.invite.confirm, "company/invite_confirm.html")
-    , FunctionRoute('website_invite_login'                 , '/invite/login/:network/:token', contexts.WebsiteRootContext                           , company.invite.social_login_start, None)
-    , FunctionRoute('website_invite_login_callback'        , '/invite/login/cb/:network/:token', contexts.WebsiteRootContext                        , company.invite.social_login_callback, None)
+    , FunctionRoute('website_invite_login'                 , '/invite/login/:network/:token', contexts.WebsiteRootContext                    , company.invite.social_login_start, None)
+    , FunctionRoute('website_invite_login_callback'        , '/invite/login/cb/:network/:token', contexts.WebsiteRootContext                 , company.invite.social_login_callback, None)
 
 
 
