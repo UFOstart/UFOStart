@@ -19,9 +19,6 @@ class SocialSettings(object):
         result = {'appId':self.appid, 'connect' : True}
         return simplejson.dumps(result) if stringify else result
 
-    def requiresAction(self):
-        return False
-
     def profileCallback(self, request):
         if request.params.get("error"):
             if 'denied' in request.params.get("error"):
@@ -50,11 +47,13 @@ class SocialSettings(object):
     def getProfileFromData(self, token, data): raise NotImplementedError
 
 
+
     # EXPOSED Functions
+
     def getSocialProfile(self, request, error_url):
         action = request.matchdict['action']
         if action != 'cb':
-            # this will redirect
+            # this will redirect, per oauth to get the code
             self.loginStart(request)
         else:
             #after redirect, this will do some more API magic and return the social profile

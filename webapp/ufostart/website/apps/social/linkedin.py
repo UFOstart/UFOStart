@@ -59,26 +59,3 @@ class LinkedinSettings(SocialSettings):
                 , 'email': profile['emailAddress']
                 , 'name': u"{firstName} {lastName}".format(**profile)
             }
-
-
-    def requiresAction(self):
-        return self.type == 'linkedin'
-
-    def action(self, request, profile):
-        cookie = request.cookies.get('linkedin_oauth_{}'.format(self.appid))
-        values = simplejson.loads(urllib.unquote(cookie))
-        sig = hmac.new(str(self.appsecret), digestmod=hashlib.sha1)
-        for key in values['signature_order']:
-            sig.update(values[key])
-        if values['signature'] != base64.b64encode(sig.digest()):
-            raise InvalidSignatureException()
-
-        consumer = Consumer(self.appid, self.appsecret)
-        client = Client(consumer)
-        status, response = client.request('https://api.linkedin.com/uas/oauth/accessToken', method="POST",body="xoauth_oauth2_access_token={}".format(values['access_token']))
-        res = dict(parse_qsl(response))
-        profile['accessToken'] = res['oauth_token']
-        profile['secret'] = res['oauth_token_secret']
-        return profile
-
-
