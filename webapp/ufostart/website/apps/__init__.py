@@ -14,8 +14,7 @@ ROUTE_LIST = [
     FunctionRoute  ("website_index"                        , "/", contexts.WebsiteRootContext                                                , index.index, "index.html")
 
     , ClassRoute   ("website_signup_decision"              , "/decide", contexts.WebsiteRootContext                                          , auth.DecisionHandler, "auth/decide.html", view_attrs = JSON_FORM_ATTRS)
-    , FunctionRoute('website_social_login'                 , '/social/:network', contexts.WebsiteRootContext                                 , auth.social.social_login_start, None)
-    , FunctionRoute('website_social_login_callback'        , '/social/cb/:network', contexts.WebsiteRootContext                              , auth.social.social_login_callback, None)
+    , FunctionRoute('website_social_login'                 , '/social/:network/:action', contexts.WebsiteRootContext                         , auth.social.social_login, None)
 
 
     , ClassRoute   ("website_company_basic"                , "/company/setup", contexts.WebsiteRootContext                                   , company.general.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
@@ -30,8 +29,7 @@ ROUTE_LIST = [
     , FunctionRoute("website_company_import_confirm"       , "/c/:slug/confirm/:network/:company_id/:token", contexts.WebsiteCompanyContext  , company.customers.company_import_confirm, None)
 
     , FunctionRoute("website_company_pledge_decide"        , "/c/:slug/pledge", contexts.WebsiteCompanyContext                               , company.customers.pledge_decide, "company/customers/pledge_decide.html")
-    , FunctionRoute('website_login_to_pledge'              , '/c/:slug/pledge/:network', contexts.WebsiteCompanyContext                      , company.customers.login_to_pledge, None)
-    , FunctionRoute('website_login_to_pledge_callback'     , '/c/:slug/pledge/cb/:network', contexts.WebsiteCompanyContext                   , company.customers.login_to_pledge_callback, None)
+    , FunctionRoute('website_login_to_pledge'              , '/c/:slug/pledge/:network/:action', contexts.WebsiteCompanyContext              , company.customers.login_to_pledge, None)
 
 
     , FunctionRoute('website_company_setup_basic'          , '/c/:slug/tasks/template', contexts.WebsiteCompanyContext                       , company.tasks.needs_template_select, "company/tasks/template.html")
@@ -46,8 +44,7 @@ ROUTE_LIST = [
 
     , FunctionRoute("website_invite_answer"                , '/invite/:token', contexts.WebsiteRootContext                                   , company.invite.answer, "company/invite_confirm.html")
     , FunctionRoute("website_invite_confirm"               , '/invite/:token/confirm', contexts.WebsiteAuthedContext                         , company.invite.confirm, "company/invite_confirm.html")
-    , FunctionRoute('website_invite_login'                 , '/invite/login/:network/:token', contexts.WebsiteRootContext                    , company.invite.social_login_start, None)
-    , FunctionRoute('website_invite_login_callback'        , '/invite/login/cb/:network/:token', contexts.WebsiteRootContext                 , company.invite.social_login_callback, None)
+    , FunctionRoute('website_invite_login'                 , '/invite/login/:network/:action/:token', contexts.WebsiteRootContext            , company.invite.social_login, None)
 
 
 

@@ -1,8 +1,10 @@
+from hnc.forms.messages import GenericErrorMessage
 from pyramid.decorator import reify
 from ufostart.lib.baseviews import RootContext
 from ufostart.website.apps.auth import LoginForm
 from ufostart.website.apps.models.auth import AnonUser
 from ufostart.website.apps.models.procs import GetCompanyProc
+from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException
 
 USER_SESSION_KEY = 'WEBSITE_USER'
 
@@ -51,6 +53,7 @@ class WebsiteRootContext(RootContext):
             return "website_company", [], {'slug':user.Company.slug}
         else:
             return "website_signup_decision", [], {}
+
 
 
 

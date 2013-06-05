@@ -14,10 +14,10 @@
             <div class="col col-lg-4">
                 <div class="btn-social-wrapper">
 
-                    <a href="${url("website_login_to_pledge", network = 'facebook', **vctxt.urlArgs)}?furl=${request.furl}" class="btn btn-primary btn-facebook">Connect with Facebook</a>
+                    <a href="${url("website_login_to_pledge", network = 'facebook', action='start', **vctxt.urlArgs)}?furl=${request.furl}" class="btn btn-primary btn-facebook">Connect with Facebook</a>
 
                     <div class="mar-top-2">
-                        <a href="${url("website_login_to_pledge", network = 'linkedin', **vctxt.urlArgs)}?furl=${request.furl}" class="btn btn-primary btn-linkedin">Connect with Linkedin</a>
+                        <a href="${url("website_login_to_pledge", network = 'linkedin', action='start', **vctxt.urlArgs)}?furl=${request.furl}" class="btn btn-primary btn-linkedin">Connect with Linkedin</a>
                     </div>
                 </div>
             </div>

@@ -18,23 +18,23 @@ class LinkedinSettings(SocialSettings):
     codeEndpoint = "https://www.linkedin.com/uas/oauth2/accessToken"
     profileEndpoint = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,picture-url,email-address)"
 
-    def loginStart(self, request, redirect_route):
+    def loginStart(self, request):
         params = {'response_type':"code"
                     , 'client_id':self.appid
                     , 'state': request.session.get_csrf_token()
-                    , 'redirect_uri':redirect_route
+                    , 'redirect_uri':request.rld_url(action='cb', with_query = False)
                  }
         request.fwd_raw("{}?{}".format(self.getCodeEndpoint, urllib.urlencode(params)))
 
 
-    def getAuthCode(self, request, redirect_route):
+    def getAuthCode(self, request):
         code = request.params.get("code")
         state = request.params.get("state")
         if not code or state != request.session.get_csrf_token():
             return False
 
         params = {'grant_type':'authorization_code', 'code':code
-                    , 'redirect_uri':redirect_route
+                    , 'redirect_uri':request.rld_url(action='cb', with_query = False)
                     , 'client_id':self.appid, 'client_secret':self.appsecret
                  }
 
@@ -80,6 +80,5 @@ class LinkedinSettings(SocialSettings):
         profile['accessToken'] = res['oauth_token']
         profile['secret'] = res['oauth_token_secret']
         return profile
-__author__ = 'Martin'
 
 
