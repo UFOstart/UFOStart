@@ -6,6 +6,7 @@ import simplejson
 from ufostart.website.apps.social.angellist import AngelListSettings
 from ufostart.website.apps.social.facebook import FacebookSettings
 from ufostart.website.apps.social.linkedin import LinkedinSettings
+from ufostart.website.apps.social.xing import XingSettings
 
 
 __author__ = 'Martin'
@@ -61,7 +62,7 @@ ROUTE_LIST = [
 
 
 
-SOCIAL_CONNECTORS_MAP = {'angellist': AngelListSettings, 'facebook': FacebookSettings, 'linkedin': LinkedinSettings}
+SOCIAL_CONNECTORS_MAP = {'angellist': AngelListSettings, 'facebook': FacebookSettings, 'linkedin': LinkedinSettings, 'xing':XingSettings}
 
 class WebsiteSettings(object):
     key = "website"

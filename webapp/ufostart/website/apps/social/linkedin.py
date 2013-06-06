@@ -55,7 +55,7 @@ class LinkedinSettings(SocialSettings):
                 'type': SOCIAL_NETWORK_TYPES_REVERSE[self.type]
                 , 'id':profile['id']
                 , 'accessToken':token
-                , 'picture': profile.get('pictureUrl', "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm")
+                , 'picture': profile.get('pictureUrl', self.default_picture)
                 , 'email': profile['emailAddress']
                 , 'name': u"{firstName} {lastName}".format(**profile)
             }

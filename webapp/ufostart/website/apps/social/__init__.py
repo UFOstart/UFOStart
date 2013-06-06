@@ -1,3 +1,4 @@
+from collections import namedtuple
 import logging, simplejson
 from hnc.forms.messages import GenericErrorMessage
 
@@ -10,6 +11,7 @@ class SocialNetworkException(Exception):pass
 
 class SocialSettings(object):
     http_options = {'disable_ssl_certificate_validation' : True}
+    default_picture = "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
     def __init__(self, type, appid, appsecret):
         self.type = type
         self.appid = appid
@@ -28,8 +30,7 @@ class SocialSettings(object):
         resp, content = self.getAuthCode(request)
         if resp.status == 500:
             raise SocialNetworkException()
-        if resp.status != 200:
-            result = simplejson.loads(content)
+        if resp.status not in [200,201]:
             return None
         else:
             token, (resp, data) = self.getTokenProfile(content)
@@ -54,7 +55,11 @@ class SocialSettings(object):
         action = request.matchdict['action']
         if action != 'cb':
             # this will redirect, per oauth to get the code
-            self.loginStart(request)
+            try:
+                self.loginStart(request)
+            except SocialNetworkException, e:
+                request.session.flash(GenericErrorMessage("{} login failed.".format(self.type.title())), "generic_messages")
+                request.fwd_raw(error_url)
         else:
             #after redirect, this will do some more API magic and return the social profile
             try:
