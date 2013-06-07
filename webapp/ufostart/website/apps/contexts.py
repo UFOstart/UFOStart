@@ -52,7 +52,7 @@ class WebsiteRootContext(RootContext):
         elif user.Company and user.Company.slug:
             return "website_company", [], {'slug':user.Company.slug}
         else:
-            return "website_signup_decision", [], {}
+            return "website_index", [], {}
 
 
 
@@ -71,9 +71,6 @@ class WebsiteAuthedContext(WebsiteRootContext):
     def is_allowed(self, request):
         if self.user.isAnon():
             request.fwd("website_index", _query=[('furl', request.url)])
-        li_profile = self.user.profileMap.get('linkedin')
-        if not li_profile or not li_profile.id:
-            request.fwd("website_require_li", _query=[('furl', request.url)])
 
 
 

@@ -6,7 +6,7 @@ from ufostart.website.apps.models.company import CompanyModel
 
 
 
-SOCIAL_NETWORK_TYPES = {'LI':'linkedin', 'FB':'facebook', 'AL':'angellist', 'XI':'xing'}
+SOCIAL_NETWORK_TYPES = {'LI':'linkedin', 'FB':'facebook', 'AL':'angellist', 'XI':'xing', 'TW':'twitter'}
 SOCIAL_NETWORK_TYPES_REVERSE = {v:k for k,v in SOCIAL_NETWORK_TYPES.items()}
 
 
@@ -19,7 +19,10 @@ class SocialNetworkProfileModel(Mapping):
     name = TextField()
     email = TextField()
     accessToken = TextField()
-    def getTypeName(self):
+    secret = TextField()
+
+    @reify
+    def network(self):
         return SOCIAL_NETWORK_TYPES[self.type]
 
 
@@ -41,7 +44,7 @@ class UserModel(Mapping):
         return simplejson.dumps(json) if stringify else json
 
     def getSocialProfileJSON(self, stringify = True):
-        result = {n.getTypeName():n.unwrap(sparse = True) for n in self.Profile if n.id}
+        result = {n.network:n.unwrap(sparse = True) for n in self.Profile if n.id}
         return simplejson.dumps(result) if stringify else result
 
     def getPicture(self):
@@ -57,7 +60,7 @@ class UserModel(Mapping):
 
     @reify
     def profileMap(self):
-        return {n.getTypeName():n for n in self.Profile}
+        return {n.network:n for n in self.Profile}
 
 def AnonUser():
     return UserModel()

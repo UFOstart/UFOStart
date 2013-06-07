@@ -1,6 +1,8 @@
 from hnc.apiclient.backend import DBNotification
 from pyramid.renderers import render_to_response
 from hnc.forms.messages import GenericErrorMessage, GenericSuccessMessage
+from ufostart.website.apps.auth.social import social_login
+from ufostart.website.apps.models.auth import SocialNetworkProfileModel
 from ufostart.website.apps.models.procs import PledgeCompanyProc, SetCompanyAngelListPitchProc
 from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException
 
@@ -91,9 +93,7 @@ def pledge_decide(context, request):
 
 
 
+@social_login(with_login  = True)
+def login(context, request, profile):
+    pledge(request, context.company, {'name': profile.name, 'network':profile.network, 'networkId': profile.id, 'picture':profile.picture})
 
-def login_to_pledge(context, request):
-    network = request.matchdict['network']
-    networkSettings = context.settings.networks.get(network)
-    profile = networkSettings.getSocialProfile(request, request.fwd_url("website_company_pledge_decide", slug = request.matchdict['slug']))
-    pledge(request, context.company, {'name': profile['name'], 'network':network, 'networkId': profile['id'], 'picture':profile['picture']})

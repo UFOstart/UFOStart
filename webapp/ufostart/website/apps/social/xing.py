@@ -8,7 +8,7 @@ from hnc.tools.oauth import Consumer, Client, Token
 from httplib2 import Http
 from pyramid.decorator import reify
 import simplejson
-from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE
+from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE, SocialNetworkProfileModel
 from ufostart.website.apps.social import SocialSettings, InvalidSignatureException, SocialNetworkException
 
 log = logging.getLogger(__name__)
@@ -36,15 +36,15 @@ class XingSettings(SocialSettings):
         secret = result.get("oauth_token_secret")
 
         if resp.status != 201 or not (token and secret):
-            raise SocialNetworkException(resp.data)
-        request.session['SOCIAL_XING_TOKEN'] = Token(token, secret)
+            raise SocialNetworkException(data)
+        request.session['SOCIAL_TOKEN_{}'.format(self.type)] = Token(token, secret)
 
         params = urllib.urlencode({'oauth_token': token})
         request.fwd_raw("{}?{}".format(self.codeEndpoint, params))
 
 
     def getAuthCode(self, request):
-        tokenSecret = request.session['SOCIAL_XING_TOKEN']
+        tokenSecret = request.session.pop('SOCIAL_TOKEN_{}'.format(self.type))
         verifier = request.params.get('oauth_verifier')
         if not (tokenSecret and verifier):
             raise SocialNetworkException()
@@ -74,7 +74,7 @@ class XingSettings(SocialSettings):
                 return pictures.get('name')
         return self.default_picture
 
-    def getProfileFromData(self, tokenSecret, data):
+    def getProfileFromData(self, tokenSecret, data, request):
         profiles = simplejson.loads(data)
         profile = profiles.get('users', [])
         if not profile: return None
@@ -82,12 +82,12 @@ class XingSettings(SocialSettings):
 
         picture = self.getBestProfilePicture(profile.get('photo_urls', []))
 
-        return {
-                'type': SOCIAL_NETWORK_TYPES_REVERSE[self.type]
-                , 'id':profile['id']
-                , 'accessToken':tokenSecret.key
-                , 'secret':tokenSecret.secret
-                , 'picture': picture
-                , 'email': profile['active_email']
-                , 'name': u"{first_name} {last_name}".format(**profile)
-            }
+        return SocialNetworkProfileModel(
+                type = SOCIAL_NETWORK_TYPES_REVERSE[self.type]
+                , id = profile['id']
+                , accessToken = tokenSecret.key
+                , secret = tokenSecret.secret
+                , picture = picture
+                , email = profile['active_email']
+                , name = u"{first_name} {last_name}".format(**profile)
+            )

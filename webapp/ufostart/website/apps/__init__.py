@@ -6,6 +6,7 @@ import simplejson
 from ufostart.website.apps.social.angellist import AngelListSettings
 from ufostart.website.apps.social.facebook import FacebookSettings
 from ufostart.website.apps.social.linkedin import LinkedinSettings
+from ufostart.website.apps.social.twitter import TwitterSettings
 from ufostart.website.apps.social.xing import XingSettings
 
 
@@ -13,10 +14,11 @@ __author__ = 'Martin'
 
 ROUTE_LIST = [
     FunctionRoute  ("website_index"                        , "/", contexts.WebsiteRootContext                                                , index.index, "index.html")
+    , FunctionRoute('website_template_basic'               , '/project/template', contexts.WebsiteRootContext                                , index.template.basics, "template/basic.html")
+    , FunctionRoute('website_template_details'             , '/project/:template', contexts.WebsiteRootContext                               , index.template.details, "template/details.html")
+    , FunctionRoute('website_template_signup'              , '/project/signup/:network/:action', contexts.WebsiteRootContext                 , index.template.login, "template/signup.html")
 
-    , ClassRoute   ("website_signup_decision"              , "/decide", contexts.WebsiteRootContext                                          , auth.DecisionHandler, "auth/decide.html", view_attrs = JSON_FORM_ATTRS)
-    , FunctionRoute('website_social_login'                 , '/social/:network/:action', contexts.WebsiteRootContext                         , auth.social.social_login, None)
-
+    , FunctionRoute('website_social_login'                 , '/social/:network/:action', contexts.WebsiteRootContext                         , auth.social.login, None)
 
     , ClassRoute   ("website_company_basic"                , "/company/setup", contexts.WebsiteRootContext                                   , company.general.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute   ("website_company_invite"               , "/c/:slug/invite", contexts.WebsiteCompanyContext                               , company.invite.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
@@ -30,39 +32,26 @@ ROUTE_LIST = [
     , FunctionRoute("website_company_import_confirm"       , "/c/:slug/confirm/:network/:company_id/:token", contexts.WebsiteCompanyContext  , company.customers.company_import_confirm, None)
 
     , FunctionRoute("website_company_pledge_decide"        , "/c/:slug/pledge", contexts.WebsiteCompanyContext                               , company.customers.pledge_decide, "company/customers/pledge_decide.html")
-    , FunctionRoute('website_login_to_pledge'              , '/c/:slug/pledge/:network/:action', contexts.WebsiteCompanyContext              , company.customers.login_to_pledge, None)
+    , FunctionRoute('website_login_to_pledge'              , '/c/:slug/pledge/:network/:action', contexts.WebsiteCompanyContext              , company.customers.login, None)
 
 
-    , FunctionRoute('website_company_setup_basic'          , '/c/:slug/tasks/template', contexts.WebsiteCompanyContext                       , company.tasks.needs_template_select, "company/tasks/template.html")
-    , ClassRoute   ('website_company_setup_round'          , '/c/:slug/tasks/:template', contexts.WebsiteCompanyContext                      , company.tasks.TasksHandler, "company/tasks/needs.html", view_attrs = JSON_FORM_ATTRS)
     , FunctionRoute('website_company_round_view'           , '/c/:slug/tasks', contexts.WebsiteCompanyContext                                , company.tasks.index, "company/tasks/index.html")
 
 
     , FunctionRoute("website_expert_dashboard"             , '/expert/dashboard', contexts.WebsiteAuthedContext                              , expert.index.index, "expert/index.html")
     , ClassRoute   ("website_expert_taskcreate"            , '/task/create', contexts.WebsiteAuthedContext                                   , expert.index.TaskCreateHandler, "expert/task_create.html", view_attrs = JSON_FORM_ATTRS)
 
-    , FunctionRoute('website_logout'                       , '/user/logout', contexts.WebsiteRootContext, auth.logout, None)
+    , FunctionRoute('website_logout'                       , '/user/logout', contexts.WebsiteRootContext, index.logout, None)
 
     , FunctionRoute("website_invite_answer"                , '/invite/:token', contexts.WebsiteRootContext                                   , company.invite.answer, "company/invite_confirm.html")
     , FunctionRoute("website_invite_confirm"               , '/invite/:token/confirm', contexts.WebsiteAuthedContext                         , company.invite.confirm, "company/invite_confirm.html")
-    , FunctionRoute('website_invite_login'                 , '/invite/login/:network/:action/:token', contexts.WebsiteRootContext            , company.invite.social_login, None)
+    , FunctionRoute('website_invite_login'                 , '/invite/login/:network/:action/:token', contexts.WebsiteRootContext            , company.invite.login, None)
 
-
-
-    , FunctionRoute('website_fbtokenrefresh'               , '/user/fb/token/refresh', contexts.WebsiteRootContext, auth.social.fb_token_refresh, "json", route_attrs = {"xhr":True})
-
-
-    # NOTE: DEPRECATED
-    , ClassRoute   ("website_signup"                       , "/signup", contexts.WebsiteAuthContext, auth.SignupHandler, "auth/signup.html", view_attrs = JSON_FORM_ATTRS)
-    , FunctionRoute("website_require_li"                   , "/require/linked", contexts.WebsiteRootContext, auth.require_li, "auth/require_li.html")
-    , FunctionRoute('website_join_checkemail'              , '/signup/checkemail', contexts.WebsiteRootContext, auth.join_checkemail, "json", {'xhr':True})
-    , ClassRoute   ('website_password_forget'              , '/ajax/templates/password.html', contexts.WebsiteRootContext, auth.WebsitePasswordForgotHandler, "ajax/auth/password.html", view_attrs = JSON_FORM_ATTRS)
-    , ClassRoute   ('website_reset_password'               , '/user/password/reset/:token', contexts.WebsiteRootContext, auth.PasswordResetHandler, "auth/password_reset.html", view_attrs = JSON_FORM_ATTRS)
 ]
 
 
 
-SOCIAL_CONNECTORS_MAP = {'angellist': AngelListSettings, 'facebook': FacebookSettings, 'linkedin': LinkedinSettings, 'xing':XingSettings}
+SOCIAL_CONNECTORS_MAP = {'angellist': AngelListSettings, 'facebook': FacebookSettings, 'linkedin': LinkedinSettings, 'xing':XingSettings, 'twitter':TwitterSettings}
 
 class WebsiteSettings(object):
     key = "website"

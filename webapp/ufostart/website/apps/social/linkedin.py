@@ -7,7 +7,7 @@ from urlparse import parse_qsl
 from hnc.tools.oauth import Consumer, Client
 from httplib2 import Http
 import simplejson
-from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE
+from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE, SocialNetworkProfileModel
 from ufostart.website.apps.social import SocialSettings, InvalidSignatureException
 
 log = logging.getLogger(__name__)
@@ -49,13 +49,13 @@ class LinkedinSettings(SocialSettings):
         return access_token, h.request('{}?{}'.format(self.profileEndpoint, urllib.urlencode({'oauth2_access_token':access_token})), method="GET" , headers = {'x-li-format':'json'})
 
 
-    def getProfileFromData(self, token, data):
+    def getProfileFromData(self, token, data, request):
         profile = simplejson.loads(data)
-        return {
-                'type': SOCIAL_NETWORK_TYPES_REVERSE[self.type]
-                , 'id':profile['id']
-                , 'accessToken':token
-                , 'picture': profile.get('pictureUrl', self.default_picture)
-                , 'email': profile['emailAddress']
-                , 'name': u"{firstName} {lastName}".format(**profile)
-            }
+        return SocialNetworkProfileModel(
+                type = SOCIAL_NETWORK_TYPES_REVERSE[self.type]
+                , id = profile['id']
+                , accessToken = token
+                , picture = profile.get('pictureUrl', self.default_picture)
+                , email = profile['emailAddress']
+                , name = u"{firstName} {lastName}".format(**profile)
+            )

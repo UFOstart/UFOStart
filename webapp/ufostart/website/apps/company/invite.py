@@ -2,8 +2,9 @@ from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage, GenericErrorMessage
-from ufostart.website.apps.auth.social import login_user
+from ufostart.website.apps.auth.social import login_user, social_login
 from ufostart.website.apps.company.general import InviteeForm
+from ufostart.website.apps.models.auth import SocialNetworkProfileModel
 from ufostart.website.apps.models.company import CompanyModel
 from ufostart.website.apps.models.procs import InviteToCompanyProc, GetInviteDetailsProc, AcceptInviteProc
 
@@ -53,10 +54,8 @@ def confirm(context, request):
 
 
 
-
-def social_login(context, request):
-    network = request.matchdict['network']
-    networkSettings = context.settings.networks.get(network)
-    profile = networkSettings.getSocialProfile(request, request.fwd_url("website_invite_answer", token=request.matchdict['token']))
-    login_user(request, profile)
+@social_login(with_login = True)
+def login(context, request, profile):
     request.fwd("website_invite_answer", token = request.matchdict['token'])
+
+

@@ -8,6 +8,17 @@ class SocialNotice(Exception): pass
 class UserRejectedNotice(SocialNotice): pass
 class InvalidSignatureException(Exception):pass
 class SocialNetworkException(Exception):pass
+class CustomProcessException(Exception):pass
+
+
+class AdditionalInformationRequired(Exception):
+    def __init__(self, template, params):
+        self.template = template
+        self.params = params
+
+
+
+
 
 class SocialSettings(object):
     http_options = {'disable_ssl_certificate_validation' : True}
@@ -20,6 +31,35 @@ class SocialSettings(object):
     def toPublicJSON(self, stringify = True):
         result = {'appId':self.appid, 'connect' : True}
         return simplejson.dumps(result) if stringify else result
+
+    def loginStart(self, request):
+        """
+        Called first, when user intends to login, should redirect user to 3rd party
+        """
+        raise NotImplementedError
+
+    def getAuthCode(self, request):
+        """
+        when user comes back, this should exchange auth_code for token
+        """
+        raise NotImplementedError
+    def getTokenProfile(self, content):
+        """
+        this parses the getAuthCode Result and should query basic user details, return plain string response
+        """
+        raise NotImplementedError
+    def getProfileFromData(self, token, data, request):
+        """
+        should extract profile data from plain string response into common format
+        """
+        raise NotImplementedError
+
+    def customCallback(self, request):
+        """
+        whenever a differing flow needs to be offered, this is the place to do it
+        """
+        raise NotImplementedError
+
 
     def profileCallback(self, request):
         if request.params.get("error"):
@@ -40,27 +80,20 @@ class SocialSettings(object):
                 result = simplejson.loads(data)
                 return None
             else:
-                return self.getProfileFromData(token, data)
-
-    def loginStart(self, request): raise NotImplementedError
-    def getAuthCode(self, request): raise NotImplementedError
-    def getTokenProfile(self, content): raise NotImplementedError
-    def getProfileFromData(self, token, data): raise NotImplementedError
-
-
+                return self.getProfileFromData(token, data, request)
 
     # EXPOSED Functions
 
     def getSocialProfile(self, request, error_url):
         action = request.matchdict['action']
-        if action != 'cb':
+        if action == 'start':
             # this will redirect, per oauth to get the code
             try:
                 self.loginStart(request)
             except SocialNetworkException, e:
                 request.session.flash(GenericErrorMessage("{} login failed.".format(self.type.title())), "generic_messages")
                 request.fwd_raw(error_url)
-        else:
+        elif action == 'cb':
             #after redirect, this will do some more API magic and return the social profile
             try:
                 profile = self.profileCallback(request)
@@ -76,3 +109,9 @@ class SocialSettings(object):
                     request.fwd_raw(error_url)
                 else:
                     return profile
+        else:
+            try:
+                return self.customCallback(request)
+            except CustomProcessException, e:
+                request.session.flash(GenericErrorMessage("{} login failed.".format(self.type.title())), "generic_messages")
+                request.fwd_raw(error_url)

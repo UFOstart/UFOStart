@@ -6,7 +6,7 @@ from urlparse import urlparse, parse_qsl
 from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField, ListField
 from httplib2 import Http
 import simplejson
-from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE
+from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE, SocialNetworkProfileModel
 from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException, SocialSettings
 
 log = logging.getLogger(__name__)
@@ -118,7 +118,7 @@ class AngelListSettings(SocialSettings):
         access_token = result['access_token']
         return access_token, h.request('{}?{}'.format(self.profileEndpoint, urllib.urlencode({'access_token':access_token})), method="GET")
 
-    def getProfileFromData(self, token, data):
+    def getProfileFromData(self, token, data, request):
         """
         {
             "name" : "Martin Peschke",
@@ -146,14 +146,14 @@ class AngelListSettings(SocialSettings):
         }
         """
         profile = simplejson.loads(data)
-        return {
-                'type': SOCIAL_NETWORK_TYPES_REVERSE[self.type]
-                , 'id':profile['id']
-                , 'accessToken':token
-                , 'picture': profile.get('image', "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm")
-                , 'email': profile['email']
-                , 'name': profile['name']
-            }
+        return SocialNetworkProfileModel(
+                type = SOCIAL_NETWORK_TYPES_REVERSE[self.type]
+                , id = profile['id']
+                , accessToken = token
+                , picture = profile.get('image', "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm")
+                , email = profile['email']
+                , name = profile['name']
+            )
 
     def getProfile(self, request):
         if request.params.get("error"):

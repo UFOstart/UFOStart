@@ -1,7 +1,7 @@
 import logging, simplejson, urllib
 from urlparse import parse_qsl
 from httplib2 import Http
-from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE
+from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE, SocialNetworkProfileModel
 from ufostart.website.apps.social import SocialSettings
 
 log = logging.getLogger(__name__)
@@ -37,13 +37,13 @@ class FacebookSettings(SocialSettings):
         return access_token, h.request('{}?{}'.format(self.profileEndpoint, urllib.urlencode({'access_token':access_token})), method="GET" )
 
 
-    def getProfileFromData(self, token, data):
+    def getProfileFromData(self, token, data, request):
         profile = simplejson.loads(data)
-        return {
-                    'type': SOCIAL_NETWORK_TYPES_REVERSE[self.type]
-                    , 'id':profile['id']
-                    , 'accessToken':token
-                    , 'picture': self.get_pic_url(profile['id'])
-                    , 'email': profile['email']
-                    , 'name': profile['name']
-                }
+        return SocialNetworkProfileModel(
+                    type = SOCIAL_NETWORK_TYPES_REVERSE[self.type]
+                    , id = profile['id']
+                    , accessToken = token
+                    , picture = self.get_pic_url(profile['id'])
+                    , email = profile['email']
+                    , name = profile['name']
+                )
