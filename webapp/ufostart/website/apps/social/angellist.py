@@ -1,13 +1,11 @@
 import logging
 from operator import attrgetter
-import re
 import urllib
 from urlparse import urlparse, parse_qsl
 from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField, ListField
 from httplib2 import Http
 import simplejson
-from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE, SocialNetworkProfileModel
-from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException, SocialSettings
+from ufostart.website.apps.social import SocialSettings
 
 log = logging.getLogger(__name__)
 

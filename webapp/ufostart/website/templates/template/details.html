@@ -1,4 +1,4 @@
-<%inherit file="../../layout.html"/>
+<%inherit file="../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
 
@@ -20,13 +20,13 @@
         <div class="container tasks-used">
             <div class="row">
                 <div class="col col-lg 12">
-                    <h1>${view.template.name} <span class="template-icon ${view.template.getStyleKey()}"></span></h1>
+                    <h1>${template.name} <span class="template-icon ${template.getStyleKey()}"></span></h1>
                     <div class="template-need-list">
                         %for need in template.Need:
                             ${self.renderNeed(need)}
                         %endfor
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block btn-humonguous"><span>Find Solutions</span></button>
+                    <a href="${url("website_template_create", template = template.name, traverse='')}" class="btn btn-primary btn-block btn-humonguous"><span>Find Solutions</span></a>
                 </div>
             </div>
         </div>

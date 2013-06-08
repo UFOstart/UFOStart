@@ -1,20 +1,20 @@
-import base64, logging
-from symbol import decorator
-from hnc.apiclient.backend import DBNotification, DBException
-from hnc.forms.formfields import BaseForm
-from hnc.forms.handlers import FormHandler
+import logging
+from hnc.apiclient.backend import DBNotification
+from hnc.forms.messages import GenericErrorMessage
 from pyramid.renderers import render_to_response
+from pyramid.response import Response
 from pyramid.view import view_config
-from ufostart.website.apps.models.auth import SocialNetworkProfileModel
-from ufostart.website.apps.models.procs import RefreshAccessTokenProc, SocialConnectProc
-from ufostart.website.apps.social import AdditionalInformationRequired
+
+from ufostart.website.apps.models.procs import SocialConnectProc
+from ufostart.website.apps.social import SocialNetworkProfileModel, SocialLoginSuccessful, SocialLoginFailed
 
 
 log = logging.getLogger(__name__)
 
 
-
 def login_user(context, request, profile):
+    if isinstance(profile, SocialNetworkProfileModel):
+        profile = profile.unwrap(sparse = True)
     params = {'Profile': [profile]}
     if not request.root.user.isAnon():
         params['token'] = request.root.user.token
@@ -27,38 +27,45 @@ def login_user(context, request, profile):
         return user.toJSON()
 
 
-def social_login(with_login = False):
-    def social_login_real(fn):
-        def social_login_inner(context, request):
-            network = request.matchdict['network']
-            networkSettings = context.settings.networks.get(network)
+@view_config(context = SocialLoginSuccessful)
+def login_success(exc, request):
+    login_user(request.root, request, exc.profile)
+    route = request.matched_route.name.rsplit('_', 1)[0]
+    params = request.matchdict.copy()
+    params.pop('traverse')
+    route = request.fwd_url(route, **params)
+    return Response("Resource Found!", 302, headerlist = [('location', route)])
 
-            #execute social handshakes for oauth1 and 2
-            profile = networkSettings.getSocialProfile(
-                            request
-                            , request.fwd_url("website_index")
-                        )
 
-            if isinstance(profile, SocialNetworkProfileModel):
+@view_config(context = SocialLoginFailed)
+def login_failure(exc, request):
+    request.session.flash(GenericErrorMessage(exc.message), "generic_messages")
 
-                if with_login:
-                    login_user(context, request, profile)
+    route = request.matched_route.name.rsplit('_', 1)[0]
+    params = request.matchdict.copy()
+    params.pop('traverse')
+    route = request.fwd_url(route, **params)
+    return Response("Resource Found!", 302, headerlist = [('location', route)])
 
-                # execute result function
-                return fn(context, request, profile)
 
+
+
+
+
+class RequiresLoginException(Exception):
+    def __init__(self, template):
+        self.template = template
+@view_config(context = RequiresLoginException)
+def auth_required_view(exc, request):
+    return render_to_response(exc.template, {}, request)
+
+
+def require_login(template):
+    def require_login_real(fn):
+        def require_login_inner(context, request):
+            if request.root.user.isAnon():
+                raise RequiresLoginException(template)
             else:
-                return profile
-        return social_login_inner
-    return social_login_real
-
-
-
-
-@social_login(with_login  = True)
-def login(context, request, profile):
-    route, args, kwargs = request.root.getPostLoginUrlParams()
-    request.fwd(route, *args, **kwargs)
-
-
-
+                return fn(context, request)
+        return require_login_inner
+    return require_login_real

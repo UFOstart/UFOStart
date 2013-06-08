@@ -1,9 +1,8 @@
 from hnc.apiclient import Mapping, TextField, IntegerField, ListField, DictField
-from hnc.apiclient.backend import ClientTokenProc, DBNotification
 from pyramid.decorator import reify
 import simplejson
 from ufostart.website.apps.models.company import CompanyModel
-
+from ufostart.website.apps.social import SocialNetworkProfileModel
 
 
 SOCIAL_NETWORK_TYPES = {'LI':'linkedin', 'FB':'facebook', 'AL':'angellist', 'XI':'xing', 'TW':'twitter'}
@@ -11,19 +10,12 @@ SOCIAL_NETWORK_TYPES_REVERSE = {v:k for k,v in SOCIAL_NETWORK_TYPES.items()}
 
 
 
-
-class SocialNetworkProfileModel(Mapping):
-    id = TextField()
-    type = TextField()
-    picture = TextField()
-    name = TextField()
-    email = TextField()
-    accessToken = TextField()
-    secret = TextField()
-
+class WebUserNetworkProfile(SocialNetworkProfileModel):
     @reify
     def network(self):
         return SOCIAL_NETWORK_TYPES[self.type]
+
+
 
 
 class UserModel(Mapping):
@@ -32,7 +24,7 @@ class UserModel(Mapping):
     pwd = TextField()
     email = TextField()
     picture = TextField()
-    Profile = ListField(DictField(SocialNetworkProfileModel))
+    Profile = ListField(DictField(WebUserNetworkProfile))
     Company = DictField(CompanyModel)
 
     def isAnon(self):

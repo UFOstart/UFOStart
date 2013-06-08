@@ -1,8 +1,9 @@
 from operator import methodcaller
-from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSON_FORM_ATTRS
+from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSON_FORM_ATTRS, BaseRoute
 
 from . import contexts, index, auth, company, expert
 import simplejson
+from ufostart.website.apps.social import SocialLoginFailed, SocialLoginSuccessful
 from ufostart.website.apps.social.angellist import AngelListSettings
 from ufostart.website.apps.social.facebook import FacebookSettings
 from ufostart.website.apps.social.linkedin import LinkedinSettings
@@ -14,11 +15,15 @@ __author__ = 'Martin'
 
 ROUTE_LIST = [
     FunctionRoute  ("website_index"                        , "/", contexts.WebsiteRootContext                                                , index.index, "index.html")
-    , FunctionRoute('website_template_basic'               , '/project/template', contexts.WebsiteRootContext                                , index.template.basics, "template/basic.html")
-    , FunctionRoute('website_template_details'             , '/project/:template', contexts.WebsiteRootContext                               , index.template.details, "template/details.html")
-    , FunctionRoute('website_template_signup'              , '/project/signup/:network/:action', contexts.WebsiteRootContext                 , index.template.login, "template/signup.html")
 
-    , FunctionRoute('website_social_login'                 , '/social/:network/:action', contexts.WebsiteRootContext                         , auth.social.login, None)
+    , FunctionRoute('website_template_basic'               , '/templates', contexts.WebsiteRootContext                                       , index.template.basics, "template/basic.html")        #   Step 1
+    , FunctionRoute('website_template_details'             , '/template/:template', contexts.WebsiteRootContext                              , index.template.details, "template/details.html")     #   Step 2
+    , FunctionRoute('website_template_create'              , '/setup/:template', contexts.WebsiteRootContext                                 , index.template.create_project, None)                 #   Step 3
+    , FunctionRoute('website_template_create_login'        , '/setup/:template/*traverse', contexts.WebsiteRootContext                       , None, None, route_attrs={'use_global_views':True})   #   Step 3
+
+
+
+    # , FunctionRoute('website_social_login'                 , '/social/:network/:action', contexts.WebsiteRootContext                         , auth.social.login, None)
 
     , ClassRoute   ("website_company_basic"                , "/company/setup", contexts.WebsiteRootContext                                   , company.general.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute   ("website_company_invite"               , "/c/:slug/invite", contexts.WebsiteCompanyContext                               , company.invite.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
@@ -52,6 +57,7 @@ ROUTE_LIST = [
 
 
 SOCIAL_CONNECTORS_MAP = {'angellist': AngelListSettings, 'facebook': FacebookSettings, 'linkedin': LinkedinSettings, 'xing':XingSettings, 'twitter':TwitterSettings}
+
 
 class WebsiteSettings(object):
     key = "website"

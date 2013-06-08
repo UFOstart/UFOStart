@@ -1,15 +1,11 @@
-import base64
-import hashlib
-import hmac
 import logging
 import urllib
 from urlparse import parse_qsl
 from hnc.tools.oauth import Consumer, Client, Token
-from httplib2 import Http
 from pyramid.decorator import reify
+from pyramid.view import view_config
 import simplejson
-from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE, SocialNetworkProfileModel
-from ufostart.website.apps.social import SocialSettings, InvalidSignatureException, SocialNetworkException
+from ufostart.website.apps.social import SocialSettings, SocialNetworkException, SocialNetworkProfileModel, assemble_profile_procs, SocialLoginSuccessful
 
 log = logging.getLogger(__name__)
 
@@ -25,69 +21,77 @@ class XingSettings(SocialSettings):
         return Consumer(self.appid, self.appsecret)
 
 
+@view_config(context = XingSettings)
+def redirect_view(context, request):
+    params = {'oauth_callback':request.rld_url(traverse=[context.type, 'cb'], with_query = False)}
 
-    def loginStart(self, request):
-        params = {'oauth_callback':request.rld_url(action='cb', with_query = False)}
+    client = Client(context.consumer)
+    resp, data = client.request(context.getCodeEndpoint, method="POST",body=urllib.urlencode(params), headers={'Accept':'application/json'})
+    result = dict(parse_qsl(data))
+    token = result.get("oauth_token")
+    secret = result.get("oauth_token_secret")
 
-        client = Client(self.consumer)
-        resp, data = client.request(self.getCodeEndpoint, method="POST",body=urllib.urlencode(params), headers={'Accept':'application/json'})
-        result = dict(parse_qsl(data))
-        token = result.get("oauth_token")
-        secret = result.get("oauth_token_secret")
+    if resp.status != 201 or not (token and secret):
+        raise SocialNetworkException(data)
+    request.session['SOCIAL_TOKEN_{}'.format(context.type)] = Token(token, secret)
 
-        if resp.status != 201 or not (token and secret):
-            raise SocialNetworkException(data)
-        request.session['SOCIAL_TOKEN_{}'.format(self.type)] = Token(token, secret)
-
-        params = urllib.urlencode({'oauth_token': token})
-        request.fwd_raw("{}?{}".format(self.codeEndpoint, params))
-
-
-    def getAuthCode(self, request):
-        tokenSecret = request.session.pop('SOCIAL_TOKEN_{}'.format(self.type))
-        verifier = request.params.get('oauth_verifier')
-        if not (tokenSecret and verifier):
-            raise SocialNetworkException()
-        tokenSecret.set_verifier(verifier)
-
-        client = Client(self.consumer, tokenSecret)
-        return client.request(self.tokenEndpoint, method="POST", headers={'Accept':'application/json'})
+    params = urllib.urlencode({'oauth_token': token})
+    request.fwd_raw("{}?{}".format(context.codeEndpoint, params))
 
 
-    def getTokenProfile(self, content):
-        result = dict(parse_qsl(content))
+def token_func(context, request):
+    tokenSecret = request.session.pop('SOCIAL_TOKEN_{}'.format(context.type))
+    verifier = request.params.get('oauth_verifier')
+    if not (tokenSecret and verifier):
+        raise SocialNetworkException("{} Login Failed".format(context.type))
+    tokenSecret.set_verifier(verifier)
 
-        token = result.get('oauth_token')
-        secret  = result.get('oauth_token_secret')
-        user_id = result.get('user_id')
-        if not (token and secret and user_id):
-            raise SocialNetworkException()
+    client = Client(context.consumer, tokenSecret)
+    return client.request(context.tokenEndpoint, method="POST", headers={'Accept':'application/json'})
 
-        accessToken = Token(token, secret)
-        client = Client(self.consumer, accessToken)
-        return accessToken, client.request('{}'.format(self.profileEndpoint), method="GET")
 
-    def getBestProfilePicture(self, pictures):
-        preference = ["maxi_thumb", "large", "thumb", "medium_thumb", "mini_thumb"]
-        for name in preference:
-            if pictures.get('name'):
-                return pictures.get('name')
-        return self.default_picture
+def profile_func(content, context, request):
+    result = dict(parse_qsl(content))
 
-    def getProfileFromData(self, tokenSecret, data, request):
-        profiles = simplejson.loads(data)
-        profile = profiles.get('users', [])
-        if not profile: return None
-        profile = profile[0]
+    token = result.get('oauth_token')
+    secret  = result.get('oauth_token_secret')
+    user_id = result.get('user_id')
+    if not (token and secret and user_id):
+        raise SocialNetworkException()
 
-        picture = self.getBestProfilePicture(profile.get('photo_urls', []))
+    accessToken = Token(token, secret)
+    client = Client(context.consumer, accessToken)
+    return accessToken, client.request('{}'.format(context.profileEndpoint), method="GET")
 
-        return SocialNetworkProfileModel(
-                type = SOCIAL_NETWORK_TYPES_REVERSE[self.type]
-                , id = profile['id']
-                , accessToken = tokenSecret.key
-                , secret = tokenSecret.secret
-                , picture = picture
-                , email = profile['active_email']
-                , name = u"{first_name} {last_name}".format(**profile)
-            )
+
+
+def getBestProfilePicture(context, pictures):
+    preference = ["maxi_thumb", "large", "thumb", "medium_thumb", "mini_thumb"]
+    for name in preference:
+        if pictures.get('name'):
+            return pictures.get('name')
+    return context.default_picture
+
+def parse_profile_func(tokenSecret, data, context, request):
+    profiles = simplejson.loads(data)
+    profile = profiles.get('users', [])
+    if not profile: return None
+    profile = profile[0]
+
+    picture = context.getBestProfilePicture(profile.get('photo_urls', []))
+
+    return SocialNetworkProfileModel(
+            id = profile['id']
+            , accessToken = tokenSecret.key
+            , secret = tokenSecret.secret
+            , picture = picture
+            , email = profile['active_email']
+            , name = u"{first_name} {last_name}".format(**profile)
+        )
+
+get_profile = assemble_profile_procs(token_func, profile_func, parse_profile_func)
+
+@view_config(context = XingSettings, name="cb")
+def callback_view(context, request):
+    profile = get_profile(context, request)
+    raise SocialLoginSuccessful(profile)

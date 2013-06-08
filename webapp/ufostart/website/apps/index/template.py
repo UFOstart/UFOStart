@@ -1,11 +1,10 @@
-from ufostart.lib.tools import group_by_n
-from ufostart.website.apps.auth.social import social_login
+from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.models.procs import GetAllCompanyTemplatesProc, GetTemplateDetailsProc
 
 
 def basics(context, request):
     templates = GetAllCompanyTemplatesProc(request)
-    return {'templates': group_by_n(templates)}
+    return {'templates': templates}
 
 
 
@@ -15,8 +14,13 @@ def details(context, request):
     return {'template': template}
 
 
-@social_login(with_login  = True)
-def login(context, request, profile):
+def login_choice(context, request):
+    return {}
+
+
+@require_login('ufostart:website/templates/template/login.html')
+def create_project(context, request):
+    templateName = request.matchdict['template']
     #TODO: implement actual template company setup
     request.fwd("website_company", slug = 'SLUG')
 

@@ -1,10 +1,13 @@
 import logging, simplejson, urllib
 from urlparse import parse_qsl
 from httplib2 import Http
-from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES_REVERSE, SocialNetworkProfileModel
-from ufostart.website.apps.social import SocialSettings
+from pyramid.view import view_config
+from ufostart.website.apps.social import SocialSettings, SocialNetworkProfileModel, SocialLoginSuccessful, assemble_profile_procs
 
 log = logging.getLogger(__name__)
+
+
+
 
 class FacebookSettings(SocialSettings):
     getCodeEndpoint = "https://www.facebook.com/dialog/oauth"
@@ -14,36 +17,46 @@ class FacebookSettings(SocialSettings):
         return "https://graph.facebook.com/%s/picture" % network_id
 
 
-    def loginStart(self, request):
-        params = {'client_id':self.appid, 'scope':'email'
-                    , 'redirect_uri':request.rld_url(action='cb', with_query = False)
-                 }
-        request.fwd_raw("{}?{}".format(self.getCodeEndpoint, urllib.urlencode(params)))
 
-    def getAuthCode(self, request):
-        code = request.params.get("code")
-        params = {'client_id':self.appid, 'client_secret':self.appsecret
-                    , 'redirect_uri':request.rld_url(action='cb', with_query = False)
-                    , 'code':code}
-        h = Http(**self.http_options)
-        url = "{}?{}".format(self.codeEndpoint, urllib.urlencode(params))
-        return h.request(url, method="GET")
+@view_config(context = FacebookSettings)
+def redirect_view(context, request):
+    params = {'client_id':context.appid, 'scope':'email'
+                , 'redirect_uri':request.rld_url(traverse=[context.type, 'cb'], with_query = False)
+             }
+    request.fwd_raw("{}?{}".format(context.getCodeEndpoint, urllib.urlencode(params)))
 
 
-    def getTokenProfile(self, content):
-        h = Http(**self.http_options)
-        result = dict(parse_qsl(content))
-        access_token = result['access_token']
-        return access_token, h.request('{}?{}'.format(self.profileEndpoint, urllib.urlencode({'access_token':access_token})), method="GET" )
+
+def token_func(context, request):
+    code = request.params.get("code")
+    params = {'client_id':context.appid, 'client_secret':context.appsecret
+                , 'redirect_uri':request.rld_url(action='cb', with_query = False)
+                , 'code':code}
+    h = Http(**context.http_options)
+    url = "{}?{}".format(context.codeEndpoint, urllib.urlencode(params))
+    return h.request(url, method="GET")
 
 
-    def getProfileFromData(self, token, data, request):
-        profile = simplejson.loads(data)
-        return SocialNetworkProfileModel(
-                    type = SOCIAL_NETWORK_TYPES_REVERSE[self.type]
-                    , id = profile['id']
-                    , accessToken = token
-                    , picture = self.get_pic_url(profile['id'])
-                    , email = profile['email']
-                    , name = profile['name']
-                )
+def profile_func(content, context, request):
+    h = Http(**context.http_options)
+    result = dict(parse_qsl(content))
+    access_token = result['access_token']
+    return access_token, h.request('{}?{}'.format(context.profileEndpoint, urllib.urlencode({'access_token':access_token})), method="GET" )
+
+
+def parse_profile_func(token, data, context, request):
+    profile = simplejson.loads(data)
+    return SocialNetworkProfileModel(
+                id = profile['id']
+                , accessToken = token
+                , picture = context.get_pic_url(profile['id'])
+                , email = profile['email']
+                , name = profile['name']
+            )
+
+get_profile = assemble_profile_procs(token_func, profile_func, parse_profile_func)
+
+@view_config(context = FacebookSettings, name="cb")
+def callback_view(context, request):
+    profile = get_profile(context, request)
+    raise SocialLoginSuccessful(profile)

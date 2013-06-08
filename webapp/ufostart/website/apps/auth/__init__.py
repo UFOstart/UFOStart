@@ -1,1 +1,3 @@
-import social
+from . import social
+
+

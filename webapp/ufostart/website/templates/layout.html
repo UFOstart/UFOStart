@@ -58,9 +58,6 @@
             <div class="col col-lg-3 footer-link">
                 <h5 class="footer-links-title">Get Started</h5>
                 <ul class="list-unstyled">
-                    %if vctxt.user.isAnon():
-                        <li><a class="footer-link" href="${url("website_social_login", network = 'linkedin', action='start')}?furl=${request.furl}"   >Connect with Linkedin</a></li>
-                    %endif
                     <li><a class="footer-link" href="#">Help</a></li>
                 </ul>
             </div>
