@@ -27,7 +27,7 @@ class TwitterSettings(SocialSettings):
 
 @view_config(context = TwitterSettings)
 def redirect_view(context, request):
-    params = {'oauth_callback':request.rld_url(traverse=[context.type, 'cb'], with_query = False)}
+    params = {'oauth_callback':request.rld_url(traverse=[context.network, 'cb'], with_query = False)}
 
     client = Client(context.consumer)
     resp, data = client.request(context.getCodeEndpoint, method="POST",body=urllib.urlencode(params))
@@ -37,14 +37,14 @@ def redirect_view(context, request):
 
     if resp.status != 200 or not (token and secret):
         raise SocialNetworkException(data)
-    request.session['SOCIAL_TOKEN_{}'.format(context.type)] = Token(token, secret)
+    request.session['SOCIAL_TOKEN_{}'.format(context.network)] = Token(token, secret)
 
     params = urllib.urlencode({'oauth_token': token})
     request.fwd_raw("{}?{}".format(context.codeEndpoint, params))
 
 
 def token_func(context, request):
-    tokenSecret = request.session.pop('SOCIAL_TOKEN_{}'.format(context.type))
+    tokenSecret = request.session.pop('SOCIAL_TOKEN_{}'.format(context.network))
     verifier = request.params.get('oauth_verifier')
     if not (tokenSecret and verifier):
         raise SocialNetworkException()
@@ -74,7 +74,7 @@ def parse_profile_func(token, data, context, request):
 
     #
     # return SocialNetworkProfileModel({
-    #     'type': SOCIAL_NETWORK_TYPES_REVERSE[context.type]
+    #     network = context.network
     #     , 'id':profile['id']
     #     , 'accessToken':token.key
     #     , 'secret':token.secret

@@ -145,7 +145,7 @@ class AngelListSettings(SocialSettings):
         """
         profile = simplejson.loads(data)
         return SocialNetworkProfileModel(
-                type = SOCIAL_NETWORK_TYPES_REVERSE[self.type]
+                type = SOCIAL_NETWORK_TYPES_REVERSE[self.network]
                 , id = profile['id']
                 , accessToken = token
                 , picture = profile.get('image', "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm")

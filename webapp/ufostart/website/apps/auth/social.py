@@ -55,8 +55,10 @@ def login_failure(exc, request):
 class RequiresLoginException(Exception):
     def __init__(self, template):
         self.template = template
+
 @view_config(context = RequiresLoginException)
 def auth_required_view(exc, request):
+    # TODO: can this be a class based view to use as email login handler?
     return render_to_response(exc.template, {}, request)
 
 

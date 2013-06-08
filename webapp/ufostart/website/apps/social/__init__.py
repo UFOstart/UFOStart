@@ -24,7 +24,7 @@ class SocialLoginSuccessful(Exception):
 
 class SocialNetworkProfileModel(Mapping):
     id = TextField()
-    type = TextField()
+    network = TextField()
     picture = TextField()
     name = TextField()
     email = TextField()
@@ -62,8 +62,8 @@ def assemble_profile_procs(token_func, profile_func, parse_profile_func):
 class SocialSettings(object):
     http_options = {'disable_ssl_certificate_validation' : True}
     default_picture = "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
-    def __init__(self, type, appid, appsecret):
-        self.type = type
+    def __init__(self, network, appid, appsecret):
+        self.network = network
         self.appid = appid
         self.appsecret = appsecret
 

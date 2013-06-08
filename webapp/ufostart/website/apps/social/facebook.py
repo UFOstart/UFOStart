@@ -21,7 +21,7 @@ class FacebookSettings(SocialSettings):
 @view_config(context = FacebookSettings)
 def redirect_view(context, request):
     params = {'client_id':context.appid, 'scope':'email'
-                , 'redirect_uri':request.rld_url(traverse=[context.type, 'cb'], with_query = False)
+                , 'redirect_uri':request.rld_url(traverse=[context.network, 'cb'], with_query = False)
              }
     request.fwd_raw("{}?{}".format(context.getCodeEndpoint, urllib.urlencode(params)))
 
@@ -47,7 +47,8 @@ def profile_func(content, context, request):
 def parse_profile_func(token, data, context, request):
     profile = simplejson.loads(data)
     return SocialNetworkProfileModel(
-                id = profile['id']
+                network = context.network
+                , id = profile['id']
                 , accessToken = token
                 , picture = context.get_pic_url(profile['id'])
                 , email = profile['email']

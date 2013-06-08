@@ -1,8 +1,9 @@
 from operator import methodcaller
-from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSON_FORM_ATTRS, BaseRoute
+from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSON_FORM_ATTRS, BaseRoute, OauthLoginRoute
 
 from . import contexts, index, auth, company, expert
 import simplejson
+from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.social import SocialLoginFailed, SocialLoginSuccessful
 from ufostart.website.apps.social.angellist import AngelListSettings
 from ufostart.website.apps.social.facebook import FacebookSettings
@@ -13,13 +14,18 @@ from ufostart.website.apps.social.xing import XingSettings
 
 __author__ = 'Martin'
 
-ROUTE_LIST = [
-    FunctionRoute  ("website_index"                        , "/", contexts.WebsiteRootContext                                                , index.index, "index.html")
 
-    , FunctionRoute('website_template_basic'               , '/templates', contexts.WebsiteRootContext                                       , index.template.basics, "template/basic.html")        #   Step 1
-    , FunctionRoute('website_template_details'             , '/template/:template', contexts.WebsiteRootContext                              , index.template.details, "template/details.html")     #   Step 2
-    , FunctionRoute('website_template_create'              , '/setup/:template', contexts.WebsiteRootContext                                 , index.template.create_project, None)                 #   Step 3
-    , FunctionRoute('website_template_create_login'        , '/setup/:template/*traverse', contexts.WebsiteRootContext                       , None, None, route_attrs={'use_global_views':True})   #   Step 3
+
+template_login = require_login("ufostart:website/templates/template/login.html")
+
+
+
+ROUTE_LIST = [
+    FunctionRoute    ("website_index"                      , "/", contexts.WebsiteRootContext                                                , index.index, "index.html")
+
+    , FunctionRoute  ('website_template_basic'             , '/templates', contexts.WebsiteRootContext                                       , index.template.basics, "template/basic.html")        #   Step 1
+    , FunctionRoute  ('website_template_details'           , '/template/:template', contexts.WebsiteRootContext                              , index.template.details, "template/details.html")     #   Step 2
+    , OauthLoginRoute('website_template_create'            , '/setup/:template', contexts.WebsiteRootContext, template_login                 , index.template.create_project, None)                 #   Step 3
 
 
 

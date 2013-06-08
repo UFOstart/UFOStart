@@ -21,7 +21,7 @@ def redirect_view(context, request):
     params = {'response_type':"code"
                 , 'client_id':context.appid
                 , 'state': request.session.get_csrf_token()
-                , 'redirect_uri':request.rld_url(traverse=[context.type, 'cb'], with_query = False)
+                , 'redirect_uri':request.rld_url(traverse=[context.network, 'cb'], with_query = False)
              }
     request.fwd_raw("{}?{}".format(context.getCodeEndpoint, urllib.urlencode(params)))
 
@@ -50,7 +50,8 @@ def profile_func(content, context, request):
 def parse_profile_func(token, data, context, request):
     profile = simplejson.loads(data)
     return SocialNetworkProfileModel(
-            id = profile['id']
+            network = context.network
+            , id = profile['id']
             , accessToken = token
             , picture = profile.get('pictureUrl', context.default_picture)
             , email = profile['emailAddress']

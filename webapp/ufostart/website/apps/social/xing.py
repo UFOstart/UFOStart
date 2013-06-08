@@ -23,7 +23,7 @@ class XingSettings(SocialSettings):
 
 @view_config(context = XingSettings)
 def redirect_view(context, request):
-    params = {'oauth_callback':request.rld_url(traverse=[context.type, 'cb'], with_query = False)}
+    params = {'oauth_callback':request.rld_url(traverse=[context.network, 'cb'], with_query = False)}
 
     client = Client(context.consumer)
     resp, data = client.request(context.getCodeEndpoint, method="POST",body=urllib.urlencode(params), headers={'Accept':'application/json'})
@@ -33,17 +33,17 @@ def redirect_view(context, request):
 
     if resp.status != 201 or not (token and secret):
         raise SocialNetworkException(data)
-    request.session['SOCIAL_TOKEN_{}'.format(context.type)] = Token(token, secret)
+    request.session['SOCIAL_TOKEN_{}'.format(context.network)] = Token(token, secret)
 
     params = urllib.urlencode({'oauth_token': token})
     request.fwd_raw("{}?{}".format(context.codeEndpoint, params))
 
 
 def token_func(context, request):
-    tokenSecret = request.session.pop('SOCIAL_TOKEN_{}'.format(context.type))
+    tokenSecret = request.session.pop('SOCIAL_TOKEN_{}'.format(context.network))
     verifier = request.params.get('oauth_verifier')
     if not (tokenSecret and verifier):
-        raise SocialNetworkException("{} Login Failed".format(context.type))
+        raise SocialNetworkException("{} Login Failed".format(context.network))
     tokenSecret.set_verifier(verifier)
 
     client = Client(context.consumer, tokenSecret)
@@ -81,7 +81,8 @@ def parse_profile_func(tokenSecret, data, context, request):
     picture = context.getBestProfilePicture(profile.get('photo_urls', []))
 
     return SocialNetworkProfileModel(
-            id = profile['id']
+            network = context.network
+            , id = profile['id']
             , accessToken = tokenSecret.key
             , secret = tokenSecret.secret
             , picture = picture
