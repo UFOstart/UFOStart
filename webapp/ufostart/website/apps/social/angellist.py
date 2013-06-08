@@ -83,7 +83,7 @@ class CompanyRoleModel(Mapping):
     def getPersonDescr(self):
         return self.tagged.bio or ''
 
-class AngelListSettings(SocialSettings):
+class SocialResource(SocialSettings):
     getCodeEndpoint = "https://angel.co/api/oauth/authorize"
     codeEndpoint = "https://angel.co/api/oauth/token"
     profileEndpoint = "https://api.angel.co/1/me"

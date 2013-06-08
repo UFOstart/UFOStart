@@ -10,7 +10,7 @@ from ufostart.website.apps.social import SocialSettings, SocialNetworkException,
 log = logging.getLogger(__name__)
 
 
-class XingSettings(SocialSettings):
+class SocialResource(SocialSettings):
     getCodeEndpoint = "https://api.xing.com/v1/request_token"
     codeEndpoint = "https://api.xing.com/v1/authorize"
     tokenEndpoint = "https://api.xing.com/v1/access_token"
@@ -21,7 +21,7 @@ class XingSettings(SocialSettings):
         return Consumer(self.appid, self.appsecret)
 
 
-@view_config(context = XingSettings)
+@view_config(context = SocialResource)
 def redirect_view(context, request):
     params = {'oauth_callback':request.rld_url(traverse=[context.network, 'cb'], with_query = False)}
 
@@ -92,7 +92,7 @@ def parse_profile_func(tokenSecret, data, context, request):
 
 get_profile = assemble_profile_procs(token_func, profile_func, parse_profile_func)
 
-@view_config(context = XingSettings, name="cb")
+@view_config(context = SocialResource, name="cb")
 def callback_view(context, request):
     profile = get_profile(context, request)
     raise SocialLoginSuccessful(profile)

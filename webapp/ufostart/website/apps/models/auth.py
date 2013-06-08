@@ -12,9 +12,7 @@ SOCIAL_NETWORK_TYPES_REVERSE = {v:k for k,v in SOCIAL_NETWORK_TYPES.items()}
 
 class WebUserNetworkProfile(SocialNetworkProfileModel):
     #TODO: reverse mapping from network profile type needs to happen
-    @reify
-    def network(self):
-        return SOCIAL_NETWORK_TYPES[self.type]
+    type = TextField()
 
 
 

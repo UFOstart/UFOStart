@@ -1,3 +1,4 @@
+from importlib import import_module
 from operator import methodcaller
 from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSON_FORM_ATTRS, BaseRoute, OauthLoginRoute
 
@@ -5,11 +6,6 @@ from . import contexts, index, auth, company, expert
 import simplejson
 from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.social import SocialLoginFailed, SocialLoginSuccessful
-from ufostart.website.apps.social.angellist import AngelListSettings
-from ufostart.website.apps.social.facebook import FacebookSettings
-from ufostart.website.apps.social.linkedin import LinkedinSettings
-from ufostart.website.apps.social.twitter import TwitterSettings
-from ufostart.website.apps.social.xing import XingSettings
 
 
 __author__ = 'Martin'
@@ -62,7 +58,7 @@ ROUTE_LIST = [
 
 
 
-SOCIAL_CONNECTORS_MAP = {'angellist': AngelListSettings, 'facebook': FacebookSettings, 'linkedin': LinkedinSettings, 'xing':XingSettings, 'twitter':TwitterSettings}
+
 
 
 class WebsiteSettings(object):
@@ -71,10 +67,12 @@ class WebsiteSettings(object):
 
     def __init__(self, settings):
         self.clientToken = settings['apiToken']
-        socials = map(methodcaller("strip"), settings['social_networks'].split(","))
-        for network in socials:
-            SettingsCls = SOCIAL_CONNECTORS_MAP[network]
-            self.networks[network] = SettingsCls(type=network, **settings[network])
+
+        networks = settings['network']
+        for network, params in networks.items():
+            moduleName = params.pop('module')
+            module = import_module(moduleName)
+            self.networks[network] = module.SocialResource(network=network, **params)
 
     def toPublicJSON(self, stringify = True):
         result = {k:v.toPublicJSON(False) for k,v in self.networks.items()}

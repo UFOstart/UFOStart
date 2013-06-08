@@ -1,5 +1,9 @@
 import logging, simplejson
-from hnc.apiclient import Mapping, TextField
+from hnc.apiclient import Mapping, TextField, DictField
+
+__all__ = ['SocialSettings', 'SocialNetworkProfileModel', 'angellist', 'facebook', 'linkedin', 'twitter', 'xing'
+    , 'SocialLoginSuccessful', 'SocialLoginFailed', 'UserRejectedNotice', 'InvalidSignatureException', 'SocialNetworkException'
+    , 'ExpiredException', 'CustomProcessException']
 
 
 log = logging.getLogger(__name__)
@@ -30,7 +34,7 @@ class SocialNetworkProfileModel(Mapping):
     email = TextField()
     accessToken = TextField()
     secret = TextField()
-
+    original = DictField()
 
 
 
@@ -39,18 +43,18 @@ def assemble_profile_procs(token_func, profile_func, parse_profile_func):
     def get_profile_inner(context, request):
         if request.params.get("error"):
             if 'denied' in request.params.get("error"):
-                raise UserRejectedNotice("You need to accept {} permissions to use {}.".format(context.type.title(), request.globals.project_name))
+                raise UserRejectedNotice("You need to accept {} permissions to use {}.".format(context.network.title(), request.globals.project_name))
             else:
-                raise SocialNetworkException("{} login failed.".format(context.type.title()))
+                raise SocialNetworkException("{} login failed.".format(context.network.title()))
         resp, content = token_func(context, request)
         if resp.status not in [200,201]:
-            raise SocialNetworkException("{} login failed.".format(context.type.title()))
+            raise SocialNetworkException("{} login failed.".format(context.network.title()))
         else:
             token, (resp, data) = profile_func(content, context, request)
             if 400 <= resp.status < 500:
-                raise ExpiredException("{} login failed.".format(context.type.title()))
+                raise ExpiredException("{} login failed.".format(context.network.title()))
             if resp.status not in [200,201]:
-                raise SocialNetworkException("{} login failed.".format(context.type.title()))
+                raise SocialNetworkException("{} login failed.".format(context.network.title()))
             else:
                 return parse_profile_func(token, data, context, request)
     return get_profile_inner
@@ -62,10 +66,12 @@ def assemble_profile_procs(token_func, profile_func, parse_profile_func):
 class SocialSettings(object):
     http_options = {'disable_ssl_certificate_validation' : True}
     default_picture = "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
-    def __init__(self, network, appid, appsecret):
+    def __init__(self, network, appid, appsecret, **kwargs):
         self.network = network
         self.appid = appid
         self.appsecret = appsecret
+        for k,v in kwargs.items():
+            setattr(self, k, v)
 
     def toPublicJSON(self, stringify = True):
         result = {'appId':self.appid, 'connect' : True}

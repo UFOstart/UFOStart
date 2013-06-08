@@ -22,5 +22,7 @@ def login_choice(context, request):
 def create_project(context, request):
     templateName = request.matchdict['template']
     #TODO: implement actual template company setup
-    request.fwd("website_company", slug = 'SLUG')
+    route, args, kwargs = context.getPostLoginUrlParams()
+    request.fwd(route, *args, **kwargs)
+
 

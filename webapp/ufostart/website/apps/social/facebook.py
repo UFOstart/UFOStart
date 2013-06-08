@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 
 
 
-class FacebookSettings(SocialSettings):
+class SocialResource(SocialSettings):
     getCodeEndpoint = "https://www.facebook.com/dialog/oauth"
     codeEndpoint = "https://graph.facebook.com/oauth/access_token"
     profileEndpoint = "https://graph.facebook.com/me"
@@ -18,7 +18,7 @@ class FacebookSettings(SocialSettings):
 
 
 
-@view_config(context = FacebookSettings)
+@view_config(context = SocialResource)
 def redirect_view(context, request):
     params = {'client_id':context.appid, 'scope':'email'
                 , 'redirect_uri':request.rld_url(traverse=[context.network, 'cb'], with_query = False)
@@ -57,7 +57,7 @@ def parse_profile_func(token, data, context, request):
 
 get_profile = assemble_profile_procs(token_func, profile_func, parse_profile_func)
 
-@view_config(context = FacebookSettings, name="cb")
+@view_config(context = SocialResource, name="cb")
 def callback_view(context, request):
     profile = get_profile(context, request)
     raise SocialLoginSuccessful(profile)
