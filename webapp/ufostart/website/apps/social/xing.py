@@ -5,12 +5,12 @@ from hnc.tools.oauth import Consumer, Client, Token
 from pyramid.decorator import reify
 from pyramid.view import view_config
 import simplejson
-from ufostart.website.apps.social import SocialSettings, SocialNetworkException, SocialNetworkProfileModel, assemble_profile_procs, SocialLoginSuccessful
+from ufostart.website.apps.social import AbstractSocialResource, SocialNetworkException, SocialNetworkProfileModel, assemble_profile_procs, SocialLoginSuccessful
 
 log = logging.getLogger(__name__)
 
 
-class SocialResource(SocialSettings):
+class SocialResource(AbstractSocialResource):
     getCodeEndpoint = "https://api.xing.com/v1/request_token"
     codeEndpoint = "https://api.xing.com/v1/authorize"
     tokenEndpoint = "https://api.xing.com/v1/access_token"

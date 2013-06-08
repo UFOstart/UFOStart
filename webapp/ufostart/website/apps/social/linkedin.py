@@ -3,14 +3,14 @@ import urllib
 from httplib2 import Http
 from pyramid.view import view_config
 import simplejson
-from ufostart.website.apps.social import SocialSettings, SocialLoginSuccessful, assemble_profile_procs, SocialNetworkProfileModel
+from ufostart.website.apps.social import AbstractSocialResource, SocialLoginSuccessful, assemble_profile_procs, SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 
 
 
 
-class SocialResource(SocialSettings):
+class SocialResource(AbstractSocialResource):
     getCodeEndpoint = "https://www.linkedin.com/uas/oauth2/authorization"
     getTokenEndpoint = "https://www.linkedin.com/uas/oauth2/accessToken"
     profileEndpoint = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,picture-url,email-address)"

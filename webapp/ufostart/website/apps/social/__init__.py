@@ -1,7 +1,7 @@
 import logging, simplejson
 from hnc.apiclient import Mapping, TextField, DictField
 
-__all__ = ['SocialSettings', 'SocialNetworkProfileModel', 'angellist', 'facebook', 'linkedin', 'twitter', 'xing'
+__all__ = ['AbstractSocialResource', 'SocialNetworkProfileModel', 'angellist', 'facebook', 'linkedin', 'twitter', 'xing'
     , 'SocialLoginSuccessful', 'SocialLoginFailed', 'UserRejectedNotice', 'InvalidSignatureException', 'SocialNetworkException'
     , 'ExpiredException', 'CustomProcessException']
 
@@ -38,6 +38,24 @@ class SocialNetworkProfileModel(Mapping):
 
 
 
+class AbstractSocialResource(object):
+    http_options = {'disable_ssl_certificate_validation' : True}
+    default_picture = "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+    def __init__(self, network, appid, appsecret, **kwargs):
+        self.network = network
+        self.appid = appid
+        self.appsecret = appsecret
+        for k,v in kwargs.items():
+            setattr(self, k, v)
+
+    def toPublicJSON(self, stringify = True):
+        result = {'appId':self.appid, 'connect' : True}
+        return simplejson.dumps(result) if stringify else result
+
+
+
+
+
 def assemble_profile_procs(token_func, profile_func, parse_profile_func):
     """after redirect, this will do some more API magic and return the social profile"""
     def get_profile_inner(context, request):
@@ -60,19 +78,3 @@ def assemble_profile_procs(token_func, profile_func, parse_profile_func):
     return get_profile_inner
 
 
-
-
-
-class SocialSettings(object):
-    http_options = {'disable_ssl_certificate_validation' : True}
-    default_picture = "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
-    def __init__(self, network, appid, appsecret, **kwargs):
-        self.network = network
-        self.appid = appid
-        self.appsecret = appsecret
-        for k,v in kwargs.items():
-            setattr(self, k, v)
-
-    def toPublicJSON(self, stringify = True):
-        result = {'appId':self.appid, 'connect' : True}
-        return simplejson.dumps(result) if stringify else result

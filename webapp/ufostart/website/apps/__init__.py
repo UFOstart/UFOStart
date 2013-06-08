@@ -74,6 +74,8 @@ class WebsiteSettings(object):
             module = import_module(moduleName)
             self.networks[network] = module.SocialResource(network=network, **params)
 
+
+
     def toPublicJSON(self, stringify = True):
         result = {k:v.toPublicJSON(False) for k,v in self.networks.items()}
         return simplejson.dumps(result) if stringify else result

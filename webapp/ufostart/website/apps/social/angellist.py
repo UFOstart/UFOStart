@@ -5,7 +5,7 @@ from urlparse import urlparse, parse_qsl
 from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField, ListField
 from httplib2 import Http
 import simplejson
-from ufostart.website.apps.social import SocialSettings
+from ufostart.website.apps.social import AbstractSocialResource
 
 log = logging.getLogger(__name__)
 
@@ -83,7 +83,7 @@ class CompanyRoleModel(Mapping):
     def getPersonDescr(self):
         return self.tagged.bio or ''
 
-class SocialResource(SocialSettings):
+class SocialResource(AbstractSocialResource):
     getCodeEndpoint = "https://angel.co/api/oauth/authorize"
     codeEndpoint = "https://angel.co/api/oauth/token"
     profileEndpoint = "https://api.angel.co/1/me"

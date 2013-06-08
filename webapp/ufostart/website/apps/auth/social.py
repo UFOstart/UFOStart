@@ -40,7 +40,6 @@ def login_success(exc, request):
 @view_config(context = SocialLoginFailed)
 def login_failure(exc, request):
     request.session.flash(GenericErrorMessage(exc.message), "generic_messages")
-
     route = request.matched_route.name.rsplit('_', 1)[0]
     params = request.matchdict.copy()
     params.pop('traverse')

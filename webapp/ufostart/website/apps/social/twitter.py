@@ -8,30 +8,28 @@ from pyramid.decorator import reify
 from pyramid.renderers import render_to_response
 from pyramid.view import view_config, view_defaults
 import simplejson
-from ufostart.website.apps.social import SocialSettings, SocialNetworkException, assemble_profile_procs, SocialNetworkProfileModel, SocialLoginSuccessful
+from ufostart.website.apps.social import AbstractSocialResource, SocialNetworkException, assemble_profile_procs, SocialNetworkProfileModel, SocialLoginSuccessful
 
 log = logging.getLogger(__name__)
 
 
 
-
-
-
-class SocialResource(SocialSettings):
+class SocialResource(AbstractSocialResource):
     getCodeEndpoint = "https://api.twitter.com/oauth/request_token"
     codeEndpoint = "https://api.twitter.com/oauth/authorize"
     tokenEndpoint = "https://api.twitter.com/oauth/access_token"
     profileEndpoint = "https://api.twitter.com/1.1/users/show.json"
     emailTemplate = 'ufostart:website/templates/auth/twitter_email.html'
 
-
     def verifyUser(self, request, profile):
         return False
-
 
     @reify
     def consumer(self):
         return Consumer(self.appid, self.appsecret)
+
+
+
 
 
 @view_config(context = SocialResource)
@@ -112,6 +110,7 @@ class TwitterEmailFormForm(BaseForm):
     @classmethod
     def on_success(cls, request, values):
         return {'success':True, 'redirect': request.rld_url()}
+
 
 @view_defaults(context = SocialResource, name="email")
 class TwitterEmailFormHandler(FormHandler):

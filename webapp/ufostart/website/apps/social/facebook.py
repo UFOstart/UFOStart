@@ -2,14 +2,14 @@ import logging, simplejson, urllib
 from urlparse import parse_qsl
 from httplib2 import Http
 from pyramid.view import view_config
-from ufostart.website.apps.social import SocialSettings, SocialNetworkProfileModel, SocialLoginSuccessful, assemble_profile_procs
+from ufostart.website.apps.social import AbstractSocialResource, SocialNetworkProfileModel, SocialLoginSuccessful, assemble_profile_procs
 
 log = logging.getLogger(__name__)
 
 
 
 
-class SocialResource(SocialSettings):
+class SocialResource(AbstractSocialResource):
     getCodeEndpoint = "https://www.facebook.com/dialog/oauth"
     codeEndpoint = "https://graph.facebook.com/oauth/access_token"
     profileEndpoint = "https://graph.facebook.com/me"
