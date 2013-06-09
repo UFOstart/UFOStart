@@ -1,7 +1,7 @@
 <%inherit file="../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
-<%def name="pageTitle()"><div class="page-header">${need.name}</div></%def>
+<%def name="pageTitle()"><div class="page-header">${vctxt.need.name}</div></%def>
 
 <%def name="content()">
     <div class="container container-constricted">
@@ -12,9 +12,26 @@
         </div>
         <div class="row">
             <div class="col col-lg-12">
-
-
+                ${self.buildPrivateNeed(vctxt.need)}
             </div>
+        </div>
+    </div>
+</%def>
+
+
+<%def name="buildPrivateNeed(need)">
+    <div>
+        ${vctxt.need.description}
+    </div>
+
+    <div class="valuation">
+        <div class="primary-number pull-right">
+            ${need.equity_mix}%
+            <div class="legend">Equity</div>
+        </div>
+        <div class="primary-number">
+            ${need.money_value}
+            <div class="legend">Value</div>
         </div>
     </div>
 </%def>

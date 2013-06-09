@@ -70,5 +70,6 @@ class WebsiteCompanyContext(WebsiteRootContext):
 class NeedContext(WebsiteCompanyContext):
     @reify
     def need(self):
-        return None
+        needMap = {n.key:n for n in self.company.Round.Needs}
+        return needMap[self.request.matchdict['need']]
         # return GetCompanyProc(self.request, {'token': self.request.matchdict['need']})

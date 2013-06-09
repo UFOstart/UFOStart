@@ -71,10 +71,10 @@ class NeedModel(Mapping):
 
     # TODO: actual implementation
     equity_mix = 4
+    money_value = format_currency(120, 'EUR', locale = 'en')
     @property
     def customized(self):
         return choice([True, False])
-    money_value = format_currency(120, 'EUR', locale = 'en')
     @property
     def description(self):
         text = 'Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
