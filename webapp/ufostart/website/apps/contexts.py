@@ -66,3 +66,9 @@ class WebsiteCompanyContext(WebsiteRootContext):
     @reify
     def urlArgs(self):
         return {'slug': self.request.matchdict['slug']}
+
+class NeedContext(WebsiteCompanyContext):
+    @reify
+    def need(self):
+        return None
+        # return GetCompanyProc(self.request, {'token': self.request.matchdict['need']})

@@ -2,7 +2,7 @@ from importlib import import_module
 from operator import methodcaller
 from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSON_FORM_ATTRS, BaseRoute, OauthLoginRoute
 
-from . import contexts, index, auth, company, expert
+from . import contexts, index, auth, company, expert, need
 import simplejson
 from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.social import SocialLoginFailed, SocialLoginSuccessful
@@ -18,41 +18,46 @@ template_login = require_login("ufostart:website/templates/template/login.html")
 
 ROUTE_LIST = [
     FunctionRoute    ("website_index"                      , "/", contexts.WebsiteRootContext                                                , index.index, "index.html")
+    , FunctionRoute  ('website_logout'                     , '/user/logout', contexts.WebsiteRootContext                                     , index.logout, None)
 
     , FunctionRoute  ('website_template_basic'             , '/templates', contexts.WebsiteRootContext                                       , index.template.basics, "template/basic.html")        #   Step 1
     , FunctionRoute  ('website_template_details'           , '/template/:template', contexts.WebsiteRootContext                              , index.template.details, "template/details.html")     #   Step 2
     , OauthLoginRoute('website_template_create'            , '/setup/:template', contexts.WebsiteRootContext, template_login                 , index.template.create_project, None)                 #   Step 3
 
 
+    , FunctionRoute('website_company'                      , '/c/:slug', contexts.WebsiteCompanyContext                                      , company.general.index, None)
+    , ClassRoute   ("website_company_company"              , "/c/:slug/company", contexts.WebsiteCompanyContext                              , company.invite.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
+    , FunctionRoute("website_company_product"              , "/c/:slug/product", contexts.WebsiteCompanyContext                              , company.customers.index, None)
+
+
+    , FunctionRoute("website_need_customize"               , '/c/:slug/:need', contexts.NeedContext                                          , need.index, "need/index.html")
+
 
     # , FunctionRoute('website_social_login'                 , '/social/:network/:action', contexts.WebsiteRootContext                         , auth.social.login, None)
-
-    , ClassRoute   ("website_company_basic"                , "/company/setup", contexts.WebsiteRootContext                                   , company.general.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
-    , ClassRoute   ("website_company_invite"               , "/c/:slug/invite", contexts.WebsiteCompanyContext                               , company.invite.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
-    , FunctionRoute('website_company'                      , '/c/:slug', contexts.WebsiteCompanyContext                                      , company.general.index, None)
-    , FunctionRoute('website_company_round_create'         , '/c/:slug/create/round', contexts.WebsiteCompanyContext                         , company.general.create_round, None)
-
-
-    , FunctionRoute("website_company_customers"            , "/c/:slug/customers", contexts.WebsiteCompanyContext                            , company.customers.index, None)
-    , FunctionRoute("website_company_import"               , "/company/import/:network", contexts.WebsiteAuthedContext                       , company.customers.company_import, "company/customers/list.html")
-    , FunctionRoute("website_company_import_list"          , "/c/:slug/import/:network/:user_id/:token", contexts.WebsiteCompanyContext      , company.customers.company_import_list, "company/customers/list.html")
-    , FunctionRoute("website_company_import_confirm"       , "/c/:slug/confirm/:network/:company_id/:token", contexts.WebsiteCompanyContext  , company.customers.company_import_confirm, None)
-
-    , FunctionRoute("website_company_pledge_decide"        , "/c/:slug/pledge", contexts.WebsiteCompanyContext                               , company.customers.pledge_decide, "company/customers/pledge_decide.html")
-    , FunctionRoute('website_login_to_pledge'              , '/c/:slug/pledge/:network/:action', contexts.WebsiteCompanyContext              , company.customers.login, None)
-
-
-    , FunctionRoute('website_company_round_view'           , '/c/:slug/tasks', contexts.WebsiteCompanyContext                                , company.tasks.index, "company/tasks/index.html")
-
-
-    , FunctionRoute("website_expert_dashboard"             , '/expert/dashboard', contexts.WebsiteAuthedContext                              , expert.index.index, "expert/index.html")
-    , ClassRoute   ("website_expert_taskcreate"            , '/task/create', contexts.WebsiteAuthedContext                                   , expert.index.TaskCreateHandler, "expert/task_create.html", view_attrs = JSON_FORM_ATTRS)
-
-    , FunctionRoute('website_logout'                       , '/user/logout', contexts.WebsiteRootContext, index.logout, None)
-
-    , FunctionRoute("website_invite_answer"                , '/invite/:token', contexts.WebsiteRootContext                                   , company.invite.answer, "company/invite_confirm.html")
-    , FunctionRoute("website_invite_confirm"               , '/invite/:token/confirm', contexts.WebsiteAuthedContext                         , company.invite.confirm, "company/invite_confirm.html")
-    , FunctionRoute('website_invite_login'                 , '/invite/login/:network/:action/:token', contexts.WebsiteRootContext            , company.invite.login, None)
+    #
+    # , ClassRoute   ("website_company_basic"                , "/company/setup", contexts.WebsiteRootContext                                   , company.general.SetupCompanyHandler, "company/setup.html", view_attrs = JSON_FORM_ATTRS)
+    #
+    # , FunctionRoute('website_company_round_create'         , '/c/:slug/create/round', contexts.WebsiteCompanyContext                         , company.general.create_round, None)
+    #
+    #
+    # , FunctionRoute("website_company_import"               , "/company/import/:network", contexts.WebsiteAuthedContext                       , company.customers.company_import, "company/customers/list.html")
+    # , FunctionRoute("website_company_import_list"          , "/c/:slug/import/:network/:user_id/:token", contexts.WebsiteCompanyContext      , company.customers.company_import_list, "company/customers/list.html")
+    # , FunctionRoute("website_company_import_confirm"       , "/c/:slug/confirm/:network/:company_id/:token", contexts.WebsiteCompanyContext  , company.customers.company_import_confirm, None)
+    #
+    # , FunctionRoute("website_company_pledge_decide"        , "/c/:slug/pledge", contexts.WebsiteCompanyContext                               , company.customers.pledge_decide, "company/customers/pledge_decide.html")
+    # , FunctionRoute('website_login_to_pledge'              , '/c/:slug/pledge/:network/:action', contexts.WebsiteCompanyContext              , company.customers.login, None)
+    #
+    #
+    # , FunctionRoute('website_company_round_view'           , '/c/:slug/tasks', contexts.WebsiteCompanyContext                                , company.tasks.index, "company/tasks/index.html")
+    #
+    #
+    # , FunctionRoute("website_expert_dashboard"             , '/expert/dashboard', contexts.WebsiteAuthedContext                              , expert.index.index, "expert/index.html")
+    # , ClassRoute   ("website_expert_taskcreate"            , '/task/create', contexts.WebsiteAuthedContext                                   , expert.index.TaskCreateHandler, "expert/task_create.html", view_attrs = JSON_FORM_ATTRS)
+    #
+    #
+    # , FunctionRoute("website_invite_answer"                , '/invite/:token', contexts.WebsiteRootContext                                   , company.invite.answer, "company/invite_confirm.html")
+    # , FunctionRoute("website_invite_confirm"               , '/invite/:token/confirm', contexts.WebsiteAuthedContext                         , company.invite.confirm, "company/invite_confirm.html")
+    # , FunctionRoute('website_invite_login'                 , '/invite/login/:network/:action/:token', contexts.WebsiteRootContext            , company.invite.login, None)
 
 ]
 

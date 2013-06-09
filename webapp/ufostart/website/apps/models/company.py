@@ -1,8 +1,15 @@
+# coding=utf-8
+from collections import OrderedDict
 from datetime import datetime, timedelta
+from math import floor
+from operator import attrgetter
+from random import random, sample, choice
 from babel.dates import format_date
+from babel.numbers import format_currency
 from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField
 from hnc.apiclient.backend import ClientTokenProc
 from pyramid.decorator import reify
+from ufostart.lib.tools import group_by_n
 
 TEMPLATE_STYLE_KEYS = {
     'EARLY_STAGE_ECOMMERCE':'ecommerce'
@@ -23,14 +30,17 @@ class ExpertModel(Mapping):
     introLastName = TextField()
     introPicture = TextField()
 
-    def getExpertPicture(self):
+    @property
+    def expert_picture(self):
         return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
-    def getExpertName(self):
+    @property
+    def expert_name(self):
         return u"{} {}".format(self.firstName, self.lastName)
-
-    def getIntroName(self):
+    @property
+    def intro_name(self):
         return u"{} {}".format(self.introFirstName, self.introLastName)
-    def getIntroPicture(self):
+    @property
+    def intro_picture(self):
         return self.introPicture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
 
 
@@ -38,20 +48,42 @@ class ExpertModel(Mapping):
 class ServiceModel(Mapping):
     name = TextField()
     url = TextField()
+    logo = TextField()
     worker = TextField()
     picture = TextField()
-    def getWorkerName(self):
+    @property
+    def worker_name(self):
         return self.worker
-    def getWorkerPicture(self):
+    @property
+    def worker_picture(self):
         return self.picture or"//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+    @property
+    def logo_picture(self):
+        return 'http://smartling.99designs.com/static/images/frontpage/logo.png'
 
 class NeedModel(Mapping):
     key = TextField()
     name = TextField()
     category = TextField()
-    description = TextField()
+
     Service = DictField(ServiceModel)
     Expert = DictField(ExpertModel)
+
+    # TODO: actual implementation
+    equity_mix = 4
+    @property
+    def customized(self):
+        return choice([True, False])
+    money_value = format_currency(120, 'EUR', locale = 'en')
+    @property
+    def description(self):
+        text = 'Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
+        length = int(random()*len(text))
+        return text[:length]
+    @property
+    def tags(self):
+        tags = ['Online Marketplaces', 'Life Sciences', 'Data Analytics', 'Business Intelligence', 'Enterprise Software', 'Enterprise Software', 'Big Data', 'Government Innovation', 'Simulation', 'E-Commerce', 'Customer Service', 'Education', 'Biotechnology', 'Robotics', 'Aerospace']
+        return sample(tags, int(random()*len(tags)))
 
 
     _inUse = BooleanField()
@@ -113,42 +145,20 @@ class RoundModel(Mapping):
     def getExpiryDate(self):
         return format_date(self.start+timedelta(90), format="medium", locale='en')
 
+    # TODO: actual implementation
+    published = False
 
-    def getPledgeEvent(self):
-        if len(self.Pledges):
-            event = self.Pledges[0]
-            return EventModel(name = event.name, picture=event.picture, text = "just pledged to this project", recency = "1 hour ago")
-        else: return None
 
-    def getTaskProgress(self):
-        return 30 if len(self.Needs) else 0
-    def getTaskEvent(self):
-        if len(self.Needs):
-            evt = EventModel(name = None, picture=None, text = "just pledged to this project", recency = "1 hour ago")
-            for need in self.Needs:
-                if need.Expert:
-                    evt.name = need.Expert.getIntroName()
-                    evt.picture = need.Expert.getIntroPicture()
-                    evt.text = 'can introduce you to {}'.format(need.Expert.getExpertName())
-            if not evt.name:
-                for need in self.Needs:
-                    if need.Service:
-                        evt.name = need.Service.getWorkerName()
-                        evt.picture = need.Service.getWorkerPicture()
-                        evt.text = 'can use <a href="{}" target="_blank">{}</a> for you'.format(need.Service.url, need.Service.name)
-            if evt.name: return evt
-
-    def getAssetsEvent(self):
-        return None
-    def getMoneyEvent(self):
-        return None
 
 
 class CompanyModel(Mapping):
     token = TextField()
     slug = TextField()
     name = TextField()
-    description = TextField()
+
+    logo_url = TextField()
+    angellist_url = TextField()
+
     angelListId = TextField()
     angelListToken = TextField()
 
@@ -161,8 +171,27 @@ class CompanyModel(Mapping):
     def getCurrentRound(self):
         return self.Round
 
+    def getDisplayTags(self):
+        return u" • ".join(['Palo Alto', 'Marketplaces', 'Outsourcing'])
 
-
+    # TODO: actual implementation
+    description = 'Democratizing access to scientific expertise'
+    logo_picture = None
+    product_picture = None
+    product_name = 'Serious Watch 5000'
+    product_description = 'This watch can measure time just like any other watch, it can tell how much the current time is.'
+    no_pledgees = 235
+    @property
+    def pledgees(self):
+        return self.Round.Pledges
+    def groupedNeeds(self, n = 4):
+        needs = self.Round.Needs
+        length = len(needs)
+        result = OrderedDict()
+        for i, need in enumerate(needs):
+            l = result.setdefault(i % n, [])
+            l.append(need)
+        return result.values()
 
 
 class InviteModel(Mapping):

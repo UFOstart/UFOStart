@@ -4,6 +4,7 @@ from hnc.forms.messages import GenericErrorMessage
 from pyramid.renderers import render_to_response
 from pyramid.response import Response
 from pyramid.view import view_config
+from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES, SOCIAL_NETWORK_TYPES_REVERSE
 
 from ufostart.website.apps.models.procs import SocialConnectProc
 from ufostart.website.apps.social import SocialNetworkProfileModel, SocialLoginSuccessful, SocialLoginFailed
@@ -15,6 +16,13 @@ log = logging.getLogger(__name__)
 def login_user(context, request, profile):
     if isinstance(profile, SocialNetworkProfileModel):
         profile = profile.unwrap(sparse = True)
+        if profile.get('network') and not profile.get('type'):
+            profile['type'] = SOCIAL_NETWORK_TYPES_REVERSE[profile['network']]
+        elif not profile.get('network') and profile.get('type'):
+            profile['network'] = SOCIAL_NETWORK_TYPES[profile['type']]
+
+
+
     params = {'Profile': [profile]}
     if not request.root.user.isAnon():
         params['token'] = request.root.user.token

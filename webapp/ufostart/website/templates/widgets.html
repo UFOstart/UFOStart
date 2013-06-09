@@ -1,0 +1,7 @@
+<%def name="logo(url, alt='')">
+%if url:
+    <div class="logo-picture"><img src="${url}" alt="${alt}"/></div>
+%else:
+    <div class="logo-picture empty"></div>
+%endif
+</%def>
