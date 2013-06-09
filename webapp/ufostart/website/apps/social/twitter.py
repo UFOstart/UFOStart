@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 
 class SocialResource(AbstractSocialResource):
     getCodeEndpoint = "https://api.twitter.com/oauth/request_token"
-    codeEndpoint = "https://api.twitter.com/oauth/authorize"
+    codeEndpoint = "https://api.twitter.com/oauth/authenticate"
     tokenEndpoint = "https://api.twitter.com/oauth/access_token"
     profileEndpoint = "https://api.twitter.com/1.1/users/show.json"
     emailTemplate = 'ufostart:website/templates/auth/twitter_email.html'

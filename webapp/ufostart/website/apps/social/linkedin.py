@@ -21,6 +21,7 @@ def redirect_view(context, request):
     params = {'response_type':"code"
                 , 'client_id':context.appid
                 , 'state': request.session.get_csrf_token()
+                , 'scope':'r_basicprofile r_emailaddress r_network r_fullprofile r_contactinfo'
                 , 'redirect_uri':request.rld_url(traverse=[context.network, 'cb'], with_query = False)
              }
     request.fwd_raw("{}?{}".format(context.getCodeEndpoint, urllib.urlencode(params)))
