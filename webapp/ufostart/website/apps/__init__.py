@@ -31,7 +31,7 @@ ROUTE_LIST = [
 
 
     , FunctionRoute("website_need_customize"               , '/c/:slug/:need', contexts.NeedContext                                          , need.index, "need/index.html")
-
+    , ClassRoute   ("website_need_create"                  , '/need/create', contexts.WebsiteAuthedContext                                   , need.NeedCreateHandler, "need/create.html", view_attrs = JSON_FORM_ATTRS)
 
     # , FunctionRoute('website_social_login'                 , '/social/:network/:action', contexts.WebsiteRootContext                         , auth.social.login, None)
     #
@@ -52,7 +52,7 @@ ROUTE_LIST = [
     #
     #
     # , FunctionRoute("website_expert_dashboard"             , '/expert/dashboard', contexts.WebsiteAuthedContext                              , expert.index.index, "expert/index.html")
-    # , ClassRoute   ("website_expert_taskcreate"            , '/task/create', contexts.WebsiteAuthedContext                                   , expert.index.TaskCreateHandler, "expert/task_create.html", view_attrs = JSON_FORM_ATTRS)
+
     #
     #
     # , FunctionRoute("website_invite_answer"                , '/invite/:token', contexts.WebsiteRootContext                                   , company.invite.answer, "company/invite_confirm.html")

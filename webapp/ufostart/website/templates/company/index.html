@@ -83,13 +83,24 @@
             </div>
         </div>
         <div class="row">
-            %for col in company.groupedNeeds(4):
+            %for i, col in enumerate(company.groupedNeeds(4)):
                 <div class="col col-lg-3 need-card-list">
                     %for need in col:
                         ${self.buildNeed(need, company.Round.published)}
                     %endfor
+                    %if not i:
+                        <a href="${url("website_need_create")}" class="need-card add-card">
+                            <img src="${STATIC_URL}img/addneed.png"/>
+                            <h5>Create a new Need</h5>
+                        </a>
+                    %endif
                 </div>
             %endfor
+        </div>
+        <div class="row">
+            <div class="col col-lg-3 col-offset-9">
+                <a href="#" class="btn btn-primary btn-humonguous btn-block"><span>Publish</span></a>
+            </div>
         </div>
     </div>
 </%def>

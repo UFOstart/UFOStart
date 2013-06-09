@@ -11,31 +11,3 @@ __author__ = 'Martin'
 def index(context, request):
     return {}
 
-
-def optionGetter(request):
-    return [NullConfigModel()] + TASK_CATEGORIES
-
-
-class TaskCreateForm(BaseForm):
-    id="TaskCreate"
-    label = ""
-    fields=[
-        StringField('name', "Need Name", REQUIRED)
-        , TextareaField("description", "Description", REQUIRED)
-        , ChoiceField("category", "Need Type", optionGetter, REQUIRED)
-    ]
-    @classmethod
-    def on_success(cls, request, values):
-        try:
-            CreateNeedProc(request, values)
-        except DBNotification, e:
-            if e.message == 'Need_Already_Exists':
-                return {'success':False, 'errors': {'name': "This need already exists, if you intend to create this need, please change its name to something less ambiguous!"}}
-            else:
-                raise e
-
-        request.session.flash(GenericSuccessMessage("Need created successfully!"), "generic_messages")
-        return {'success':True, 'redirect': request.fwd_url("website_expert_dashboard")}
-
-class TaskCreateHandler(FormHandler):
-    form = TaskCreateForm
