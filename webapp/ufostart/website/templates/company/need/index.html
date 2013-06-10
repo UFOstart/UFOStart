@@ -2,30 +2,44 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../../widgets.html" name="widgets"/>
 
-
 <%def name="pageTitle()"><div class="page-header">${vctxt.company.display_name}</div></%def>
 
 <%def name="content()">
     <div class="container">
-        <div class="row">
-            <div class="col col-lg-8">
-                ${self.buildPrivateNeed(vctxt.need)}
-            </div>
-            <div class="col col-lg-4">
+        <div class="row mar-top-1">
+            <div class="col col-lg-6">
                 <div class="box-framed">
-                    ${self.infoBox(vctxt.company, vctxt.need)}
+                    <div class="box-title">
+                        <a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
+                        ${vctxt.need.name}
+                    </div>
+                    <div class="box-content">
+                        ${self.buildPrivateNeed(vctxt.need)}
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-6">
+                <div class="box-framed">
+                    <div class="box-title">
+                        Recommended Solutions
+                    </div>
+                    <div class="box-content">
+                        ${self.privateInfoBox(vctxt.company, vctxt.need)}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mar-top-2">
+            <div class="col col-lg 12">
+                <div class="box-title">
+                    Applications
                 </div>
             </div>
         </div>
     </div>
 </%def>
 
-
 <%def name="buildPrivateNeed(need)">
-    <div class="box-title">
-        <a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
-        ${vctxt.need.name}
-    </div>
     <div class="description mar-top-1">
         %if need.picture:
             <div class="picture need empty">
@@ -45,7 +59,88 @@
     </div>
 </%def>
 
-<%def name="infoBox(company, need)">
+<%def name="privateInfoBox(company, need)">
+
+    %if need.first_level_expert:
+        <div class="experts">
+            <h5 class="text-muted upper">Recommended Experts in your network</h5>
+            <div class="expert-pile row">
+                %for expert in need.first_level_expert:
+                    <div class="col col-lg-4 expert-briefing">
+                        <div class="picture medium">
+                            <img src="${expert.picture}" alt="${expert.name}"/>
+                        </div>
+                        <a href="#"><strong>${expert.name}</strong></a>
+                        <p class="text-muted text-small">${expert.position}</p>
+                        <p class="expert-skills"><strong>${expert.display_skills}</strong></p>
+                        <img src="${STATIC_URL}img/stars.png" class="stars"/>
+                        <a href="#" class="btn btn-primary btn-small btn-block ">Send Message</a>
+                    </div>
+                %endfor
+            </div>
+        </div>
+    %endif
+
+    %if need.second_level_expert:
+    <div class="experts">
+        <h5 class="text-muted no-margin upper mar-top-2">Recommended Experts and people who can introduce you</h5>
+        <div class="expert-pile">
+                %for expert in need.second_level_expert:
+                    <div class="expert-briefing row">
+                        <div class="col col-lg-4">
+                            <h6 class="text-muted">Expert</h6>
+                            <div class="picture medium">
+                                <img src="${expert.picture}" alt="${expert.name}"/>
+                            </div>
+                            <a href="#"><strong>${expert.name}</strong></a>
+                            <p class="text-muted text-small">${expert.position}</p>
+                            <p class="expert-skills"><strong>${expert.display_skills}</strong></p>
+                            <img src="${STATIC_URL}img/stars.png" class="stars"/>
+                        </div>
+                        <div class="col col-lg-8">
+                            <h6 class="text-muted">Introducers</h6>
+                            %for intro in expert.introducers:
+                            <div class="row mar-top-half">
+                                <div class="col col-lg-2">
+                                    <div class="picture mini">
+                                        <img src="${intro.picture}" alt="${intro.name}"/>
+                                    </div>
+                                </div>
+                                <div class="col col-lg-4">
+                                    <a href="#"><strong>${expert.name}</strong></a>
+                                    <p class="text-muted text-small">${expert.position}</p>
+                                </div>
+                                <div class="col col-lg-6">
+                                    <a href="#" class="btn btn-primary btn-small btn-block ">Get Introduction</a>
+                                </div>
+                            </div>
+                            %endfor
+                        </div>
+                    </div>
+                %endfor
+            </div>
+        </div>
+    %endif
+
+    <h5 class="text-muted no-margin upper mar-top-2">Recommended Cloud Services</h5>
+    <div class="service-list row">
+    %for service in need.services:
+        <div class="col col-lg-4 service-briefing">
+            <div class="picture">
+                <img src="${service.logo_picture}" name="${service.name}"/>
+            </div>
+            <a href="#"><strong>${service.name}</strong></a>
+            <p class="text-muted text-small">${service.short_description}</p>
+            <img src="${STATIC_URL}img/stars.png" class="stars"/>
+            <a href="${service.url}" target="_blank" class="btn btn-small btn-block btn-primary">See Details</a>
+        </div>
+    %endfor
+    </div>
+</%def>
+
+
+
+<%def name="publicInfoBox(company, need)">
     <div class="box-title">
         Info
     </div>

@@ -20,46 +20,157 @@ TEMPLATE_STYLE_KEYS = {
     , 'SERIES_B':'seriesb'
 }
 
+SKILLS = ['abandon'
+        , 'abandoned'
+        , 'ability'
+        , 'able'
+        , 'about'
+        , 'above'
+        , 'abroad'
+        , 'absence'
+        , 'absent'
+        , 'absolute'
+        , 'absolutely'
+        , 'absorb'
+        , 'abuse'
+        , 'academic'
+        , 'accent'
+        , 'acceptable'
+        , 'accept'
+        , 'access'
+        , 'accident'
+        , 'accidental'
+        , 'accommodation'
+        , 'accompany'
+        , 'accordingto'
+        , 'account'
+        , 'accurate'
+        , 'accuse'
+        , 'achieve'
+        , 'achievement'
+        , 'acid'
+        , 'acknowledge'
+        , 'acquire'
+        , 'across'
+        , 'act'
+        , 'action'
+        , 'active'
+        , 'activity'
+        , 'actor'
+        , 'actress'
+        , 'actual'
+        , 'actually'
+        , 'ad'
+        , 'adapt'
+        , 'add'
+        , 'addition'
+        , 'additional'
+        , 'address'
+        , 'adequate'
+        , 'adjust'
+        , 'admiration'
+        , 'admire'
+        , 'admit'
+        , 'adopt'
+        , 'adult'
+        , 'advance'
+        , 'advanced'
+        , 'advantage'
+        , 'adventure'
+        , 'advert'
+        , 'advertise'
+        , 'advertisement'
+        , 'advertising'
+        , 'advice'
+        , 'advise'
+        , 'affair'
+        , 'affect'
+        , 'affection'
+        , 'afford'
+        , 'afraid'
+        , 'after'
+        , 'afternoon'
+        , 'afterwards'
+        , 'again'
+        , 'against'
+        , 'age'
+        , 'aged'
+        , 'agency'
+        , 'agent'
+        , 'aggressive'
+        , 'ago'
+        , 'agree'
+        , 'agreement'
+        , 'ahead'
+        , 'aid'
+        , 'aim'
+        , 'air'
+        , 'aircraft'
+        , 'airport'
+        , 'alarm'
+        , 'alarmed'
+        , 'alarming'
+        , 'alcohol'
+        , 'alcoholic'
+        , 'alive'
+        , 'all'
+        , 'allied'
+        , 'allow'
+        , 'allright'
+        , 'ally'
+        , 'almost']
+
+
+
+class IntroducerModel(Mapping):
+    firstName = TextField()
+    lastName = TextField()
+    picture = TextField()
+    @property
+    def name(self):
+        return u"{} {}".format(self.firstName, self.lastName)
+
 class ExpertModel(Mapping):
     linkedinId = TextField()
     firstName = TextField()
     lastName = TextField()
     picture = TextField()
-    introLinkedinId = TextField()
-    introFirstName = TextField()
-    introLastName = TextField()
-    introPicture = TextField()
+    Introducer = ListField(DictField(IntroducerModel))
 
     @property
-    def expert_picture(self):
-        return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
-    @property
-    def expert_name(self):
+    def name(self):
         return u"{} {}".format(self.firstName, self.lastName)
     @property
-    def intro_name(self):
-        return u"{} {}".format(self.introFirstName, self.introLastName)
+    def position(self):
+        return 'IT Expert'
     @property
-    def intro_picture(self):
-        return self.introPicture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
-
-
+    def display_skills(self):
+        return ', '.join(sample(SKILLS, int(random()*30)))
+    @property
+    def introducers(self):
+        return self.Introducer
 
 class ServiceModel(Mapping):
     name = TextField()
+    description = TextField()
     url = TextField()
     logo = TextField()
+
     worker = TextField()
     picture = TextField()
+
     @property
     def worker_name(self):
         return self.worker
     @property
     def worker_picture(self):
-        return self.picture or"//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+        return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
     @property
     def logo_picture(self):
-        return 'http://smartling.99designs.com/static/images/frontpage/logo.png'
+        return self.logo
+    @property
+    def short_description(self):
+        return self.description
 
 class NeedModel(Mapping):
     key = TextField()
@@ -75,6 +186,20 @@ class NeedModel(Mapping):
     money_value = format_currency(120, 'EUR', locale = 'en')
     picture = ''
 
+
+    @property
+    def first_level_expert(self):
+        expert = ExpertModel(firstName='J.', lastName='of Nazareth', picture='http://lorempixel.com/100/100/people')
+        return [expert]*5
+    @property
+    def second_level_expert(self):
+        introducer = IntroducerModel(firstName = 'Intro', lastName='Man', picture='http://lorempixel.com/100/100/people/3')
+        expert = ExpertModel(firstName='P.', lastName='of Saulus', picture='http://lorempixel.com/100/100/people/2', Introducer = [introducer]*3)
+        return [expert]*2
+    @property
+    def services(self):
+        service = ServiceModel(name='99Designs', description='Design Platform', logo = 'http://smartling.99designs.com/static/images/frontpage/logo.png')
+        return [service]*5
     @property
     def customized(self):
         return self.status != 'PENDING'
