@@ -79,3 +79,13 @@ def require_login(template):
                 return fn(context, request)
         return require_login_inner
     return require_login_real
+
+
+
+
+@require_login('ufostart:website/templates/auth/login.html')
+def login(context, request):
+    route, args, kwargs = context.getPostLoginUrlParams()
+    request.fwd(route, *args, **kwargs)
+
+

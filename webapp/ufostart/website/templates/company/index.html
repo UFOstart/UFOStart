@@ -127,11 +127,11 @@
     <div class="need-card" data-entity-id="${need.token}">
         %if not published:
             %if not need.customized:
-                <a class="customize" href="${url("website_round_need", need=need.key, **vctxt.urlArgs)}">Customize</a>
+                <a class="customize" href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">Customize</a>
             %endif
             <a class="remove" data-target=".need-card">×</a>
         %endif
-        <h5><a href="${url("website_round_need", need=need.key, **vctxt.urlArgs)}">${need.name}</a></h5>
+        <h5><a href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">${need.name}</a></h5>
         <div class="description">
             ${need.description}
         </div>

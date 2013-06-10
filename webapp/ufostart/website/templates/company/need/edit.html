@@ -1,13 +1,29 @@
 <%inherit file="index.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
-<%def name="buildPrivateNeed(need)">
-    <div class="box-title">
-        <a href="${url("website_round_need", **vctxt.urlArgs)}" class="btn btn-default">Cancel</a>
-        ${vctxt.need.name}
+
+<%def name="content()">
+    <div class="container">
+        <div class="row mar-top-1">
+            <div class="col col-lg-12">
+                ${self.buildPrivateNeed(vctxt.need)}
+            </div>
+        </div>
     </div>
-    <div class="description mar-top-1">
-        ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+</%def>
+
+
+<%def name="buildPrivateNeed(need)">
+    <div class="box-framed">
+        <div class="box-title">
+            <a href="${url("website_round_need", **vctxt.urlArgs)}" class="btn btn-default">Cancel</a>
+            Edit Need Details
+        </div>
+        <div class="box-content">
+            <div class="description mar-top-1">
+                ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+            </div>
+        </div>
     </div>
 </%def>
 
@@ -17,6 +33,9 @@
     <form class="${form.classes}" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
 
+        ${form.fieldMap['name'].render(form.id, request, values, errors, view)|n}
+        ${form.fieldMap['value'].render(form.id, request, values, errors, view)|n}
+        ${form.fieldMap['ratio'].render(form.id, request, values, errors, view)|n}
         ${form.fieldMap['picture'].render(form.id, request, values, errors, view)|n}
         ${form.fieldMap['description'].render(form.id, request, values, errors, view)|n}
         <div class="label-list">

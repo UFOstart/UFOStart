@@ -1,10 +1,9 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import NullConfigModel, BaseForm, StringField, REQUIRED, TextareaField, ChoiceField, TypeAheadField, TagSearchField
+from hnc.forms.formfields import NullConfigModel, BaseForm, StringField, REQUIRED, TextareaField, ChoiceField, TypeAheadField, TagSearchField, IntField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from ufostart.models.tasks import TASK_CATEGORIES
-from ufostart.website.apps.models.procs import CreateNeedProc
-
+from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc
 
 
 def index(context, request):
@@ -54,14 +53,24 @@ class NeedEditForm(BaseForm):
     label = ""
     fields = [
         FileUploadField("picture", 'Picture', group_classes='file-upload-control')
+        , StringField('name', "Need Name", REQUIRED)
+        , IntField('value', "Total Value", REQUIRED)
+        , IntField('ratio', "Equity percentage", REQUIRED)
         , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
         , TagSearchField("tags", "Related Tags", '/web/tag/search', 'TagSearchResult', attrs = REQUIRED)
     ]
 
     @classmethod
     def on_success(cls, request, values):
+        values['token'] = request.matchdict['need']
+
+        total = values.pop('value')
+        ratio = values.pop('ratio')
+        values['cash'] = total * (1 - ratio/100)
+        values['equity'] = total * ratio/100
+
         try:
-            CreateNeedProc(request, values)
+            EditNeedProc(request, {'Needs':[values]})
         except DBNotification, e:
             if e.message == 'Need_Already_Exists':
                 return {'success':False, 'errors': {'name': "This need already exists, if you intend to Edit this need, please change its name to something less ambiguous!"}}

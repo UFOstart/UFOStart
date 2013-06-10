@@ -173,7 +173,6 @@ class ServiceModel(Mapping):
         return self.description
 
 class NeedModel(Mapping):
-    key = TextField()
     token = TextField()
     name = TextField()
     status = TextField()
@@ -187,7 +186,9 @@ class NeedModel(Mapping):
     money_value = format_currency(120, 'EUR', locale = 'en')
     picture = ''
 
-
+    @property
+    def slug(self):
+        return self.token
     @property
     def first_level_expert(self):
         expert = ExpertModel(firstName='J.', lastName='of Nazareth', picture='http://lorempixel.com/100/100/people')

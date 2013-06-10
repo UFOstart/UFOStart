@@ -76,9 +76,9 @@ class RoundContext(WebsiteCompanyContext):
 class NeedContext(RoundContext):
     @reify
     def need(self):
-        needMap = {n.key:n for n in self.company.Round.Needs}
+        needMap = {n.slug:n for n in self.company.Round.Needs}
         return needMap[self.request.matchdict['need']]
 
     @reify
     def urlArgs(self):
-        return {'slug': self.request.matchdict['slug'], 'need': self.need.key}
+        return {'slug': self.request.matchdict['slug'], 'need': self.need.slug}

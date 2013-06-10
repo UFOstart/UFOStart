@@ -8,15 +8,7 @@
     <div class="container">
         <div class="row mar-top-1">
             <div class="col col-lg-6">
-                <div class="box-framed">
-                    <div class="box-title">
-                        <a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
-                        ${vctxt.need.name}
-                    </div>
-                    <div class="box-content">
-                        ${self.buildPrivateNeed(vctxt.need)}
-                    </div>
-                </div>
+                    ${self.buildPrivateNeed(vctxt.need)}
             </div>
             <div class="col col-lg-6">
                 <div class="box-framed">
@@ -40,22 +32,30 @@
 </%def>
 
 <%def name="buildPrivateNeed(need)">
-    <div class="description mar-top-1">
-        %if need.picture:
-            <div class="picture need empty">
-                <img src="${need.picture}"/>
+    <div class="box-framed">
+        <div class="box-title">
+            <a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
+            ${vctxt.need.name}
+        </div>
+        <div class="box-content">
+        <div class="description mar-top-1">
+            %if need.picture:
+                <div class="picture need empty">
+                    <img src="${need.picture}"/>
 
-            </div>
-        %endif
-        ${vctxt.need.description}
-    </div>
-    <h5 class="text-muted">
-        Related Tags
-    </h5>
-    <div class="label-list">
-        %for tag in need.tags:
-            <span class="label label-info spaced text-small">${tag}</span>
-        %endfor
+                </div>
+            %endif
+            ${vctxt.need.description}
+        </div>
+        <h5 class="text-muted">
+            Related Tags
+        </h5>
+        <div class="label-list">
+            %for tag in need.tags:
+                <span class="label label-info spaced text-small">${tag}</span>
+            %endfor
+        </div>
+        </div>
     </div>
 </%def>
 

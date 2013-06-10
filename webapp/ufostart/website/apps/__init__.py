@@ -11,17 +11,15 @@ __author__ = 'Martin'
 
 
 
-template_login = require_login("ufostart:website/templates/template/login.html")
-
-
 
 ROUTE_LIST = [
     FunctionRoute    ("website_index"                      , "/", contexts.WebsiteRootContext                                                , index.index, "index.html")
+    , OauthLoginRoute('website_login'                      , '/login', contexts.WebsiteRootContext                                           , auth.social.login, 'auth/login.html')
     , FunctionRoute  ('website_logout'                     , '/user/logout', contexts.WebsiteRootContext                                     , index.logout, None)
 
     , FunctionRoute  ('website_template_basic'             , '/templates', contexts.WebsiteRootContext                                       , index.template.basics, "template/basic.html")        #   Step 1
     , FunctionRoute  ('website_template_details'           , '/template/:template', contexts.WebsiteRootContext                              , index.template.details, "template/details.html")     #   Step 2
-    , OauthLoginRoute('website_template_create'            , '/setup/:template', contexts.WebsiteRootContext, template_login                 , index.template.create_project, None)                 #   Step 3
+    , OauthLoginRoute('website_template_create'            , '/setup/:template', contexts.WebsiteRootContext                                 , index.template.create_project, None)                 #   Step 3
 
 
     , FunctionRoute('website_company'                      , '/c/:slug', contexts.WebsiteCompanyContext                                      , company.general.index, None)
