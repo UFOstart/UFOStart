@@ -14,18 +14,22 @@ define(["tools/ajax"], function(ajax){
             max = lengths.indexOf(Math.max.apply(Math, lengths));
             min = lengths.indexOf(Math.min.apply(Math, lengths));
 
-
             this.$(".js-need-card-list").eq(min).append(
                 this.$(".js-need-card-list").eq(max).children('.need-card[data-entity-id]').last().detach()
             );
-
-
         }
+
         , removeNeed: function(e){
             if(!e.keyCode|| e.keyCode == 13){
                 var $t = $(e.currentTarget)
-                    , $need = $t.closest($t.data("target")).remove();
-                ajax.submit({url: $need.data('removeUrl'), data: {'key': $need.data("entityId")}});
+                    , $need = $t.closest($t.data("target"))
+                    , roundToken = this.$el.data('entityId');
+                ajax.submitPrefixed({url: '/web/round/removeneed'
+                    , data: {token:roundToken, Needs: [{token: $need.data("entityId")}]}
+                    , success: function(resp, status, xhr){
+                        $need.remove()
+                    }
+                });
             }
         }
         , render: function(){

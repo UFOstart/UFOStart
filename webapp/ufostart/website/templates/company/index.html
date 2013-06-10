@@ -97,7 +97,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" id="project-round-need-dashboard">
+        <div class="row" id="project-round-need-dashboard" data-entity-id=${company.Round.token}>
             %for i, col in enumerate(company.groupedNeeds(4)):
                 <div class="col col-lg-3 need-card-list">
                     <div class="js-need-card-list">
@@ -124,7 +124,7 @@
 
 
 <%def name="buildNeed(need, published)">
-    <div class="need-card" data-entity-id="${need.key}" data-remove-url="/api/need/remove">
+    <div class="need-card" data-entity-id="${need.token}">
         %if not published:
             %if not need.customized:
                 <a class="customize" href="${url("website_round_need", need=need.key, **vctxt.urlArgs)}">Customize</a>

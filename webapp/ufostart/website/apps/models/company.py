@@ -174,6 +174,7 @@ class ServiceModel(Mapping):
 
 class NeedModel(Mapping):
     key = TextField()
+    token = TextField()
     name = TextField()
     status = TextField()
     category = TextField()
