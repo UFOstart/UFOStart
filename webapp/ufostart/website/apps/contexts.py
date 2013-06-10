@@ -67,9 +67,18 @@ class WebsiteCompanyContext(WebsiteRootContext):
     def urlArgs(self):
         return {'slug': self.request.matchdict['slug']}
 
-class NeedContext(WebsiteCompanyContext):
+
+class RoundContext(WebsiteCompanyContext):
+    @reify
+    def need(self):
+        return self.company.Round
+
+class NeedContext(RoundContext):
     @reify
     def need(self):
         needMap = {n.key:n for n in self.company.Round.Needs}
         return needMap[self.request.matchdict['need']]
-        # return GetCompanyProc(self.request, {'token': self.request.matchdict['need']})
+
+    @reify
+    def urlArgs(self):
+        return {'slug': self.request.matchdict['slug'], 'need': self.need.key}

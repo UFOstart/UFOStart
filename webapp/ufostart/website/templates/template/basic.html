@@ -2,12 +2,7 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
 <%def name="pageTitle()">
-<div class="page-header">Task Setup</div>
-<div class="breadcrumbs">
-    <div class="crumb active">1</div>
-    <div class="crumb">2</div>
-    <div class="crumb">3</div>
-</div>
+    <div class="page-header">Your Project Template</div>
 </%def>
 
 
@@ -23,7 +18,7 @@
             %for t in templates:
                 <div class="col col-lg-6">
                     <div class="single-template">
-                        <a href="${url("website_template_details", template=t.name)}" class="single-template-button ${t.getStyleKey()} no-btn">
+                        <a href="${url("website_template_details", template=t.key)}" class="single-template-button ${t.getStyleKey()} no-btn">
                             <img src="${STATIC_URL}img/templates/${t.getStyleKey()}.png"/>
                             <span class="name">${t.name}</span>
                         </a>

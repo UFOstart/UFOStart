@@ -17,10 +17,10 @@
                                 ${widgets.logo(company.logo_picture)}
                             </div>
                             <div class="col col-lg-6">
-                                <a href="${url("website_company_company", **vctxt.urlArgs)}"><strong>${company.name}</strong></a>
-                                <div class="tagline">${company.description}</div>
+                                <a href="${url("website_company_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
+                                <div class="tagline">${company.display_description}</div>
                                 <div class="text-muted text-small">
-                                    ${company.getDisplayTags()}
+                                    ${company.display_tags}
                                 </div>
                             </div>
                             <div class="col col-lg-4">
@@ -40,6 +40,14 @@
                                 <a href="${url("website_company_company", **vctxt.urlArgs)}"><small>Invite more team members</small></a>
                             </div>
                         </div>
+
+                        %if not company.is_setup:
+                            <div class="disabled-overlay">
+                                <div class="overlay-action">
+                                    <a href="${url("website_company_company", **vctxt.urlArgs)}" class="btn btn-primary btn-large btn-block">Create Your Company</a>
+                                </div>
+                            </div>
+                        %endif
                     </div>
                 </div>
             </div>
@@ -71,6 +79,13 @@
                                 </div>
                             </div>
                         </div>
+                        %if not company.product_is_setup:
+                            <div class="disabled-overlay">
+                                <div class="overlay-action">
+                                    <a href="${url("website_company_product", **vctxt.urlArgs)}" class="btn btn-primary btn-large btn-block">Create Your Product</a>
+                                </div>
+                            </div>
+                        %endif
                     </div>
                 </div>
             </div>
@@ -82,14 +97,16 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" id="project-round-need-dashboard">
             %for i, col in enumerate(company.groupedNeeds(4)):
                 <div class="col col-lg-3 need-card-list">
+                    <div class="js-need-card-list">
                     %for need in col:
                         ${self.buildNeed(need, company.Round.published)}
                     %endfor
+                    </div>
                     %if not i:
-                        <a href="${url("website_need_create")}" class="need-card add-card">
+                        <a href="${url("website_round_need_create", **vctxt.urlArgs)}" class="need-card add-card">
                             <img src="${STATIC_URL}img/addneed.png"/>
                             <h5>Create a new Need</h5>
                         </a>
@@ -107,14 +124,14 @@
 
 
 <%def name="buildNeed(need, published)">
-    <div class="need-card">
+    <div class="need-card" data-entity-id="${need.key}" data-remove-url="/api/need/remove">
         %if not published:
             %if not need.customized:
-                <a class="customize" href="${url("website_need_customize", need=need.key, **vctxt.urlArgs)}">Customize</a>
+                <a class="customize" href="${url("website_round_need", need=need.key, **vctxt.urlArgs)}">Customize</a>
             %endif
-            <a class="remove" data-remove="need-card">×</a>
+            <a class="remove" data-target=".need-card">×</a>
         %endif
-        <h5><a href="${url("website_need_customize", need=need.key, **vctxt.urlArgs)}">${need.name}</a></h5>
+        <h5><a href="${url("website_round_need", need=need.key, **vctxt.urlArgs)}">${need.name}</a></h5>
         <div class="description">
             ${need.description}
         </div>
@@ -158,90 +175,10 @@
     </div>
 </%def>
 
-
-
-<%def name="buildTaskPillar(round)">
-    <%
-        taskUrl = url("website_company_round_view" if round.Needs else "website_company_setup_basic", **vctxt.urlArgs)
-    %>
-    <div class="round-dashboard-group">
-        <img src="${STATIC_URL}img/round/tasks.png" />
-        <a class="link" href="${taskUrl}">Tasks</a>
-    </div>
-    <h5 class="text-muted">NEEDS FULFILLED</h5>
-    <div class="progress">
-        <div style="width:${round.getTaskProgress()}%;" class="progress-bar"></div>
-        <span class="progress-num">${round.getTaskProgress()}%</span>
-    </div>
-
-    <h6 class="mar-top-2 text-muted">Recent events</h6>
-    %if round.getTaskEvent():
-        <% event = round.getTaskEvent() %>
-        ${self.buildRoundEvent(event, taskUrl)}
-    %endif
-</%def>
-
-
-<%def name="buildCustomerPillar(round)">
-    <div class="round-dashboard-group">
-        <img src="${STATIC_URL}img/round/customers.png" />
-        <a class="link" href="${url("website_company_customers", **vctxt.urlArgs)}">Customers</a>
-    </div>
-    <h5 class="text-muted">PLEDGES</h5>
-    <h2>${len(round.Pledges)}</h2>
-    <h6 class="mar-top-2 text-muted">Recent pledges</h6>
-    %if round.getPledgeEvent():
-        <% event = round.getPledgeEvent() %>
-        ${self.buildRoundEvent(event, url("website_company_customers", **vctxt.urlArgs))}
-    %endif
-</%def>
-
-
-<%def name="buildAssetsPillar(round)">
-    <div class="round-dashboard-group">
-        <img src="${STATIC_URL}img/round/assets.png" />
-        <a class="link" href="#">Assets</a>
-    </div>
-    <h5 class="text-muted">ASSETS VALUE</h5>
-    <h2>0 $</h2>
-    <h6 class="mar-top-2 text-muted">Recent events</h6>
-    %if round.getAssetsEvent():
-        <% event = round.getAssetsEvent() %>
-        ${self.buildRoundEvent(event, "#")}
-    %endif
-</%def>
-
-<%def name="buildMoneyPillar(round)">
-    <div class="round-dashboard-group">
-        <img src="${STATIC_URL}img/round/money.png" />
-        <a class="link" href="#">Money</a>
-    </div>
-    <h5 class="text-muted">FUNDED</h5>
-    <h2>0 $</h2>
-
-    <h6 class="mar-top-2 text-muted">Recent contributions</h6>
-    %if round.getMoneyEvent():
-        <% event = round.getMoneyEvent() %>
-        ${self.buildRoundEvent(event, "#")}
-    %endif
-</%def>
-
-
-
-<%def name="buildRoundEvent(event, moreLink)">
-    <div class="round-event">
-        <div class="actor-line">
-            <img src="${event.picture}" class="img-thumbnail mini"/>
-            <a href="#">${event.name}</a>
-        </div>
-        <div class="action-line">
-            ${event.text|n}
-        </div>
-        <div class="share-line">
-            <span class="share-item">${event.recency}</span>
-            <a href="#" class="share-item">Like</a>
-            <a href="#" class="share-item">Share</a>
-        </div>
-        <a class="more-line" href="${moreLink}">More...</a>
-    </div>
+<%def name="post_scripts()">
+<script>
+    require(["views/company/dashboard"], function(View){
+        var view =new View({el: $("#project-round-need-dashboard")});
+    });
+</script>
 </%def>

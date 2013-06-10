@@ -64,6 +64,7 @@ class ServiceModel(Mapping):
 class NeedModel(Mapping):
     key = TextField()
     name = TextField()
+    status = TextField()
     category = TextField()
 
     Service = DictField(ServiceModel)
@@ -72,9 +73,11 @@ class NeedModel(Mapping):
     # TODO: actual implementation
     equity_mix = 4
     money_value = format_currency(120, 'EUR', locale = 'en')
+    picture = ''
+
     @property
     def customized(self):
-        return choice([True, False])
+        return self.status != 'PENDING'
     @property
     def description(self):
         text = 'Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
@@ -171,20 +174,52 @@ class CompanyModel(Mapping):
     def getCurrentRound(self):
         return self.Round
 
-    def getDisplayTags(self):
-        return u" • ".join(['Palo Alto', 'Marketplaces', 'Outsourcing'])
+    @property
+    def no_users(self):
+        return len(self.Users)
 
     # TODO: actual implementation
+
+    @property
+    def display_name(self):
+        if self.is_setup:
+            return self.name
+        else:
+            return 'Your Company'
+    @property
+    def display_description(self):
+        if self.is_setup:
+            return self.description
+        else:
+            return ''
+    @property
+    def display_tags(self):
+        if self.is_setup:
+            return u" • ".join(['Palo Alto', 'Marketplaces', 'Outsourcing'])
+        else:
+            return ''
+
+
+    @property
+    def is_setup(self):
+        return bool(self.name)
+    product_is_setup = is_setup
+
+
+
     description = 'Democratizing access to scientific expertise'
     logo_picture = None
     product_picture = None
-    product_name = 'Serious Watch 5000'
-    product_description = 'This watch can measure time just like any other watch, it can tell how much the current time is.'
-    no_pledgees = 235
+    product_name = 'Product Name'
+    product_description = ''
+    @property
+    def no_pledgees(self):
+        return len(self.pledgees)
     @property
     def pledgees(self):
-        return self.Round.Pledges
+        return self.Round and self.Round.Pledges or []
     def groupedNeeds(self, n = 4):
+        if not self.Round: return []
         needs = self.Round.Needs
         length = len(needs)
         result = OrderedDict()

@@ -44,3 +44,27 @@ class NeedCreateForm(BaseForm):
 
 class NeedCreateHandler(FormHandler):
     form = NeedCreateForm
+
+class NeedEditForm(BaseForm):
+    id="NeedEdit"
+    label = ""
+    fields=[
+        StringField('name', "Need Name", REQUIRED)
+        , TextareaField("description", "Description", REQUIRED)
+        , ChoiceField("category", "Need Type", optionGetter, REQUIRED)
+    ]
+    @classmethod
+    def on_success(cls, request, values):
+        try:
+            CreateNeedProc(request, values)
+        except DBNotification, e:
+            if e.message == 'Need_Already_Exists':
+                return {'success':False, 'errors': {'name': "This need already exists, if you intend to Edit this need, please change its name to something less ambiguous!"}}
+            else:
+                raise e
+
+        request.session.flash(GenericSuccessMessage("Need edited successfully!"), "generic_messages")
+        return {'success':True, 'redirect': request.fwd_url("website_expert_dashboard")}
+
+class NeedEditHandler(FormHandler):
+    form = NeedEditForm

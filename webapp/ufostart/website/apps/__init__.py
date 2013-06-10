@@ -26,12 +26,13 @@ ROUTE_LIST = [
 
 
     , FunctionRoute('website_company'                      , '/c/:slug', contexts.WebsiteCompanyContext                                      , company.general.index, None)
-    , ClassRoute   ("website_company_company"              , "/c/:slug/company", contexts.WebsiteCompanyContext                              , company.invite.InviteCompanyHandler, "company/invite.html", view_attrs = JSON_FORM_ATTRS)
+    , ClassRoute   ("website_company_company"              , "/c/:slug/company", contexts.WebsiteCompanyContext                              , company.invite.InviteCompanyHandler, "company/company.html", view_attrs = JSON_FORM_ATTRS)
     , FunctionRoute("website_company_product"              , "/c/:slug/product", contexts.WebsiteCompanyContext                              , company.customers.index, None)
 
+    , ClassRoute   ("website_round_need_create"            , '/c/:slug/need/create', contexts.RoundContext                                   , need.NeedCreateHandler, "need/create.html", view_attrs = JSON_FORM_ATTRS)
+    , ClassRoute   ("website_round_need_edit"              , '/c/:slug/:need/edit', contexts.NeedContext                                     , need.NeedEditHandler, "need/edit.html", view_attrs = JSON_FORM_ATTRS)
+    , FunctionRoute("website_round_need"                   , '/c/:slug/:need', contexts.NeedContext                                          , need.index, "need/index.html")
 
-    , FunctionRoute("website_need_customize"               , '/c/:slug/:need', contexts.NeedContext                                          , need.index, "need/index.html")
-    , ClassRoute   ("website_need_create"                  , '/need/create', contexts.WebsiteAuthedContext                                   , need.NeedCreateHandler, "need/create.html", view_attrs = JSON_FORM_ATTRS)
 
     # , FunctionRoute('website_social_login'                 , '/social/:network/:action', contexts.WebsiteRootContext                         , auth.social.login, None)
     #
