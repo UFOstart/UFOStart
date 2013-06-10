@@ -1,6 +1,6 @@
-<%inherit file="../layout.html"/>
+<%inherit file="../../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
-<%namespace file="../widgets.html" name="widgets"/>
+<%namespace file="../../widgets.html" name="widgets"/>
 
 
 <%def name="pageTitle()"><div class="page-header">${vctxt.company.display_name}</div></%def>
@@ -8,41 +8,40 @@
 <%def name="content()">
     <div class="container">
         <div class="row">
-            ${self.buildPrivateNeed(vctxt.need)}
+            <div class="col col-lg-8">
+                ${self.buildPrivateNeed(vctxt.need)}
+            </div>
+            <div class="col col-lg-4">
+                <div class="box-framed">
+                    ${self.infoBox(vctxt.company, vctxt.need)}
+                </div>
+            </div>
         </div>
     </div>
 </%def>
 
 
 <%def name="buildPrivateNeed(need)">
-    <div class="col col-lg-8">
-        <div class="box-title">
-            <a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
-            ${vctxt.need.name}
-        </div>
-        <div class="description mar-top-1">
-            %if need.picture:
-                <div class="picture need empty">
-                    <img src="${need.picture}"/>
-
-                </div>
-            %endif
-            ${vctxt.need.description}
-        </div>
-        <h5 class="text-muted">
-            Related Tags
-        </h5>
-        <div class="label-list">
-            %for tag in need.tags:
-                <span class="label label-info spaced text-small">${tag}</span>
-            %endfor
-        </div>
-
+    <div class="box-title">
+        <a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
+        ${vctxt.need.name}
     </div>
-    <div class="col col-lg-4">
-        <div class="box-framed">
-            ${self.infoBox(vctxt.company, need)}
-        </div>
+    <div class="description mar-top-1">
+        %if need.picture:
+            <div class="picture need empty">
+                <img src="${need.picture}"/>
+
+            </div>
+        %endif
+        ${vctxt.need.description}
+    </div>
+    <h5 class="text-muted">
+        Related Tags
+    </h5>
+    <div class="label-list">
+        %for tag in need.tags:
+            <span class="label label-info spaced text-small">${tag}</span>
+        %endfor
     </div>
 </%def>
 

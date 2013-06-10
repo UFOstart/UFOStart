@@ -1,0 +1,23 @@
+<%inherit file="index.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="buildPrivateNeed(need)">
+    <div class="box-title">
+        <a href="${url("website_round_need", **vctxt.urlArgs)}" class="btn btn-default">Cancel</a>
+        ${vctxt.need.name}
+    </div>
+    <div class="description mar-top-1">
+        <div class="picture need empty">
+            <img src="${need.picture}"/>
+        </div>
+        ${vctxt.need.description}
+    </div>
+    <h5 class="text-muted">
+        Related Tags
+    </h5>
+    <div class="label-list">
+        %for tag in need.tags:
+            <span class="label label-info spaced text-small">${tag}</span>
+        %endfor
+    </div>
+</%def>
