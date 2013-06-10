@@ -1,0 +1,12 @@
+<%inherit file="hnc.forms:templates/basefield.html"/>
+<%namespace name="lib" file="hnc.forms:templates/lib.html"/>
+
+<%block name="controls">
+<div class="row">
+    <div class="col col-lg-4">
+        <div class="file-picker-upload upload-picture-display logo-picture empty" data-field-name="${widget.getName(prefix)}">
+            Drag & Drop Files here
+        </div>
+    </div>
+</div>
+</%block>
