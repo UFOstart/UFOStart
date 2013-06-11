@@ -1,9 +1,10 @@
 from hnc.forms.messages import GenericErrorMessage
-from ufostart.website.apps.models.procs import SetCompanyAngelListPitchProc
+from ufostart.website.apps.models.procs import SetCompanyAngelListPitchProc, CreateCompanyProc
 from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException
 
 
 def company_import_start(context, request):
+    request.session['ANGELLIST_FURL'] = request.furl()
     network = 'angellist'
     networkSettings = context[network]
     slug = context.user.Company.slug
@@ -29,17 +30,16 @@ def company_import(context, request):
             request.fwd("website_company_import_list", network = network, user_id = profile['id'], token = profile['accessToken'], slug = slug)
 
 def company_import_list(context, request):
-    network = 'angellist'
     user_id = request.matchdict['user_id']
     token = request.matchdict['token']
-    networkSettings = context[network]
-    return {'companies':networkSettings.getCompaniesData(user_id, token)}
+    return {'companies':context['angellist'].getCompaniesData(user_id, token)}
 
 def company_import_confirm(context, request):
     company_id = request.matchdict['company_id']
     token = request.matchdict['token']
+    company = context['angellist'].getCompanyData(company_id, token)
+    SetCompanyAngelListPitchProc(request, {'slug':request.matchdict['slug'], 'angelListId': company_id, 'angelListToken':token, 'name': company.display_name, 'picture': company.logo_url, 'description':company.high_concept, 'angellistUrl': company.angellist_url})
+    request.fwd_raw(location = request.session.get('ANGELLIST_FURL', request.fwd_url("website_company_company", **context.urlArgs)))
 
-    SetCompanyAngelListPitchProc(request, {'slug':request.matchdict['slug'], 'angelListId': company_id, 'angelListToken':token })
-    request.fwd("website_company_company", **context.urlArgs)
 
 

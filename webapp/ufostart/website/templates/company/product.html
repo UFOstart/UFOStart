@@ -26,7 +26,7 @@
                                 <a href="$#" class="btn btn-primary col col-sm-8 mar-top-1">Pledge Now</a>
                             </div>
                             <div class="col col-lg-9">
-                                <div class="product-image large">${self.company_media(company)}</div>
+                                <div class="product-image large">${self.company_media(al_company)}</div>
                             </div>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                             <div class="col col-lg-3">
                                 <h5 class="box-title dark">Founders</h5>
                                 <div class="mar-top-half">
-                                %for role in al_company_roles:
+                                %for role in company_roles:
                                     <div class="company-founder">
                                         <div class="actor-line">
                                             <img src="${role.getPicture()}" class="img-thumbnail mini"/>
@@ -110,10 +110,10 @@
 
 
 
-<%def name="company_media(company)" filter="trim">
+<%def name="company_media(al_company)" filter="trim">
     <%
-        youtube_id = company.getYoutubeVideoId()
-        vimeo_id = company.getVimeoVideoId()
+        youtube_id = al_company.getYoutubeVideoId()
+        vimeo_id = al_company.getVimeoVideoId()
     %>
     %if youtube_id:
         <div class="you-tube-container" data-video-id="${youtube_id}"></div>
@@ -121,11 +121,11 @@
         <div class="vimeo-container">
         <iframe src="http://player.vimeo.com/video/${vimeo_id}" width="847" height="400" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
         </div>
-    %elif company.video_url:
-        <a href="${company.video_url}">${company.video_url}</a>
-    %elif company.screenshots:
+    %elif al_company.video_url:
+        <a href="${al_company.video_url}">${al_company.video_url}</a>
+    %elif al_company.screenshots:
         <div class="product-screenshots">
-            <img src="${company.getFirstScreenShot()}"/>
+            <img src="${al_company.getFirstScreenShot()}"/>
         </div>
     %endif
 </%def>

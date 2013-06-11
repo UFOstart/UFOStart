@@ -33,6 +33,7 @@ class CompanyRolePerson(Mapping):
 class CompanyModel(Mapping):
     id = IntegerField()
     name = TextField()
+    display_name = TextField()
     high_concept = TextField()
     product_desc = TextField()
     logo_url = TextField()

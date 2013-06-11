@@ -58,6 +58,9 @@ GetRoundProc = ClientTokenProc("/web/round", root_key="Round", result_cls=RoundM
 
 SetRoundTasksProc = ClientTokenProc("/web/round/needs")
 
+CreateProductProc = ClientTokenProc("/web/product/create")
+
+
 SetCompanyTemplateProc = ClientTokenProc("/web/company/template")
 GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)
 
@@ -76,3 +79,6 @@ ApplyForNeedProc = ClientTokenProc("/web/need/application")
 InviteToCompanyProc = ClientTokenProc("/web/company/invite")
 GetInviteDetailsProc = ClientTokenProc("/web/company/getInvite", result_cls=InviteModel, root_key="Invite")
 AcceptInviteProc = ClientTokenProc("/web/company/acceptInvite")
+
+
+
