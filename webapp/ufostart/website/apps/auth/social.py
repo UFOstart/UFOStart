@@ -35,17 +35,6 @@ def login_user(context, request, profile):
     else:
         return user.toJSON()
 
-
-@view_config(context = SocialLoginSuccessful, route_name = 'website_round_need_apply_login')
-def login_success(exc, request):
-    login_user(request.root, request, exc.profile)
-    route = request.matched_route.name.rsplit('_', 1)[0]
-    params = request.matchdict.copy()
-    params.pop('traverse')
-    route = request.fwd_url(route, **params)
-    return Response("Resource Found!", 302, headerlist = [('location', route)])
-
-
 @view_config(context = SocialLoginSuccessful)
 def login_success(exc, request):
     login_user(request.root, request, exc.profile)

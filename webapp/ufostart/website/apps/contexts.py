@@ -86,7 +86,8 @@ class WebsiteCompanyContext(WebsiteRootContext):
 
 class WebsiteCompanyFounderContext(WebsiteCompanyContext):
     def is_allowed(self, request):
-        WebsiteAuthContext.is_allowed(self, request)
+        if self.user.isAnon():
+            request.fwd("website_login", request.furl)
         if not self.isTeamMember:
             raise HTTPForbidden()
 

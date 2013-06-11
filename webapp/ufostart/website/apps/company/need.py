@@ -7,7 +7,7 @@ from pyramid.view import view_config
 from ufostart.models.tasks import TASK_CATEGORIES
 from ufostart.website.apps.social import SocialLoginSuccessful
 from ufostart.website.apps.auth.social import AuthedFormHandler, login_user
-from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc
+from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc
 
 
 def index(context, request):
@@ -24,7 +24,9 @@ class ApplicationForm(BaseForm):
     fields=[StringField('message', 'Message', REQUIRED)]
     @classmethod
     def on_success(cls, request, values):
-        return {'success':True, 'redirect': request.fwd_url("website_index")}
+        ApplyForNeedProc(request, {'token':request.root.need.token, 'Application': {'User':{'token':request.root.user.token}, 'message':values['message']}})
+        request.session.flash(GenericSuccessMessage("You have applied for this need successfully. One of the team members will contact you shortly."), "generic_messages")
+        return {'success':True, 'redirect': request.fwd_url("website_round_need", **request.root.urlArgs)}
 
 class ApplicationHandler(AuthedFormHandler):
     form = ApplicationForm

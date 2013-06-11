@@ -34,7 +34,7 @@ ROUTE_LIST = [
     , ClassRoute   ("website_round_need_create"            , '/c/:slug/need/create', contexts.WebsiteCompanyContext                          , company.need.NeedCreateHandler, "company/need/create.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute   ("website_round_need_edit"              , '/c/:slug/:need/edit', contexts.WebsiteCompanyFounderContext                    , company.need.NeedEditHandler, "company/need/edit.html", view_attrs = JSON_FORM_ATTRS)
     , FunctionRoute("website_round_need"                   , '/c/:slug/:need', contexts.WebsiteCompanyContext                                , company.need.index, "company/need/index.html")
-    ,OAuthClassRoute("website_round_need_apply"             , '/c/:slug/:need/apply', contexts.WebsiteCompanyContext                         , company.need.ApplicationHandler, "company/need/index.html", view_attrs = JSON_FORM_ATTRS)
+    ,OAuthClassRoute("website_round_need_apply"             , '/c/:slug/:need/apply', contexts.WebsiteCompanyContext                         , company.need.ApplicationHandler, "company/need/apply.html", view_attrs = JSON_FORM_ATTRS)
 
 
     # , FunctionRoute('website_social_login'                 , '/social/:network/:action', contexts.WebsiteRootContext                         , auth.social.login, None)

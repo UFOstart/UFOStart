@@ -47,10 +47,13 @@ class UserModel(Mapping):
             else:
                 return "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
 
-
     @reify
     def profileMap(self):
         return {n.network:n for n in self.Profile}
+
+    @property
+    def position(self):
+        return 'Expert'
 
 def AnonUser():
     return UserModel()

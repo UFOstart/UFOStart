@@ -1,16 +1,11 @@
 # coding=utf-8
 from collections import OrderedDict
 from datetime import datetime, timedelta
-from math import floor
 from operator import attrgetter
-from random import random, sample, choice
+from random import random, sample
 from babel.dates import format_date
-from babel.numbers import format_currency
 from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField, IntegerField
-from hnc.apiclient.backend import ClientTokenProc
-from hnc.forms.formfields import IntField
 from pyramid.decorator import reify
-from ufostart.lib.tools import group_by_n
 from ufostart.models.tasks import NamedModel
 
 TEMPLATE_STYLE_KEYS = {
@@ -124,6 +119,22 @@ SKILLS = ['abandon'
 
 
 
+
+class CompanyUserModel(Mapping):
+    token = TextField()
+    name = TextField()
+    picture = TextField()
+    unconfirmed = BooleanField()
+
+    @property
+    def picture_url(self):
+        return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+
+    @property
+    def position(self):
+        return 'Founder'
+
+
 class IntroducerModel(Mapping):
     firstName = TextField()
     lastName = TextField()
@@ -174,6 +185,17 @@ class ServiceModel(Mapping):
     def short_description(self):
         return self.description
 
+class ApplicationModel(Mapping):
+
+    message = TextField()
+    created = DateTimeField()
+    User = DictField(CompanyUserModel)
+
+    @property
+    def display_date(self):
+        return format_date(self.created, format='medium', locale='en')
+
+
 class NeedModel(Mapping):
     token = TextField()
     name = TextField()
@@ -184,6 +206,7 @@ class NeedModel(Mapping):
     cash = IntegerField()
     equity = IntegerField()
     Tags = ListField(DictField(NamedModel))
+    Applications = ListField(DictField(ApplicationModel))
 
     Service = DictField(ServiceModel)
     Expert = DictField(ExpertModel)
@@ -196,10 +219,10 @@ class NeedModel(Mapping):
         return self.status != 'PENDING'
     @property
     def equity_mix(self):
-        return 100.0 * self.equity / self.money_value
+        return 100.0 * (self.equity or 0) / (self.money_value or 1)
     @property
     def money_value(self):
-        return self.cash + self.equity
+        return (self.cash or 0) + (self.equity or 0)
     @property
     def tags(self):
         return map(attrgetter('name'), self.Tags)
@@ -241,20 +264,6 @@ class PledgeModel(Mapping):
     picture = TextField()
 
 
-class CompanyUserModel(Mapping):
-    token = TextField()
-    name = TextField()
-    picture = TextField()
-    unconfirmed = BooleanField()
-
-    @property
-    def picture_url(self):
-        return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
-
-    @property
-    def position(self):
-        return 'Founder'
-
 class EventModel(Mapping):
     name = TextField()
     picture = TextField()
@@ -287,7 +296,6 @@ class RoundModel(Mapping):
 
     # TODO: actual implementation
     published = False
-
 
 
 
