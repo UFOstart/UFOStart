@@ -8,6 +8,8 @@ from ufostart.website.apps.models.procs import CreateCompanyProc, CreateRoundPro
 
 def index(context, request):
     company = context.company
+    if not company:
+        request.fwd("website_index")
     return render_to_response("ufostart:website/templates/company/index.html", {'company': company, 'currentRound':company.getCurrentRound()}, request)
 
 def create_round(context, request):

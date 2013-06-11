@@ -362,7 +362,7 @@ class CompanyModel(Mapping):
 
 
     def getCurrentRound(self):
-        return self.Round
+        return self.Round if self.Round else None
     def isMember(self, userToken):
         if not userToken: return False
         return len(filter(lambda x: x.token == userToken, self.Users))
