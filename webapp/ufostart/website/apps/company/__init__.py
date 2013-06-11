@@ -1,2 +1,2 @@
 from .tasks import *
-import customers, general, invite, need, imp
+import product, general, invite, need, imp

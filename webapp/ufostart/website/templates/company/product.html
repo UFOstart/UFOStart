@@ -1,0 +1,139 @@
+<%inherit file="../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="pageTitle()"><div class="page-header">${al_company.name}</div></%def>
+
+
+<%def name="content()">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box-shaded company-customer-dashboard disabled">
+                    <h5 class="box-title">Project</h5>
+                    <div class="row mar-top-1">
+                        <div class="col col-lg-12">
+                            <div class="col col-lg-3">
+                                <div class="company-card">
+                                    <div class="company-logo medium">
+                                        <img src="${al_company.logo_url}"/>
+                                    </div>
+                                    <a href="${company.angellist_url}" class="name mar-top-1">${al_company.name}</a>
+                                    <div class="tagline">${al_company.display_description}</div>
+                                    <div class="tags mar-top-1">
+                                        ${al_company.getDisplayTags()}
+                                    </div>
+                                </div>
+                                <a href="$#" class="btn btn-primary col col-sm-8 mar-top-1">Pledge Now</a>
+                            </div>
+                            <div class="col col-lg-9">
+                                <div class="product-image large">${self.company_media(company)}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mar-top-1">
+                        <div class="col col-lg-12">
+                            <div class="col col-lg-6 col-offset-3">
+                                <h5 class="box-title dark">About</h5>
+                                <p class="mar-top-half">
+                                    ${al_company.product_desc}
+                                </p>
+                                <div class="company-tags">
+                                %for tag in al_company.markets:
+                                    <span class="label">
+                                        ${tag.display_name}
+                                    </span>
+                                %endfor
+                                </div>
+                            </div>
+                            <div class="col col-lg-3">
+                                <h5 class="box-title dark">Founders</h5>
+                                <div class="mar-top-half">
+                                %for role in al_company_roles:
+                                    <div class="company-founder">
+                                        <div class="actor-line">
+                                            <img src="${role.getPicture()}" class="img-thumbnail mini"/>
+                                            <a href="${role.getPersonUrl()}">${role.getPersonName()}</a>
+                                        </div>
+                                        <p>${role.getPersonDescr()}</p>
+                                        <a href="${role.getPersonUrl()}"/>More...</a>
+                                    </div>
+                                %endfor
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mar-top-1">
+            <div class="col-lg-12">
+                <div class="box-shaded customer-pledge-section">
+                    ${self.pledgeBox(vctxt.company.Round.Pledges)}
+                </div>
+            </div>
+        </div>
+        <div class="row mar-top-1">
+            <div class="col-lg-12 text-center">
+                <a class="btn btn-primary btn-humonguous" href="#"><span>Pledge Now</span></a>
+            </div>
+        </div>
+    </div>
+</%def>
+
+
+<%def name="pledgeBox(pledges)">
+    <h5 class="box-title">${pluralize("{num} Pledge", "{num} Pledges", len(pledges))}</h5>
+    %if pledges:
+
+        <div class="picture-pile pledges">
+            %for pledge in pledges:
+                ${self.renderPledge(pledge)}
+            %endfor
+        </div>
+
+    %else:
+
+        <div class="empty">
+            No Pledges Yet
+        </div>
+
+    %endif
+</%def>
+<%def name="renderPledge(pledge)">
+    <div class="member">
+        <div class="picture">
+            <img src="${pledge.picture}" class="img-thumbnail medium"/>
+        </div>
+        <a href="#" class="link">${pledge.name}</a>
+    </div>
+</%def>
+
+
+
+<%def name="company_media(company)" filter="trim">
+    <%
+        youtube_id = company.getYoutubeVideoId()
+        vimeo_id = company.getVimeoVideoId()
+    %>
+    %if youtube_id:
+        <div class="you-tube-container" data-video-id="${youtube_id}"></div>
+    %elif vimeo_id:
+        <div class="vimeo-container">
+        <iframe src="http://player.vimeo.com/video/${vimeo_id}" width="847" height="400" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+        </div>
+    %elif company.video_url:
+        <a href="${company.video_url}">${company.video_url}</a>
+    %elif company.screenshots:
+        <div class="product-screenshots">
+            <img src="${company.getFirstScreenShot()}"/>
+        </div>
+    %endif
+</%def>
+
+<%def name="post_scripts()">
+    <script>
+        require(["tools/youtube"], function(yt){
+            yt.onLoad({root: $(".company-customer-dashboard")})
+        })
+    </script>
+</%def>

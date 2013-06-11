@@ -24,7 +24,7 @@ define(["tools/hash", "tools/ajax", "text!libs/templates/searchresult.html"]
                     .on('blur', $.proxy(this.hideonBlur, this));
 
                 this.model.on("reset", _.bind(this.onSearchResult, this));
-                this.$resultNode = $('<div class="entity-search-result hide"></div>').appendTo("body");
+                this.$resultNode = $('<div class="entity-search-result"></div>').appendTo("body");
 
 
                 this.$resultNode.on({'mouseenter' : $.proxy(this.mouseenter, this),
@@ -93,12 +93,14 @@ define(["tools/hash", "tools/ajax", "text!libs/templates/searchresult.html"]
                         this.last();
                         break;
                     default:
-                        this.doSearch(e.target.value);
+                        if(this.otherKey(e))this.doSearch(e.target.value);
                 }
                 e.stopPropagation();
                 e.preventDefault();
             }
-
+            , otherKey: function(e){
+                return true;
+            }
             , keypress: function (e) {
                 if (!this.shown) return
 

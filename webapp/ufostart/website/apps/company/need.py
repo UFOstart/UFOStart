@@ -1,5 +1,5 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import NullConfigModel, BaseForm, StringField, REQUIRED, TextareaField, ChoiceField, TypeAheadField, TagSearchField, IntField
+from hnc.forms.formfields import NullConfigModel, BaseForm, StringField, REQUIRED, TextareaField, ChoiceField, TypeAheadField, TagSearchField, IntField, HtmlAttrs
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from ufostart.models.tasks import TASK_CATEGORIES
@@ -57,7 +57,7 @@ class NeedEditForm(BaseForm):
         , IntField('value', "Total Value", REQUIRED)
         , IntField('ratio', "Equity percentage", REQUIRED)
         , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
-        , TagSearchField("tags", "Related Tags", '/web/tag/search', 'TagSearchResult', attrs = REQUIRED)
+        , TagSearchField("tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3))
     ]
 
     @classmethod

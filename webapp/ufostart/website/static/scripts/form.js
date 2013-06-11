@@ -5,18 +5,21 @@
  * Time: 14:20
  * To change this template use File | Settings | File Templates.
  */
-define(['tools/ajax', "libs/fileupload", "libs/typeahead", "libs/tagsearch"], function(ajax, FileUploader, TypeAhead, TagSearch){
+define(['tools/ajax', "libs/fileupload", "libs/typeahead"], function(ajax, FileUploader, TypeAhead){
     var View = Backbone.View.extend({
-//        events: {
-//            "click .remove-link": "removeRow"
-//            , "keyup .remove-link": "removeRow"
-//            , "click .add-more-link" :"addRow"
-//            , "keyup .add-more-link": "addRow"
-//        }
-//        removeLink: '<a class="remove-link link close">&times;</a>'
-        initialize: function(opts){
+        events: {
+            "click .remove-link": "removeRow"
+            , "keyup .remove-link": "removeRow"
+            , "click .add-more-link" :"addRow"
+            , "keyup .add-more-link": "addRow"
+        }
+        , removeLink: '<a class="remove-link link close">&times;</a>'
+        , initialize: function(opts){
             var view = this;
             var valid_params = {form: this.$el};
+
+            this.widgets = [];
+            this.setupWidgets(this.$el);
 
             ajax.ifyForm(_.extend(valid_params, opts.validatorOpts));
 
@@ -30,8 +33,6 @@ define(['tools/ajax', "libs/fileupload", "libs/typeahead", "libs/tagsearch"], fu
                 });
             });
 
-            this.widgets = [];
-            this.setupWidgets(this.$el);
 
             this.saveTimeout = null;
             this.savedTimeout = null;
@@ -81,11 +82,9 @@ define(['tools/ajax', "libs/fileupload", "libs/typeahead", "libs/tagsearch"], fu
         }
         , addTagSearch: function(idx, elem){
             var data = _.extend({el:elem}, $(elem).data());
-            if(data.customModule)
-                require([data.customModule], function(V){
-                    V.init(data);
-                });
-            else TagSearch.init(data);
+            require([data.customModule||"libs/tagsearch"], function(V){
+                V.init(data);
+            });
         }
         , addTypeAhead: function(idx, elem){
             TypeAhead.init(_.extend({el:elem}, $(elem).data()));

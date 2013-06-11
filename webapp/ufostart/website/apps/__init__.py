@@ -24,7 +24,7 @@ ROUTE_LIST = [
 
     , FunctionRoute('website_company'                      , '/c/:slug', contexts.WebsiteCompanyContext                                      , company.general.index, None)
     , ClassRoute   ("website_company_company"              , "/c/:slug/company", contexts.WebsiteCompanyContext                              , company.invite.InviteCompanyHandler, "company/company.html", view_attrs = JSON_FORM_ATTRS)
-    , FunctionRoute("website_company_product"              , "/c/:slug/product", contexts.WebsiteCompanyContext                              , company.customers.index, None)
+    , FunctionRoute("website_company_product"              , "/c/:slug/product", contexts.WebsiteCompanyContext                              , company.product.index, "company/product.html")
 
     , FunctionRoute("website_company_import_start"         , "/angellist/import/start", contexts.WebsiteAuthedContext                        , company.imp.company_import_start, "company/import/list.html")
     , FunctionRoute("website_company_import"               , "/angellist/import", contexts.WebsiteAuthedContext                              , company.imp.company_import, "company/import/list.html")

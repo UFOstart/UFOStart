@@ -1,4 +1,4 @@
-define(["tools/ajax", "libs/abstractsearch"], function(ajax, AbstractSearch){
+define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, ajax, AbstractSearch){
     var
         getRec = hnc.getRecursive
         , re = /-[0-9]+\./g
@@ -36,13 +36,28 @@ define(["tools/ajax", "libs/abstractsearch"], function(ajax, AbstractSearch){
         , TagSearch = AbstractSearch.extend({
             buildQuery: function(query){
                 var extra = this.options.queryExtra;
-                return query?_.extend({'term':query}, extra):null;
+                return query?_.extend({'name':query}, extra):null;
+            }
+            , delKey: function(e){
+                return true;
             }
         })
         , TagSearchView = Backbone.View.extend({
             MODEL_CLS: TagModels
             , initialize: function(opts){
+                var view = this;
                 this.$input = this.$(".query");
+
+                this.required = this.$input.prop('required') || this.$input.is(".required");
+                this.$input.removeClass("required").prop('required', false);
+                if(this.required){
+                    var requiredMethod = 'required-'+hashlib.UUID()
+                        , min = this.$input.addClass(requiredMethod).data('requiredMin');
+                    jQuery.validator.addMethod(requiredMethod, function (value, element) {
+                        return view.model.length>=min;
+                    }, "Please add at least "+min+" tags");
+                }
+
                 this.$result = this.$(".current-tags");
                 this.tagTemplate = _.template(this.$(".tag-template").html().trim());
                 var view = this;
