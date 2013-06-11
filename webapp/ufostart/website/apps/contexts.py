@@ -77,7 +77,7 @@ class WebsiteCompanyContext(WebsiteRootContext):
     def need(self):
         if 'need' in self.request.matchdict:
             needMap = {n.slug:n for n in self.company.Round.Needs}
-            return needMap[self.request.matchdict['need']]
+            return needMap.get(self.request.matchdict['need'])
         else: return None
 
     @reify
