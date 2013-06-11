@@ -40,7 +40,7 @@ class ProductPledgeForm(BaseForm):
     id="ProductPledge"
     label = ""
     fields=[
-        OfferChoiceField('offer', 'Your Offer', offer_choices, REQUIRED)
+        OfferChoiceField('offer', 'Your Offer', offer_choices, REQUIRED, input_classes='radio')
         , TextareaField('comment', 'Comment', REQUIRED)
     ]
     @classmethod
