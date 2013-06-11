@@ -27,20 +27,20 @@ ROUTE_LIST = [
     , ClassRoute     ("website_company_product"            , "/c/:slug/product", contexts.WebsiteCompanyContext                              , company.product.ProductOfferHandler, "company/product.html", view_attrs = JSON_FORM_ATTRS)
     , OAuthLoginRoute('website_company_product_pledge'     , '/c/:slug/pledge', contexts.WebsiteCompanyContext                               , company.product.login, 'auth/login.html')
 
-    , FunctionRoute("website_company_import_start"         , "/angellist/import/start", contexts.WebsiteRootContext                          , company.imp.company_import_start, "company/import/list.html")
-    , FunctionRoute("website_company_import"               , "/angellist/import", contexts.WebsiteRootContext                                , company.imp.company_import, "company/import/list.html")
-    , FunctionRoute("website_company_import_list"          , "/c/:slug/import/:user_id/:token", contexts.WebsiteCompanyFounderContext        , company.imp.company_import_list, "company/import/list.html")
-    , FunctionRoute("website_company_import_confirm"       , "/c/:slug/confirm/:company_id/:token", contexts.WebsiteCompanyFounderContext    , company.imp.company_import_confirm, None)
+    , FunctionRoute  ("website_company_import_start"       , "/angellist/import/start", contexts.WebsiteRootContext                          , company.imp.company_import_start, "company/import/list.html")
+    , FunctionRoute  ("website_company_import"             , "/angellist/import", contexts.WebsiteRootContext                                , company.imp.company_import, "company/import/list.html")
+    , FunctionRoute  ("website_company_import_list"        , "/c/:slug/import/:user_id/:token", contexts.WebsiteCompanyFounderContext        , company.imp.company_import_list, "company/import/list.html")
+    , FunctionRoute  ("website_company_import_confirm"     , "/c/:slug/confirm/:company_id/:token", contexts.WebsiteCompanyFounderContext    , company.imp.company_import_confirm, None)
 
-    , ClassRoute   ("website_round_need_create"            , '/c/:slug/need/create', contexts.WebsiteCompanyContext                          , company.need.NeedCreateHandler, "company/need/create.html", view_attrs = JSON_FORM_ATTRS)
-    , ClassRoute   ("website_round_need_edit"              , '/c/:slug/:need/edit', contexts.WebsiteCompanyFounderContext                    , company.need.NeedEditHandler, "company/need/edit.html", view_attrs = JSON_FORM_ATTRS)
-    , FunctionRoute("website_round_need"                   , '/c/:slug/:need', contexts.WebsiteCompanyContext                                , company.need.index, "company/need/index.html")
-    ,OAuthClassRoute("website_round_need_apply"            , '/c/:slug/:need/apply', contexts.WebsiteCompanyContext                         , company.need.ApplicationHandler, "company/need/apply.html", view_attrs = JSON_FORM_ATTRS)
+    , ClassRoute     ("website_round_need_create"          , '/c/:slug/need/create', contexts.WebsiteCompanyContext                          , company.need.NeedCreateHandler, "company/need/create.html", view_attrs = JSON_FORM_ATTRS)
+    , ClassRoute     ("website_round_need_edit"            , '/c/:slug/:need/edit', contexts.WebsiteCompanyFounderContext                    , company.need.NeedEditHandler, "company/need/edit.html", view_attrs = JSON_FORM_ATTRS)
+    , FunctionRoute  ("website_round_need"                 , '/c/:slug/:need', contexts.WebsiteCompanyContext                                , company.need.index, "company/need/index.html")
+    , OAuthClassRoute("website_round_need_apply"           , '/c/:slug/:need/apply', contexts.WebsiteCompanyContext                         , company.need.ApplicationHandler, "company/need/apply.html", view_attrs = JSON_FORM_ATTRS)
 
 
-    , FunctionRoute("website_invite_answer"                , '/invite/:token', contexts.WebsiteRootContext                                   , company.invite.answer, "company/invite_confirm.html")
-    , FunctionRoute("website_invite_confirm"               , '/invite/:token/confirm', contexts.WebsiteAuthedContext                         , company.invite.confirm, "company/invite_confirm.html")
-    , FunctionRoute('website_invite_login'                 , '/invite/login/:network/:action/:token', contexts.WebsiteRootContext            , company.invite.login, None)
+    , OAuthLoginRoute("website_invite_confirm"             , '/invite/:token/confirm', contexts.WebsiteRootContext                           , company.invite.confirm, "company/invite_confirm.html")
+    , OAuthLoginRoute("website_invite_answer"              , '/invite/:token', contexts.WebsiteRootContext                                   , company.invite.answer, "company/invite_confirm.html")
+
 
     # , FunctionRoute('website_social_login'                 , '/social/:network/:action', contexts.WebsiteRootContext                         , auth.social.login, None)
     #

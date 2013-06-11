@@ -2,6 +2,7 @@ from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm, StringField, EmailField, REQUIRED
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage, GenericErrorMessage
+from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.models.procs import InviteToCompanyProc, GetInviteDetailsProc, AcceptInviteProc
 
 
@@ -25,7 +26,7 @@ class InviteCompanyForm(BaseForm):
         InviteToCompanyProc(request, {'Invite': [values]})
 
         request.session.flash(GenericSuccessMessage("You successfully invited {name} to your company!".format(**values)), "generic_messages")
-        return {'success':True, 'redirect': request.fwd_url("website_company", slug = request.matchdict['slug'])}
+        return {'success':True, 'redirect': request.fwd_url("website_company_company", slug = request.matchdict['slug'])}
 
 class InviteCompanyHandler(FormHandler):
     form = InviteCompanyForm
@@ -58,6 +59,7 @@ def answer(context, request):
         request.fwd("website_index")
     return {'invite': invite}
 
+@require_login('ufostart:website/templates/auth/login.html')
 def confirm(context, request):
     token = request.matchdict['token']
 
