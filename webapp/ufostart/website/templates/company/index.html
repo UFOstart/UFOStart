@@ -122,7 +122,7 @@
                         ${self.buildNeed(need, company.Round.published)}
                     %endfor
                     </div>
-                    %if not i:
+                    %if not i and vctxt.isTeamMember:
                         <a href="${url("website_round_need_create", **vctxt.urlArgs)}" class="need-card add-card">
                             <img src="${STATIC_URL}img/addneed.png"/>
                             <h5>Create a new Need</h5>
@@ -131,11 +131,13 @@
                 </div>
             %endfor
         </div>
+        %if vctxt.isTeamMember:
         <div class="row">
-            <div class="col col-lg-3 col-offset-9">
-                <a href="#" class="btn btn-primary btn-humonguous btn-block"><span>Publish</span></a>
+            <div class="col col-lg-12">
+                <a href="#" class="pull-right btn btn-primary btn-humonguous"><span>Publish</span></a>
             </div>
         </div>
+        %endif
     </div>
 </%def>
 
