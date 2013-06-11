@@ -147,12 +147,21 @@ class IntroducerModel(Mapping):
     def name(self):
         return u"{} {}".format(self.firstName, self.lastName)
 
+    @property
+    def position(self):
+        return "IT Expert"
+
 class ExpertModel(Mapping):
     linkedinId = TextField()
     firstName = TextField()
     lastName = TextField()
     picture = TextField()
     Introducer = ListField(DictField(IntroducerModel))
+
+
+    introFirstName = TextField()
+    introLastName = TextField()
+    introPicture = TextField()
 
     @property
     def name(self):
@@ -250,9 +259,13 @@ class NeedModel(Mapping):
         return [expert]*5
     @property
     def second_level_expert(self):
-        introducer = IntroducerModel(firstName = 'Intro', lastName='Man', picture='http://lorempixel.com/100/100/people/3')
-        expert = ExpertModel(firstName='P.', lastName='of Saulus', picture='http://lorempixel.com/100/100/people/2', Introducer = [introducer]*3)
-        return [expert]*2
+        for expert in self.Experts:
+            expert.Introducer = [IntroducerModel(firstName = expert.introFirstName, lastName = expert.introLastName, picture = expert.introPicture)]
+        return self.Experts
+
+        # introducer = IntroducerModel(firstName = 'Intro', lastName='Man', picture='http://lorempixel.com/100/100/people/3')
+        # expert = ExpertModel(firstName='P.', lastName='of Saulus', picture='http://lorempixel.com/100/100/people/2', Introducer = [introducer]*3)
+        # return [expert]*2
     @property
     def services(self):
         return self.Services

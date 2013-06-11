@@ -67,29 +67,10 @@
 <%def name="privateInfoBox(company, need)">
 <div class="box-title">Recommended Solutions</div>
 <div class="box-content">
-    %if need.first_level_expert:
-        <div class="experts">
-            <h5 class="text-muted upper">Recommended Experts in your network</h5>
-            <div class="expert-pile row">
-                %for expert in need.first_level_expert:
-                    <div class="col col-lg-4 expert-briefing">
-                        <div class="picture medium">
-                            <img src="${expert.picture}" alt="${expert.name}"/>
-                        </div>
-                        <a href="#" class="overflow"><strong>${expert.name}</strong></a>
-                        <p class="text-muted text-small">${expert.position}</p>
-                        <p class="expert-skills"><strong>${expert.display_skills}</strong></p>
-                        <img src="${STATIC_URL}img/stars.png" class="stars"/>
-                        <a href="#" class="btn btn-primary btn-small btn-block ">Send Message</a>
-                    </div>
-                %endfor
-            </div>
-        </div>
-    %endif
 
     %if need.second_level_expert:
     <div class="experts">
-        <h5 class="text-muted no-margin upper mar-top-2">Recommended Experts and people who can introduce you</h5>
+        <h5 class="text-muted no-margin upper">Recommended Experts and people who can introduce you</h5>
         <div class="expert-pile">
                 %for expert in need.second_level_expert:
                     <div class="expert-briefing row">
@@ -100,7 +81,10 @@
                             </div>
                             <a href="#" class="overflow"><strong>${expert.name}</strong></a>
                             <p class="text-muted text-small">${expert.position}</p>
-                            <p class="expert-skills"><strong>${expert.display_skills}</strong></p>
+                            <%doc>
+                                TODO: implement expert skills
+                                <p class="expert-skills"><strong>${expert.display_skills}</strong></p>
+                            </%doc>
                             <img src="${STATIC_URL}img/stars.png" class="stars"/>
                         </div>
                         <div class="col col-lg-8">
@@ -113,8 +97,8 @@
                                     </div>
                                 </div>
                                 <div class="col col-sm-4">
-                                    <a class="overflow" href="#"><strong>${expert.name}</strong></a>
-                                    <p class="text-muted text-small">${expert.position}</p>
+                                    <a class="overflow" href="#"><strong>${intro.name}</strong></a>
+                                    <p class="text-muted text-small">${intro.position}</p>
                                 </div>
                                 <div class="col col-lg-6">
                                     <a href="#" class="btn btn-primary btn-small btn-block ">Get Introduction</a>
@@ -122,6 +106,29 @@
                             </div>
                             %endfor
                         </div>
+                    </div>
+                %endfor
+            </div>
+        </div>
+    %endif
+
+    %if need.first_level_expert:
+        <div class="experts">
+            <h5 class="text-muted upper">Recommended Experts in your network</h5>
+            <div class="expert-pile row">
+                %for expert in need.first_level_expert:
+                    <div class="col col-lg-4 expert-briefing">
+                        <div class="picture medium">
+                            <img src="${expert.picture}" alt="${expert.name}"/>
+                        </div>
+                        <a href="#" class="overflow"><strong>${expert.name}</strong></a>
+                        <p class="text-muted text-small">${expert.position}</p>
+                        <%doc>
+                            TODO: implement expert skills
+                            <p class="expert-skills"><strong>${expert.display_skills}</strong></p>
+                        </%doc>
+                        <img src="${STATIC_URL}img/stars.png" class="stars"/>
+                        <a href="#" class="btn btn-primary btn-small btn-block ">Send Message</a>
                     </div>
                 %endfor
             </div>
