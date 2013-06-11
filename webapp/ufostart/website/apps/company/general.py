@@ -28,10 +28,7 @@ class SetupCompanyForm(BaseForm):
     ]
     @classmethod
     def on_success(cls, request, values):
-        data = {
-                "token": request.root.user.token,
-                "Company": values
-            }
+        data = {"token": request.root.user.token, "Company": values}
         try:
             user = CreateCompanyProc(request,  data)
             company = user.Company

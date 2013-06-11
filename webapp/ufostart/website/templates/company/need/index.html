@@ -134,7 +134,7 @@
     %for service in need.services:
         <div class="col col-lg-4 service-briefing">
             <div class="picture">
-                <img src="${service.logo_picture}" name="${service.name}"/>
+                <img src="${service.logo_url}" name="${service.name}"/>
             </div>
             <a href="#"><strong>${service.name}</strong></a>
             <p class="text-muted text-small">${service.short_description}</p>
@@ -168,7 +168,7 @@
         </h5>
         <div class="row">
             <div class="col col-lg-3">
-                ${widgets.logo(company.logo_picture)}
+                ${widgets.logo(company.logo_url)}
             </div>
             <div class="col col-lg-6">
                 <a href="${url("website_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>

@@ -1,84 +1,208 @@
 <%inherit file="../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="../widgets.html" name="widgets"/>
 
 <%def name="pageTitle()"><div class="page-header">${al_company.name}</div></%def>
 
 
 <%def name="content()">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="box-shaded company-customer-dashboard disabled">
-                    <h5 class="box-title">Project</h5>
-                    <div class="row mar-top-1">
-                        <div class="col col-lg-12">
-                            <div class="col col-lg-3">
-                                <div class="company-card">
-                                    <div class="company-logo medium">
-                                        <img src="${al_company.logo_url}"/>
-                                    </div>
-                                    <a href="${company.angellist_url}" class="name mar-top-1">${al_company.name}</a>
-                                    <div class="tagline">${al_company.display_description}</div>
-                                    <div class="tags mar-top-1">
-                                        ${al_company.getDisplayTags()}
-                                    </div>
-                                </div>
-                                <a href="$#" class="btn btn-primary col col-sm-8 mar-top-1">Pledge Now</a>
-                            </div>
-                            <div class="col col-lg-9">
-                                <div class="product-image large">${self.company_media(al_company)}</div>
-                            </div>
-                        </div>
+    ${self.details(vctxt.company, vctxt.company.Round.Product)}
+</%def>
+
+<%def name="details(company, product)">
+<div class="container">
+    <div class="row">
+        <div class="col col-lg-8 company-customer-dashboard">
+            <div class="box-title">Product Details</div>
+            <div class="product-image large mar-top-1">${self.company_media(al_company)}</div>
+            <div class="mar-top-1">
+                ${product.display_description if product else ''}
+            </div>
+            <div class="mar-top-1">
+                <div class="label-list">
+                %for tag in al_company.display_tags:
+                    <span class="label label-info spaced text-small">${tag}</span>
+                %endfor
+                </div>
+            </div>
+            %if not company.product_is_setup:
+                <div class="disabled-overlay">
+                    <div class="overlay-action">
+                        <a href="${url("website_company_import_start", _query=[('furl', request.furl)], **vctxt.urlArgs)}" class="btn btn-primary btn-large btn-block">Import Your Product from Angellist</a>
                     </div>
-                    <div class="row mar-top-1">
-                        <div class="col col-lg-12">
-                            <div class="col col-lg-6 col-offset-3">
-                                <h5 class="box-title dark">About</h5>
-                                <p class="mar-top-half">
-                                    ${al_company.product_desc}
-                                </p>
-                                <div class="company-tags">
-                                %for tag in al_company.markets:
-                                    <span class="label">
-                                        ${tag.display_name}
-                                    </span>
-                                %endfor
-                                </div>
-                            </div>
-                            <div class="col col-lg-3">
-                                <h5 class="box-title dark">Founders</h5>
-                                <div class="mar-top-half">
-                                %for role in company_roles:
-                                    <div class="company-founder">
-                                        <div class="actor-line">
-                                            <img src="${role.getPicture()}" class="img-thumbnail mini"/>
-                                            <a href="${role.getPersonUrl()}">${role.getPersonName()}</a>
+                </div>
+            %endif
+
+            %if product:
+                %if product.Offers:
+                    <div class="mar-top-2"></div>
+                    <div class="box-title">
+                        Offers
+                    </div>
+                    <div class="mar-top-1">
+                        <p>This product can be acquired in the following options:</p>
+                        <ul class="styled">
+                            %for offer in product.offers:
+                                <li><span>${offer.name}</span></li>
+                            %endfor
+                        </ul>
+                    </div>
+
+                    %if not vctxt.isTeamMember:
+                        <% form = view.schemas['ProductPledge'] %>
+                        ${self.pledge_offer_form(form, values.get(form.id), errors.get(form.id))}
+                    %endif
+
+
+
+                    <div class="mar-top-1">
+                        <div class="box-title">Pledges</div>
+                        %if company.no_pledgees:
+                            %for pledge in company.Round.Pledges:
+                                <div class="row mar-top-1">
+                                    <div class="col col-lg-4">
+                                        <div class="row">
+                                            <div class="col col-sm-4">
+                                                <div class="picture">
+                                                    <img src="${pledge.picture}"/>
+                                                </div>
+                                            </div>
+                                            <div class="col col-sm-8">
+                                                <p class="name"><a href="#"><strong>${pledge.name}</strong></a></p>
+                                                <div class="text-small text-muted">Offer Option</div>
+                                                <ul class="styled">
+                                                    <li><span class="text-small">${pledge.offer}</span></li>
+                                                </ul>
+
+
+                                            </div>
                                         </div>
-                                        <p>${role.getPersonDescr()}</p>
-                                        <a href="${role.getPersonUrl()}"/>More...</a>
                                     </div>
-                                %endfor
+                                    <div class="col col-lg-8 control-group">
+                                        ${pledge.comment}
+                                    </div>
                                 </div>
+                            %endfor
+                        %else:
+                            <div class="empty">
+                                No Pledges yet
                             </div>
+                        %endif
+                    </div>
+
+                %else:
+                    <% form = view.schemas['ProductOffer'] %>
+                    ${self.create_offer_form(form, values.get(form.id), errors.get(form.id))}
+                %endif
+            %endif
+        </div>
+        <div class="col col-lg-4">
+            <div class="box-framed">
+                <div class="box-title">Company Info</div>
+                <div class="box-content">
+                    <div class="row">
+                        <div class="col col-sm-3">
+                            ${widgets.logo(company.logo_url)}
+                        </div>
+                        <div class="col col-sm-9">
+                            <a href="${url("website_company_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
+                            <p>
+                                ${al_company.display_description}
+                            </p>
+                            <a href="${url("website_company_company", **vctxt.urlArgs)}"><small>More...</small></a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row mar-top-1">
-            <div class="col-lg-12">
-                <div class="box-shaded customer-pledge-section">
-                    ${self.pledgeBox(vctxt.company.Round.Pledges)}
+            <div class="box-framed mar-top-1">
+                <div class="box-title">Pledges</div>
+                <div class="box-content">
+                    %if company.no_pledgees:
+                        %for pledge in company.Round.Pledges:
+                            <div class="picture small">
+                                <img src="${pledge.picture}"/>
+                            </div>
+                        %endfor
+                    %else:
+                        <div class="empty">
+                            No Pledges yet
+                        </div>
+                    %endif
                 </div>
-            </div>
-        </div>
-        <div class="row mar-top-1">
-            <div class="col-lg-12 text-center">
-                <a class="btn btn-primary btn-humonguous" href="#"><span>Pledge Now</span></a>
             </div>
         </div>
     </div>
+</div>
 </%def>
+
+
+
+
+<%def name="create_offer_form(form, values, errors)">
+    <div class="mar-top-2"></div>
+    <div class="box-title">
+        Setup Offers Now
+    </div>
+
+    <div class="mar-top-1">
+    <form class="${form.classes}" id="${form.id}" method="POST">
+        ${baseform.prelims(form)}
+        %for field in view.form.fields:
+            ${field.render(form.id, request, values, errors, view)|n}
+        %endfor
+        <div class="form-actions col col-offset-3 col-lg-6">
+            <button type="submit" class="btn btn-primary">Save Offers</button>
+        </div>
+    </form>
+    </div>
+</%def>
+
+<%def name="pledge_offer_form(form, values, errors)">
+    <div class="mar-top-2"></div>
+    <div class="box-title">
+        Pledge Now
+    </div>
+    <div class="mar-top-1">
+    %if vctxt.user.isAnon():
+
+        <a href="${url("website_company_product_pledge", **vctxt.urlArgs)}" class="btn btn-primary">Login to Pledge</a>
+
+    %else:
+
+        <form class="${form.classes}" id="${form.id}" method="POST">
+            ${baseform.prelims(form)}
+            <div class="row mar-top-1">
+                <div class="col col-lg-4">
+                    <div class="row">
+                        <div class="col col-sm-3">
+                            <div class="picture">
+                                <img src="${vctxt.user.picture}"/>
+                            </div>
+                        </div>
+                        <div class="col col-sm-9">
+                            <div class="name">${vctxt.user.name}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-12">
+                            <button type="submit" class="btn btn-primary">Pledge Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-lg-8 control-group">
+                    %for field in form.fields:
+                        ${field.render(form.id, request, values, errors, view)|n}
+                    %endfor
+                </div>
+            </div>
+        </form>
+
+    %endif
+    </div>
+</%def>
+
+
+
 
 
 <%def name="pledgeBox(pledges)">
@@ -135,5 +259,10 @@
         require(["tools/youtube"], function(yt){
             yt.onLoad({root: $(".company-customer-dashboard")})
         })
+        require(["form"], function(View){
+            $("form.form-validated").each(function(idx, elem){
+                new View({el: $(elem)});
+            });
+        });
     </script>
 </%def>

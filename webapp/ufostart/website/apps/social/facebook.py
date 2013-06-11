@@ -62,4 +62,4 @@ get_profile = assemble_profile_procs(token_func, profile_func, parse_profile_fun
 def callback_view(context, request):
     profile = get_profile(context, request)
     request.session['SOCIAL_BACKUP_{}'.format(context.network)] = profile
-    request.rld(traverse=[context.network, 'list'], with_query = False)
+    raise SocialLoginSuccessful(profile)

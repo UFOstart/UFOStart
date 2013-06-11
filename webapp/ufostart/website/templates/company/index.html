@@ -14,7 +14,7 @@
                     <div class="box-content min-height-7">
                         <div class="row">
                             <div class="col col-lg-2">
-                                ${widgets.logo(company.logo_picture)}
+                                ${widgets.logo(company.logo_url)}
                             </div>
                             <div class="col col-lg-6">
                                 <a href="${url("website_company_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
@@ -167,7 +167,7 @@
                 <h5 class="no-margin upper text-muted">Recomended Cloud Services</h5>
                 <div class="picture-pile">
                     <div class="picture medium">
-                        <img src="${need.Service.logo_picture}" name="${need.Service.name}"/>
+                        <img src="${need.Service.logo_url}" name="${need.Service.name}"/>
                     </div>
                 </div>
             </div>

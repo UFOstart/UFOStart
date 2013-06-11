@@ -54,8 +54,9 @@ class CompanyModel(Mapping):
     def display_description(self):
         return self.high_concept
 
-    def getDisplayTags(self):
-        return ", ".join(map(attrgetter("display_name"), self.markets))
+    @property
+    def display_tags(self):
+        return map(attrgetter("display_name"), self.markets)
 
     def getYoutubeVideoId(self):
         if self.video_url and 'youtube' in self.video_url:

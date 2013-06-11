@@ -180,7 +180,7 @@ class ServiceModel(Mapping):
     def worker_picture(self):
         return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
     @property
-    def logo_picture(self):
+    def logo_url(self):
         return self.logo
 
     @property
@@ -266,6 +266,8 @@ class PledgeModel(Mapping):
     network = TextField()
     networkId = TextField()
     picture = TextField()
+    offer = TextField()
+    comment = TextField()
 
 
 class EventModel(Mapping):
@@ -274,6 +276,23 @@ class EventModel(Mapping):
     text = TextField()
     recency =TextField()
 
+class ProductModel(Mapping):
+    token = TextField()
+    name = TextField()
+    picture = TextField()
+    description = TextField()
+    Offers = ListField(DictField(NamedModel))
+
+    @property
+    def is_setup(self):
+        return self.name and self.token
+    @property
+    def display_description(self):
+        return self.description or ''
+    @property
+    def offers(self):
+        return self.Offers
+
 
 class RoundModel(Mapping):
     start = DateTimeField()
@@ -281,7 +300,7 @@ class RoundModel(Mapping):
     Needs = ListField(DictField(NeedModel))
     Users = ListField(DictField(CompanyUserModel))
     Pledges = ListField(DictField(PledgeModel))
-
+    Product = DictField(ProductModel)
 
     @reify
     def expiry(self):
@@ -302,19 +321,13 @@ class RoundModel(Mapping):
     published = False
 
 
-class ProductModel(Mapping):
-    token = TextField()
-    name = TextField()
-    picture = TextField()
-    description = TextField()
-
 class CompanyModel(Mapping):
     token = TextField()
     slug = TextField()
     name = TextField()
 
-    logo_url = TextField()
-    angellist_url = TextField()
+    logo = TextField()
+    url = TextField()
 
     angelListId = TextField()
     angelListToken = TextField()
@@ -324,7 +337,7 @@ class CompanyModel(Mapping):
     Round = DictField(RoundModel)
     Rounds = ListField(DictField(RoundModel))
     Users = ListField(DictField(CompanyUserModel))
-    Product = DictField(ProductModel)
+
 
     def getCurrentRound(self):
         return self.Round
@@ -350,8 +363,15 @@ class CompanyModel(Mapping):
     @property
     def is_setup(self):
         return self.angelListId and self.angelListToken and self.name
-    product_is_setup = is_setup
-
+    @property
+    def product_is_setup(self):
+        return self.angelListId and self.angelListToken and self.Round and self.Round.Product
+    @property
+    def product_description(self):
+        return self.Round.Product.display_description if self.product_is_setup else ''
+    @property
+    def logo_url(self):
+        return self.logo
 
     # TODO: actual implementation
     @property
@@ -364,10 +384,10 @@ class CompanyModel(Mapping):
 
     description = 'Democratizing access to scientific expertise'
 
-    logo_picture = None
+
     product_picture = None
     product_name = 'Product Name'
-    product_description = ''
+
     @property
     def no_pledgees(self):
         return len(self.pledgees)
