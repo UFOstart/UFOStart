@@ -142,7 +142,7 @@
 
 <%def name="buildNeed(need, published)">
     <div class="need-card ${need.status}" data-entity-id="${need.token}">
-        %if not published:
+        %if not published and vctxt.isTeamMember:
             <a class="remove" data-target=".need-card">×</a>
         %endif
         <h5><a href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">${need.name}</a></h5>
@@ -190,7 +190,7 @@
                 </div>
             </div>
         %endif
-        %if not need.customized:
+        %if not need.customized and vctxt.isTeamMember:
             <a class="customize" href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">Customize</a>
         %endif
     </div>

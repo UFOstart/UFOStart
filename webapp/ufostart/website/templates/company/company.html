@@ -43,7 +43,9 @@
                     </div>
                 %endfor
             </div>
-            ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+            %if vctxt.isTeamMember:
+                ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+            %endif
         </div>
     </div>
 </%def>
