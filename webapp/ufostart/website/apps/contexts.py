@@ -1,5 +1,6 @@
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.decorator import reify
+from pyramid.httpexceptions import HTTPForbidden
 from ufostart.lib.baseviews import RootContext
 from ufostart.website.apps.models.auth import AnonUser
 from ufostart.website.apps.models.procs import GetCompanyProc
@@ -67,20 +68,26 @@ class WebsiteCompanyContext(WebsiteRootContext):
 
     @reify
     def urlArgs(self):
-        return {'slug': self.request.matchdict['slug']}
+        if self.need:
+            return {'slug': self.request.matchdict['slug'], 'need': self.need.slug}
+        else:
+            return {'slug': self.request.matchdict['slug']}
 
-
-class RoundContext(WebsiteCompanyContext):
     @reify
     def need(self):
-        return self.company.Round
-
-class NeedContext(RoundContext):
-    @reify
-    def need(self):
-        needMap = {n.slug:n for n in self.company.Round.Needs}
-        return needMap[self.request.matchdict['need']]
+        if 'need' in self.request.matchdict:
+            needMap = {n.slug:n for n in self.company.Round.Needs}
+            return needMap[self.request.matchdict['need']]
+        else: return None
 
     @reify
-    def urlArgs(self):
-        return {'slug': self.request.matchdict['slug'], 'need': self.need.slug}
+    def isTeamMember(self):
+        return self.company.isMember(self.user.token)
+
+class WebsiteCompanyFounderContext(WebsiteCompanyContext):
+    def is_allowed(self, request):
+        WebsiteAuthContext.is_allowed(self, request)
+        if not self.isTeamMember:
+            raise HTTPForbidden()
+
+

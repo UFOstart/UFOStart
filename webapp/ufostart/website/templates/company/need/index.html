@@ -2,65 +2,71 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../../widgets.html" name="widgets"/>
 
-<%def name="pageTitle()"><div class="page-header">${vctxt.company.display_name}</div></%def>
+<%def name="pageTitle()"><div class="page-header">${vctxt.need.name}</div></%def>
 
 <%def name="content()">
+%if vctxt.isTeamMember:
     <div class="container">
         <div class="row mar-top-1">
             <div class="col col-lg-6">
-                    ${self.buildPrivateNeed(vctxt.need)}
+                <div class="box-framed">
+                    <div class="box-title"><a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>Need Details</div>
+                    <div class="box-content">${self.needDetails(vctxt.need)}</div>
+                </div>
             </div>
             <div class="col col-lg-6">
-                <div class="box-framed">
-                    <div class="box-title">
-                        Recommended Solutions
-                    </div>
-                    <div class="box-content">
-                        ${self.privateInfoBox(vctxt.company, vctxt.need)}
-                    </div>
-                </div>
+                <div class="box-framed">${self.privateInfoBox(vctxt.company, vctxt.need)}</div>
             </div>
         </div>
         <div class="row mar-top-2">
             <div class="col col-lg 12">
-                <div class="box-title">
-                    Applications
-                </div>
+                <div class="box-title">Applications</div>
             </div>
         </div>
     </div>
+%else:
+    <div class="container">
+        <div class="row mar-top-1">
+            <div class="col col-lg-8">
+                <div class="box-title">Need Details</div>
+                ${self.needDetails(vctxt.need)}
+            </div>
+            <div class="col col-lg-4">
+                <div class="box-framed">${self.publicInfoBox(vctxt.company, vctxt.need)}</div>
+                <a href="${url("website_round_need_apply", **vctxt.urlArgs)}" class="btn btn-primary btn-block mar-top-1">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
+            </div>
+        </div>
+    </div>
+%endif
 </%def>
 
-<%def name="buildPrivateNeed(need)">
-    <div class="box-framed">
-        <div class="box-title">
-            <a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
-            ${vctxt.need.name}
-        </div>
-        <div class="box-content">
-        <div class="description mar-top-1">
-            %if need.picture:
-                <div class="picture need empty">
-                    <img src="${need.picture}"/>
 
-                </div>
-            %endif
-            ${vctxt.need.description}
-        </div>
-        <h5 class="text-muted">
-            Related Tags
-        </h5>
-        <div class="label-list">
-            %for tag in need.tags:
-                <span class="label label-info spaced text-small">${tag}</span>
-            %endfor
-        </div>
-        </div>
+
+
+
+<%def name="needDetails(need)">
+    <div class="description mar-top-1">
+        %if need.picture:
+            <div class="picture need empty">
+                <img src="${need.picture}"/>
+
+            </div>
+        %endif
+        ${vctxt.need.description}
+    </div>
+    <h5 class="text-muted">
+        Related Tags
+    </h5>
+    <div class="label-list">
+        %for tag in need.tags:
+            <span class="label label-info spaced text-small">${tag}</span>
+        %endfor
     </div>
 </%def>
 
 <%def name="privateInfoBox(company, need)">
-
+<div class="box-title">Recommended Solutions</div>
+<div class="box-content">
     %if need.first_level_expert:
         <div class="experts">
             <h5 class="text-muted upper">Recommended Experts in your network</h5>
@@ -136,6 +142,7 @@
         </div>
     %endfor
     </div>
+</div>
 </%def>
 
 
@@ -145,49 +152,49 @@
         Info
     </div>
     <div class="box-content">
-    <div class="valuation">
-        <div class="primary-number pull-right">
-            ${need.equity_mix}%
-            <div class="legend">Equity</div>
+        <div class="valuation">
+            <div class="primary-number pull-right">
+                ${need.equity_mix}%
+                <div class="legend">Equity</div>
+            </div>
+            <div class="primary-number">
+                ${need.money_value}
+                <div class="legend">Value</div>
+            </div>
         </div>
-        <div class="primary-number">
-            ${need.money_value}
-            <div class="legend">Value</div>
+        <h5 class="upper text-muted">
+            Company
+        </h5>
+        <div class="row">
+            <div class="col col-lg-3">
+                ${widgets.logo(company.logo_picture)}
+            </div>
+            <div class="col col-lg-6">
+                <a href="${url("website_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
+                <div class="tagline">${company.display_description}</div>
+                <a href="${url("website_company", **vctxt.urlArgs)}"><small>More...</small></a>
+            </div>
+            <div class="col col-lg-3">
+                <h5 class="text-muted no-margin">Team members</h5>
+                <h5 class="no-margin brand-primary">${company.no_users}</h5>
+            </div>
         </div>
-    </div>
-    <h5 class="upper text-muted">
-        Company
-    </h5>
-    <div class="row">
-        <div class="col col-lg-3">
-            ${widgets.logo(company.logo_picture)}
+        <h5 class="upper text-muted">
+            Product
+        </h5>
+        <div class="row">
+            <div class="col col-lg-3">
+                ${widgets.logo(company.product_picture)}
+            </div>
+            <div class="col col-lg-6">
+                <a href="${url("website_company_product", **vctxt.urlArgs)}"><strong>${company.product_name}</strong></a>
+                <div class="description">${company.product_description}</div>
+                <a href="${url("website_company_product", **vctxt.urlArgs)}"><small>More...</small></a>
+            </div>
+            <div class="col col-lg-3">
+                <h5 class="text-muted no-margin">Pledges</h5>
+                <h5 class="no-margin brand-primary">${company.no_pledgees}</h5>
+            </div>
         </div>
-        <div class="col col-lg-6">
-            <a href="${url("website_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
-            <div class="tagline">${company.display_description}</div>
-            <a href="${url("website_company", **vctxt.urlArgs)}"><small>More...</small></a>
-        </div>
-        <div class="col col-lg-3">
-            <h5 class="text-muted no-margin">Team members</h5>
-            <h5 class="no-margin brand-primary">${company.no_users}</h5>
-        </div>
-    </div>
-    <h5 class="upper text-muted">
-        Product
-    </h5>
-    <div class="row">
-        <div class="col col-lg-3">
-            ${widgets.logo(company.product_picture)}
-        </div>
-        <div class="col col-lg-6">
-            <a href="${url("website_company_product", **vctxt.urlArgs)}"><strong>${company.product_name}</strong></a>
-            <div class="description">${company.product_description}</div>
-            <a href="${url("website_company_product", **vctxt.urlArgs)}"><small>More...</small></a>
-        </div>
-        <div class="col col-lg-3">
-            <h5 class="text-muted no-margin">Pledges</h5>
-            <h5 class="no-margin brand-primary">${company.no_pledgees}</h5>
-        </div>
-    </div>
     </div>
 </%def>

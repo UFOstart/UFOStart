@@ -1,8 +1,12 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import NullConfigModel, BaseForm, StringField, REQUIRED, TextareaField, ChoiceField, TypeAheadField, TagSearchField, IntField, HtmlAttrs
+from hnc.forms.formfields import NullConfigModel, BaseForm, StringField, REQUIRED, TextareaField, ChoiceField, TagSearchField, IntField, HtmlAttrs
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
+from pyramid.response import Response
+from pyramid.view import view_config
 from ufostart.models.tasks import TASK_CATEGORIES
+from ufostart.website.apps.social import SocialLoginSuccessful
+from ufostart.website.apps.auth.social import AuthedFormHandler, login_user
 from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc
 
 
@@ -14,7 +18,16 @@ def optionGetter(request):
 
 
 
+class ApplicationForm(BaseForm):
+    id="Application"
+    label = ""
+    fields=[StringField('message', 'Message', REQUIRED)]
+    @classmethod
+    def on_success(cls, request, values):
+        return {'success':True, 'redirect': request.fwd_url("website_index")}
 
+class ApplicationHandler(AuthedFormHandler):
+    form = ApplicationForm
 
 
 

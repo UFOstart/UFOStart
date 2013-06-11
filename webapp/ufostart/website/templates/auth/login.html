@@ -9,10 +9,10 @@
             <div class="col col-lg-12">
                 <p class="intro"><strong>Log in now</strong></p>
                 <p class="btn-social-wrapper">
-                    <a href="${url("website_login_login", traverse = ['linkedin'], **request.matchdict)}" class="btn btn-primary btn-linkedin">Log in with Linkedin</a>
-                    <a href="${url("website_login_login", traverse = ['facebook'], **request.matchdict)}" class="btn btn-primary btn-facebook">Log in with Facebook</a>
-                    <a href="${url("website_login_login", traverse = ['xing'], **request.matchdict)}" class="btn btn-primary btn-xing">Log in with Xing</a>
-                    <a href="${url("website_login_login", traverse = ['twitter'], **request.matchdict)}" class="btn btn-primary btn-xing">Log in with Twitter</a>
+                    <a href="${url('{}_login'.format(request.matched_route.name), traverse = ['linkedin'], **request.matchdict)}" class="btn btn-primary btn-linkedin">Log in with Linkedin</a>
+                    <a href="${url('{}_login'.format(request.matched_route.name), traverse = ['facebook'], **request.matchdict)}" class="btn btn-primary btn-facebook">Log in with Facebook</a>
+                    <a href="${url('{}_login'.format(request.matched_route.name), traverse = ['xing'], **request.matchdict)}" class="btn btn-primary btn-xing">Log in with Xing</a>
+                    <a href="${url('{}_login'.format(request.matched_route.name), traverse = ['twitter'], **request.matchdict)}" class="btn btn-primary btn-xing">Log in with Twitter</a>
                 </p>
                 <small><strong class="text-muted">If you don't have a Linkedin account yet, please <a href="http://www.linkedin.com" class="text-muted">create one</a>.</strong></small>
             </div>

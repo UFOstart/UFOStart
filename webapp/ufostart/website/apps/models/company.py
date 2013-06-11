@@ -310,13 +310,13 @@ class CompanyModel(Mapping):
 
     def getCurrentRound(self):
         return self.Round
+    def isMember(self, userToken):
+        if not userToken: return False
+        return len(filter(lambda x: x.token == userToken, self.Users))
 
     @property
     def no_users(self):
         return len(self.Users)
-
-    # TODO: actual implementation
-
     @property
     def display_name(self):
         if self.is_setup:
@@ -330,18 +330,18 @@ class CompanyModel(Mapping):
         else:
             return ''
     @property
+    def is_setup(self):
+        return self.angelListId and self.angelListToken
+    product_is_setup = is_setup
+
+
+    # TODO: actual implementation
+    @property
     def display_tags(self):
         if self.is_setup:
             return u" • ".join(['Palo Alto', 'Marketplaces', 'Outsourcing'])
         else:
             return ''
-
-
-    @property
-    def is_setup(self):
-        return self.angelListId and self.angelListToken
-    product_is_setup = is_setup
-
 
 
     description = 'Democratizing access to scientific expertise'

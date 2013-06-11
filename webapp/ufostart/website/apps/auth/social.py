@@ -1,5 +1,6 @@
 import logging
 from hnc.apiclient.backend import DBNotification
+from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.renderers import render_to_response
 from pyramid.response import Response
@@ -35,6 +36,16 @@ def login_user(context, request, profile):
         return user.toJSON()
 
 
+@view_config(context = SocialLoginSuccessful, route_name = 'website_round_need_apply_login')
+def login_success(exc, request):
+    login_user(request.root, request, exc.profile)
+    route = request.matched_route.name.rsplit('_', 1)[0]
+    params = request.matchdict.copy()
+    params.pop('traverse')
+    route = request.fwd_url(route, **params)
+    return Response("Resource Found!", 302, headerlist = [('location', route)])
+
+
 @view_config(context = SocialLoginSuccessful)
 def login_success(exc, request):
     login_user(request.root, request, exc.profile)
@@ -43,6 +54,8 @@ def login_success(exc, request):
     params.pop('traverse')
     route = request.fwd_url(route, **params)
     return Response("Resource Found!", 302, headerlist = [('location', route)])
+
+
 
 
 @view_config(context = SocialLoginFailed)
@@ -81,6 +94,13 @@ def require_login(template):
     return require_login_real
 
 
+class AuthedFormHandler(FormHandler):
+    template = "ufostart:website/templates/auth/login.html"
+    def __init__(self, context=None, request=None):
+        if request.root.user.isAnon():
+            raise RequiresLoginException(self.template)
+        else:
+            super(AuthedFormHandler, self).__init__(context, request)
 
 
 @require_login('ufostart:website/templates/auth/login.html')
