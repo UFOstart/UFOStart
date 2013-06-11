@@ -6,7 +6,10 @@ from random import random, sample
 from babel.dates import format_date
 from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField, IntegerField
 from hnc.tools.tools import word_truncate_by_letters
+from httplib2 import Http
 from pyramid.decorator import reify
+import simplejson
+from ufostart.lib.tools import getYoutubeVideoId, getVimeoVideoId
 from ufostart.models.tasks import NamedModel
 
 TEMPLATE_STYLE_KEYS = {
@@ -398,9 +401,25 @@ class CompanyModel(Mapping):
     def logo_url(self):
         return self.logo
 
-    @property
+    @reify
     def product_picture(self):
-        return self.Round.Product.picture if self.Round and self.Round.Product else ''
+        picture = self.Round.Product.picture if self.Round and self.Round.Product else ''
+        if not picture: return
+        elif 'youtube' in picture:
+            youtubeId  = getYoutubeVideoId(picture)
+            return 'http://img.youtube.com/vi/{}/0.jpg'.format(youtubeId)
+        elif 'vimeo' in picture:
+            try:
+                vimeoId =  getVimeoVideoId(picture)
+                h = Http()
+                resp, data = h.request("http://vimeo.com/api/v2/video/{}.json".format(vimeoId))
+                json = simplejson.loads(data)
+                return json[0]['thumbnail_small']
+            except:
+                return None
+        else:
+            return picture
+
 
 
     @property

@@ -5,6 +5,7 @@ from urlparse import urlparse, parse_qsl
 from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField, ListField
 from httplib2 import Http
 import simplejson
+from ufostart.lib.tools import getYoutubeVideoId, getVimeoVideoId
 from ufostart.website.apps.social import AbstractSocialResource, SocialNetworkException, UserRejectedNotice, SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
@@ -60,18 +61,12 @@ class CompanyModel(Mapping):
 
     def getYoutubeVideoId(self):
         if self.video_url and 'youtube' in self.video_url:
-            scheme, netloc, url, params, query, fragment = urlparse(self.video_url)
-            params = dict(parse_qsl(query))
-            return params.get('v')
-        else: return ''
+            return getYoutubeVideoId(self.video_url)
+        return ''
 
     def getVimeoVideoId(self):
         if self.video_url and 'vimeo' in self.video_url:
-            scheme, netloc, url, params, query, fragment = urlparse(self.video_url)
-            for e in url.split("/"):
-                try:
-                    return int(e)
-                except: pass
+            return getVimeoVideoId(self.video_url)
         return ''
 
     def getFirstScreenShot(self):
