@@ -52,7 +52,8 @@ class AbstractSocialResource(object):
         result = {'appId':self.appid, 'connect' : True}
         return simplejson.dumps(result) if stringify else result
 
-
+    def start_process(self, request):
+        request.session.flash(request.furl, 'redirections')
 
 
 

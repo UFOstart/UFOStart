@@ -11,7 +11,7 @@
                     <div class="box-title">
                         Company
                     </div>
-                    <div class="box-content">
+                    <div class="box-content min-height-7">
                         <div class="row">
                             <div class="col col-lg-2">
                                 ${widgets.logo(company.logo_picture)}
@@ -30,7 +30,7 @@
                                 <div class="picture-pile">
                                 %for member in company.Users[:8]:
                                     <div class="picture mini">
-                                        <img src="${member.getPicture()}"/>
+                                        <img src="${member.picture_url}"/>
                                         %if member.unconfirmed:
                                             <span title="unconfirmed" class="unconfirmed">unconfirmed</span>
                                         %endif
@@ -56,7 +56,7 @@
                     <div class="box-title">
                         Product
                     </div>
-                    <div class="box-content">
+                    <div class="box-content min-height-7">
                         <div class="row">
                             <div class="col col-lg-3">
                                 ${widgets.logo(company.product_picture)}

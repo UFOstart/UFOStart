@@ -23,6 +23,6 @@ def create_project(context, request):
     templateKey = request.matchdict['template']
     company = CreateCompanyProc(request, {'token':context.user.token, 'Company':{'Template': {'key': templateKey}}})
     route, args, kwargs = context.getPostLoginUrlParams()
-    request.fwd(route, *args, **kwargs)
+    if route: request.fwd(route, *args, **kwargs)
 
 

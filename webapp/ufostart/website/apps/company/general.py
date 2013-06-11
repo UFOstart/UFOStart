@@ -46,12 +46,3 @@ class SetupCompanyForm(BaseForm):
 class SetupCompanyHandler(FormHandler):
     form = SetupCompanyForm
 
-
-
-class InviteeForm(MultipleFormField):
-    template = 'ufostart:website/templates/company/controls/invitee.html'
-    add_more_link_label = "Add Invitee"
-    fields = [
-        StringField("name", "Name", REQUIRED)
-        , EmailField("email", "email address", REQUIRED)
-    ]

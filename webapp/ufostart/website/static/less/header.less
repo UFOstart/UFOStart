@@ -1,4 +1,8 @@
-.page-header-bar {
+.page-header-bar.anon {
+  color:@text-color;
+  .page-header-bar-menu > li > a {color: @text-color;}
+}
+.page-header-bar.logged-in {
   background-color: black;
   border-bottom:1px solid @corp-color;
 }

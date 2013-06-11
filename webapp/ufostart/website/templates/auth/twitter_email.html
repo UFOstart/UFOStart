@@ -6,7 +6,7 @@
 <%def name="content()">
     <div class="container">
     <div class="row">
-        <div class="col col-lg-6">
+        <div class="col col-lg-8">
           ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
         </div>
     </div>
@@ -18,7 +18,7 @@
     <form class="${form.classes}" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
         <div class="row">
-            <div class="col col-sm-8 col-offset-4">
+            <div class="col col-sm-9 col-offset-3">
                     <legend>Enter your email, cause Twitter ain't gave it us!</legend>
             </div>
         </div>
@@ -27,8 +27,9 @@
             ${field.render(form.id, request, values, errors, view)|n}
         %endfor
         <div class="row">
-            <div class="col col-sm-8 col-offset-4">
+            <div class="col col-sm-9 col-offset-3">
                 <button type="submit" class="btn btn-primary">Submit</button>
+                <a class="actions-link" href="${url("website_index")}">Cancel</a>
             </div>
         </div>
     </form>

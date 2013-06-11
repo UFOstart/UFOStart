@@ -1,49 +1,92 @@
 <%inherit file="../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="../widgets.html" name="widgets"/>
 
-<%def name="pageTitle()"><div class="page-header">Invite Team Members</div></%def>
+
+<%def name="pageTitle()"><div class="page-header">${vctxt.company.display_name}</div></%def>
 
 <%def name="content()">
     <div class="container">
         <div class="row">
-            <div class="col col-lg-12">
-                <div class="row">
-                    <div class="col col-sm-8 col-offset-2">
-                        <h1 class="site-slogan">Now build your team</h1>
-                    </div>
-                </div>
+            <div class="col col-lg-8">
+                ${self.companyMainInfo(vctxt.company)}
             </div>
-        </div>
-        <div class="row mar-top-2">
-            <div class="col col-lg-12">
-                ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+            <div class="col col-lg-4">
+                ${self.teamMembers(vctxt.company.Users)}
             </div>
         </div>
     </div>
 </%def>
 
 
-<%def name="build_form(form, values, errors)">
-    <form class="${form.classes}" id="${form.id}" method="POST">
-        ${baseform.prelims(form)}
-        %for field in view.form.fields:
-            ${field.render(form.id, request, values, errors, view)|n}
-        %endfor
-
-        <div class="row mar-top-2">
-            <div class="col col-lg-6">
-                <div class="row">
-                    <div class="col col-sm-8 col-offset-4">
-                        <button type="submit" class="btn btn-primary btn-block">Invite members</button>
+<%def name="teamMembers(members)">
+    <div class="box-framed">
+        <div class="box-title">
+            Team Members
+        </div>
+        <div class="box-content">
+            <div class="member-pile">
+                %for member in members:
+                    <div class="row mar-top-half">
+                        <div class="col col-lg-3">
+                            <div class="picture">
+                                <img src="${member.picture_url}" width="100%"/>
+                                %if member.unconfirmed:
+                                    <span title="unconfirmed" class="unconfirmed">unconfirmed</span>
+                                %endif
+                            </div>
+                        </div>
+                        <div class="col col-lg-9">
+                            <a href="#"><strong>${member.name}</strong></a>
+                            <div class="text-muted">${member.position}</div>
+                        </div>
                     </div>
-                </div>
+                %endfor
             </div>
-            <div class="col col-lg-6">
-                <a href="${url("website_company", **vctxt.urlArgs)}" class="btn btn-default col col-sm-4">Skip</a>
+            ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+        </div>
+    </div>
+</%def>
+
+
+<%def name="companyMainInfo(company)">
+    <div class="box-title">
+        Company Information
+    </div>
+    <div class="row mar-top-1">
+        <div class="col col-lg-3">
+            ${widgets.logo(company.logo_picture)}
+        </div>
+        <div class="col col-lg-9">
+            <a href="${vctxt.company.angellist_url}"><strong>${al_company.display_name}</strong></a>
+        </div>
+    </div>
+    <div class="mar-top-1">
+        ${al_company.display_description}
+    </div>
+
+    %if not company.is_setup:
+        <div class="disabled-overlay">
+            <div class="overlay-action">
+                <a href="${url("website_company_import_start", _query=[('furl', request.furl)], **vctxt.urlArgs)}" class="btn btn-primary btn-large btn-block">Import Your Company from Angellist</a>
             </div>
         </div>
+    %endif
+</%def>
 
-    </form>
+
+
+
+<%def name="build_form(form, values, errors)">
+    <div class="box-shaded mar-top-1">
+        <form class="${form.classes}" id="${form.id}" method="POST">
+            ${baseform.prelims(form)}
+            %for field in view.form.fields:
+                ${field.render(form.id, request, values, errors, view)|n}
+            %endfor
+            <button type="submit" class="btn btn-primary btn-block mar-top-1">Invite member</button>
+        </form>
+    </div>
 </%def>
 
 <%def name="post_scripts()">

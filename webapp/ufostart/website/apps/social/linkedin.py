@@ -18,6 +18,7 @@ class SocialResource(AbstractSocialResource):
 
 @view_config(context = SocialResource)
 def redirect_view(context, request):
+    context.start_process(request)
     params = {'response_type':"code"
                 , 'client_id':context.appid
                 , 'state': request.session.get_csrf_token()

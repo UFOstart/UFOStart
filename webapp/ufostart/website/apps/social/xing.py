@@ -23,6 +23,7 @@ class SocialResource(AbstractSocialResource):
 
 @view_config(context = SocialResource)
 def redirect_view(context, request):
+    context.start_process(request)
     params = {'oauth_callback':request.rld_url(traverse=[context.network, 'cb'], with_query = False)}
 
     client = Client(context.consumer)
@@ -78,7 +79,7 @@ def parse_profile_func(tokenSecret, data, context, request):
     if not profile: return None
     profile = profile[0]
 
-    picture = context.getBestProfilePicture(profile.get('photo_urls', []))
+    picture = getBestProfilePicture(context, profile.get('photo_urls', []))
 
     return SocialNetworkProfileModel(
             network = context.network

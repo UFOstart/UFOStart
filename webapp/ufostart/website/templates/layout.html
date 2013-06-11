@@ -78,8 +78,20 @@
 
 <%def name="pageTitle()"></%def>
 <%def name="menu(user)">
-    %if not user.isAnon():
-        <div class="page-header-bar">
+    %if user.isAnon():
+        <div class="page-header-bar anon">
+        <div class="container">
+            <div class="row">
+                <div class="col col-sm 12">
+                    <ul class="page-header-bar-menu">
+                        <li><a href="${url("website_login", _query=[('furl', request.furl)])}">Log in</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+    %else:
+        <div class="page-header-bar logged-in">
         <div class="container">
             <div class="row">
                 <div class="col col-sm 12">
@@ -88,7 +100,7 @@
                         %if user.Company and user.Company.slug:
                             <li><a href="${url("website_company", slug = user.Company.slug)}">Dashboard</a></li>
                         %endif
-                        <li><a href="${url("website_logout")}">Logout</a></li>
+                        <li><a href="${url("website_logout")}">Log out</a></li>
                     </ul>
                 </div>
             </div>

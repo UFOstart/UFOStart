@@ -20,6 +20,7 @@ class SocialResource(AbstractSocialResource):
 
 @view_config(context = SocialResource)
 def redirect_view(context, request):
+    context.start_process(request)
     params = {'client_id':context.appid, 'scope':'email'
                 , 'redirect_uri':request.rld_url(traverse=[context.network, 'cb'], with_query = False)
              }
@@ -60,4 +61,5 @@ get_profile = assemble_profile_procs(token_func, profile_func, parse_profile_fun
 @view_config(context = SocialResource, name="cb")
 def callback_view(context, request):
     profile = get_profile(context, request)
-    raise SocialLoginSuccessful(profile)
+    request.session['SOCIAL_BACKUP_{}'.format(context.network)] = profile
+    request.rld(traverse=[context.network, 'list'], with_query = False)

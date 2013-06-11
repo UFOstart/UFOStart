@@ -6,17 +6,17 @@ define(["tools/ajax"], function(ajax){
         }
         , initialize:function(opts){
             var lengths = [], max, min;
-
-            this.$(".js-need-card-list").each(function(idx, elem){
-                lengths.push($(elem).height());
-            });
-
-            max = lengths.indexOf(Math.max.apply(Math, lengths));
-            min = lengths.indexOf(Math.min.apply(Math, lengths));
-
-            this.$(".js-need-card-list").eq(min).append(
-                this.$(".js-need-card-list").eq(max).children('.need-card[data-entity-id]').last().detach()
-            );
+//
+//            this.$(".js-need-card-list").each(function(idx, elem){
+//                lengths.push($(elem).height());
+//            });
+//
+//            max = lengths.indexOf(Math.max.apply(Math, lengths));
+//            min = lengths.indexOf(Math.min.apply(Math, lengths));
+//
+//            this.$(".js-need-card-list").eq(min).append(
+//                this.$(".js-need-card-list").eq(max).children('.need-card[data-entity-id]').last().detach()
+//            );
         }
 
         , removeNeed: function(e){

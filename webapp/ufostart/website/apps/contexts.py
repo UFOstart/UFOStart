@@ -26,12 +26,14 @@ class WebsiteRootContext(RootContext):
 
     def getPostLoginUrlParams(self):
         user = self.user
-        if user.isAnon():
-            return "website_index", [], {}
-        elif user.Company and user.Company.slug:
+        route, args, kwargs = "website_index", [], {}
+        if user.Company and user.Company.slug:
             return "website_company", [], {'slug':user.Company.slug}
+        if route != self.request.matched_route.name:
+            return route, args, kwargs
         else:
-            return "website_index", [], {}
+            return None, None, None
+
 
 
     def __getitem__(self, item):

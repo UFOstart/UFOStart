@@ -242,8 +242,13 @@ class CompanyUserModel(Mapping):
     picture = TextField()
     unconfirmed = BooleanField()
 
-    def getPicture(self):
+    @property
+    def picture_url(self):
         return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+
+    @property
+    def position(self):
+        return 'Founder'
 
 class EventModel(Mapping):
     name = TextField()
@@ -329,7 +334,7 @@ class CompanyModel(Mapping):
 
     @property
     def is_setup(self):
-        return bool(self.name)
+        return self.angelListId and self.angelListToken
     product_is_setup = is_setup
 
 

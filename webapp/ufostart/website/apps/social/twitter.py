@@ -34,6 +34,7 @@ class SocialResource(AbstractSocialResource):
 
 @view_config(context = SocialResource)
 def redirect_view(context, request):
+    context.start_process(request)
     params = {'oauth_callback':request.rld_url(traverse=[context.network, 'cb'], with_query = False)}
 
     client = Client(context.consumer)

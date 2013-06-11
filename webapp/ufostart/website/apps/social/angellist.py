@@ -5,7 +5,7 @@ from urlparse import urlparse, parse_qsl
 from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField, ListField
 from httplib2 import Http
 import simplejson
-from ufostart.website.apps.social import AbstractSocialResource
+from ufostart.website.apps.social import AbstractSocialResource, SocialNetworkException, UserRejectedNotice, SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 
@@ -45,6 +45,14 @@ class CompanyModel(Mapping):
 
     pledges = ListField(DictField(ScreenShotModel))
 
+
+    @property
+    def display_name(self):
+        return self.name
+    @property
+    def display_description(self):
+        return self.high_concept
+
     def getDisplayTags(self):
         return ", ".join(map(attrgetter("display_name"), self.markets))
 
@@ -83,6 +91,9 @@ class CompanyRoleModel(Mapping):
     def getPersonDescr(self):
         return self.tagged.bio or ''
 
+
+
+
 class SocialResource(AbstractSocialResource):
     getCodeEndpoint = "https://angel.co/api/oauth/authorize"
     codeEndpoint = "https://angel.co/api/oauth/token"
@@ -92,6 +103,7 @@ class SocialResource(AbstractSocialResource):
     companyRolesEndpoint = "https://api.angel.co/1/startups/{company_id}/roles"
 
     def loginStart(self, request):
+        self.start_process(request)
         params = {'response_type':"code"
                     , 'client_id':self.appid
                     , 'scope':'email'
@@ -116,7 +128,7 @@ class SocialResource(AbstractSocialResource):
         access_token = result['access_token']
         return access_token, h.request('{}?{}'.format(self.profileEndpoint, urllib.urlencode({'access_token':access_token})), method="GET")
 
-    def getProfileFromData(self, token, data, request):
+    def getProfileFromData(self, token, data, context, request):
         """
         {
             "name" : "Martin Peschke",
@@ -145,7 +157,7 @@ class SocialResource(AbstractSocialResource):
         """
         profile = simplejson.loads(data)
         return SocialNetworkProfileModel(
-                type = SOCIAL_NETWORK_TYPES_REVERSE[self.network]
+                network = 'angellist'
                 , id = profile['id']
                 , accessToken = token
                 , picture = profile.get('image', "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm")
@@ -156,24 +168,24 @@ class SocialResource(AbstractSocialResource):
     def getProfile(self, request):
         if request.params.get("error"):
             if 'denied' in request.params.get("error"):
-                raise UserRejectedNotice()
+                raise UserRejectedNotice("Import failed")
             else:
                 return None
-        resp, content = self.getAuthCode(request, None, None)
+        resp, content = self.getAuthCode(request)
         if resp.status == 500:
-            raise SocialNetworkException()
+            raise SocialNetworkException("Import failed")
         if resp.status != 200:
             result = simplejson.loads(content)
             return None
         else:
             token, (resp, data) = self.getTokenProfile(content)
             if resp.status == 500:
-                raise SocialNetworkException()
+                raise SocialNetworkException("Import failed")
             if resp.status != 200:
                 result = simplejson.loads(data)
                 return None
             else:
-                return self.getProfileFromData(token, data)
+                return self.getProfileFromData(token, data, request.root, request)
 
     def unwrapCompanies(self, data):
         result = simplejson.loads(data)
