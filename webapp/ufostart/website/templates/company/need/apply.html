@@ -2,13 +2,13 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../../widgets.html" name="widgets"/>
 
-<%def name="pageTitle()"><div class="page-header">${vctxt.need.name}</div></%def>
+<%def name="pageTitle()"><div class="page-header">Need Details</div></%def>
 
 <%def name="content()">
     <div class="container">
         <div class="row mar-top-1">
             <div class="col col-lg-8">
-                <div class="box-title">Need Details</div>
+                <div class="box-title">${vctxt.need.name}</div>
                 ${self.needDetails(vctxt.need)}
             </div>
             <div class="col col-lg-4">
