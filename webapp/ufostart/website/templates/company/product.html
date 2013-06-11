@@ -56,44 +56,8 @@
 
 
                 %if product.Offers:
-
-                    %if not vctxt.isTeamMember:
-                        <% form = view.schemas['ProductPledge'] %>
-                        ${self.pledge_offer_form(form, values.get(form.id), errors.get(form.id))}
-                    %endif
-
-                    <div class="mar-top-1">
-                        <div class="box-title">Pledges</div>
-                        %if company.no_pledgees:
-                            %for pledge in company.Round.Pledges:
-                                <div class="row mar-top-1">
-                                    <div class="col col-lg-4">
-                                        <div class="row">
-                                            <div class="col col-sm-4">
-                                                <div class="picture">
-                                                    <img src="${pledge.picture}"/>
-                                                </div>
-                                            </div>
-                                            <div class="col col-sm-8">
-                                                <p class="name"><a href="#"><strong>${pledge.name}</strong></a></p>
-                                                <div class="text-small text-muted">Offer Option</div>
-                                                <ul class="styled">
-                                                    <li><span class="text-small">${pledge.offer}</span></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col col-lg-8 control-group">
-                                        ${pledge.comment}
-                                    </div>
-                                </div>
-                            %endfor
-                        %else:
-                            <div class="empty">
-                                No Pledges yet
-                            </div>
-                        %endif
-                    </div>
+                    <% form = view.schemas['ProductPledge'] %>
+                    ${self.pledge_offer_form(form, values.get(form.id), errors.get(form.id))}
                 %endif
 
             %endif
@@ -194,47 +158,82 @@
 </%def>
 
 <%def name="pledge_offer_form(form, values, errors)">
+    <div class="expander">
     <div class="mar-top-2"></div>
     <div class="box-title">
-        Pledge Now
+        %if vctxt.user.isAnon():
+            <a href="${url("website_company_product_pledge", **vctxt.urlArgs)}" class="btn btn-primary">Login to Pledge</a>
+        %elif not vctxt.isTeamMember:
+            <a class="btn btn-primary show-contracted" data-toggle-target=".expander" data-toggle-class="expanded">Pledge Now</a>
+            <a class="btn btn-default show-expanded" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
+        %endif
+        Pledges
     </div>
-    <div class="mar-top-1">
-    %if vctxt.user.isAnon():
-
-        <a href="${url("website_company_product_pledge", **vctxt.urlArgs)}" class="btn btn-primary">Login to Pledge</a>
-
-    %else:
-
-        <form class="${form.classes}" id="${form.id}" method="POST">
-            ${baseform.prelims(form)}
-            <div class="row mar-top-1">
-                <div class="col col-lg-4">
-                    <div class="row">
-                        <div class="col col-sm-3">
-                            <div class="picture">
-                                <img src="${vctxt.user.picture}"/>
+    %if not vctxt.isTeamMember and not vctxt.user.isAnon():
+        <div class="show-expanded box-shaded box-framed">
+            <div class="box-content">
+                <form class="${form.classes}" id="${form.id}" method="POST">
+                    ${baseform.prelims(form)}
+                    <div class="row mar-top-1">
+                        <div class="col col-lg-4">
+                            <div class="row">
+                                <div class="col col-sm-4">
+                                    <div class="picture">
+                                        <img src="${vctxt.user.picture}"/>
+                                    </div>
+                                </div>
+                                <div class="col col-sm-8">
+                                    <div class="name">${vctxt.user.name}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-lg-12">
+                                    <button type="submit" class="btn btn-primary btn-block">Submit Pledge</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col col-sm-9">
-                            <div class="name">${vctxt.user.name}</div>
+                        <div class="col col-lg-8 control-group">
+                            %for field in form.fields:
+                                ${field.render(form.id, request, values, errors, view)|n}
+                            %endfor
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col col-lg-12">
-                            <button type="submit" class="btn btn-primary">Pledge Now</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-lg-8 control-group">
-                    %for field in form.fields:
-                        ${field.render(form.id, request, values, errors, view)|n}
-                    %endfor
-                </div>
+                </form>
             </div>
-        </form>
-
+        </div>
     %endif
     </div>
+
+        %if company.no_pledgees:
+            %for pledge in company.Round.Pledges:
+                <div class="row mar-top-1">
+                    <div class="col col-lg-4">
+                        <div class="row">
+                            <div class="col col-sm-4">
+                                <div class="picture">
+                                    <img src="${pledge.picture}"/>
+                                </div>
+                            </div>
+                            <div class="col col-sm-8">
+                                <p class="name"><a href="#"><strong>${pledge.name}</strong></a></p>
+                                <div class="text-small text-muted">Offer Option</div>
+                                <ul class="styled">
+                                    <li><span class="text-small">${pledge.offer}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-lg-8 control-group">
+                        ${pledge.comment}
+                    </div>
+                </div>
+            %endfor
+        %else:
+            <div class="empty">
+                No Pledges yet
+            </div>
+        %endif
+
 </%def>
 
 
