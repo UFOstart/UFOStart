@@ -263,9 +263,6 @@ class NeedModel(Mapping):
             expert.Introducer = [IntroducerModel(firstName = expert.introFirstName, lastName = expert.introLastName, picture = expert.introPicture)]
         return self.Experts
 
-        # introducer = IntroducerModel(firstName = 'Intro', lastName='Man', picture='http://lorempixel.com/100/100/people/3')
-        # expert = ExpertModel(firstName='P.', lastName='of Saulus', picture='http://lorempixel.com/100/100/people/2', Introducer = [introducer]*3)
-        # return [expert]*2
     @property
     def services(self):
         return self.Services
@@ -340,6 +337,7 @@ class RoundModel(Mapping):
     Users = ListField(DictField(CompanyUserModel))
     Pledges = ListField(DictField(PledgeModel))
     Product = DictField(ProductModel)
+    Template = DictField(TemplateModel)
 
     @reify
     def expiry(self):
@@ -432,8 +430,6 @@ class CompanyModel(Mapping):
                 return None
         else:
             return picture
-
-
 
     @property
     def display_tags(self):
