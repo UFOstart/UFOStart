@@ -1,4 +1,4 @@
-define(["tools/ajax"], function(ajax){
+define(["tools/messaging", "tools/ajax"], function(messaging, ajax){
     var View = Backbone.View.extend({
         events: {
             'click .remove': "removeNeed"
@@ -20,16 +20,19 @@ define(["tools/ajax"], function(ajax){
         }
 
         , removeNeed: function(e){
-            if(!e.keyCode|| e.keyCode == 13){
+            if(!e.keyCode||e.keyCode == 13){
                 var $t = $(e.currentTarget)
                     , $need = $t.closest($t.data("target"))
                     , roundToken = this.$el.data('entityId');
-                ajax.submitPrefixed({url: '/web/round/removeneed'
-                    , data: {token:roundToken, Needs: [{token: $need.data("entityId")}]}
-                    , success: function(resp, status, xhr){
-                        $need.remove()
-                    }
-                });
+                if(confirm("Do you really want to delete this need?")){
+                    ajax.submitPrefixed({url: '/web/round/removeneed'
+                        , data: {token:roundToken, Needs: [{token: $need.data("entityId")}]}
+                        , success: function(resp, status, xhr){
+                            $need.remove();
+                            messaging.addSuccess({message:"Need successfully removed!"})
+                        }
+                    });
+                }
             }
         }
         , render: function(){
