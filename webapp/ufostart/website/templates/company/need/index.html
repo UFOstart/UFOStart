@@ -76,7 +76,7 @@
                         <div class="picture medium">
                             <img src="${expert.picture}" alt="${expert.name}"/>
                         </div>
-                        <a href="#"><strong>${expert.name}</strong></a>
+                        <a href="#" class="overflow"><strong>${expert.name}</strong></a>
                         <p class="text-muted text-small">${expert.position}</p>
                         <p class="expert-skills"><strong>${expert.display_skills}</strong></p>
                         <img src="${STATIC_URL}img/stars.png" class="stars"/>
@@ -98,7 +98,7 @@
                             <div class="picture medium">
                                 <img src="${expert.picture}" alt="${expert.name}"/>
                             </div>
-                            <a href="#"><strong>${expert.name}</strong></a>
+                            <a href="#" class="overflow"><strong>${expert.name}</strong></a>
                             <p class="text-muted text-small">${expert.position}</p>
                             <p class="expert-skills"><strong>${expert.display_skills}</strong></p>
                             <img src="${STATIC_URL}img/stars.png" class="stars"/>
@@ -113,7 +113,7 @@
                                     </div>
                                 </div>
                                 <div class="col col-sm-4">
-                                    <a href="#"><strong>${expert.name}</strong></a>
+                                    <a class="overflow" href="#"><strong>${expert.name}</strong></a>
                                     <p class="text-muted text-small">${expert.position}</p>
                                 </div>
                                 <div class="col col-lg-6">
@@ -135,7 +135,7 @@
             <div class="picture">
                 <img src="${service.logo_url}" name="${service.name}"/>
             </div>
-            <a href="#"><strong>${service.name}</strong></a>
+            <a href="#" class="overflow"><strong>${service.name}</strong></a>
             <p class="text-muted text-small">${service.short_description}</p>
             <img src="${STATIC_URL}img/stars.png" class="stars"/>
             <a href="${service.url or '#'}" target="_blank" class="btn btn-small btn-block btn-primary">See Details</a>
