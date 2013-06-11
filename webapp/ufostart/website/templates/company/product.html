@@ -34,10 +34,23 @@
             %endif
 
             %if product:
-
-                <% form = view.schemas['ProductOffer'] %>
-                ${self.create_offer_form(product, form, values.get(form.id), errors.get(form.id))}
-
+                %if vctxt.isTeamMember:
+                    <% form = view.schemas['ProductOffer'] %>
+                    ${self.create_offer_form(product, form, values.get(form.id), errors.get(form.id))}
+                %else:
+                    <div class="mar-top-2"></div>
+                    <div class="box-title">
+                        Offers
+                    </div>
+                    <div class="mar-top-1">
+                        <p>This product can be acquired in the following options:</p>
+                        <ul class="styled">
+                            %for offer in product.offers:
+                                <li><span>${offer.name}</span></li>
+                            %endfor
+                        </ul>
+                    </div>
+                %endif
 
 
                 %if product.Offers:
@@ -125,8 +138,6 @@
     </div>
 </div>
 </%def>
-
-
 
 
 <%def name="create_offer_form(product, form, values, errors)">
