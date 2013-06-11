@@ -2,38 +2,96 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
 
-<%def name="header_buttons()">
-    <a href="#" class="btn btn-primary switchLibrary">Task Library</a>
-</%def>
-
-<%def name="pageTitle()">
-    <div class="page-header">Your Project Template</div>
-</%def>
-
 <%def name="content()">
     <div id="round-need-setup-page">
         <div class="container tasks-used">
             <div class="row">
                 <div class="col col-lg 12">
-                    <h1>${template.name} <span class="template-icon ${template.getStyleKey()}"></span></h1>
-                    <div class="template-need-list">
-                        %for need in template.Need:
-                            ${self.renderNeed(need)}
-                        %endfor
-                    </div>
-                    <a href="${url("website_template_create", template = template.key, traverse='')}" class="btn btn-primary btn-block btn-humonguous"><span>Find Solutions</span></a>
+                    <h1 class="site-slogan">${template.name} <span class="template-icon ${template.getStyleKey()}"></span></h1>
                 </div>
+            </div>
+            <div class="row">
+                <div class="col col-lg-8">
+                    <div class="box-title">
+                        Template Description
+                    </div>
+                    <div class="mar-top-1">
+                        <div class="picture xx-large no-margin pull-left single-template-button" style="margin-right:15px;margin-top:0;">
+                            <img src="${STATIC_URL}img/templates/${template.getStyleKey()}.png"/>
+                            <span class="name">${template.name}</span>
+                        </div>
+                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                        Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                        Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+                        Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+                        Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.
+                        At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+                    </div>
+                </div>
+                <div class="col col-lg-4">
+                    <div class="box-framed">
+                        <div class="box-title">Related Tags</div>
+                        <div class="box-content">
+                        %if template.display_tags:
+                            %for tag in template.display_tags:
+                                <span class="label label-info spaced text-small">${tag}</span>
+                            %endfor
+                        %else:
+                            <div class="empty">
+                                No Needs or Tags
+                            </div>
+                        %endif
+                        </div>
+                    </div>
+                    <div class="mar-top-1">
+                        <a href="${url("website_template_create", template = template.key)}" class="btn btn-primary btn-block btn-humonguous"><span>Find Solutions</span></a>
+                        <div  class="mar-top-1">
+                            <a href="${url("website_template_basic")}">&laquo;Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mar-top-2">
+                <div class="col col-lg-12">
+                    <div class="box-title">Needs</div>
+                </div>
+            </div>
+            <div class="row">
+                %for col in template.groupedNeeds(4):
+                    <div class="col col-lg-3 need-card-list">
+                        <div class="js-need-card-list">
+                        %for need in col:
+                            ${self.buildNeed(need)}
+                        %endfor
+                        </div>
+                    </div>
+                %endfor
             </div>
         </div>
     </div>
 </%def>
 
 
-<%def name="renderNeed(need)">
-<div class="single-need" data-entity-sort="${need.name}" data-entity-id="${need.slug}">
-    <div class="single-need-inner">
-        <div class="need-title">${need.name}</div>
-        <div class="need-description">Dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</div>
+<%def name="buildNeed(need)">
+    <div class="need-card">
+        <h5>${need.name}</h5>
+        <div class="description">
+            ${need.short_description}
+        </div>
+        <div class="valuation">
+            <div class="primary-number pull-right">
+                ${need.equity_mix}%
+                <div class="legend">Equity</div>
+            </div>
+            <div class="primary-number">
+                $${need.money_value}
+                <div class="legend">Value</div>
+            </div>
+        </div>
+        <div class="label-list">
+            %for tag in need.tags:
+                <span class="label label-info spaced text-small">${tag}</span>
+            %endfor
+        </div>
     </div>
-</div>
 </%def>

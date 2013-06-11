@@ -263,6 +263,23 @@ class TemplateModel(Mapping):
             self.key = self.name.replace(" ", "_").upper()
         return TEMPLATE_STYLE_KEYS[self.key]
 
+    @reify
+    def display_tags(self):
+        result = set()
+        for need in self.Need:
+            result = result.union(set(need.tags))
+        return result
+
+    def groupedNeeds(self, n = 4):
+        needs = self.Need
+        length = len(needs)
+        result = OrderedDict()
+        for i, need in enumerate(needs):
+            l = result.setdefault(i % n, [])
+            l.append(need)
+        return result.values()
+
+
 
 class PledgeModel(Mapping):
     name = TextField()

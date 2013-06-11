@@ -20,9 +20,11 @@
             </div>
             <div class="mar-top-1">
                 <div class="label-list">
-                %for tag in al_company.display_tags:
-                    <span class="label label-info spaced text-small">${tag}</span>
-                %endfor
+                %if al_company:
+                    %for tag in al_company.display_tags:
+                        <span class="label label-info spaced text-small">${tag}</span>
+                    %endfor
+                %endif
                 </div>
             </div>
             %if not company.product_is_setup:
@@ -107,7 +109,7 @@
                         <div class="col col-sm-9">
                             <a href="${url("website_company_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
                             <p>
-                                ${al_company.display_description}
+                                ${al_company.display_description if al_company else ''}
                             </p>
                             <a href="${url("website_company_company", **vctxt.urlArgs)}"><small>More...</small></a>
                         </div>
@@ -175,8 +177,12 @@
         %for field in form.fields:
             ${field.render(form.id, request, values, errors, view)|n}
         %endfor
-        <div class="form-actions col col-offset-3 col-lg-6">
-            <button type="submit" class="btn btn-primary">Save Offers</button>
+        <div class="form-actions col col-lg-6">
+            <div class="row">
+                <div class="col col-offset-3 col-lg-9">
+                    <button type="submit" class="btn btn-primary">Save Offers</button>
+                </div>
+            </div>
         </div>
     </form>
     </div>
@@ -265,21 +271,27 @@
 
 
 <%def name="company_media(al_company)" filter="trim">
-    <%
-        youtube_id = al_company.getYoutubeVideoId()
-        vimeo_id = al_company.getVimeoVideoId()
-    %>
-    %if youtube_id:
-        <div class="you-tube-container" data-video-id="${youtube_id}"></div>
-    %elif vimeo_id:
-        <div class="vimeo-container">
-        <iframe src="http://player.vimeo.com/video/${vimeo_id}" width="847" height="400" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-        </div>
-    %elif al_company.video_url:
-        <a href="${al_company.video_url}">${al_company.video_url}</a>
-    %elif al_company.screenshots:
-        <div class="product-screenshots">
-            <img src="${al_company.getFirstScreenShot()}"/>
+    %if al_company:
+        <%
+            youtube_id = al_company.getYoutubeVideoId()
+            vimeo_id = al_company.getVimeoVideoId()
+        %>
+        %if youtube_id:
+            <div class="you-tube-container" data-video-id="${youtube_id}"></div>
+        %elif vimeo_id:
+            <div class="vimeo-container">
+            <iframe src="http://player.vimeo.com/video/${vimeo_id}" width="847" height="400" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+            </div>
+        %elif al_company.video_url:
+            <a href="${al_company.video_url}">${al_company.video_url}</a>
+        %elif al_company.screenshots:
+            <div class="product-screenshots">
+                <img src="${al_company.getFirstScreenShot()}"/>
+            </div>
+        %endif
+    %else:
+        <div class="empty">
+            No Video
         </div>
     %endif
 </%def>
