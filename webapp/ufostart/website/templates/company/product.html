@@ -34,19 +34,13 @@
             %endif
 
             %if product:
+
+                <% form = view.schemas['ProductOffer'] %>
+                ${self.create_offer_form(product, form, values.get(form.id), errors.get(form.id))}
+
+
+
                 %if product.Offers:
-                    <div class="mar-top-2"></div>
-                    <div class="box-title">
-                        Offers
-                    </div>
-                    <div class="mar-top-1">
-                        <p>This product can be acquired in the following options:</p>
-                        <ul class="styled">
-                            %for offer in product.offers:
-                                <li><span>${offer.name}</span></li>
-                            %endfor
-                        </ul>
-                    </div>
 
                     %if not vctxt.isTeamMember:
                         <% form = view.schemas['ProductPledge'] %>
@@ -85,10 +79,8 @@
                             </div>
                         %endif
                     </div>
-                %else:
-                    <% form = view.schemas['ProductOffer'] %>
-                    ${self.create_offer_form(form, values.get(form.id), errors.get(form.id))}
                 %endif
+
             %endif
         </div>
         <div class="col col-lg-4">
@@ -137,22 +129,50 @@
 
 
 
-<%def name="create_offer_form(form, values, errors)">
+<%def name="create_offer_form(product, form, values, errors)">
+    <div class="expander">
+    %if product.Offers:
+        <div class="show-contracted">
+        <div class="mar-top-2"></div>
+        <div class="box-title">
+            <a class="btn btn-default" data-toggle-target=".expander" data-toggle-class="expanded">Edit</a>
+            Offers
+        </div>
+        <div class="mar-top-1">
+            <p>This product can be acquired in the following options:</p>
+            <ul class="styled">
+                %for offer in product.offers:
+                    <li><span>${offer.name}</span></li>
+                %endfor
+            </ul>
+        </div>
+        </div>
+        <div class="show-expanded row"><div class="col-lg-12 col">
+    %endif
+
     <div class="mar-top-2"></div>
     <div class="box-title">
+        %if product.Offers:
+            <a class="btn btn-default" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
+        %endif
         Setup Offers Now
     </div>
 
     <div class="mar-top-1">
     <form class="${form.classes}" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
-        %for field in view.form.fields:
+        %for field in form.fields:
             ${field.render(form.id, request, values, errors, view)|n}
         %endfor
         <div class="form-actions col col-offset-3 col-lg-6">
             <button type="submit" class="btn btn-primary">Save Offers</button>
         </div>
     </form>
+    </div>
+
+    %if product.Offers:
+        </div></div>
+    %endif
     </div>
 </%def>
 

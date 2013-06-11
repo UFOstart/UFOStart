@@ -66,6 +66,8 @@ class ProductOfferHandler(FormHandler):
     def pre_fill_values(self, request, result):
         company = request.root.company
         result['company'] = company
+        if company.Round and company.Round.Product:
+            result['values']['ProductOffer'] = company.Round.Product.unwrap()
 
         angelListId = company.angelListId if company.angelListId != 'asdfasdf' else ''
         angelListToken = company.angelListToken

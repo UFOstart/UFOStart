@@ -328,6 +328,8 @@ class CompanyModel(Mapping):
 
     logo = TextField()
     url = TextField()
+    description = TextField()
+    tagString = TextField()
 
     angelListId = TextField()
     angelListToken = TextField()
@@ -373,19 +375,17 @@ class CompanyModel(Mapping):
     def logo_url(self):
         return self.logo
 
-    # TODO: actual implementation
+    @property
+    def product_picture(self):
+        return self.Round.Product.picture if self.Round and self.Round.Product else ''
+
+
     @property
     def display_tags(self):
         if self.is_setup:
-            return u" • ".join(['Palo Alto', 'Marketplaces', 'Outsourcing'])
+            return self.tagString
         else:
             return ''
-
-
-    description = 'Democratizing access to scientific expertise'
-
-
-    product_picture = None
     product_name = 'Product Name'
 
     @property
@@ -394,6 +394,7 @@ class CompanyModel(Mapping):
     @property
     def pledgees(self):
         return self.Round and self.Round.Pledges or []
+
     def groupedNeeds(self, n = 4):
         if not self.Round: return []
         needs = self.Round.Needs

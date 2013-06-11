@@ -2,11 +2,8 @@ from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import NullConfigModel, BaseForm, StringField, REQUIRED, TextareaField, ChoiceField, TagSearchField, IntField, HtmlAttrs
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
-from pyramid.response import Response
-from pyramid.view import view_config
 from ufostart.models.tasks import TASK_CATEGORIES
-from ufostart.website.apps.social import SocialLoginSuccessful
-from ufostart.website.apps.auth.social import AuthedFormHandler, login_user
+from ufostart.website.apps.auth.social import AuthedFormHandler
 from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc
 
 
@@ -15,6 +12,10 @@ def index(context, request):
 
 def optionGetter(request):
     return [NullConfigModel()] + TASK_CATEGORIES
+
+
+class FileUploadField(StringField):
+    template = "ufostart:website/templates/company/controls/fileupload.html"
 
 
 
@@ -36,15 +37,18 @@ class ApplicationHandler(AuthedFormHandler):
 class NeedCreateForm(BaseForm):
     id="NeedCreate"
     label = ""
-    fields=[
-        StringField('name', "Need Name", REQUIRED)
-        , TextareaField("description", "Description", REQUIRED)
-        , ChoiceField("category", "Need Type", optionGetter, REQUIRED)
+    fields = [
+        FileUploadField("picture", 'Picture', group_classes='file-upload-control')
+        , StringField('name', "Need Name", REQUIRED)
+        , IntField('cash', "Cash value", REQUIRED)
+        , IntField('equity', "Equity value", REQUIRED)
+        , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
+        , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3))
     ]
     @classmethod
     def on_success(cls, request, values):
         try:
-            CreateNeedProc(request, values)
+            round = CreateNeedProc(request, {'Needs':[values], 'token': request.root.company.Round.token})
         except DBNotification, e:
             if e.message == 'Need_Already_Exists':
                 return {'success':False, 'errors': {'name': "This need already exists, if you intend to create this need, please change its name to something less ambiguous!"}}
@@ -52,15 +56,11 @@ class NeedCreateForm(BaseForm):
                 raise e
 
         request.session.flash(GenericSuccessMessage("Need created successfully!"), "generic_messages")
-        return {'success':True, 'redirect': request.fwd_url("website_expert_dashboard")}
+        return {'success':True, 'redirect': request.fwd_url("website_company", **request.matchdict)}
 
 class NeedCreateHandler(FormHandler):
     form = NeedCreateForm
 
-
-
-class FileUploadField(StringField):
-    template = "ufostart:website/templates/company/controls/fileupload.html"
 
 
 class NeedEditForm(BaseForm):

@@ -38,6 +38,9 @@ ROUTE_LIST = [
     ,OAuthClassRoute("website_round_need_apply"            , '/c/:slug/:need/apply', contexts.WebsiteCompanyContext                         , company.need.ApplicationHandler, "company/need/apply.html", view_attrs = JSON_FORM_ATTRS)
 
 
+    , FunctionRoute("website_invite_answer"                , '/invite/:token', contexts.WebsiteRootContext                                   , company.invite.answer, "company/invite_confirm.html")
+    , FunctionRoute("website_invite_confirm"               , '/invite/:token/confirm', contexts.WebsiteAuthedContext                         , company.invite.confirm, "company/invite_confirm.html")
+    , FunctionRoute('website_invite_login'                 , '/invite/login/:network/:action/:token', contexts.WebsiteRootContext            , company.invite.login, None)
 
     # , FunctionRoute('website_social_login'                 , '/social/:network/:action', contexts.WebsiteRootContext                         , auth.social.login, None)
     #
@@ -59,9 +62,7 @@ ROUTE_LIST = [
 
     #
     #
-    # , FunctionRoute("website_invite_answer"                , '/invite/:token', contexts.WebsiteRootContext                                   , company.invite.answer, "company/invite_confirm.html")
-    # , FunctionRoute("website_invite_confirm"               , '/invite/:token/confirm', contexts.WebsiteAuthedContext                         , company.invite.confirm, "company/invite_confirm.html")
-    # , FunctionRoute('website_invite_login'                 , '/invite/login/:network/:action/:token', contexts.WebsiteRootContext            , company.invite.login, None)
+
 
 ]
 
