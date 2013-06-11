@@ -30,7 +30,7 @@
 <%def name="build_form(form, values, errors)">
     <form class="${form.classes}" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
-        <div class="row mar-top-1">
+        <div class="row mar-top-1" id="application-form">
             <div class="col col-lg-4">
                 <div class="row">
                     <div class="col col-sm-3">
@@ -45,7 +45,7 @@
                 </div>
                 <div class="row mar-top-1">
                     <div class="col col-lg-12">
-                        <button type="submit" class="btn btn-primary btn-block">Apply now</button>
+                        <button type="submit" class="btn btn-primary btn-block">Submit</button>
                     </div>
                 </div>
             </div>

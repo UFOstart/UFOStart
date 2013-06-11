@@ -232,6 +232,9 @@ class NeedModel(Mapping):
     def short_description(self):
         return word_truncate_by_letters(self.description, 300)
 
+    @property
+    def display_description(self):
+        return self.description if self.description else ''
     # TODO: actual implementation
 
     @property

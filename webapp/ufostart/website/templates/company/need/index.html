@@ -34,7 +34,7 @@
             </div>
             <div class="col col-lg-4">
                 <div class="box-framed">${self.publicInfoBox(vctxt.company, vctxt.need)}</div>
-                <a href="${url("website_round_need_apply", **vctxt.urlArgs)}" class="btn btn-primary btn-block mar-top-1">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
+                <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary btn-block mar-top-1">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
             </div>
         </div>
     </div>
@@ -52,7 +52,7 @@
                 <img src="${need.picture}"/>
             </div>
         %endif
-        ${vctxt.need.description}
+        ${vctxt.need.display_description}
     </div>
     <h5 class="text-muted">
         Related Tags
