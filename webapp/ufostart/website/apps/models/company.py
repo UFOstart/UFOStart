@@ -6,10 +6,12 @@ from operator import attrgetter
 from random import random, sample, choice
 from babel.dates import format_date
 from babel.numbers import format_currency
-from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField
+from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField, IntegerField
 from hnc.apiclient.backend import ClientTokenProc
+from hnc.forms.formfields import IntField
 from pyramid.decorator import reify
 from ufostart.lib.tools import group_by_n
+from ufostart.models.tasks import NamedModel
 
 TEMPLATE_STYLE_KEYS = {
     'EARLY_STAGE_ECOMMERCE':'ecommerce'
@@ -177,18 +179,34 @@ class NeedModel(Mapping):
     name = TextField()
     status = TextField()
     category = TextField()
+    description = TextField()
+    picture = TextField()
+    cash = IntegerField()
+    equity = IntegerField()
+    Tags = ListField(DictField(NamedModel))
 
     Service = DictField(ServiceModel)
     Expert = DictField(ExpertModel)
 
-    # TODO: actual implementation
-    equity_mix = 4
-    money_value = format_currency(120, 'EUR', locale = 'en')
-    picture = ''
-
     @property
     def slug(self):
         return self.token
+    @property
+    def customized(self):
+        return self.status != 'PENDING'
+    @property
+    def equity_mix(self):
+        return 100.0 * self.equity / self.money_value
+    @property
+    def money_value(self):
+        return self.cash + self.equity
+    @property
+    def tags(self):
+        return map(attrgetter('name'), self.Tags)
+
+
+    # TODO: actual implementation
+
     @property
     def first_level_expert(self):
         expert = ExpertModel(firstName='J.', lastName='of Nazareth', picture='http://lorempixel.com/100/100/people')
@@ -202,19 +220,6 @@ class NeedModel(Mapping):
     def services(self):
         service = ServiceModel(name='99Designs', description='Design Platform', logo = 'http://smartling.99designs.com/static/images/frontpage/logo.png')
         return [service]*5
-    @property
-    def customized(self):
-        return self.status != 'PENDING'
-    @property
-    def description(self):
-        text = 'Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
-        length = int(random()*len(text))
-        return text[:length]
-    @property
-    def tags(self):
-        tags = ['Online Marketplaces', 'Life Sciences', 'Data Analytics', 'Business Intelligence', 'Enterprise Software', 'Enterprise Software', 'Big Data', 'Government Innovation', 'Simulation', 'E-Commerce', 'Customer Service', 'Education', 'Biotechnology', 'Robotics', 'Aerospace']
-        return sample(tags, int(random()*len(tags)))
-
 
     _inUse = BooleanField()
 

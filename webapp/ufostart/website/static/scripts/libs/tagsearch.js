@@ -93,9 +93,9 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
                     });
                 }
 
-                var seed = this.$result.find(".tag").find("input");
+                var seed = this.$result.find(".label").find("input");
                 if(seed.length)
-                    this.$(".tag").each(function(idx, el){
+                    this.$(".label").each(function(idx, el){
                         var model = new PlainResult({name: $(el).find("input[name]").val()});
                         view.model.add(model, {silent:true});
                         new TagView({model: model,el:el});

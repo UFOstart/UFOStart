@@ -1,13 +1,11 @@
 ﻿define(["tools/ajax"], function(ajax){
     var View = Backbone.View.extend({
-        picture_template : _.template('<img src="{{ pic.url }}"/><input type="hidden" name="{{ field_name }}" value="{{ pic.url }}"/>')
-        , initialize:function(opts){
+        initialize:function(opts){
             this.uploader = this.$(".file-picker-upload");
-            var view = this, uploader = this.uploader;
-
+            var view = this, uploader = this.uploader, picture_template = _.template(this.$(".picture-template").html());
             filepicker.makeDropPane(uploader[0], {
                 dragEnter: function() {
-                    uploader.html("Drop to upload").css({
+                    uploader.html('<div class="info">Drop to upload</div>').css({
                         'backgroundColor': "rgba(0,0,0,.1)"
                     });
                 },
@@ -17,15 +15,15 @@
                     });
                 },
                 onSuccess: function(fpfiles) {
-                    uploader.text("Done!");
+                    uploader.html('<div class="info">Done!</div>');
                     var file = fpfiles[0];
-                    uploader.html(view.picture_template({field_name: view.uploader.data("fieldName"), pic: fpfiles[0]}));
+                    uploader.html(picture_template({field_name: view.uploader.data("fieldName"), pic: fpfiles[0]}));
                 },
                 onError: function(type, message) {
                     uploader.after().text('('+type+') '+ message);
                 },
                 onProgress: function(percentage) {
-                    uploader.text("Uploading ("+percentage+"%)");
+                    uploader.html('<div class="info">Uploading ('+percentage+'%)');
                 }
             });
         }

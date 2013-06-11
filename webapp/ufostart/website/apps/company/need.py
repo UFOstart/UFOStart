@@ -57,7 +57,7 @@ class NeedEditForm(BaseForm):
         , IntField('value', "Total Value", REQUIRED)
         , IntField('ratio', "Equity percentage", REQUIRED)
         , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
-        , TagSearchField("tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3))
+        , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3))
     ]
 
     @classmethod
@@ -70,7 +70,7 @@ class NeedEditForm(BaseForm):
         values['equity'] = total * ratio/100
 
         try:
-            EditNeedProc(request, {'Needs':[values]})
+            round = EditNeedProc(request, {'Needs':[values]})
         except DBNotification, e:
             if e.message == 'Need_Already_Exists':
                 return {'success':False, 'errors': {'name': "This need already exists, if you intend to Edit this need, please change its name to something less ambiguous!"}}
@@ -78,11 +78,15 @@ class NeedEditForm(BaseForm):
                 raise e
 
         request.session.flash(GenericSuccessMessage("Need edited successfully!"), "generic_messages")
-        return {'success':True, 'redirect': request.fwd_url("website_expert_dashboard")}
+        return {'success':True, 'redirect': request.fwd_url("website_round_need", **request.matchdict)}
 
 class NeedEditHandler(FormHandler):
     form = NeedEditForm
 
     def pre_fill_values(self, request, result):
-        result['values'][self.form.id] = self.context.need.unwrap()
+        need = self.context.need
+        values = need.unwrap()
+        values['value'] = need.money_value
+        values['ratio'] = need.equity_mix
+        result['values'][self.form.id] = values
         return super(NeedEditHandler, self).pre_fill_values(request, result)

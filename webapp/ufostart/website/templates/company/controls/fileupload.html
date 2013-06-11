@@ -4,8 +4,14 @@
 <%block name="controls">
 <div class="row">
     <div class="col col-lg-4">
+        <script type="text/template" class="picture-template"><img src="{{ pic.url }}"/><input type="hidden" name="{{ field_name }}" value="{{ pic.url }}"/></script>
         <div class="file-picker-upload upload-picture-display logo-picture empty" data-field-name="${widget.getName(prefix)}">
-            Drag & Drop Files here
+            %if value:
+                <img src="${value}"/><input type="hidden" name="${widget.getName(prefix)}" value="${value}"/>
+            %else:
+
+            %endif
+            <div class="info">Drag & Drop Files here</div>
         </div>
     </div>
 </div>

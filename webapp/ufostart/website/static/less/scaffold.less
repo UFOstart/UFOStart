@@ -101,6 +101,7 @@
 
 .logo-picture {
   text-align: center;
+  position: relative;
   background-color: @body-bg-muted;
   box-shadow: -1px 1px 2px rgba(0,0,0,.3) inset;
   padding: 3px;
@@ -108,9 +109,17 @@
   &.empty {
     height:0;
     line-height:1em;
-    padding-top: 40%;
-    padding-bottom: 60%;
+    padding-bottom: 100%;
   }
+   > .info {
+      position: absolute;
+      top:50%;
+      left:0;
+      width:100%;
+      text-align: center;
+      line-height:1em;
+      margin-top:-.5em;
+   }
 }
 
 

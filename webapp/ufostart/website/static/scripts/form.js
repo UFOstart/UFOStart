@@ -59,7 +59,6 @@ define(['tools/ajax', "libs/fileupload", "libs/typeahead"], function(ajax, FileU
             el.find(".tagsearch-container").each(_.bind(this.addTagSearch, this));
             el.find(".dependent-control").each(_.bind(this.addDependent, this));
             el.find(".file-upload-control").each(_.bind(this.addFileUpload, this));
-            el.find(".typed-upload-control").each(_.bind(this.addTypedFileUpload, this));
             el.find(".custom-control").each(_.bind(this.addCustomControl, this));
         }
         , addCustomControl: function(idx, elem){
@@ -91,11 +90,7 @@ define(['tools/ajax', "libs/fileupload", "libs/typeahead"], function(ajax, FileU
         }
         , addFileUpload: function(idx, elem){
             var fpl = new FileUploader({el: elem});
-            fpl.on("file:uploaded", function(file_path, file){
-                var path = hnc.resUrl(file_path);
-                $(elem).find(".profile-picture").remove();
-                $(elem).find(".picture-holder").val(file_path).after('<div class="img-wrap profile-picture img-polaroid"><div class="img-wrap-inner"><img src="'+path+'" class="picture"/></div></div>');
-            })
+//            fpl.on("file:uploaded", function(file_path, file){})
         }
         , addTypedFileUpload: function(idx, elem){
             var view = this
