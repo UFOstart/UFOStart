@@ -62,7 +62,11 @@
                         %if not company.is_setup:
                             <div class="disabled-overlay">
                                 <div class="overlay-action">
-                                    <a href="${url("website_company_company", **vctxt.urlArgs)}" class="btn btn-primary btn-large btn-block">Create Your Company</a>
+                                    %if vctxt.isTeamMember:
+                                        <a href="${url("website_company_company", **vctxt.urlArgs)}" class="btn btn-primary btn-large btn-block">Create Your Company</a>
+                                    %else:
+                                        <h3>Not Setup yet</h3>
+                                    %endif
                                 </div>
                             </div>
                         %endif
@@ -99,7 +103,11 @@
                         %if not company.product_is_setup:
                             <div class="disabled-overlay">
                                 <div class="overlay-action">
-                                    <a href="${url("website_company_product", **vctxt.urlArgs)}" class="btn btn-primary btn-large btn-block">Create Your Product</a>
+                                    %if vctxt.isTeamMember:
+                                        <a href="${url("website_company_product", **vctxt.urlArgs)}" class="btn btn-primary btn-large btn-block">Create Your Product</a>
+                                    %else:
+                                        <h3>Not Setup yet</h3>
+                                    %endif
                                 </div>
                             </div>
                         %endif
