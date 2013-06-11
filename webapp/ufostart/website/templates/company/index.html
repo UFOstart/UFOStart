@@ -135,9 +135,6 @@
 <%def name="buildNeed(need, published)">
     <div class="need-card ${need.status}" data-entity-id="${need.token}">
         %if not published:
-            %if not need.customized:
-                <a class="customize" href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">Customize</a>
-            %endif
             <a class="remove" data-target=".need-card">×</a>
         %endif
         <h5><a href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">${need.name}</a></h5>
@@ -159,27 +156,34 @@
                 <span class="label label-info spaced text-small">${tag}</span>
             %endfor
         </div>
-        %if need.Expert:
+        %if need.experts:
             <hr/>
             <div class="experts">
                 <h5 class="no-margin upper text-muted">Recomended Experts</h5>
                 <div class="picture-pile">
-                    <div class="picture mini">
-                        <img src="${need.Expert.picture}" alt="${need.Expert.name}"/>
+                %for expert in need.experts:
+                    <div class="picture medium">
+                        <img src="${expert.picture}" alt="${expert.name}"/>
                     </div>
+                %endfor
                 </div>
             </div>
         %endif
-        %if need.Service:
+        %if need.services:
             <hr/>
             <div class="services">
                 <h5 class="no-margin upper text-muted">Recomended Cloud Services</h5>
                 <div class="picture-pile">
+                %for service in need.services[:4]:
                     <div class="picture medium">
-                        <img src="${need.Service.logo_url}" name="${need.Service.name}"/>
+                        <img src="${service.logo_url}" name="${service.name}"/>
                     </div>
+                %endfor
                 </div>
             </div>
+        %endif
+        %if not need.customized:
+            <a class="customize" href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">Customize</a>
         %endif
     </div>
 </%def>

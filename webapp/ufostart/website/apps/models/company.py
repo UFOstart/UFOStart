@@ -210,8 +210,8 @@ class NeedModel(Mapping):
     Tags = ListField(DictField(NamedModel))
     Applications = ListField(DictField(ApplicationModel))
 
-    Service = DictField(ServiceModel)
-    Expert = DictField(ExpertModel)
+    Services = ListField(DictField(ServiceModel))
+    Experts = ListField(DictField(ExpertModel))
 
     @property
     def slug(self):
@@ -238,6 +238,10 @@ class NeedModel(Mapping):
     # TODO: actual implementation
 
     @property
+    def experts(self):
+        return self.Experts
+
+    @property
     def first_level_expert(self):
         expert = ExpertModel(firstName='J.', lastName='of Nazareth', picture='http://lorempixel.com/100/100/people')
         return [expert]*5
@@ -248,8 +252,7 @@ class NeedModel(Mapping):
         return [expert]*2
     @property
     def services(self):
-        service = ServiceModel(name='99Designs', description='Design Platform', logo = 'http://smartling.99designs.com/static/images/frontpage/logo.png')
-        return [service]*5
+        return self.Services
 
     _inUse = BooleanField()
 
