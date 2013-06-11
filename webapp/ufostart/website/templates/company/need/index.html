@@ -138,7 +138,7 @@
             <a href="#"><strong>${service.name}</strong></a>
             <p class="text-muted text-small">${service.short_description}</p>
             <img src="${STATIC_URL}img/stars.png" class="stars"/>
-            <a href="${service.url}" target="_blank" class="btn btn-small btn-block btn-primary">See Details</a>
+            <a href="${service.url or '#'}" target="_blank" class="btn btn-small btn-block btn-primary">See Details</a>
         </div>
     %endfor
     </div>
