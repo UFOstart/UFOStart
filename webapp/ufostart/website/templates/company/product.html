@@ -53,8 +53,6 @@
                         ${self.pledge_offer_form(form, values.get(form.id), errors.get(form.id))}
                     %endif
 
-
-
                     <div class="mar-top-1">
                         <div class="box-title">Pledges</div>
                         %if company.no_pledgees:
@@ -73,8 +71,6 @@
                                                 <ul class="styled">
                                                     <li><span class="text-small">${pledge.offer}</span></li>
                                                 </ul>
-
-
                                             </div>
                                         </div>
                                     </div>
@@ -89,7 +85,6 @@
                             </div>
                         %endif
                     </div>
-
                 %else:
                     <% form = view.schemas['ProductOffer'] %>
                     ${self.create_offer_form(form, values.get(form.id), errors.get(form.id))}
@@ -117,17 +112,21 @@
             <div class="box-framed mar-top-1">
                 <div class="box-title">Pledges</div>
                 <div class="box-content">
-                    %if company.no_pledgees:
-                        %for pledge in company.Round.Pledges:
-                            <div class="picture small">
-                                <img src="${pledge.picture}"/>
+                    <div class="row">
+                        %if company.no_pledgees:
+                            %for pledge in company.Round.Pledges:
+                            <div class="col col-sm-3">
+                                <div class="picture medium">
+                                    <img src="${pledge.picture}"/>
+                                </div>
                             </div>
-                        %endfor
-                    %else:
-                        <div class="empty">
-                            No Pledges yet
-                        </div>
-                    %endif
+                            %endfor
+                        %else:
+                            <div class="empty">
+                                No Pledges yet
+                            </div>
+                        %endif
+                    </div>
                 </div>
             </div>
         </div>
