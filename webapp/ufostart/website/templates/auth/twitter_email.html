@@ -19,7 +19,7 @@
         ${baseform.prelims(form)}
         <div class="row">
             <div class="col col-sm-9 col-offset-3">
-                    <legend>Enter your email, cause Twitter ain't gave it us!</legend>
+                <legend>Please enter your email address.</legend>
             </div>
         </div>
 
@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col col-sm-9 col-offset-3">
                 <button type="submit" class="btn btn-primary">Submit</button>
-                <a class="actions-link" href="${url("website_index")}">Cancel</a>
+                <a class="actions-link" href="${request.rld_url(traverse = '').strip("/")}">Cancel</a>
             </div>
         </div>
     </form>

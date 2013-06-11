@@ -3,6 +3,7 @@ import urllib
 from urlparse import parse_qsl
 from hnc.forms.formfields import BaseForm, REQUIRED, EmailField
 from hnc.forms.handlers import FormHandler
+from hnc.forms.messages import GenericErrorMessage
 from hnc.tools.oauth import Consumer, Client, Token
 from pyramid.decorator import reify
 from pyramid.renderers import render_to_response
@@ -110,6 +111,7 @@ class TwitterEmailFormForm(BaseForm):
     fields=[EmailField('email', 'Email', REQUIRED)]
     @classmethod
     def on_success(cls, request, values):
+        request.session.flash(GenericErrorMessage("Some error occured"), "generic_messages")
         return {'success':True, 'redirect': request.rld_url()}
 
 

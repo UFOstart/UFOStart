@@ -31,6 +31,7 @@ def login_user(context, request, profile):
         user = SocialConnectProc(request, params)
     except DBNotification, e:
         log.error("UNHANDLED DB MESSAGE: %s", e.message)
+        request.session.flash(GenericErrorMessage(e.message), "generic_messages")
         return None
     else:
         return user.toJSON()
