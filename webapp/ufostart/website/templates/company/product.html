@@ -108,51 +108,48 @@
 
 <%def name="create_offer_form(product, form, values, errors)">
     <div class="expander">
-    %if product.Offers:
-        <div class="show-contracted">
         <div class="mar-top-2"></div>
         <div class="box-title">
-            <a class="btn btn-primary" data-toggle-target=".expander" data-toggle-class="expanded">Edit</a>
+            %if product.Offers:
+                <a class="btn btn-primary show-contracted" data-toggle-target=".expander" data-toggle-class="expanded">Edit</a>
+                <a class="btn btn-default show-expanded" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
+            %endif
             Offers
         </div>
-        <div class="mar-top-1">
-            <p>This product can be acquired in the following options:</p>
-            <ul class="styled">
-                %for offer in product.offers:
-                    <li><span>${offer.name}</span></li>
-                %endfor
-            </ul>
-        </div>
-        </div>
-        <div class="show-expanded row"><div class="col-lg-12 col">
-    %endif
 
-    <div class="mar-top-2"></div>
-    <div class="box-title">
         %if product.Offers:
-            <a class="btn btn-default" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
+            <div class="show-contracted">
+            <div class="mar-top-1">
+                <p>This product can be acquired in the following options:</p>
+                <ul class="styled">
+                    %for offer in product.offers:
+                        <li><span>${offer.name}</span></li>
+                    %endfor
+                </ul>
+            </div>
+            </div>
+            <div class="show-expanded row"><div class="col-lg-12 col">
         %endif
-        Setup Offers Now
-    </div>
 
-    <div class="mar-top-1">
-    <form class="${form.classes}" id="${form.id}" method="POST">
-        ${baseform.prelims(form)}
-        %for field in form.fields:
-            ${field.render(form.id, request, values, errors, view)|n}
-        %endfor
-        <div class="form-actions col col-lg-6">
-            <div class="row">
-                <div class="col col-offset-3 col-lg-9">
-                    <button type="submit" class="btn btn-primary">Save Offers</button>
-                </div>
+        <div class="box-framed box-shaded">
+            <div class="box-content clearfix">
+                <form class="${form.classes}" id="${form.id}" method="POST">
+                    ${baseform.prelims(form)}
+                    %for field in form.fields:
+                        ${field.render(form.id, request, values, errors, view)|n}
+                    %endfor
+                    <div class="row">
+                        <div class="col col-offset-3 col-lg-9">
+                            <button type="submit" class="btn btn-primary">Save Offers</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </form>
-    </div>
 
     %if product.Offers:
-        </div></div>
+        </div>
+        </div>
     %endif
     </div>
 </%def>

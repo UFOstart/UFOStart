@@ -151,6 +151,9 @@ define(['tools/ajax', "libs/fileupload", "libs/typeahead"], function(ajax, FileU
                 new_node.find(".valid").removeClass("valid");
 
                 this.setupWidgets(new_node);
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
             }
         }
         , removeRow : function(e){
