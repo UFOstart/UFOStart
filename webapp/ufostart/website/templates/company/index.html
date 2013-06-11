@@ -179,7 +179,7 @@
             <div class="experts">
                 <h5 class="no-margin upper text-muted">Recomended Experts</h5>
                 <div class="picture-pile">
-                %for expert in need.experts:
+                %for expert in need.experts[:4]:
                     <div class="picture medium">
                         <img src="${expert.picture}" alt="${expert.name}"/>
                     </div>

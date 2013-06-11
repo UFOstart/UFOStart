@@ -260,7 +260,10 @@ class NeedModel(Mapping):
     @property
     def second_level_expert(self):
         for expert in self.Experts:
-            expert.Introducer = [IntroducerModel(firstName = expert.introFirstName, lastName = expert.introLastName, picture = expert.introPicture)]
+            if expert.introFirstName:
+                expert.Introducer = [IntroducerModel(firstName = expert.introFirstName, lastName = expert.introLastName, picture = expert.introPicture)]
+            else:
+                expert.Introducer = []
         return self.Experts
 
     @property
