@@ -21,9 +21,15 @@
                     <a class="btn btn-default" href="${url("website_round_need", **vctxt.urlArgs)}">Cancel</a>
                     Apply to solve this need now
                 </div>
+
+                <div class="box-framed box-shaded">
+                    <div class="box-content">
+                        ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+                    </div>
+                </div>
+
             </div>
         </div>
-        ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
     </div>
 </%def>
 
