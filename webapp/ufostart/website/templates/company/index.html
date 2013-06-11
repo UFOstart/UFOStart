@@ -133,7 +133,7 @@
         %endif
         <h5><a href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">${need.name}</a></h5>
         <div class="description">
-            ${need.description}
+            ${need.short_description}
         </div>
         <div class="valuation">
             <div class="primary-number pull-right">
@@ -141,7 +141,7 @@
                 <div class="legend">Equity</div>
             </div>
             <div class="primary-number">
-                ${need.money_value}
+                $${need.money_value}
                 <div class="legend">Value</div>
             </div>
         </div>

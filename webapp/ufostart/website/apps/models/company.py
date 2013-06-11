@@ -5,6 +5,7 @@ from operator import attrgetter
 from random import random, sample
 from babel.dates import format_date
 from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField, IntegerField
+from hnc.tools.tools import word_truncate_by_letters
 from pyramid.decorator import reify
 from ufostart.models.tasks import NamedModel
 
@@ -181,9 +182,10 @@ class ServiceModel(Mapping):
     @property
     def logo_picture(self):
         return self.logo
+
     @property
     def short_description(self):
-        return self.description
+        return word_truncate_by_letters(self.description, 50)
 
 class ApplicationModel(Mapping):
 
@@ -219,14 +221,16 @@ class NeedModel(Mapping):
         return self.status != 'PENDING'
     @property
     def equity_mix(self):
-        return 100.0 * (self.equity or 0) / (self.money_value or 1)
+        return int(100.0 * (self.equity or 0) / (self.money_value or 1))
     @property
     def money_value(self):
         return (self.cash or 0) + (self.equity or 0)
     @property
     def tags(self):
         return map(attrgetter('name'), self.Tags)
-
+    @property
+    def short_description(self):
+        return word_truncate_by_letters(self.description, 300)
 
     # TODO: actual implementation
 
@@ -353,6 +357,7 @@ class CompanyModel(Mapping):
 
 
     description = 'Democratizing access to scientific expertise'
+
     logo_picture = None
     product_picture = None
     product_name = 'Product Name'

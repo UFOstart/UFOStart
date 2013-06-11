@@ -69,8 +69,8 @@ class NeedEditForm(BaseForm):
     fields = [
         FileUploadField("picture", 'Picture', group_classes='file-upload-control')
         , StringField('name', "Need Name", REQUIRED)
-        , IntField('value', "Total Value", REQUIRED)
-        , IntField('ratio', "Equity percentage", REQUIRED)
+        , IntField('cash', "Cash value", REQUIRED)
+        , IntField('equity', "Equity value", REQUIRED)
         , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3))
     ]
@@ -78,11 +78,6 @@ class NeedEditForm(BaseForm):
     @classmethod
     def on_success(cls, request, values):
         values['token'] = request.matchdict['need']
-
-        total = values.pop('value')
-        ratio = values.pop('ratio')
-        values['cash'] = total * (1 - ratio/100)
-        values['equity'] = total * ratio/100
 
         try:
             round = EditNeedProc(request, {'Needs':[values]})
