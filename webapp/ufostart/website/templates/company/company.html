@@ -3,10 +3,14 @@
 <%namespace file="../widgets.html" name="widgets"/>
 
 
-<%def name="pageTitle()"><div class="page-header">${al_company.display_name if al_company else 'Your Company'}</div></%def>
 
 <%def name="content()">
     <div class="container">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="site-slogan">${al_company.display_name if al_company else 'Your Company'}</h1>
+            </div>
+        </div>
         <div class="row">
             <div class="col col-lg-8">
                 ${self.companyMainInfo(vctxt.company)}

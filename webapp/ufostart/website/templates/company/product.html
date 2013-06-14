@@ -2,15 +2,16 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../widgets.html" name="widgets"/>
 
-<%def name="pageTitle()"><div class="page-header">${al_company.name}</div></%def>
-
-
 <%def name="content()">
     ${self.details(vctxt.company, vctxt.company.Round.Product)}
 </%def>
 
 <%def name="details(company, product)">
 <div class="container">
+    <div class="col col-lg-12">
+        <h1 class="site-slogan">${al_company.name}</h1>
+    </div>
+
     <div class="row">
         <div class="col col-lg-8 company-customer-dashboard">
             <div class="box-title">Product Details</div>

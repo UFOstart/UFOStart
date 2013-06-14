@@ -1,11 +1,13 @@
 <%inherit file="../../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
-<%def name="pageTitle()"><div class="page-header">${company.name}</div></%def>
-
-
 <%def name="content()">
     <div class="container">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="site-slogan">${company.name}</h1>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-12">
                 <div class="box-shaded company-customer-dashboard disabled">

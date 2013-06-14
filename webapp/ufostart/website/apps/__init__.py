@@ -1,7 +1,7 @@
 from importlib import import_module
 from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSON_FORM_ATTRS, BaseRoute, OAuthClassRoute, OAuthLoginRoute
 
-from . import contexts, index, auth, company, expert
+from . import contexts, index, auth, company, expert, user
 import simplejson
 from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.social import SocialLoginFailed, SocialLoginSuccessful
@@ -16,6 +16,10 @@ ROUTE_LIST = [
     FunctionRoute    ("website_index"                      , "/", contexts.WebsiteRootContext                                                , index.index, "index.html")
     , OAuthLoginRoute('website_login'                      , '/login', contexts.WebsiteRootContext                                           , auth.social.login, 'auth/login.html')
     , FunctionRoute  ('website_logout'                     , '/user/logout', contexts.WebsiteRootContext                                     , index.logout, None)
+
+    , FunctionRoute  ('website_user_home'                  , '/home', contexts.WebsiteRootContext                                            , user.home, None)
+
+
 
     , FunctionRoute  ('website_template_basic'             , '/templates', contexts.WebsiteRootContext                                       , index.template.basics, "template/basic.html")        #   Step 1
     , FunctionRoute  ('website_template_details'           , '/template/:template', contexts.WebsiteRootContext                              , index.template.details, "template/details.html")     #   Step 2
@@ -35,7 +39,7 @@ ROUTE_LIST = [
     , ClassRoute     ("website_round_need_create"          , '/c/:slug/need/create', contexts.WebsiteCompanyContext                          , company.need.NeedCreateHandler, "company/need/create.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute     ("website_round_need_edit"            , '/c/:slug/:need/edit', contexts.WebsiteCompanyFounderContext                    , company.need.NeedEditHandler, "company/need/edit.html", view_attrs = JSON_FORM_ATTRS)
     , FunctionRoute  ("website_round_need"                 , '/c/:slug/:need', contexts.WebsiteCompanyContext                                , company.need.index, "company/need/index.html")
-    , OAuthClassRoute("website_round_need_apply"           , '/c/:slug/:need/apply', contexts.WebsiteCompanyContext                         , company.need.ApplicationHandler, "company/need/apply.html", view_attrs = JSON_FORM_ATTRS)
+    , OAuthClassRoute("website_round_need_apply"           , '/c/:slug/:need/apply', contexts.WebsiteCompanyContext                          , company.need.ApplicationHandler, "company/need/apply.html", view_attrs = JSON_FORM_ATTRS)
 
 
     , OAuthLoginRoute("website_invite_confirm"             , '/invite/:token/confirm', contexts.WebsiteRootContext                           , company.invite.confirm, "company/invite_confirm.html")

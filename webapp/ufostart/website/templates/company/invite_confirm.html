@@ -1,10 +1,13 @@
 <%inherit file="../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
-<%def name="pageTitle()"><div class="page-header">Your have been invited to ${invite.companyName}</div></%def>
-
 <%def name="content()">
     <div class="container">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="site-slogan">Your have been invited to ${invite.companyName}</h1>
+            </div>
+        </div>
         <div class="row">
             <div class="col col-lg-12">
                 <h1 class="site-slogan">${invite.invitorName} has invited ${invite.name} as a member of ${invite.companyName}.</h1>

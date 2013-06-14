@@ -64,7 +64,10 @@ class WebsiteAuthedContext(WebsiteRootContext):
 class WebsiteCompanyContext(WebsiteRootContext):
     @reify
     def company(self):
-        return GetCompanyProc(self.request, {'slug': self.request.matchdict['slug']})
+        company = GetCompanyProc(self.request, {'slug': self.request.matchdict['slug']})
+        if not company:
+            self.user.Company = None
+        return company
 
     @reify
     def urlArgs(self):
