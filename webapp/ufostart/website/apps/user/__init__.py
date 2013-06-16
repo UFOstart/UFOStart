@@ -1,1 +1,1 @@
-__author__ = 'Martin'
+from . import index
