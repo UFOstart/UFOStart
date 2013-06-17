@@ -92,3 +92,34 @@
   border-top:1px solid @text-muted;
   padding-top:@line-height-computed;
 }
+
+
+
+
+.workflow-step {
+  font-weight: @font-weight-bold;
+  .position {
+    display: inline-block;
+    width: 30px;
+    height:30px;
+    border-radius: 100%;
+    border: 2px solid @wtf-active-color;
+  }
+  &.done {
+    position: relative;
+    &:after {
+      content: "✓";
+      border:1px solid white;
+      color:white;
+      background-color: green;
+      position: absolute;
+      top:-3px;
+      right:-3px;
+    }
+  }
+  &.active {
+    border-color: white;
+    background-color: @wtf-active-color;
+    color:white;
+  }
+}
