@@ -1,5 +1,6 @@
 <%inherit file="../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="../widgets.html" name="widgets"/>
 
 
 <%def name="content()">
@@ -13,10 +14,31 @@
             <div class="col col-lg-6">
                 <div class="box-framed">
                     <h5 class="box-title">
+                        <span class="pull-right">${len(profile.Companies)}</span>
                         Companies
                     </h5>
                     <div class="box-content">
+                    %for company in profile.Companies:
+                        <div class="row single-company">
+                            <div class="col col-sm-2">
+                                ${widgets.logo(company.logo_url)}
+                            </div>
+                            <div class="col col-sm-5">
+                                <div class="overflow"><a href="${url("website_company", slug = company.slug)}"><strong>${company.name}</strong></a></div>
+                                <div><strong>Round not published</strong></div>
+                            </div>
+                            <div class="col col-lg-5">
+                                <div class="member-pile">
+                                    %for member in company.Users:
+                                        <div class="picture micro">
+                                            <img src="${member.picture_url}"/>
+                                        </div>
+                                    %endfor
+                                </div>
+                            </div>
 
+                        </div>
+                    %endfor
                     </div>
                 </div>
             </div>

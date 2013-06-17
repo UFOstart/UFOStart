@@ -24,6 +24,7 @@ class UserModel(Mapping):
     picture = TextField()
     Profile = ListField(DictField(WebUserNetworkProfile))
     Company = DictField(CompanyModel)
+    Companies = ListField(DictField(CompanyModel))
 
     def isAnon(self):
         return self.token is None

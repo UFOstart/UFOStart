@@ -46,6 +46,8 @@ SocialConnectProc = LoggingInProc('/web/user/connect', db_messages={'NEWUSER':Ne
 RefreshAccessTokenProc= ClientTokenProc('/web/user/refreshAccessToken')
 DisconnectFacebookProc = ClientTokenProc("/web/user/disconnectFb")
 
+RefreshProfileProc = LoggingInProc("/web/user/profile")
+
 #
 ################# COMPANY
 #
