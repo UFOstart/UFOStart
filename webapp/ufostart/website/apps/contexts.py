@@ -58,22 +58,10 @@ class WebsiteRootContext(RootContext):
             return self.settings.networks[item]
 
 
-
-
-
-
 class WebsiteAuthContext(WebsiteRootContext):
     def is_allowed(self, request):
         if not self.user.isAnon():
             request.fwd_raw(request.furl)
-
-
-
-class WebsiteAuthedContext(WebsiteRootContext):
-    def is_allowed(self, request):
-        if self.user.isAnon():
-            request.fwd("website_index", _query=[('furl', request.url)])
-
 
 
 

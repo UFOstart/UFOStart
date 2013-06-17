@@ -33,7 +33,9 @@
 .min-height-15 {  min-height: 330px; }
 .mar-top-half {margin-top: ceil(@line-height-computed / 2);}
 
-
+.right-bordered {
+  border-right:1px solid black;
+}
 .box-title {
   display: block;
   background-color: #ff792a;
@@ -56,7 +58,6 @@
     margin: 0 -15px 0 0;
     .box-shadow(none);
   }
-
 }
 .box-framed {
   border: 1px solid @btn-default-bg;
@@ -74,6 +75,19 @@
     padding: 10px 15px;
   }
 }
+.wtf-box {
+  background-color: navy;
+  color:white;
+  > .box-title {
+    background-color: transparent;
+  }
+  > .box-content {
+    padding-top:0;
+  }
+}
+
+
+
 
 .empty {
   padding: @line-height-computed 0;

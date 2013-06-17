@@ -36,7 +36,6 @@ class UserModel(Mapping):
     def getSocialProfileJSON(self, stringify = True):
         result = {n.network:n.unwrap(sparse = True) for n in self.Profile if n.id}
         return simplejson.dumps(result) if stringify else result
-
     def getPicture(self):
         if self.picture:
             return self.picture
@@ -46,6 +45,10 @@ class UserModel(Mapping):
                 return pics[0]
             else:
                 return "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+    def getDefaultCompanySlug(self):
+        return self.Company.slug if self.Company else None
+    def getDefaultCompanyName(self):
+        return self.Company.name if self.Company else None
 
     @reify
     def profileMap(self):

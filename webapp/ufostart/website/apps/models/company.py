@@ -404,7 +404,7 @@ class CompanyModel(Mapping):
             return ''
     @property
     def is_setup(self):
-        return self.angelListId and self.angelListToken and self.name
+        return self.slug
     @property
     def product_is_setup(self):
         return self.angelListId and self.angelListToken and self.Round and self.Round.Product

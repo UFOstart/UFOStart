@@ -33,6 +33,8 @@ class CompanyRolePerson(Mapping):
 
 class CompanyModel(Mapping):
     id = IntegerField()
+    token = TextField()
+
     name = TextField()
     display_name = TextField()
     high_concept = TextField()
@@ -44,8 +46,10 @@ class CompanyModel(Mapping):
     angellist_url = TextField()
     markets = ListField(DictField(MarketModel))
     screenshots = ListField(DictField(ScreenShotModel))
-
     pledges = ListField(DictField(ScreenShotModel))
+
+
+
 
 
     @property

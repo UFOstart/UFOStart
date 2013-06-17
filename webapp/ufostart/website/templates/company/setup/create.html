@@ -1,0 +1,53 @@
+<%inherit file="layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+
+<%def name="slogan()">
+    ${self.crumbs(3)}
+    <h1 class="site-slogan">
+        Enter Basic Details of your project
+    </h1>
+</%def>
+
+
+
+<%def name="bodyContent()">
+    <div class="row mar-top-2">
+        <div class="col col-lg-6 right-bordered">
+            ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+        </div>
+        <div class="col col-lg-6">
+            <a href="${url("website_company_import_start", _query=[('furl', request.furl)])}" class="btn btn-primary btn-form-field btn-block">Import from Angellist</a>
+        </div>
+    </div>
+</%def>
+
+
+<%def name="build_form(form, values, errors)">
+    <form class="${form.classes}" id="${form.id}" method="POST">
+        ${baseform.prelims(form)}
+        %for field in view.form.fields:
+            ${field.render(form.id, request, values, errors, view)|n}
+        %endfor
+        <div class="row">
+            <div class="col col-lg-9 col-offset-3">
+              <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </div>
+        </div>
+    </form>
+</%def>
+
+
+<%def name="post_scripts()">
+    <script type="text/javascript">
+        (function(a){if(window.filepicker){return}var b=a.createElement("script");b.type="text/javascript";b.async=!0;b.src=("https:"===a.location.protocol?"https:":"http:")+"//api.filepicker.io/v1/filepicker.js";var c=a.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c);var d={};d._queue=[];var e="pick,pickMultiple,pickAndStore,read,write,writeUrl,export,convert,store,storeUrl,remove,stat,setKey,constructWidget,makeDropPane".split(",");var f=function(a,b){return function(){b.push([a,arguments])}};for(var g=0;g<e.length;g++){d[e[g]]=f(e[g],d._queue)}window.filepicker=d})(document);
+    </script>
+    <script>
+        require(["form"], function(View){
+            filepicker.setKey('A0Me4BRKSLSnOkrY6Jb2xz');
+            $(".form-validated").each(function(idx, form){
+                new View({el:form})
+            });
+        });
+    </script>
+</%def>

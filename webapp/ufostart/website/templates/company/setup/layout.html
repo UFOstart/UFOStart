@@ -1,0 +1,33 @@
+<%inherit file="../../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="content()">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-9">
+                ${self.slogan()}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-3 pull-right">
+                ${self.wtfBox()}
+            </div>
+            <div class="col col-lg-9">
+                ${self.bodyContent()}
+            </div>
+        </div>
+    </div>
+</%def>
+
+
+<%def name="crumbs(no)">
+    <ul class="list-unstyled breadcrumbs">
+        <li class="crumb after ${'active' if no == 1 else ''}">
+            Choose a Template</li><li class="crumb before after ${'active' if no == 2 else ''}">
+            Review Template</li><li class="crumb before ${'active' if no == 3 else ''}">
+            Setup Project
+        </li>
+    </ul>
+    <div style="clear:both"></div>
+</%def>
+<%def name="wtfBox()"></%def>

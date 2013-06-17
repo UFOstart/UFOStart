@@ -73,7 +73,7 @@ def auth_required_view(exc, request):
     return render_to_response(exc.template, {}, request)
 
 
-def require_login(template):
+def require_login(template = "ufostart:website/templates/auth/login.html"):
     def require_login_real(fn):
         def require_login_inner(context, request):
             if request.root.user.isAnon():

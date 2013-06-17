@@ -1,0 +1,72 @@
+<%inherit file="layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+
+<%def name="slogan()">
+    ${self.crumbs(2)}
+    <h1 class="site-slogan">${template.name} <span class="template-icon ${template.getStyleKey()}"></span></h1>
+</%def>
+
+<%def name="bodyContent()">
+    <div class="row">
+        <div class="col col-lg-12">
+            <div class="box-title">
+                Template Description
+            </div>
+            <div class="mar-top-1">
+                <div class="picture xx-large no-margin pull-left single-template-mock">
+                    <img src="${STATIC_URL}img/templates/${template.getStyleKey()}.png"/>
+                    <span class="name">${template.name}</span>
+                </div>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+            </div>
+            <div class="mar-top-1">
+                <a href="${url("website_template_create", template = template.key)}" class="btn btn-primary btn-humonguous pull-right "><span>Use this</span></a>
+                <a href="${url("website_template_basic")}">&laquo;Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="row mar-top-2">
+        <div class="col col-lg-12">
+            <div class="box-title">Needs</div>
+        </div>
+    </div>
+    <div class="row">
+        %for col in template.groupedNeeds(4):
+            <div class="col col-lg-3 need-card-list">
+                <div class="js-need-card-list">
+                %for need in col:
+                    ${self.buildNeed(need)}
+                %endfor
+                </div>
+            </div>
+        %endfor
+    </div>
+</%def>
+
+<%def name="buildNeed(need)">
+    <div class="need-card">
+        <h5>${need.name}</h5>
+        <div class="description">
+            ${need.short_description}
+        </div>
+        <div class="label-list">
+            %for tag in need.tags:
+                <span class="label label-info spaced text-small">${tag}</span>
+            %endfor
+        </div>
+    </div>
+</%def>
+
+
+<%def name="wtfBox()">
+    <div class="wtf-box">
+        <div class="box-title">
+            Whats happening here?
+        </div>
+        <div class="box-content mar-top-1">
+            Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ... Read more
+        </div>
+    </div>
+</%def>

@@ -94,9 +94,9 @@
             <div class="row">
                 <div class="col col-sm 12">
                     <ul class="page-header-bar-menu">
-                        <li><span>Welcome ${user.name}</span></li>
-                        %if user.Company and user.Company.slug:
-                            <li><a href="${url("website_company", slug = user.Company.slug)}">Dashboard</a></li>
+                        <li><a href="${url("website_user_home")}">${user.name}</a></li>
+                        %if user.getDefaultCompanySlug():
+                            <li><a href="${url("website_company", slug = user.getDefaultCompanySlug())}">${user.getDefaultCompanyName()}</a></li>
                         %endif
                         <li><a href="${url("website_logout")}">Log out</a></li>
                     </ul>

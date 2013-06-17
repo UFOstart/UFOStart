@@ -3,11 +3,48 @@
 
 
 <%def name="content()">
-    <div class="container container-constricted">
+    <div class="container">
         <div class="row">
-            <div class="col-lg-12">
-                <h1 class="site-slogan"></h1>
+            <div class="col col-lg-12">
+                <h5 class="site-slogan">Welcome ${vctxt.user.name}</h5>
             </div>
         </div>
+        <div class="row mar-top-1">
+            <div class="col col-lg-6">
+                <div class="box-framed">
+                    <h5 class="box-title">
+                        Companies
+                    </h5>
+                    <div class="box-content">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-6">
+                <div class="box-framed">
+                    <h5 class="box-title">
+                        Applications
+                    </h5>
+                    <div class="box-content">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mar-top-2">
+            <div class="col col-lg-12">
+                <h5 class="site-slogan">Where you can help other companies out</h5>
+            </div>
+        </div>
+
+        <div class="row mar-top-1">
+            <div class="col col-lg-12">
+                <h5 class="box-title">Opportunities near you, ${vctxt.location}</h5>
+            </div>
+        </div>
+
+
+
+
     </div>
 </%def>
