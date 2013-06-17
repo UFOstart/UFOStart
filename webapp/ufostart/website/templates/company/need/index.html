@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col col-lg-12">
                 <h1 class="site-slogan">
-                    Need Details
+                    ${vctxt.need.name}
                 </h1>
             </div>
         </div>
@@ -15,13 +15,11 @@
 %if vctxt.isTeamMember:
     <div class="container">
         <div class="row mar-top-1">
-            <div class="col col-lg-6">
-                <div class="box-framed">
-                    <div class="box-title"><a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>Need Details</div>
-                    <div class="box-content">${self.needDetails(vctxt.need)}</div>
-                </div>
+            <div class="col col-lg-8">
+                ${vctxt.need.meta_description}
+                ${self.bodyContent(vctxt.need)}
             </div>
-            <div class="col col-lg-6">
+            <div class="col col-lg-4">
                 <div class="box-framed">${self.privateInfoBox(vctxt.company, vctxt.need)}</div>
             </div>
         </div>
@@ -49,6 +47,12 @@
 </%def>
 
 
+<%def name="bodyContent(need)">
+    <div class="box-framed">
+        <div class="box-title"><a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>Need Details</div>
+        <div class="box-content">${self.needDetails(need)}</div>
+    </div>
+</%def>
 
 
 
@@ -59,7 +63,26 @@
                 <img src="${need.picture}"/>
             </div>
         %endif
-        ${vctxt.need.display_description}
+        <div class="valuation">
+            <div class="number total">
+                <strong>VALUE</strong>
+                <h2><strong>&pound;${need.money_value}</strong></h2>
+            </div>
+            <div class="secondary">
+                <div class="number equity">
+                    <strong>Equity</strong>
+                    <h2>${need.equity_mix}</h2>
+                </div>
+                <div class="number cash">
+                    <strong>Cash</strong>
+                    <h2>${need.cash}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            ${vctxt.need.display_description}
+        </div>
     </div>
     <h5 class="text-muted">
         Related Tags
@@ -74,27 +97,33 @@
 <%def name="privateInfoBox(company, need)">
 <div class="box-title">Recommended Solutions</div>
 <div class="box-content">
-
-    %if need.second_level_expert:
-    <div class="experts">
-        <h5 class="text-muted no-margin upper">Recommended Experts and people who can introduce you</h5>
-        <div class="expert-pile">
-                %for expert in need.second_level_expert:
-                    <div class="expert-briefing row">
-                        <div class="col col-lg-4">
-                            <h6 class="text-muted">Expert</h6>
-                            <div class="picture medium">
-                                <img src="${expert.picture}" alt="${expert.name}"/>
-                            </div>
-                            <a href="#" class="overflow"><strong>${expert.name}</strong></a>
-                            <p class="text-muted text-small">${expert.position}</p>
-                            <%doc>
-                                TODO: implement expert skills
-                                <p class="expert-skills"><strong>${expert.display_skills}</strong></p>
-                            </%doc>
+    %if need.experts:
+        <div class="experts">
+            <h5 class="text-muted no-margin upper">Recommended Experts</h5>
+            <div class="expert-list">
+            %for expert in need.experts:
+            <div class="expert-briefing">
+                <div class="row">
+                    <div class="col col-lg-3">
+                        <div class="picture medium">
+                            <img src="${expert.picture}" alt="${expert.name}"/>
+                        </div>
+                    </div>
+                    <div class="col col-lg-7">
+                        <a href="#" class="overflow"><strong>${expert.name}</strong></a>
+                        <p class="text-muted text-small">${expert.position}</p>
+                        <div class="show-expanded">
+                            <p>${expert.display_skills}</p>
                             <img src="${STATIC_URL}img/stars.png" class="stars"/>
                         </div>
-                        <div class="col col-lg-8">
+                    </div>
+                    <div class="col col-lg-2">
+                        <a class="expander btn btn-default btn-large btn-block" data-toggle-target=".expert-briefing" data-toggle-class="expanded" data-toggle-text="▼">◀</a>
+                    </div>
+                </div>
+                <div class="expert-details row show-expanded">
+                    <div class="col col-lg-12">
+                        %if expert.introducers:
                             <h6 class="text-muted">Introducers</h6>
                             %for intro in expert.introducers:
                             <div class="row mar-top-half">
@@ -112,32 +141,11 @@
                                 </div>
                             </div>
                             %endfor
-                        </div>
+                        %endif
                     </div>
-                %endfor
-            </div>
-        </div>
-    %endif
-
-    %if need.first_level_expert:
-        <div class="experts">
-            <h5 class="text-muted upper">Recommended Experts in your network</h5>
-            <div class="expert-pile row">
-                %for expert in need.first_level_expert:
-                    <div class="col col-lg-4 expert-briefing">
-                        <div class="picture medium">
-                            <img src="${expert.picture}" alt="${expert.name}"/>
-                        </div>
-                        <a href="#" class="overflow"><strong>${expert.name}</strong></a>
-                        <p class="text-muted text-small">${expert.position}</p>
-                        <%doc>
-                            TODO: implement expert skills
-                            <p class="expert-skills"><strong>${expert.display_skills}</strong></p>
-                        </%doc>
-                        <img src="${STATIC_URL}img/stars.png" class="stars"/>
-                        <a href="#" class="btn btn-primary btn-small btn-block ">Send Message</a>
-                    </div>
-                %endfor
+                </div>
+                </div>
+            %endfor
             </div>
         </div>
     %endif

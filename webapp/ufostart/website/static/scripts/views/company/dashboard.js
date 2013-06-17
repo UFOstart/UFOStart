@@ -3,22 +3,23 @@ define(["tools/messaging", "tools/ajax"], function(messaging, ajax){
         events: {
             'click .remove': "removeNeed"
             , 'keyup .remove': "removeNeed"
+
+            , 'click .workflow-link': "highlightTarget"
+            , 'keyup .workflow-link': "highlightTarget"
         }
         , initialize:function(opts){
             var lengths = [], max, min;
-//
-//            this.$(".js-need-card-list").each(function(idx, elem){
-//                lengths.push($(elem).height());
-//            });
-//
-//            max = lengths.indexOf(Math.max.apply(Math, lengths));
-//            min = lengths.indexOf(Math.min.apply(Math, lengths));
-//
-//            this.$(".js-need-card-list").eq(min).append(
-//                this.$(".js-need-card-list").eq(max).children('.need-card[data-entity-id]').last().detach()
-//            );
         }
 
+        , highlightTarget: function(e){
+            if(!e.keyCode||e.keyCode == 13){
+                var $t = $($(e.currentTarget).attr("href")).closest(".highlight-target");
+                $t.addClass("highlighted");
+                setTimeout(function(){
+                    $t.removeClass("highlighted");
+                }, 1000);
+            }
+        }
         , removeNeed: function(e){
             if(!e.keyCode||e.keyCode == 13){
                 var $t = $(e.currentTarget)

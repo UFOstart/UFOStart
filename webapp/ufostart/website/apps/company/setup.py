@@ -1,5 +1,5 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, REQUIRED, StringField, TextareaField
+from hnc.forms.formfields import BaseForm, REQUIRED, StringField, TextareaField, HORIZONTAL_GRID
 from pyramid.decorator import reify
 from ufostart.website.apps.auth.social import AuthedFormHandler
 from ufostart.website.apps.company.imp import SESSION_SAVE_TOKEN
@@ -20,6 +20,7 @@ def details(context, request):
 
 class CompanyCreateForm(BaseForm):
     id="CompanyCreate"
+    grid = HORIZONTAL_GRID
     label = ""
     fields=[
         StringField('name', 'Project Name', REQUIRED)

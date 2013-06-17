@@ -26,18 +26,46 @@
   }
 }
 
-
 .need-card-list.col {padding-left:10px;padding-right: 10px;}
 .need-card {
+  margin-top: 25px;
+  > .customize {
+    display: block;
+    margin-bottom: 7px;
+    text-align: left;
+    font-weight: @font-weight-bold;
+    padding: 7px;
+    line-height:1em;
+    font-size: @font-size-small;
+    border-radius:@border-radius-large;
+
+    &.danger {
+      background-color: fadeout(@label-danger-bg, 70%);
+      color: @label-danger-bg;
+      border: 1px solid @label-danger-bg;
+    }
+    &.success {
+      background-color: fadeout(@label-success-bg, 70%);
+      color: @label-success-bg;
+      border: 1px solid @label-success-bg;
+    }
+    &:hover {text-decoration: none;}
+    > .glyphicon {
+      position: relative;
+      top: -3px;
+      font-size: 14px;
+      line-height: 10px;
+      height: 9px;
+      display: inline-block
+    }
+  }
+}
+.need-card-inner {
   background-color: #f4f4f4;
   border-radius: 4px;
   padding: 1px 10px 10px;
-  margin-top: 25px;
   box-shadow: 0 2px 5px rgba(0,0,0,.4);
   position: relative;
-  &.PENDING {
-    padding-bottom:40px;
-  }
   > hr {
     margin: 10px -15px;
     border-bottom: 1px solid #fff;
@@ -82,8 +110,14 @@
 
 .valuation {
   margin: 15px 0;
+  .clearfix;
   .number {
    > h2 {margin-top:0;}
+  }
+  > .secondary > .number{
+    float:left;
+    margin-right:30px;
+    min-width:90px;
   }
 }
 
@@ -96,30 +130,53 @@
 
 
 
-.workflow-step {
-  font-weight: @font-weight-bold;
-  .position {
+.workflow-link {
+    display: block;
+    padding: 8px 15px;
+    margin: 15px -15px;
+    color: @wtf-active-color;
+    font-weight: @font-weight-bold;
+  > .position {
     display: inline-block;
-    width: 30px;
-    height:30px;
+    width: 40px;
+    height:40px;
+    line-height:34px;
+    font-size:20px;
+    margin-right: 5px;
+    text-align: center;
     border-radius: 100%;
-    border: 2px solid @wtf-active-color;
+    border: 3px solid @wtf-active-color;
   }
-  &.done {
+  &.done > .position {
     position: relative;
     &:after {
       content: "✓";
-      border:1px solid white;
+      border:2px solid white;
       color:white;
       background-color: green;
       position: absolute;
-      top:-3px;
-      right:-3px;
+      top:-8px;
+      right:-10px;
+      border-radius: 100%;
+      width: 16px;
+      height:16px;
+      line-height:16px;
+      text-align: center;
+      font-size:12px;
     }
   }
   &.active {
-    border-color: white;
     background-color: @wtf-active-color;
     color:white;
+    > .position{
+      border-color: white;
+      color:white;
+    }
+  }
+}
+.highlight-target {
+  .transition(box-shadow .1s ease-in-out);
+  &.highlighted {
+    .box-shadow(0 0 15px navy);
   }
 }

@@ -217,8 +217,8 @@ class NeedModel(Mapping):
     category = TextField()
     description = TextField()
     picture = TextField()
-    cash = IntegerField()
-    equity = IntegerField()
+    cash = IntegerField(default = 0)
+    equity = IntegerField(default = 0)
     Tags = ListField(DictField(NamedModel))
     Applications = ListField(DictField(ApplicationModel))
 
@@ -248,22 +248,11 @@ class NeedModel(Mapping):
     def display_description(self):
         return self.description if self.description else ''
     # TODO: actual implementation
-
+    @property
+    def meta_description(self):
+        return "LOREM IPSUM long meta need description"
     @property
     def experts(self):
-        return self.Experts
-
-    @property
-    def first_level_expert(self):
-        expert = ExpertModel(firstName='J.', lastName='of Nazareth', picture='http://lorempixel.com/100/100/people')
-        return [expert]*5
-    @property
-    def second_level_expert(self):
-        for expert in self.Experts:
-            if expert.introFirstName:
-                expert.Introducer = [IntroducerModel(firstName = expert.introFirstName, lastName = expert.introLastName, picture = expert.introPicture)]
-            else:
-                expert.Introducer = []
         return self.Experts
 
     @property

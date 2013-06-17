@@ -2,7 +2,7 @@
 <%namespace file="../widgets.html" name="widgets"/>
 
 <%def name="content()">
-    <div class="container">
+    <div class="container" id="project-round-need-dashboard">
         <div class="row">
             <div class="col col-lg-12">
                 <h1 class="site-slogan">${vctxt.company.display_name}</h1>
@@ -25,7 +25,7 @@
 <div class="row">
     <div class="col col-lg-6">
         <div class="box-framed">
-            <div class="box-title">
+            <div class="box-title highlight-target" id="target-invite-team">
                 Company
             </div>
             <div class="box-content min-height-7">
@@ -74,7 +74,7 @@
     </div>
     <div class="col col-lg-6">
         <div class="box-framed">
-            <div class="box-title">
+            <div class="box-title highlight-target" id="target-create-product">
                 Product
             </div>
             <div class="box-content min-height-7">
@@ -120,7 +120,7 @@
 <%def name="lowerContent()">
     <div class="row mar-top-2">
         <div class="col col-lg-12">
-            <div class="box-title">
+            <div class="box-title highlight-target" id="target-need-list">
                 Needs
             </div>
         </div>
@@ -154,57 +154,64 @@
 
 <%def name="buildNeed(need, published)">
     <div class="need-card ${need.status}" data-entity-id="${need.token}">
-        %if not published and vctxt.isTeamMember:
-            <a class="remove" data-target=".need-card">×</a>
+        %if vctxt.isTeamMember:
+            %if not need.customized:
+                <a class="customize danger" href="${url("website_round_need_edit", need=need.slug, **vctxt.urlArgs)}"><span class="glyphicon glyphicon-exclamation-sign"></span> Customize Need</a>
+            %else:
+                <a class="customize success" href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}"><span class="glyphicon glyphicon-ok-sign"></span> Customized</a>
+            %endif
         %endif
-        <h5><a href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">${need.name}</a></h5>
-        <div class="description">
-            ${need.short_description}
-        </div>
-        <div class="valuation">
-            <div class="primary-number pull-right">
-                ${need.equity_mix}%
-                <div class="legend">Equity</div>
+        <div class="need-card-inner">
+            %if not published and vctxt.isTeamMember:
+                <a class="remove" data-target=".need-card">×</a>
+            %endif
+
+            <h5><a href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">${need.name}</a></h5>
+            <div class="description">
+                ${need.short_description}
             </div>
-            <div class="primary-number">
-                $${need.money_value}
-                <div class="legend">Value</div>
-            </div>
-        </div>
-        <div class="label-list">
-            %for tag in need.tags:
-                <span class="label label-info spaced text-small">${tag}</span>
-            %endfor
-        </div>
-        %if need.experts:
-            <hr/>
-            <div class="experts">
-                <h5 class="no-margin upper text-muted">Recomended Experts</h5>
-                <div class="picture-pile">
-                %for expert in need.experts[:4]:
-                    <div class="picture medium">
-                        <img src="${expert.picture}" alt="${expert.name}"/>
-                    </div>
-                %endfor
+            <div class="valuation">
+                <div class="primary-number pull-right">
+                    ${need.equity_mix}%
+                    <div class="legend">Equity</div>
+                </div>
+                <div class="primary-number">
+                    $${need.money_value}
+                    <div class="legend">Value</div>
                 </div>
             </div>
-        %endif
-        %if need.services:
-            <hr/>
-            <div class="services">
-                <h5 class="no-margin upper text-muted">Recomended Cloud Services</h5>
-                <div class="picture-pile">
-                %for service in need.services[:4]:
-                    <div class="picture medium">
-                        <img src="${service.logo_url}" name="${service.name}"/>
-                    </div>
+            <div class="label-list">
+                %for tag in need.tags:
+                    <span class="label label-info spaced text-small">${tag}</span>
                 %endfor
-                </div>
             </div>
-        %endif
-        %if not need.customized and vctxt.isTeamMember:
-            <a class="customize" href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">Customize</a>
-        %endif
+            %if need.experts:
+                <hr/>
+                <div class="experts">
+                    <h5 class="no-margin upper text-muted">Recomended Experts</h5>
+                    <div class="picture-pile">
+                    %for expert in need.experts[:4]:
+                        <div class="picture medium">
+                            <img src="${expert.picture}" alt="${expert.name}"/>
+                        </div>
+                    %endfor
+                    </div>
+                </div>
+            %endif
+            %if need.services:
+                <hr/>
+                <div class="services">
+                    <h5 class="no-margin upper text-muted">Recomended Cloud Services</h5>
+                    <div class="picture-pile">
+                    %for service in need.services[:4]:
+                        <div class="picture medium">
+                            <img src="${service.logo_url}" name="${service.name}"/>
+                        </div>
+                    %endfor
+                    </div>
+                </div>
+            %endif
+        </div>
     </div>
 </%def>
 
@@ -212,37 +219,43 @@
 
 
 <%def name="wtfBox()">
-<div class="wtf-box company-dashboard">
-    <div class="box-framed">
+    <div class="wtf-box company-dashboard">
         <h5 class="box-title">
             Steps
         </h5>
         <div class="box-content">
             <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
             <ul class="list-unstyled">
-                <li class="workflow-step done">
-                    <span class="position">1</span>
-                    Create Project
+                <li>
+                    <a class="workflow-link active" href="#target-invite-team">
+                        <span class="position">1</span>
+                        Invite Team Members
+                    </a>
                 </li>
-
-                <li class="workflow-step active">
-                    <span class="position">2</span>
-                    Invite Team Members
+                <li>
+                    <a class="workflow-link" href="#target-create-product">
+                        <span class="position">2</span>
+                        Customize Product
+                    </a>
                 </li>
-
-                <li class="workflow-step">
-                    <span class="position">3</span>
-                    Customize Product
+                <li>
+                    <a class="workflow-link" href="#target-need-list">
+                        <span class="position">3</span>
+                        Customize Needs
+                    </a>
                 </li>
-
-                <li class="workflow-step">
-                    <span class="position">4</span>
-                    Customize Needs
+                <li>
+                    <a class="workflow-link" href="#target-publish">
+                        <span class="position">3</span>
+                        Customize Needs
+                    </a>
                 </li>
             </ul>
         </div>
     </div>
-</div>
+    <div class="mar-top-2 highlight-target" id="target-publish">
+        <a href="#" class="btn btn-primary btn-block btn-humonguous disabled"><span>Publish</span></a>
+    </div>
 </%def>
 
 

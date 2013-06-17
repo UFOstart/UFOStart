@@ -1,5 +1,5 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, MultipleFormField, EmailField
+from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, MultipleFormField, EmailField, HORIZONTAL_GRID
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from pyramid.renderers import render_to_response
@@ -23,6 +23,7 @@ def create_round(context, request):
 
 class SetupCompanyForm(BaseForm):
     id="SetupCompany"
+    grid = HORIZONTAL_GRID
     label = ""
     fields=[
         StringField("name", "Name", REQUIRED)

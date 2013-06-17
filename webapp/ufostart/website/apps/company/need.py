@@ -1,5 +1,5 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, TagSearchField, IntField, HtmlAttrs
+from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, TagSearchField, IntField, HtmlAttrs, HORIZONTAL_GRID
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from ufostart.website.apps.forms.controls import FileUploadField
@@ -13,6 +13,7 @@ def index(context, request):
 class ApplicationForm(BaseForm):
     id="Application"
     label = ""
+    grid = HORIZONTAL_GRID
     fields=[StringField('message', 'Message', REQUIRED)]
     @classmethod
     def on_success(cls, request, values):
@@ -60,8 +61,8 @@ class NeedEditForm(BaseForm):
     fields = [
         FileUploadField("picture", 'Picture', group_classes='file-upload-control')
         , StringField('name', "Need Name", REQUIRED)
-        , IntField('cash', "Cash value", REQUIRED)
-        , IntField('equity', "Equity value", REQUIRED)
+        , IntField('value', "Set need value", REQUIRED)
+        , IntField('equity', "Equity (%)", REQUIRED)
         , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3))
     ]

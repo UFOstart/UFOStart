@@ -2,16 +2,11 @@
 <%namespace name="lib" file="hnc.forms:templates/lib.html"/>
 
 <%block name="controls">
-<div class="row">
-    <div class="col col-lg-4">
-        <script type="text/template" class="picture-template"><img src="{{ pic.url }}"/><input type="hidden" name="{{ field_name }}" value="{{ pic.url }}"/></script>
-        <div class="file-picker-upload upload-picture-display logo-picture empty" data-field-name="${widget.getName(prefix)}">
-            %if value:
-                <img src="${value}"/><input type="hidden" name="${widget.getName(prefix)}" value="${value}"/>
-            %else:
-                <div class="info">Drag & Drop Files here</div>
-            %endif
-        </div>
+    <script type="text/template" class="picture-template"><img src="{{ pic.url }}"/><input type="hidden" name="{{ field_name }}" value="{{ pic.url }}"/></script>
+    <div class="file-picker-upload upload-picture-display logo-picture empty" data-field-name="${widget.getName(prefix)}">
+        %if value:
+            <img src="${value}"/><input type="hidden" name="${widget.getName(prefix)}" value="${value}"/>
+        %endif
     </div>
-</div>
+    <div class="info">Drag & Drop Files here</div>
 </%block>

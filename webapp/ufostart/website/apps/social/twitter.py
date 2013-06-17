@@ -1,7 +1,7 @@
 import logging
 import urllib
 from urlparse import parse_qsl
-from hnc.forms.formfields import BaseForm, REQUIRED, EmailField
+from hnc.forms.formfields import BaseForm, REQUIRED, EmailField, HORIZONTAL_GRID
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from hnc.tools.oauth import Consumer, Client, Token
@@ -108,6 +108,7 @@ def callback_view(context, request):
 class TwitterEmailFormForm(BaseForm):
     id="TwitterEmailForm"
     label = ""
+    grid = HORIZONTAL_GRID
     fields=[EmailField('email', 'Email', REQUIRED)]
     @classmethod
     def on_success(cls, request, values):

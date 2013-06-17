@@ -1,4 +1,4 @@
-
+.labels-capitalized .control-label {text-transform: uppercase;}
 .control-group {
   margin-bottom:@line-height-base * @font-size-base;
   &.required {
@@ -6,15 +6,21 @@
   }
 }
 
-
+.pseudo-controls {
+  font-size:24px;
+  margin-top:6px;
+}
 
 .form-horizontal .row + .row.form-actions {margin-top:30px;}
 .forgot-password-link {margin-bottom:0;}
 
 
 textarea.x-high {height: 8 * @line-height-computed;}
-
-
+.box-dark .has-error {
+  .control-label, .help-inline {
+    color:white;
+  }
+}
 .btn.glyphicon-plus:before {
   content: "\002b";
   font-size: 2em;
@@ -41,4 +47,9 @@ ul.styled {
   > li {color:@corp-color;
     > span {color:@text-color;}
   }
+}
+
+.file-upload-control {
+  min-width: 120px;
+  .upload-picture-display {min-height:120px;}
 }

@@ -9,7 +9,6 @@ from ufostart.website.apps.models.procs import InviteToCompanyProc, GetInviteDet
 class InviteCompanyForm(BaseForm):
     id="InviteCompany"
     label = ""
-    classes = "form-validated"
     fields = [
         StringField("name", "Name", REQUIRED)
         , EmailField("email", "email address", REQUIRED)

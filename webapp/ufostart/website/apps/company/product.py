@@ -1,5 +1,5 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, MultipleFormField, REQUIRED, StringField, RadioChoice, NullConfigModel, TextareaField
+from hnc.forms.formfields import BaseForm, MultipleFormField, REQUIRED, StringField, RadioChoice, NullConfigModel, TextareaField, HORIZONTAL_GRID
 from hnc.forms.handlers import FormHandler
 from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.models.procs import AddProductOfferProc, PledgeCompanyProc
@@ -25,6 +25,7 @@ class OffersField(MultipleFormField):
 class ProductOfferForm(BaseForm):
     id="ProductOffer"
     label = ""
+    grid = HORIZONTAL_GRID
     fields=[
         OffersField("Offers")
     ]
@@ -38,6 +39,7 @@ class ProductOfferForm(BaseForm):
 
 class ProductPledgeForm(BaseForm):
     id="ProductPledge"
+    grid = HORIZONTAL_GRID
     label = ""
     fields=[
         OfferChoiceField('offer', 'Your Offer', offer_choices, REQUIRED, input_classes='radio')
