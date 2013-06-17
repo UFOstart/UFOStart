@@ -4,7 +4,7 @@
 
 <%def name="slogan()">
     ${self.crumbs(3)}
-    <h1 class="site-slogan">
+    <h1 class="mar-top-2">
         Enter Basic Details of your project
     </h1>
 </%def>
@@ -12,7 +12,7 @@
 
 
 <%def name="bodyContent()">
-    <div class="row mar-top-2">
+    <div class="row">
         <div class="col col-lg-6 right-bordered">
             ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
         </div>
@@ -50,4 +50,15 @@
             });
         });
     </script>
+</%def>
+
+<%def name="wtfBox()">
+<div class="wtf-box">
+    <h5 class="box-title">
+        Whats going on here?
+    </h5>
+    <div class="box-content">
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+    </div>
+</div>
 </%def>

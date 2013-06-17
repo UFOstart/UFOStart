@@ -40,7 +40,7 @@
   display: block;
   background-color: #ff792a;
   text-transform: uppercase;
-  font-weight: 600;
+
   line-height: 2em;
   padding: 0 15px;
   margin:0;
@@ -59,6 +59,8 @@
     .box-shadow(none);
   }
 }
+div.box-title{font-weight: 600;}
+
 .box-framed {
   border: 1px solid @btn-default-bg;
   position: relative;
@@ -76,10 +78,11 @@
   }
 }
 .wtf-box {
-  background-color: navy;
-  color:white;
+  background-color: @wtf-active-bg-color;
+  color: @wtf-active-color;
   > .box-title {
     background-color: transparent;
+    color: @wtf-active-color;
   }
   > .box-content {
     padding-top:0;
