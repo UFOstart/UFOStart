@@ -12,7 +12,6 @@ def home(context, request):
 
 
 
-@require_login()
 def user(context, request):
     profile = GetProfileProc(request, {'token': request.matchdict['slug']})
     location = FindPublicNeedsByLocation(request)

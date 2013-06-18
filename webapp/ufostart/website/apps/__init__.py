@@ -17,7 +17,7 @@ ROUTE_LIST = [
     , OAuthLoginRoute('website_login'                      , '/login', contexts.WebsiteRootContext                                           , auth.social.login, 'auth/login.html')
     , FunctionRoute  ('website_logout'                     , '/user/logout', contexts.WebsiteRootContext                                     , index.logout, None)
 
-    , FunctionRoute  ('website_user_home'                  , '/home', contexts.WebsiteRootContext                                            , user.index.home, "user/home.html")
+    , OAuthLoginRoute('website_user_home'                  , '/home', contexts.WebsiteRootContext                                            , user.index.home, "user/home.html")
     , FunctionRoute  ('website_user'                       , '/u/:slug', contexts.WebsiteRootContext                                         , user.index.user, "user/home.html")
 
     , FunctionRoute  ('website_template_basic'             , '/templates', contexts.WebsiteRootContext                                       , company.setup.basics, "company/setup/basic.html")                #   Step 1
