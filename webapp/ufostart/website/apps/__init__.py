@@ -18,6 +18,7 @@ ROUTE_LIST = [
     , FunctionRoute  ('website_logout'                     , '/user/logout', contexts.WebsiteRootContext                                     , index.logout, None)
 
     , FunctionRoute  ('website_user_home'                  , '/home', contexts.WebsiteRootContext                                            , user.index.home, "user/home.html")
+    , FunctionRoute  ('website_user'                       , '/u/:slug', contexts.WebsiteRootContext                                         , user.index.user, "user/home.html")
 
     , FunctionRoute  ('website_template_basic'             , '/templates', contexts.WebsiteRootContext                                       , company.setup.basics, "company/setup/basic.html")                #   Step 1
     , FunctionRoute  ('website_template_details'           , '/template/:template', contexts.WebsiteRootContext                              , company.setup.details, "company/setup/details.html")             #   Step 2

@@ -16,7 +16,7 @@
                             <div class="col col-lg-8">
                                 ${widgets.logo(profile.picture, alt=profile.name, classes="left-aligned")}
                                 <h1 class="brand-teal site-slogan">Welcome ${profile.name}</h1>
-                                <div>${profile.headline}</div>
+                                <div>${profile.headline | html.nn}</div>
                             </div>
                             <div class="col col-lg-4">
                                 <h5>Skills</h5>
@@ -47,7 +47,7 @@
                                     <div><strong>Round not published</strong></div>
                                 </div>
                                 <div class="col col-lg-5">
-                                    <div class="member-pile">
+                                    <div class="member-pile face-pile-mini">
                                         %for member in company.Users:
                                             <div class="picture micro">
                                                 <img src="${member.picture_url}"/>
