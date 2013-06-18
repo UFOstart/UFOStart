@@ -99,15 +99,12 @@
                 <div class="row">
                     <div class="col col-lg-3">
                         <div class="picture medium">
-                            <img src="${expert.picture}" alt="${expert.name}"/>
+                            <img src="${expert.picture_url}" alt="${expert.name}"/>
                         </div>
                     </div>
                     <div class="col col-lg-7">
                         <a href="#" class="overflow"><strong>${expert.name}</strong></a>
-                        <p class="text-muted text-small">${expert.position}</p>
-                        <div class="show-expanded">
-                            <p>${expert.display_skills}</p>
-                        </div>
+                        <p class="text-muted text-small">${html.nn(expert.position)}</p>
                     </div>
                     <div class="col col-lg-2">
                         <a class="expander btn btn-default btn-large btn-block" data-toggle-target=".expert-briefing" data-toggle-class="expanded" data-toggle-text="▼">◀</a>
