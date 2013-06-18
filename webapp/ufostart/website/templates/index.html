@@ -1,5 +1,7 @@
 <%inherit file="layout.html"/>
+<%namespace file="widgets.html" name="widgets"/>
 
+<%def name="footer_classes()"></%def>
 <%def name="content()">
     <div class="home-band">
         <div class="container homepage">
@@ -26,11 +28,13 @@
                     <h2><strong>Opportunities near you,</strong> ${vctxt.location}</h2>
 
                     <div class="row">
-                    %for i in range(4):
-                        <div class="col col-lg-3">
-                            ${self.companyNeed()}
-                        </div>
-                    %endfor
+
+                        %for need in needs_close_by:
+                            <div class="col col-lg-3">
+                                ${self.companyNeed(need)}
+                            </div>
+                        %endfor
+
                     </div>
 
                 </div>
@@ -43,6 +47,13 @@
                 <div class="col col-lg-12">
                     <h1>Most Popular</h1>
                 </div>
+            </div>
+            <div class="row">
+                %for need in popular_needs:
+                    <div class="col col-lg-3">
+                        ${self.companyNeed(need)}
+                    </div>
+                %endfor
             </div>
         </div>
     </div>
@@ -59,44 +70,31 @@
 
 
 
-<%def name="companyNeed()">
-    <div class="need-card">
+<%def name="companyNeed(need)">
+    <%
+        need_url = url("website_round_need", slug = need.Company.slug, need = need.token)
+    %>
+    <div class="need-card home">
     <div class="need-card-inner">
         <div class="row">
             <div class="col col-sm-3" style="margin-top:10px">
-                <img src="http://blog.lieferheld.de/wp-content/uploads/2012/09/Lieferheld_Logo_2.png">
+                <img src="${need.Company.logo}">
             </div>
             <div class="col col-sm-9">
-                <h5><a href="#">Lieferheld.com</a></h5>
-                <div>Democratizing access to scientific expertise <a href="#">More...</a></div>
+                <h5><a href="${need_url}">${need.Company.name}</a></h5>
+                <div class="description">${need.Company.short_description}</div>
             </div>
         </div>
-        <h5>CRM</h5>
-        <div>Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt<a href="#">More...</a></div>
+        <h5><a href="${need_url}">${need.name}</a></h5>
+        <div class="need-description">${need.short_description}</div>
 
-        <div class="valuation">
-            <div class="number">
-                <strong>VALUE</strong>
-                <h2><strong>$120</strong></h2>
-            </div>
-            <div class="secondary row">
-                <div class="number col col-lg-4">
-                    <strong>Equity</strong>
-                    <h2>4%</h2>
-                </div>
-                <div class="number col col-lg-8">
-                    <strong>Cash</strong>
-                    <h2>$115.20</h2>
-                </div>
-            </div>
-        </div>
+        ${widgets.valuation(need)}
 
         <div class="label-list">
-            %for tag in ['label', 'list']:
+            %for tag in need.tags:
                 <span class="label label-info spaced text-small">${tag}</span>
             %endfor
         </div>
-
     </div>
     </div>
 </%def>

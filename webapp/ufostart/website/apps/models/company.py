@@ -212,6 +212,32 @@ class ApplicationModel(Mapping):
         return format_date(self.created, format='medium', locale='en')
 
 
+class BaseCompanyModel(Mapping):
+    token = TextField()
+    slug = TextField()
+    name = TextField()
+    logo = TextField()
+    url = TextField()
+    description = TextField()
+    @property
+    def display_name(self):
+        if self.is_setup:
+            return self.name
+        else:
+            return 'Your Company'
+    @property
+    def display_description(self):
+        if self.is_setup:
+            return self.description
+        else:
+            return ''
+    @property
+    def short_description(self):
+        return word_truncate_by_letters(self.display_description, 50)
+    @property
+    def is_setup(self):
+        return self.slug
+
 class NeedModel(Mapping):
     token = TextField()
     name = TextField()
@@ -223,6 +249,8 @@ class NeedModel(Mapping):
     equity = IntegerField(default = 0)
     Tags = ListField(DictField(NamedModel))
     Applications = ListField(DictField(ApplicationModel))
+
+    Company = DictField(BaseCompanyModel)
 
     Services = ListField(DictField(ServiceModel))
     Experts = ListField(DictField(ExpertModel))
@@ -378,14 +406,7 @@ class RoundModel(Mapping):
     published = False
 
 
-class CompanyModel(Mapping):
-    token = TextField()
-    slug = TextField()
-    name = TextField()
-
-    logo = TextField()
-    url = TextField()
-    description = TextField()
+class CompanyModel(BaseCompanyModel):
     tagString = TextField()
 
     angelListId = TextField()
@@ -407,21 +428,7 @@ class CompanyModel(Mapping):
     @property
     def no_users(self):
         return len(self.Users)
-    @property
-    def display_name(self):
-        if self.is_setup:
-            return self.name
-        else:
-            return 'Your Company'
-    @property
-    def display_description(self):
-        if self.is_setup:
-            return self.description
-        else:
-            return ''
-    @property
-    def is_setup(self):
-        return self.slug
+
     @property
     def product_is_setup(self):
         return self.angelListId and self.angelListToken and self.Round and self.Round.Product

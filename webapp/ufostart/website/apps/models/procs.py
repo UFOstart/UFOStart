@@ -49,6 +49,14 @@ DisconnectFacebookProc = ClientTokenProc("/web/user/disconnectFb")
 RefreshProfileProc = LoggingInProc("/web/user/profile")
 
 #
+################# HOMEPAGE
+#
+
+FindPublicNeeds = ClientTokenProc("/web/need/search", result_cls=NeedModel, root_key="Needs", result_list=True)
+GetPopularNeeds = ClientTokenProc("/web/need/popular", result_cls=NeedModel, root_key='Needs', result_list=True)
+GetNewProductsProc = ClientTokenProc("/web/product/newest", root_key="Company", result_cls=CompanyModel, result_list=True)
+
+#
 ################# COMPANY
 #
 
@@ -62,8 +70,6 @@ SetRoundTasksProc = ClientTokenProc("/web/round/needs")
 
 CreateProductProc = ClientTokenProc("/web/product/create")
 AddProductOfferProc = ClientTokenProc("/web/product/offer")
-
-FindPublicNeeds = ClientTokenProc("/web/need/search")
 
 SetCompanyTemplateProc = ClientTokenProc("/web/company/template")
 GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)
