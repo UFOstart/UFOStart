@@ -218,7 +218,7 @@ class BaseCompanyModel(Mapping):
     token = TextField()
     slug = TextField()
     name = TextField()
-    logo_url = logo = TextField()
+    logo = TextField()
     url = TextField()
     description = TextField()
     @property
@@ -239,6 +239,9 @@ class BaseCompanyModel(Mapping):
     @property
     def is_setup(self):
         return self.slug
+    @property
+    def logo_url(self):
+        return self.logo
 
 class NeedModel(Mapping):
     token = TextField()

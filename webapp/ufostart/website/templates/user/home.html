@@ -7,13 +7,21 @@
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
-                <div class="box-framed box-shaded">
+                <div class="box-framed">
+                    <div class="box-title">
+                        User Info
+                    </div>
                     <div class="box-content clearfix">
-                        <div class="col col-lg-2">
-                            ${widgets.logo(vctxt.user.picture, alt=vctxt.user.name, classes="fixed-w")}
-                        </div>
-                        <div class="col col-lg-9">
-                            <h1 class="site-slogan">Welcome ${vctxt.user.name}</h1>
+                        <div class="row">
+                            <div class="col col-lg-8">
+                                ${widgets.logo(profile.picture, alt=profile.name, classes="left-aligned")}
+                                <h1 class="brand-teal site-slogan">Welcome ${profile.name}</h1>
+                                <div>${profile.headline}</div>
+                            </div>
+                            <div class="col col-lg-4">
+                                <h5>Skills</h5>
+                                ${', '.join(profile.display_skills)}
+                            </div>
                         </div>
                     </div>
                 </div>
