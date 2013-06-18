@@ -11,6 +11,7 @@ from pyramid.decorator import reify
 import simplejson
 from ufostart.lib.tools import getYoutubeVideoId, getVimeoVideoId
 from ufostart.models.tasks import NamedModel
+from ufostart.website.apps.models.workflow import WorkflowModel
 
 TEMPLATE_STYLE_KEYS = {
     'EARLY_STAGE_ECOMMERCE':'ecommerce'
@@ -321,7 +322,6 @@ class ProductModel(Mapping):
     def offers(self):
         return self.Offers
 
-
 class RoundModel(Mapping):
     start = DateTimeField()
     token = TextField()
@@ -330,6 +330,7 @@ class RoundModel(Mapping):
     Pledges = ListField(DictField(PledgeModel))
     Product = DictField(ProductModel)
     Template = DictField(TemplateModel)
+    Workflow = DictField(WorkflowModel)
 
     @reify
     def expiry(self):

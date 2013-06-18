@@ -2,7 +2,7 @@ from ufostart.website.apps.models.procs import FindPublicNeeds
 
 
 def index(context, request):
-    result = FindPublicNeeds(request, {'Search': {'tags': ['office']}})
+    result = FindPublicNeeds(request, {'Search': {'tags': ['Agile']}})
     return {}
 
 
