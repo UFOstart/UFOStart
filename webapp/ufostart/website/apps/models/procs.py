@@ -47,6 +47,7 @@ RefreshAccessTokenProc= ClientTokenProc('/web/user/refreshAccessToken')
 DisconnectFacebookProc = ClientTokenProc("/web/user/disconnectFb")
 
 RefreshProfileProc = LoggingInProc("/web/user/profile")
+GetProfileProc = ClientTokenProc("/web/user/profile", root_key = "User", result_cls = UserModel)
 
 #
 ################# HOMEPAGE
