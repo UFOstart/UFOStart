@@ -2,6 +2,14 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../../widgets.html" name="widgets"/>
 
+<%def name="header_buttons()">
+    <div class="pull-right">
+        Company: <a href="${url('website_company', **vctxt.urlArgs)}">${vctxt.company.name}</a>
+    </div>
+</%def>
+
+
+
 <%def name="content()">
     ${self.details(company, product)}
 </%def>

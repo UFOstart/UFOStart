@@ -2,6 +2,11 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../widgets.html" name="widgets"/>
 
+<%def name="header_buttons()">
+    <div class="pull-right">
+        Company: <a href="${url('website_company', **vctxt.urlArgs)}">${vctxt.company.name}</a>
+    </div>
+</%def>
 
 
 <%def name="content()">
@@ -24,7 +29,7 @@
 
 
 <%def name="teamMembers(members)">
-    <div class="box-framed expander">
+    <div class="box-framed expander expanded">
         <div class="box-title">
             %if vctxt.isTeamMember:
                 <a class="btn btn-primary show-contracted" data-toggle-target=".expander" data-toggle-class="expanded">Invite More</a>
@@ -72,12 +77,11 @@
         </div>
         <div class="col col-lg-9">
             <a href="${company.url}"><strong>${company.name}</strong></a>
+                <div class="mar-top-1">
+                    ${company.description | html.nn}
+                </div>
         </div>
     </div>
-    <div class="mar-top-1">
-        ${company.description | html.nn}
-    </div>
-
 </%def>
 
 
@@ -102,7 +106,3 @@
         });
     </script>
 </%def>
-
-
-
-
