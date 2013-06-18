@@ -9,6 +9,8 @@
                 <h1 class="site-slogan">
                     ${vctxt.need.name}
                 </h1>
+
+                <p>${vctxt.need.meta_description}</p>
             </div>
         </div>
     </div>
@@ -16,7 +18,6 @@
     <div class="container">
         <div class="row mar-top-1">
             <div class="col col-lg-8">
-                ${vctxt.need.meta_description}
                 ${self.bodyContent(vctxt.need)}
             </div>
             <div class="col col-lg-4">
@@ -63,22 +64,7 @@
                 <img src="${need.picture}"/>
             </div>
         %endif
-        <div class="valuation">
-            <div class="number total">
-                <strong>VALUE</strong>
-                <h2><strong>&pound;${need.money_value}</strong></h2>
-            </div>
-            <div class="secondary">
-                <div class="number equity">
-                    <strong>Equity</strong>
-                    <h2>${need.equity_mix}</h2>
-                </div>
-                <div class="number cash">
-                    <strong>Cash</strong>
-                    <h2>${need.cash}</h2>
-                </div>
-            </div>
-        </div>
+        ${widgets.valuation(need)}
 
         <div>
             ${vctxt.need.display_description}
@@ -174,16 +160,9 @@
         Info
     </div>
     <div class="box-content">
-        <div class="valuation">
-            <div class="primary-number pull-right">
-                ${need.equity_mix}%
-                <div class="legend">Equity</div>
-            </div>
-            <div class="primary-number">
-                ${need.money_value}
-                <div class="legend">Value</div>
-            </div>
-        </div>
+
+        ${widgets.valuation(need)}
+
         <h5 class="upper text-muted">
             Company
         </h5>

@@ -4,12 +4,13 @@ from datetime import datetime, timedelta
 from operator import attrgetter
 from random import random, sample
 from babel.dates import format_date
+from babel.numbers import get_currency_symbol
 from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField, IntegerField
 from hnc.tools.tools import word_truncate_by_letters
 from httplib2 import Http
 from pyramid.decorator import reify
 import simplejson
-from ufostart.lib.tools import getYoutubeVideoId, getVimeoVideoId
+from ufostart.lib.tools import getYoutubeVideoId, getVimeoVideoId, format_currency
 from ufostart.models.tasks import NamedModel
 from ufostart.website.apps.models.workflow import WorkflowModel
 
@@ -233,12 +234,6 @@ class NeedModel(Mapping):
     def customized(self):
         return self.status != 'PENDING'
     @property
-    def equity_mix(self):
-        return int(100.0 * (self.equity or 0) / (self.money_value or 1))
-    @property
-    def money_value(self):
-        return (self.cash or 0) + (self.equity or 0)
-    @property
     def tags(self):
         return map(attrgetter('name'), self.Tags)
     @property
@@ -248,17 +243,44 @@ class NeedModel(Mapping):
     @property
     def display_description(self):
         return self.description if self.description else ''
+
+    @property
+    def total(self):
+        return (self.cash or 0) + (self.equity or 0)
+    @property
+    def equity_ratio(self):
+        return int(100.0 * (self.equity or 0) / (self.total or 1))
+
+    @property
+    def display_total(self):
+        return format_currency(self.total, self.currency)
+    @property
+    def display_cash(self):
+        return format_currency(self.cash, self.currency)
+    @property
+    def display_equity(self):
+        return format_currency(self.equity, self.currency)
+    @property
+    def display_mix(self):
+        return '{}%'.format(self.equity_ratio)
+
+
+
+    @property
+    def experts(self):
+        return self.Experts
+    @property
+    def services(self):
+        return self.Services
+
+
     # TODO: actual implementation
     @property
     def meta_description(self):
         return "LOREM IPSUM long meta need description"
-    @property
-    def experts(self):
-        return self.Experts
 
-    @property
-    def services(self):
-        return self.Services
+    currency = 'USD'
+    currency_symbol = get_currency_symbol('USD', locale = 'en')
 
     _inUse = BooleanField()
 

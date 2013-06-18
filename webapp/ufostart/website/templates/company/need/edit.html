@@ -3,10 +3,8 @@
 
 
 <%def name="bodyContent(need)">
-    ${need.meta_description}
-
-    <div class="box-content box-dark mar-top-2">
-        ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+    <div class="box-content box-dark">
+        ${self.build_form(need, view.form, values.get(view.form.id), errors.get(view.form.id))}
     </div>
 
     <div class="box-framed mar-top-2">
@@ -15,27 +13,38 @@
     </div>
 </%def>
 
-<%def name="build_form(form, values, errors)">
+<%def name="build_form(need, form, values, errors)">
     <form class="${form.grid.form_classes} labels-capitalized" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
 
         ${form.fieldMap['name'].render(form.id, request, values, errors, view)|n}
         <div class="row">
-            <div class="col col-lg-2">
+            <div class="col col-lg-3">
                 ${form.fieldMap['picture'].render(form.id, request, values, errors, view)|n}
             </div>
-            <div class="col col-lg-3 col-offset-2">
-                ${form.fieldMap['value'].render(form.id, request, values, errors, view)|n}
-            </div>
-            <div class="col col-lg-2">
-                ${form.fieldMap['equity'].render(form.id, request, values, errors, view)|n}
-            </div>
-            <div class="col col-lg-2">
-                <div class="control-label">
-                    Cash
+            <div class="col col-lg-4 col-offset-1">
+                ${form.fieldMap['total'].render(form.id, request, values, errors, view)|n}
+                <div class="control-group">
+                    <div class="control-label">
+                        Cash Value
+                    </div>
+                    <div class="pseudo-controls data-target cash" data-currency-symbol="${need.currency_symbol}">
+                        ${need.display_cash}
+                    </div>
+                    <input type="hidden" name="${form.id}.cash" value="${values.get('cash', '')}"/>
                 </div>
-                <div class="pseudo-controls">
-                    0,00$
+            </div>
+            <div class="col col-lg-4">
+                ${form.fieldMap['ratio'].render(form.id, request, values, errors, view)|n}
+
+                <div class="control-group">
+                    <div class="control-label">
+                        Equity Value
+                    </div>
+                    <div class="pseudo-controls data-target equity" data-currency-symbol="${need.currency_symbol}">
+                        ${need.display_equity}
+                    </div>
+                    <input type="hidden" name="${form.id}.equity" value="${values.get('equity', '')}"/>
                 </div>
             </div>
         </div>

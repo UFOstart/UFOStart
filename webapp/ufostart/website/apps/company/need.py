@@ -1,5 +1,5 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, TagSearchField, IntField, HtmlAttrs, HORIZONTAL_GRID
+from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, TagSearchField, IntField, HtmlAttrs, HORIZONTAL_GRID, DecimalField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from ufostart.website.apps.forms.controls import FileUploadField
@@ -61,8 +61,10 @@ class NeedEditForm(BaseForm):
     fields = [
         FileUploadField("picture", 'Picture', group_classes='file-upload-control')
         , StringField('name', "Need Name", REQUIRED)
-        , IntField('value', "Set need value", REQUIRED)
-        , IntField('equity', "Equity (%)", REQUIRED)
+        , IntField('total', "Total value ($)", REQUIRED, input_classes='data-input value')
+        , IntField('ratio', "of this Equity (%)", REQUIRED, input_classes='data-input ratio')
+        , DecimalField('cash', None)
+        , DecimalField('equity', None)
         , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3))
     ]
@@ -88,7 +90,7 @@ class NeedEditHandler(FormHandler):
     def pre_fill_values(self, request, result):
         need = self.context.need
         values = need.unwrap()
-        values['value'] = need.money_value
-        values['ratio'] = need.equity_mix
+        values['total'] = need.total
+        values['ratio'] = need.equity_ratio
         result['values'][self.form.id] = values
         return super(NeedEditHandler, self).pre_fill_values(request, result)

@@ -5,3 +5,23 @@
     <div class="logo-picture empty"></div>
 %endif
 </%def>
+
+
+<%def name="valuation(need)">
+    <div class="valuation">
+        <div class="number total">
+            <strong>VALUE</strong>
+            <h2><strong>${need.display_total}</strong></h2>
+        </div>
+        <div class="secondary">
+            <div class="number equity">
+                <strong>Equity</strong>
+                <h2>${need.display_mix}</h2>
+            </div>
+            <div class="number cash">
+                <strong>Cash</strong>
+                <h2>${need.display_cash}</h2>
+            </div>
+        </div>
+    </div>
+</%def>

@@ -10,7 +10,9 @@
         </div>
         <div class="row mar-top-1">
             <div class="col col-lg-3 pull-right">
-                ${self.wtfBox()}
+                %if vctxt.isTeamMember:
+                    ${self.wtfBox()}
+                %endif
             </div>
 
             <div class="col col-lg-9">
@@ -63,7 +65,7 @@
                     <div class="disabled-overlay">
                         <div class="overlay-action">
                             %if vctxt.isTeamMember:
-                                <a href="${url("website_company_company", **vctxt.urlArgs)}" class="btn btn-primary btn-large btn-block">Create Your Company</a>
+                                <a href="${url("website_company_company", **vctxt.urlArgs)}" class="btn btn-primary btn-block">Create Your Company</a>
                             %else:
                                 <h3>Not Setup yet</h3>
                             %endif
@@ -106,7 +108,7 @@
                     <div class="disabled-overlay">
                         <div class="overlay-action">
                             %if vctxt.isTeamMember:
-                                <a href="${url("website_company_product", **vctxt.urlArgs)}" class="btn btn-primary btn-large btn-block">Create Your Product</a>
+                                <a href="${url("website_company_product", **vctxt.urlArgs)}" class="btn btn-primary btn-block">Create Your Product</a>
                             %else:
                                 <h3>Not Setup yet</h3>
                             %endif
@@ -137,7 +139,7 @@
                 %endfor
                 </div>
                 %if not i and vctxt.isTeamMember:
-                    <a href="${url("website_round_need_create", **vctxt.urlArgs)}" class="need-card add-card">
+                    <a href="${url("website_round_need_create", **vctxt.urlArgs)}" class="need-card-inner add-card">
                         <img src="${STATIC_URL}img/addneed.png"/>
                         <h5>Create a new Need</h5>
                     </a>
@@ -145,13 +147,6 @@
             </div>
         %endfor
     </div>
-    %if vctxt.isTeamMember:
-    <div class="row">
-        <div class="col col-lg-12">
-            <a href="#" class="pull-right btn btn-primary btn-humonguous"><span>Publish</span></a>
-        </div>
-    </div>
-    %endif
 </%def>
 
 
@@ -173,16 +168,9 @@
             <div class="description">
                 ${need.short_description}
             </div>
-            <div class="valuation">
-                <div class="primary-number pull-right">
-                    ${need.equity_mix}%
-                    <div class="legend">Equity</div>
-                </div>
-                <div class="primary-number">
-                    $${need.money_value}
-                    <div class="legend">Value</div>
-                </div>
-            </div>
+            %if need.customized:
+                ${widgets.valuation(need)}
+            %endif
             <div class="label-list">
                 %for tag in need.tags:
                     <span class="label label-info spaced text-small">${tag}</span>
