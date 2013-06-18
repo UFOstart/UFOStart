@@ -180,7 +180,7 @@ class ExpertModel(Mapping):
 
 class ServiceModel(Mapping):
     name = TextField()
-    description = TextField()
+    description = TextField(default = 'this is a web service')
     url = TextField()
     logo = TextField()
 
@@ -196,10 +196,6 @@ class ServiceModel(Mapping):
     @property
     def logo_url(self):
         return self.logo
-
-    @property
-    def short_description(self):
-        return word_truncate_by_letters(self.description, 50)
 
 class ApplicationModel(Mapping):
 
@@ -227,15 +223,7 @@ class BaseCompanyModel(Mapping):
             return self.name
         else:
             return 'Your Company'
-    @property
-    def display_description(self):
-        if self.is_setup:
-            return self.description
-        else:
-            return ''
-    @property
-    def short_description(self):
-        return word_truncate_by_letters(self.display_description, 50)
+
     @property
     def is_setup(self):
         return self.slug
@@ -269,13 +257,6 @@ class NeedModel(Mapping):
     @property
     def tags(self):
         return map(attrgetter('name'), self.Tags)
-    @property
-    def short_description(self):
-        return word_truncate_by_letters(self.description, 300)
-
-    @property
-    def display_description(self):
-        return self.description if self.description else ''
 
     @property
     def total(self):
@@ -371,12 +352,6 @@ class ProductModel(Mapping):
     @property
     def is_setup(self):
         return self.name and self.token
-    @property
-    def display_description(self):
-        return self.description or ''
-    @property
-    def short_description(self):
-        return word_truncate_by_letters(self.description, 50)
 
     @property
     def offers(self):
@@ -455,7 +430,7 @@ class CompanyModel(BaseCompanyModel):
 
     @property
     def product_description(self):
-        return self.Round.Product.short_description if self.product_is_setup else ''
+        return self.Round.Product.description if self.product_is_setup else ''
 
     @reify
     def product_name(self):

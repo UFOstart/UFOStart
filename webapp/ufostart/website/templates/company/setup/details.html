@@ -1,7 +1,6 @@
 <%inherit file="layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
-
 <%def name="slogan()">
     ${self.crumbs(2)}
     <h1 class="mar-top-2">${template.name} <span class="template-icon ${template.getStyleKey()}"></span></h1>
@@ -34,7 +33,7 @@
     </div>
     <div class="row">
         %for col in template.groupedNeeds(3):
-            <div class="col col-lg-4 need-card-list">
+            <div class="col col-lg-4">
                 <div class="js-need-card-list">
                 %for need in col:
                     ${self.buildNeed(need)}
@@ -47,15 +46,17 @@
 
 <%def name="buildNeed(need)">
     <div class="need-card">
+    <div class="need-card-inner">
         <h5>${need.name}</h5>
         <div class="description">
-            ${need.short_description}
+            ${need.meta_description | html.trunc(50)}
         </div>
         <div class="label-list">
             %for tag in need.tags:
                 <span class="label label-info spaced text-small">${tag}</span>
             %endfor
         </div>
+    </div>
     </div>
 </%def>
 

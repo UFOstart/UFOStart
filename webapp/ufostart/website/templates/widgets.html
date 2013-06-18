@@ -25,3 +25,33 @@
         </div>
     </div>
 </%def>
+
+
+<%def name="publicNeedCard(need, descr_len = 50)">
+    <%
+        need_url = url("website_round_need", slug = need.Company.slug, need = need.token)
+    %>
+    <div class="need-card home">
+    <div class="need-card-inner">
+        <div class="row">
+            <div class="col col-sm-3" style="margin-top:10px">
+                <img src="${need.Company.logo}">
+            </div>
+            <div class="col col-sm-9">
+                <h5><a href="${need_url}">${need.Company.name}</a></h5>
+                <div class="description">${need.Company.description | html.trunc(50)}</div>
+            </div>
+        </div>
+        <h5><a href="${need_url}">${need.name}</a></h5>
+        <div class="need-description">${need.description | html.trunc(descr_len)}</div>
+
+        ${self.valuation(need)}
+
+        <div class="label-list">
+            %for tag in need.tags:
+                <span class="label label-info spaced text-small">${tag}</span>
+            %endfor
+        </div>
+    </div>
+    </div>
+</%def>

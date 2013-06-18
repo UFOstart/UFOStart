@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="row mar-top-1">
+        <div class="row mar-top-2">
             <div class="col col-lg-6">
                 <div class="box-framed">
                     <h5 class="box-title">
@@ -84,7 +84,7 @@
                                         <div class="pull-right">${application.display_date}</div>
                                         <div class="overflow"><a href="#"><strong>${application.need}</strong></a></div>
                                         <div class="overflow"><small>${application.companyName}</small></div>
-                                        <div class="application-message">${application.short_description}
+                                        <div class="application-message">${application.description | html.trunc(50)}
                                             <a href="#applications">Read more</a>
                                         </div>
                                     </div>
@@ -100,15 +100,25 @@
                 </div>
             </div>
         </div>
+
+
+
         <div class="row mar-top-2">
             <div class="col col-lg-12">
-                <h5 class="site-slogan">Where you can help other companies out</h5>
-            </div>
-        </div>
+                <h5 class="box-title">Needs that best match your skills</h5>
+                %if len(best_match):
+                    <div class="row">
+                        %for need in best_match:
+                            <div class="col col-lg-3">
+                                ${widgets.publicNeedCard(need)}
+                            </div>
+                        %endfor
+                    </div>
 
-        <div class="row mar-top-1">
-            <div class="col col-lg-12">
-                <h5 class="box-title">Opportunities near you, ${vctxt.location}</h5>
+                %else:
+                    <div class="empty">No Needs matching your skill set found</div>
+                %endif
+
             </div>
         </div>
 

@@ -20,7 +20,7 @@
                     <div class="product-image large mar-top-1">${self.product_media(product)}</div>
 
                     <div class="mar-top-1">
-                        ${product.display_description if product else ''}
+                        ${product.description | html.nn}
                     </div>
 
                     %if vctxt.isTeamMember:
@@ -58,7 +58,7 @@
                         <div class="col col-sm-9">
                             <a href="${url("website_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
                             <p>
-                                ${company.short_description}
+                                ${company.description | html.trunc(50)}
                             </p>
                             <a href="${url("website_company", **vctxt.urlArgs)}"><small>More...</small></a>
                         </div>

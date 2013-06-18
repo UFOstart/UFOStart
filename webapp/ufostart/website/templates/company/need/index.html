@@ -67,7 +67,7 @@
         ${widgets.valuation(need)}
 
         <div>
-            ${vctxt.need.display_description}
+            ${vctxt.need.description | html.nn}
         </div>
     </div>
     <h5 class="text-muted">
@@ -100,7 +100,6 @@
                         <p class="text-muted text-small">${expert.position}</p>
                         <div class="show-expanded">
                             <p>${expert.display_skills}</p>
-                            <img src="${STATIC_URL}img/stars.png" class="stars"/>
                         </div>
                     </div>
                     <div class="col col-lg-2">
@@ -143,8 +142,7 @@
                 <img src="${service.logo_url}" name="${service.name}"/>
             </div>
             <a href="${service.url or '#'}" class="overflow"><strong>${service.name}</strong></a>
-            <p class="text-muted text-small">${service.short_description}</p>
-            <img src="${STATIC_URL}img/stars.png" class="stars"/>
+            <p class="text-muted text-small">${service.description | html.trunc(50)}</p>
             <a href="${service.url or '#'}" target="_blank" class="btn btn-small btn-block btn-primary">See Details</a>
         </div>
     %endfor
@@ -168,7 +166,7 @@
             </div>
             <div class="col col-lg-6">
                 <a href="${url("website_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
-                <div class="tagline">${company.short_description}</div>
+                <div class="tagline">${company.description | html.trunc(50)}</div>
                 <a href="${url("website_company", **vctxt.urlArgs)}"><small>More...</small></a>
             </div>
             <div class="col col-lg-3">

@@ -24,11 +24,6 @@ class UserApplicationModel(ApplicationModel):
     companySlug = TextField()
     need = TextField()
 
-    @property
-    def short_description(self):
-        return word_truncate_by_letters(self.message, 50)
-
-
 class UserModel(Mapping):
     token = TextField()
     name = TextField()

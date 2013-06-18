@@ -3,7 +3,7 @@
 
 <%block name="controls">
     <script type="text/template" class="picture-template"><img src="{{ pic.url }}"/><input type="hidden" name="{{ field_name }}" value="{{ pic.url }}"/></script>
-    <div class="file-picker-upload upload-picture-display logo-picture empty" data-field-name="${widget.getName(prefix)}">
+    <div class="file-picker-upload upload-picture-display logo-picture ${'' if value else 'empty'}" data-field-name="${widget.getName(prefix)}">
         %if value:
             <img src="${value}"/><input type="hidden" name="${widget.getName(prefix)}" value="${value}"/>
         %endif
