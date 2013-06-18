@@ -1,3 +1,4 @@
+from pyramid.httpexceptions import HTTPNotFound
 from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.models.procs import RefreshProfileProc, FindPublicNeeds, FindPublicNeedsByLocation, GetNewProductsProc
 
@@ -14,8 +15,9 @@ def home(context, request):
 @require_login()
 def user(context, request):
     profile = RefreshProfileProc(request, {'token': request.matchdict['slug']})
+    location = FindPublicNeedsByLocation(request)
     if not profile:
-        return {'profile': None}
+        raise HTTPNotFound()
     else:
         best_match = FindPublicNeeds(request, {'Search': {'tags': profile.display_skills}})
         return {'profile': profile, 'best_match':best_match, 'isMyProfile': False, 'location_needs':location}

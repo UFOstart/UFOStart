@@ -116,9 +116,7 @@
                                         <div class="pull-right">${application.display_date}</div>
                                         <div class="overflow"><a href="#"><strong>${application.need}</strong></a></div>
                                         <p class="overflow"><small>${application.companyName}</small></p>
-                                        <div class="application-message">${application.message | html.trunc(50)}
-                                            <a href="#applications">Read more</a>
-                                        </div>
+                                        <div class="application-message">${application.message | html.trunc(50)}</div>
                                     </div>
                                 </div>
                             %endfor

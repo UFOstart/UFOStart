@@ -56,7 +56,12 @@
                             </div>
                         </div>
                         <div class="col col-lg-9">
-                            <a href="#"><strong>${member.name}</strong></a>
+                            %if member.token:
+                                <a href="${url("website_user", slug = member.token)}"><strong>${member.name}</strong></a>
+                            %else:
+                                <strong>${member.name}</strong>
+                            %endif
+
                             <div class="text-muted">${member.position}</div>
                         </div>
                     </div>
@@ -76,7 +81,7 @@
             ${widgets.logo(company.logo)}
         </div>
         <div class="col col-lg-9">
-            <a href="${company.url}"><strong>${company.name}</strong></a>
+            <a href="${url('website_company', **vctxt.urlArgs)}"><strong>${company.name}</strong></a>
                 <div class="mar-top-1">
                     ${html.nn(company.description)}
                 </div>

@@ -17,7 +17,7 @@
                     ${vctxt.need.name}
                 </h1>
 
-                <p>${vctxt.need.summary}</p>
+                <p>${html.nn(vctxt.need.summary)}</p>
             </div>
         </div>
     </div>
@@ -191,7 +191,7 @@
             <div class="col col-lg-6">
                 %if company.product_is_setup:
                     <a href="${url("website_company_product", **vctxt.urlArgs)}"><strong>${company.product_name}</strong></a>
-                    <div class="description">${company.product_description}</div>
+                    <div class="description">${company.product_description | html.trunc(50) }</div>
                     <a href="${url("website_company_product", **vctxt.urlArgs)}"><small>More...</small></a>
                 %else:
                     <strong>Not setup yet</strong>
