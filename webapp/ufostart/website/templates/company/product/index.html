@@ -20,7 +20,9 @@
         <div class="col col-lg-8 company-customer-dashboard">
             <div class="box-framed">
                 <div class="box-title">
-                    <a href="${url("website_company_product_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
+                    %if vctxt.isTeamMember:
+                        <a href="${url("website_company_product_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
+                    %endif
                     Product Details
                 </div>
                 <div class="box-content">

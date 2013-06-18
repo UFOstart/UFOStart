@@ -1,6 +1,7 @@
 from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm, MultipleFormField, REQUIRED, StringField, RadioChoice, NullConfigModel, TextareaField, HORIZONTAL_GRID
 from hnc.forms.handlers import FormHandler
+from pyramid.httpexceptions import HTTPForbidden
 from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.company.imp import SESSION_SAVE_TOKEN
 from ufostart.website.apps.models.procs import AddProductOfferProc, PledgeCompanyProc, CreateProductProc
@@ -27,6 +28,11 @@ class ProductCreateForm(BaseForm):
 
 class ProductCreateHandler(FormHandler):
     form = ProductCreateForm
+
+    def __init__(self, context=None, request=None):
+        if not context.isTeamMember:
+            raise HTTPForbidden()
+        super(ProductCreateHandler, self).__init__(context, request)
 
     def pre_fill_values(self, request, result):
         al_company = request.session.get(SESSION_SAVE_TOKEN)
@@ -56,6 +62,12 @@ class ProductEditForm(ProductCreateForm):
 
 class ProductEditHandler(FormHandler):
     form = ProductEditForm
+
+    def __init__(self, context=None, request=None):
+        if not context.isTeamMember:
+            raise HTTPForbidden()
+        super(ProductEditHandler, self).__init__(context, request)
+
     def pre_fill_values(self, request, result):
         product = request.root.company.Round.Product
         result['values'][self.form.id] = product.unwrap()
