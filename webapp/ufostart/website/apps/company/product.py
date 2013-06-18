@@ -2,7 +2,70 @@ from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm, MultipleFormField, REQUIRED, StringField, RadioChoice, NullConfigModel, TextareaField, HORIZONTAL_GRID
 from hnc.forms.handlers import FormHandler
 from ufostart.website.apps.auth.social import require_login
-from ufostart.website.apps.models.procs import AddProductOfferProc, PledgeCompanyProc
+from ufostart.website.apps.company.imp import SESSION_SAVE_TOKEN
+from ufostart.website.apps.models.procs import AddProductOfferProc, PledgeCompanyProc, CreateProductProc
+from ufostart.website.apps.forms.controls import FileUploadField
+
+
+
+
+class ProductCreateForm(BaseForm):
+    id="ProductCreate"
+    label = ""
+    grid = HORIZONTAL_GRID
+    fields=[
+        StringField('name', "Name")
+        , TextareaField('description', "Description", input_classes="x-high")
+        , FileUploadField("picture", "Product Picture")
+        , StringField("video", "Vimeo/YouTube")
+    ]
+    @classmethod
+    def on_success(cls, request, values):
+        data = {'token': request.context.company.Round.token, 'Product': values}
+        result = CreateProductProc(request, data)
+        return {'success':True, 'redirect': request.fwd_url("website_company_product", **request.root.urlArgs)}
+
+class ProductCreateHandler(FormHandler):
+    form = ProductCreateForm
+
+    def pre_fill_values(self, request, result):
+        al_company = request.session.get(SESSION_SAVE_TOKEN)
+        if al_company:
+            result['values'][self.form.id] = {
+                'name': al_company.name
+                , 'description': al_company.product_desc
+                , 'picture': al_company.getFirstScreenShot()
+                , 'video' : al_company.video_url
+            }
+        return super(ProductCreateHandler, self).pre_fill_values(request, result)
+
+
+
+
+
+class ProductEditForm(ProductCreateForm):
+    id="ProductEdit"
+    @classmethod
+    def on_success(cls, request, values):
+        product = request.root.company.Round.Product
+        values['token'] = product.token
+        data = {'token': request.context.company.Round.token, 'Product': values}
+        result = CreateProductProc(request, data)
+        return {'success':True, 'redirect': request.fwd_url("website_company_product", **request.root.urlArgs)}
+
+
+class ProductEditHandler(FormHandler):
+    form = ProductEditForm
+    def pre_fill_values(self, request, result):
+        product = request.root.company.Round.Product
+        result['values'][self.form.id] = product.unwrap()
+        return super(ProductEditHandler, self).pre_fill_values(request, result)
+
+
+
+
+
+
 
 
 class OfferChoiceField(RadioChoice):
@@ -68,18 +131,9 @@ class ProductOfferHandler(FormHandler):
     def pre_fill_values(self, request, result):
         company = request.root.company
         result['company'] = company
+        result['product'] = company.Round.Product
         if company.Round and company.Round.Product:
             result['values']['ProductOffer'] = company.Round.Product.unwrap()
-
-        angelListId = company.angelListId if company.angelListId != 'asdfasdf' else ''
-        angelListToken = company.angelListToken
-
-        if angelListId:
-            networkSettings = request.root['angellist']
-            company = networkSettings.getCompanyData(angelListId, angelListToken)
-            if company:
-                roles = filter(lambda x: 'founder' in x.role, networkSettings.getCompanyRoles(angelListId, angelListToken))
-                result.update({'al_company': company, 'company_roles': roles})
         return result
 
 

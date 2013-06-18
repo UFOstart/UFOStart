@@ -8,15 +8,15 @@
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
-                <h1 class="site-slogan">${al_company.display_name if al_company else 'Your Company'}</h1>
+                <h1 class="site-slogan">${company.name}</h1>
             </div>
         </div>
         <div class="row">
             <div class="col col-lg-8">
-                ${self.companyMainInfo(vctxt.company)}
+                ${self.companyMainInfo(company)}
             </div>
             <div class="col col-lg-4">
-                ${self.teamMembers(vctxt.company.Users)}
+                ${self.teamMembers(company.Users)}
             </div>
         </div>
     </div>
@@ -61,23 +61,16 @@
     </div>
     <div class="row mar-top-1">
         <div class="col col-lg-3">
-            ${widgets.logo(company.logo_url)}
+            ${widgets.logo(company.logo)}
         </div>
         <div class="col col-lg-9">
-            <a href="${company.url}"><strong>${company.display_name}</strong></a>
+            <a href="${company.url}"><strong>${company.name}</strong></a>
         </div>
     </div>
     <div class="mar-top-1">
-        ${al_company.display_description if al_company else ''}
+        ${company.display_description}
     </div>
 
-    %if not company.is_setup:
-        <div class="disabled-overlay">
-            <div class="overlay-action">
-                <a href="${url("website_company_import_start", _query=[('furl', request.furl)], **vctxt.urlArgs)}" class="btn btn-primary btn-large btn-block">Import Your Company from Angellist</a>
-            </div>
-        </div>
-    %endif
 </%def>
 
 

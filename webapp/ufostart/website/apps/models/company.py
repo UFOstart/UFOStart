@@ -218,7 +218,7 @@ class BaseCompanyModel(Mapping):
     token = TextField()
     slug = TextField()
     name = TextField()
-    logo = TextField()
+    logo_url = logo = TextField()
     url = TextField()
     description = TextField()
     @property
@@ -361,6 +361,7 @@ class ProductModel(Mapping):
     token = TextField()
     name = TextField()
     picture = TextField()
+    video = TextField()
     description = TextField()
     Offers = ListField(DictField(NamedModel))
 
@@ -371,11 +372,22 @@ class ProductModel(Mapping):
     def display_description(self):
         return self.description or ''
     @property
+    def short_description(self):
+        return word_truncate_by_letters(self.description, 50)
+
+    @property
     def offers(self):
         return self.Offers
 
+    def getYoutubeVideoId(self):
+        if self.video and 'youtube' in self.video:
+            return getYoutubeVideoId(self.video)
+        return ''
 
-
+    def getVimeoVideoId(self):
+        if self.video and 'vimeo' in self.video:
+            return getVimeoVideoId(self.video)
+        return ''
 
 
 class RoundModel(Mapping):
@@ -433,13 +445,18 @@ class CompanyModel(BaseCompanyModel):
 
     @property
     def product_is_setup(self):
-        return self.angelListId and self.angelListToken and self.Round and self.Round.Product
+        try:
+            return bool(self.Round.Product.token)
+        except AttributeError:
+            return False
+
     @property
     def product_description(self):
-        return self.Round.Product.display_description if self.product_is_setup else ''
-    @property
-    def logo_url(self):
-        return self.logo
+        return self.Round.Product.short_description if self.product_is_setup else ''
+
+    @reify
+    def product_name(self):
+        return self.Round.Product.name if self.product_is_setup else ''
 
     @reify
     def product_picture(self):
@@ -466,7 +483,6 @@ class CompanyModel(BaseCompanyModel):
             return self.tagString
         else:
             return ''
-    product_name = 'Product Name'
 
     @property
     def no_pledgees(self):

@@ -22,6 +22,7 @@
                 </div>
                 <div class="col col-lg-4">
                     <div class="box-framed">${self.privateInfoBox(vctxt.company, vctxt.need)}</div>
+                    <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary btn-block mar-top-1">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
                 </div>
             </div>
         </div>
@@ -134,7 +135,6 @@
             </div>
         </div>
     %endif
-
     <h5 class="text-muted no-margin upper mar-top-2">Recommended Cloud Services</h5>
     <div class="service-list row">
     %for service in need.services:
@@ -168,7 +168,7 @@
             </div>
             <div class="col col-lg-6">
                 <a href="${url("website_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
-                <div class="tagline">${company.display_description}</div>
+                <div class="tagline">${company.short_description}</div>
                 <a href="${url("website_company", **vctxt.urlArgs)}"><small>More...</small></a>
             </div>
             <div class="col col-lg-3">
@@ -231,6 +231,5 @@
     <div class="empty">
         No Applications Yet
     </div>
-
 %endif
 </%def>

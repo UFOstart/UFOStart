@@ -108,7 +108,7 @@
                     <div class="disabled-overlay">
                         <div class="overlay-action">
                             %if vctxt.isTeamMember:
-                                <a href="${url("website_company_product", **vctxt.urlArgs)}" class="btn btn-primary btn-block">Create Your Product</a>
+                                <a href="${url("website_company_product_create", **vctxt.urlArgs)}" class="btn btn-primary btn-block">Create Your Product</a>
                             %else:
                                 <h3>Not Setup yet</h3>
                             %endif

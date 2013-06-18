@@ -1,26 +1,46 @@
-<%inherit file="layout.html"/>
+<%inherit file="../../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
 
+<%def name="content()">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-9">
+                ${self.slogan()}
+            </div>
+        </div>
+        <div class="row mar-top-2">
+            <div class="col col-lg-3 pull-right">
+                ${self.wtfBox()}
+            </div>
+            <div class="col col-lg-9">
+                ${self.bodyContent()}
+            </div>
+        </div>
+    </div>
+</%def>
+
+
 <%def name="slogan()">
-    ${self.crumbs(3)}
     <h1 class="mar-top-2">
-        Enter Basic Details of your project
+        Your product
     </h1>
 </%def>
 
 
-
 <%def name="bodyContent()">
-    <div class="row">
-        <div class="col col-lg-8 right-bordered">
-            ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
-        </div>
-        <div class="col col-lg-4">
-            <a href="${url("website_company_import_start", _query=[('furl', request.furl)])}" class="btn btn-primary btn-form-field btn-block">Import from Angellist</a>
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-8 right-bordered">
+                ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+            </div>
+            <div class="col col-lg-4">
+                <a href="${url("website_company_import_start", _query=[('furl', request.furl)])}" class="btn btn-primary btn-form-field btn-block">Import from Angellist</a>
+            </div>
         </div>
     </div>
 </%def>
+
 
 
 <%def name="build_form(form, values, errors)">

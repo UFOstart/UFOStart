@@ -1,67 +1,51 @@
-<%inherit file="../layout.html"/>
+<%inherit file="../../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
-<%namespace file="../widgets.html" name="widgets"/>
+<%namespace file="../../widgets.html" name="widgets"/>
 
 <%def name="content()">
-    ${self.details(vctxt.company, vctxt.company.Round.Product)}
+    ${self.details(company, product)}
 </%def>
 
 <%def name="details(company, product)">
 <div class="container">
-    <div class="col col-lg-12">
-        <h1 class="site-slogan">${al_company.name}</h1>
-    </div>
-
     <div class="row">
         <div class="col col-lg-8 company-customer-dashboard">
-            <div class="box-title">Product Details</div>
-            <div class="product-image large mar-top-1">${self.company_media(al_company)}</div>
-            <div class="mar-top-1">
-                ${product.display_description if product else ''}
-            </div>
-            <div class="mar-top-1">
-                <div class="label-list">
-                %if al_company:
-                    %for tag in al_company.display_tags:
-                        <span class="label label-info spaced text-small">${tag}</span>
-                    %endfor
-                %endif
+            <div class="box-framed">
+                <div class="box-title">
+                    <a href="${url("website_company_product_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
+                    Product Details
                 </div>
-            </div>
-            %if not company.product_is_setup:
-                <div class="disabled-overlay">
-                    <div class="overlay-action">
-                        <a href="${url("website_company_import_start", _query=[('furl', request.furl)], **vctxt.urlArgs)}" class="btn btn-primary btn-large btn-block">Import Your Product from Angellist</a>
-                    </div>
-                </div>
-            %endif
+                <div class="box-content">
+                    <h3 class="site-slogan">${product.name}</h3>
+                    <div class="product-image large mar-top-1">${self.product_media(product)}</div>
 
-            %if product:
-                %if vctxt.isTeamMember:
-                    <% form = view.schemas['ProductOffer'] %>
-                    ${self.create_offer_form(product, form, values.get(form.id), errors.get(form.id))}
-                %else:
-                    <div class="mar-top-2"></div>
-                    <div class="box-title">
-                        Offers
-                    </div>
                     <div class="mar-top-1">
-                        <p>This product can be acquired in the following options:</p>
-                        <ul class="styled">
-                            %for offer in product.offers:
-                                <li><span>${offer.name}</span></li>
-                            %endfor
-                        </ul>
+                        ${product.display_description if product else ''}
                     </div>
-                %endif
 
-
-                %if product.Offers:
-                    <% form = view.schemas['ProductPledge'] %>
-                    ${self.pledge_offer_form(form, values.get(form.id), errors.get(form.id))}
-                %endif
-
-            %endif
+                    %if vctxt.isTeamMember:
+                        <% form = view.schemas['ProductOffer'] %>
+                        ${self.create_offer_form(product, form, values.get(form.id), errors.get(form.id))}
+                    %else:
+                        <div class="mar-top-2"></div>
+                        <div class="box-title">
+                            Offers
+                        </div>
+                        <div class="mar-top-1">
+                            <p>This product can be acquired in the following options:</p>
+                            <ul class="styled">
+                                %for offer in product.offers:
+                                    <li><span>${offer.name}</span></li>
+                                %endfor
+                            </ul>
+                        </div>
+                    %endif
+                    %if product.Offers:
+                        <% form = view.schemas['ProductPledge'] %>
+                        ${self.pledge_offer_form(form, values.get(form.id), errors.get(form.id))}
+                    %endif
+                </div>
+            </div>
         </div>
         <div class="col col-lg-4">
             <div class="box-framed">
@@ -72,11 +56,11 @@
                             ${widgets.logo(company.logo_url)}
                         </div>
                         <div class="col col-sm-9">
-                            <a href="${url("website_company_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
+                            <a href="${url("website_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
                             <p>
-                                ${al_company.display_description if al_company else ''}
+                                ${company.short_description}
                             </p>
-                            <a href="${url("website_company_company", **vctxt.urlArgs)}"><small>More...</small></a>
+                            <a href="${url("website_company", **vctxt.urlArgs)}"><small>More...</small></a>
                         </div>
                     </div>
                 </div>
@@ -132,12 +116,12 @@
             <div class="show-expanded row"><div class="col-lg-12 col">
         %endif
 
-        <div class="box-framed box-shaded">
-            <div class="box-content clearfix">
+        <div class="box-framed box-dark">
+            <div class="box-content mar-top-1 clearfix">
                 <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
                     ${baseform.prelims(form)}
                     %for field in form.fields:
-                        ${field.render(form.id, request, values, errors, view)|n}
+                        ${field.render(form.id, request, values, errors, view, grid = form.grid)|n}
                     %endfor
                     <div class="row">
                         <div class="col col-offset-3 col-lg-9">
@@ -267,11 +251,11 @@
 
 
 
-<%def name="company_media(al_company)" filter="trim">
-    %if al_company:
+<%def name="product_media(product)" filter="trim">
+    %if product:
         <%
-            youtube_id = al_company.getYoutubeVideoId()
-            vimeo_id = al_company.getVimeoVideoId()
+            youtube_id = product.getYoutubeVideoId()
+            vimeo_id = product.getVimeoVideoId()
         %>
         %if youtube_id:
             <div class="you-tube-container" data-video-id="${youtube_id}"></div>
@@ -279,11 +263,11 @@
             <div class="vimeo-container">
             <iframe src="http://player.vimeo.com/video/${vimeo_id}" width="847" height="400" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
             </div>
-        %elif al_company.video_url:
-            <a href="${al_company.video_url}">${al_company.video_url}</a>
-        %elif al_company.screenshots:
+        %elif product.video:
+            <a href="${product.video}">${product.video}</a>
+        %elif product.picture:
             <div class="product-screenshots">
-                <img src="${al_company.getFirstScreenShot()}"/>
+                <img src="${product.picture}"/>
             </div>
         %endif
     %else:

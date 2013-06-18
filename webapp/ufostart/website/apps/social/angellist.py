@@ -74,7 +74,10 @@ class CompanyModel(Mapping):
         return ''
 
     def getFirstScreenShot(self):
-        return self.screenshots[0].original
+        try:
+            return self.screenshots[0].original
+        except IndexError:
+            return None
 
 class CompanyRoleModel(Mapping):
     confirmed = BooleanField()
