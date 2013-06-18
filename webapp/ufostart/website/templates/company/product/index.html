@@ -35,18 +35,20 @@
                         <% form = view.schemas['ProductOffer'] %>
                         ${self.create_offer_form(product, form, values.get(form.id), errors.get(form.id))}
                     %else:
+                        %if len(product.offers):
                         <div class="mar-top-2"></div>
                         <div class="box-title">
                             Offers
                         </div>
-                        <div class="mar-top-1">
-                            <p>This product can be acquired in the following options:</p>
-                            <ul class="styled">
-                                %for offer in product.offers:
-                                    <li><span>${offer.name}</span></li>
-                                %endfor
-                            </ul>
-                        </div>
+                            <div class="mar-top-1">
+                                <p>This product can be acquired in the following options:</p>
+                                <ul class="styled">
+                                    %for offer in product.offers:
+                                        <li><span>${offer.name}</span></li>
+                                    %endfor
+                                </ul>
+                            </div>
+                        %endif
                     %endif
                     %if product.Offers:
                         <% form = view.schemas['ProductPledge'] %>

@@ -55,7 +55,7 @@ RefreshProfileProc = LoggingInProc("/web/user/profile")
 FindPublicNeeds = ClientTokenProc("/web/need/search", result_cls=NeedModel, root_key="Needs", result_list=True)
 FindPublicNeedsByLocation = ClientTokenProc("/web/need/location", result_cls=NeedModel, root_key="Needs", result_list=True)
 GetPopularNeeds = ClientTokenProc("/web/need/popular", result_cls=NeedModel, root_key='Needs', result_list=True)
-GetNewProductsProc = ClientTokenProc("/web/product/newest", root_key="Company", result_cls=CompanyModel, result_list=True)
+GetNewProductsProc = ClientTokenProc("/web/product/newest", root_key="Companies", result_cls=CompanyModel, result_list=True)
 
 #
 ################# COMPANY

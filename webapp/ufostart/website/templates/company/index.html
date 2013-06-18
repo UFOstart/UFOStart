@@ -87,7 +87,7 @@
                     </div>
                     <div class="col col-lg-5">
                         <a href="${url("website_company_product", **vctxt.urlArgs)}"><strong>${company.product_name}</strong></a>
-                        <div class="description">${company.product_description}</div>
+                        <div class="description">${company.product_description | html.trunc(60) }</div>
                         <a href="${url("website_company_product", **vctxt.urlArgs)}"><small>More...</small></a>
                     </div>
                     <div class="col col-lg-4">

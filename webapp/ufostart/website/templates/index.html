@@ -67,7 +67,11 @@
             <div class="row">
                 <div class="col col-lg-12">
                     <h1 class="brand-primary">Newest Projects</h1>
-                    ${products}
+                    %for company in products:
+                        <div class="col col-lg-3">
+                            ${widgets.publicProductCard(company, descr_len = 300)}
+                        </div>
+                    %endfor
                 </div>
             </div>
         </div>

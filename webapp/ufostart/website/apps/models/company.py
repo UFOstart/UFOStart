@@ -433,6 +433,10 @@ class CompanyModel(BaseCompanyModel):
         return self.Round.Product.description if self.product_is_setup else ''
 
     @reify
+    def product_pledges(self):
+        return len(self.Round.Product.Pledges) if self.product_is_setup else 0
+
+    @reify
     def product_name(self):
         return self.Round.Product.name if self.product_is_setup else ''
 

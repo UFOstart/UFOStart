@@ -43,7 +43,7 @@
             </div>
         </div>
         <h5><a href="${need_url}">${need.name}</a></h5>
-        <div class="need-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
+        <div class="long-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
 
         ${self.valuation(need)}
 
@@ -55,3 +55,36 @@
     </div>
     </div>
 </%def>
+
+
+
+<%def name="publicProductCard(company, descr_len = 50)">
+    <%
+        product_url = url("website_company_product", slug = company.slug)
+    %>
+    <div class="need-card home product">
+    <div class="need-card-inner">
+        <div class="picture maxi">
+            <img src="${company.product_picture}"/>
+        </div>
+        <h5><a href="${product_url}" class="overflow">${company.product_name}</a></h5>
+        <div class="long-description">${company.product_description | html.trunc(descr_len)}</div>
+        %if company.no_pledgees:
+            <div class="valuation">
+                <div class="number total">
+                    <strong>PLEDGES</strong>
+                    <h2><strong>${company.no_pledgees or ''}</strong></h2>
+                </div>
+            </div>
+        %else:
+            <div class="valuation">
+                <div class="number total">
+                    <strong>&nbsp;</strong>
+                    <h2><strong>&nbsp;</strong></h2>
+                </div>
+            </div>
+        %endif
+    </div>
+    </div>
+</%def>
+
