@@ -49,7 +49,7 @@
     <div class="need-card-inner">
         <h5>${need.name}</h5>
         <div class="description">
-            ${need.meta_description | html.trunc(50)}
+            ${need.summary | html.trunc(50)}
         </div>
         <div class="label-list">
             %for tag in need.tags:

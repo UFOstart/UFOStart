@@ -157,6 +157,7 @@ class ExpertModel(Mapping):
     linkedinId = TextField()
     firstName = TextField()
     lastName = TextField()
+    headline = TextField()
     picture = TextField()
     Introducer = ListField(DictField(IntroducerModel))
 
@@ -170,13 +171,13 @@ class ExpertModel(Mapping):
         return u"{} {}".format(self.firstName, self.lastName)
     @property
     def position(self):
-        return 'IT Expert'
+        return self.headline or 'IT Expert'
     @property
     def display_skills(self):
         return ', '.join(sample(SKILLS, int(random()*30)))
     @property
     def introducers(self):
-        return self.Introducer
+        return [IntroducerModel(picture = self.introPicture, firstName = self.introFirstName, lastName = self.introLastName)]#self.Introducer
 
 class ServiceModel(Mapping):
     name = TextField()
@@ -234,6 +235,7 @@ class BaseCompanyModel(Mapping):
 class NeedModel(Mapping):
     token = TextField()
     name = TextField()
+    summary = TextField()
     status = TextField()
     category = TextField()
     description = TextField()
@@ -289,9 +291,6 @@ class NeedModel(Mapping):
 
 
     # TODO: actual implementation
-    @property
-    def meta_description(self):
-        return "LOREM IPSUM long meta need description"
 
     currency = 'USD'
     currency_symbol = get_currency_symbol('USD', locale = 'en')
