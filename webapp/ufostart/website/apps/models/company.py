@@ -322,6 +322,10 @@ class ProductModel(Mapping):
     def offers(self):
         return self.Offers
 
+
+
+
+
 class RoundModel(Mapping):
     start = DateTimeField()
     token = TextField()
@@ -331,7 +335,6 @@ class RoundModel(Mapping):
     Product = DictField(ProductModel)
     Template = DictField(TemplateModel)
     Workflow = DictField(WorkflowModel)
-
     @reify
     def expiry(self):
         return self.start+timedelta(90)
@@ -346,6 +349,8 @@ class RoundModel(Mapping):
             return closed
     def getExpiryDate(self):
         return format_date(self.start+timedelta(90), format="medium", locale='en')
+
+
 
     # TODO: actual implementation
     published = False

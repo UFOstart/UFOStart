@@ -5,8 +5,7 @@
     <div class="container" id="project-round-need-dashboard">
         <div class="row">
             <div class="col col-lg-12">
-                <h1 class="site-slogan">${vctxt.company.display_name}</h1>
-                ${vctxt.company.Round.Workflow}
+                <h1 class="site-slogan">${company.display_name}</h1>
             </div>
         </div>
         <div class="row mar-top-1">
@@ -26,7 +25,8 @@
 <div class="row">
     <div class="col col-lg-6">
         <div class="box-framed">
-            <div class="box-title highlight-target" id="target-invite-team">
+            <div class="box-title highlight-target">
+                <div id="target-invite-team" class="highlight-anchor"></div>
                 Company
             </div>
             <div class="box-content min-height-7">
@@ -75,7 +75,8 @@
     </div>
     <div class="col col-lg-6">
         <div class="box-framed">
-            <div class="box-title highlight-target" id="target-create-product">
+            <div class="box-title highlight-target">
+                <div id="target-create-product" class="highlight-anchor"></div>
                 Product
             </div>
             <div class="box-content min-height-7">
@@ -121,7 +122,8 @@
 <%def name="lowerContent()">
     <div class="row mar-top-2">
         <div class="col col-lg-12">
-            <div class="box-title highlight-target" id="target-need-list">
+            <div class="box-title highlight-target">
+                <div id="target-customise-needs" class="highlight-anchor"></div>
                 Needs
             </div>
         </div>
@@ -227,34 +229,24 @@
         <div class="box-content">
             <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
             <ul class="list-unstyled">
-                <li>
-                    <a class="workflow-link active" href="#target-invite-team">
-                        <span class="position">1</span>
-                        Invite Team Members
-                    </a>
-                </li>
-                <li>
-                    <a class="workflow-link" href="#target-create-product">
-                        <span class="position">2</span>
-                        Customize Product
-                    </a>
-                </li>
-                <li>
-                    <a class="workflow-link" href="#target-need-list">
-                        <span class="position">3</span>
-                        Customize Needs
-                    </a>
-                </li>
-                <li>
-                    <a class="workflow-link" href="#target-publish">
-                        <span class="position">3</span>
-                        Customize Needs
-                    </a>
-                </li>
+                <%
+                    wf = currentRound.Workflow
+                    active = wf.getActiveStage()
+                %>
+
+                %for i, stage in enumerate(wf.sortedStages):
+                    <li>
+                        <a class="workflow-link${' active' if active.name == stage.name else ''}${' done' if stage.completed else ''}" href="#target-${stage.slug}">
+                            <span class="position">${i+1}</span>
+                            ${stage.display_name}
+                        </a>
+                    </li>
+                %endfor
             </ul>
         </div>
     </div>
-    <div class="mar-top-2 highlight-target" id="target-publish">
+    <div class="mar-top-2 highlight-target">
+        <div id="target-publish" class="highlight-anchor"></div>
         <a href="#" class="btn btn-primary btn-block btn-humonguous disabled"><span>Publish</span></a>
     </div>
 </%def>

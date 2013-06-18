@@ -85,7 +85,7 @@
 
 <%def name="build_form(form, values, errors)">
     <div class="box-shaded mar-top-1">
-        <form class="${form.classes}" id="${form.id}" method="POST">
+        <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
             ${baseform.prelims(form)}
             %for field in view.form.fields:
                 ${field.render(form.id, request, values, errors, view)|n}

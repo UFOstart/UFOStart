@@ -3,6 +3,13 @@ from operator import attrgetter
 from hnc.apiclient import Mapping, TextField, IntegerField, BooleanField, DictField, ListField
 from pyramid.decorator import reify
 
+def workflow_check(name):
+    def f(self):
+        try:
+            return self.Workflow.stagesMap[name].done
+        except (AttributeError, ValueError, KeyError):
+            return False
+    return f
 
 def stage_sorter(a,b):
     if a.order == b.order:
@@ -14,6 +21,15 @@ def stage_sorter(a,b):
     else:
         return cmp(a.order,b.order)
 
+STAGE_NAMES = {
+    u'CREATE_COMPANY':'Setup Project'
+    , u'CREATE_PRODUCT':'Customize Product'
+    , u'CUSTOMISE_NEEDS': 'Customize Needs'
+    , u'INVITE_TEAM':'Invite Team Members'
+    , u'PUBLISH': 'Publish Round'
+}
+
+
 class StageModel(Mapping):
     name = TextField()
     order = IntegerField()
@@ -22,6 +38,13 @@ class StageModel(Mapping):
 
     def canBeSkipped(self):
         return self.skippable
+
+    @property
+    def display_name(self):
+        return STAGE_NAMES[self.name]
+    @property
+    def slug(self):
+        return self.name.replace("_", "-").lower()
 
 class WorkflowBluePrintModel(Mapping):
     name = TextField()

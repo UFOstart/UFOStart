@@ -134,7 +134,7 @@
 
         <div class="box-framed box-shaded">
             <div class="box-content clearfix">
-                <form class="${form.classes}" id="${form.id}" method="POST">
+                <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
                     ${baseform.prelims(form)}
                     %for field in form.fields:
                         ${field.render(form.id, request, values, errors, view)|n}
@@ -170,7 +170,7 @@
     %if not vctxt.isTeamMember and not vctxt.user.isAnon():
         <div class="show-expanded box-shaded box-framed">
             <div class="box-content">
-                <form class="${form.classes}" id="${form.id}" method="POST">
+                <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
                     ${baseform.prelims(form)}
                     <div class="row mar-top-1">
                         <div class="col col-lg-4">

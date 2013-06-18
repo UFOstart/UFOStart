@@ -36,7 +36,7 @@
 
 
 <%def name="build_form(form, values, errors)">
-    <form class="${form.classes}" id="${form.id}" method="POST">
+    <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
 
         ${form.fieldMap['name'].render(form.id, request, values, errors, view)|n}
