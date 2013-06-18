@@ -33,8 +33,8 @@
         </div>
     </div>
     <div class="row">
-        %for col in template.groupedNeeds(4):
-            <div class="col col-lg-3 need-card-list">
+        %for col in template.groupedNeeds(3):
+            <div class="col col-lg-4 need-card-list">
                 <div class="js-need-card-list">
                 %for need in col:
                     ${self.buildNeed(need)}
