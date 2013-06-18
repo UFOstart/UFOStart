@@ -74,7 +74,12 @@
                                 </div>
                                 <div class="col col-sm-5">
                                     <div class="overflow"><a href="${url("website_company", slug = company.slug)}"><strong>${company.name}</strong></a></div>
-                                    <div><strong>Round not published</strong></div>
+                                    %if company.currentRound and company.currentRound.published:
+                                        <div><strong>${company.currentRound.getExpiryDays()}</strong></div>
+                                    %else:
+                                        <div>Round not published</div>
+                                    %endif
+
                                 </div>
                                 <div class="col col-lg-5">
                                     <div class="member-pile face-pile-mini">

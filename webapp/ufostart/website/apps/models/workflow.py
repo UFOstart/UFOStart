@@ -82,3 +82,6 @@ class WorkflowModel(WorkflowBluePrintModel):
     def getActiveStage(self):
         for stage in self.sortedStages:
             if not stage.completed: return stage
+    def canPublish(self):
+        a_s = self.getActiveStage()
+        return a_s.name == 'PUBLISH' if a_s else False

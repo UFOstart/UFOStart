@@ -33,26 +33,6 @@ define(['tools/ajax', "libs/fileupload", "libs/typeahead"], function(ajax, FileU
                 });
             });
 
-
-            this.saveTimeout = null;
-            this.savedTimeout = null;
-            this.$el.on({
-                change: function(){
-                    view.saveTimeout && clearTimeout(view.saveTimeout);
-                    view.saveTimeout = setTimeout(function(){
-                        view.$el.submit();
-                    }, 90000);
-                }
-                , "form:saved": function(){
-                    view.saveTimeout && clearTimeout(view.saveTimeout);
-                    view.savedTimeout && clearTimeout(view.savedTimeout);
-                    view.$el.addClass("data-saved");
-                    view.savedTimeout = setTimeout(function(){
-                        view.$el.removeClass("data-saved");
-                    }, 4000);
-
-                }
-            });
         }
         , setupWidgets : function(el){
             el.find(".typeahead-container").each(_.bind(this.addTypeAhead, this));

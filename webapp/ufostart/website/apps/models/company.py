@@ -371,6 +371,7 @@ class ProductModel(Mapping):
 class RoundModel(Mapping):
     start = DateTimeField()
     token = TextField()
+    status = TextField()
     Needs = ListField(DictField(NeedModel))
     Users = ListField(DictField(CompanyUserModel))
     Pledges = ListField(DictField(PledgeModel))
@@ -383,19 +384,19 @@ class RoundModel(Mapping):
 
     def getExpiryDays(self, singular = "{} Day Left", plural="{} Days Left", closed = "Closed"):
         delta = (self.start+timedelta(90)) - datetime.today()
-        if 0 < delta.days <= 1:
-            return singular.format(delta.days)
-        elif delta.days > 1:
-            return plural.format(delta.days)
+        days = delta.days + 1
+        if 0 < days <= 1:
+            return singular.format(days)
+        elif days > 1:
+            return plural.format(days)
         else:
             return closed
     def getExpiryDate(self):
         return format_date(self.start+timedelta(90), format="medium", locale='en')
 
-
-
-    # TODO: actual implementation
-    published = False
+    @property
+    def published(self):
+        return self.status == 'PUBLISHED'
 
 
 class CompanyModel(BaseCompanyModel):
@@ -410,9 +411,10 @@ class CompanyModel(BaseCompanyModel):
     Rounds = ListField(DictField(RoundModel))
     Users = ListField(DictField(CompanyUserModel))
 
-
-    def getCurrentRound(self):
+    @property
+    def currentRound(self):
         return self.Round if self.Round else None
+
     def isMember(self, userToken):
         if not userToken: return False
         return len(filter(lambda x: x.token == userToken, self.Users))

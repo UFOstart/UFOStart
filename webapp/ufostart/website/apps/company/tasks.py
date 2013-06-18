@@ -3,7 +3,7 @@ from ufostart.website.apps.models.procs import GetAllCompanyTemplatesProc
 
 
 def index(context, request):
-    currentRound = context.company.getCurrentRound()
+    currentRound = context.company.currentRound
     return {'currentRound': currentRound}
 
 def need_library(context, request):

@@ -209,33 +209,48 @@
 
 
 <%def name="wtfBox()">
-    <div class="wtf-box company-dashboard">
-        <h5 class="box-title">
-            Steps
-        </h5>
-        <div class="box-content">
+    %if currentRound.published:
+        <div class="company-dashboard box-shaded box-content">
+            <h5>You have got</h5>
+            <h1 class="super">${currentRound.getExpiryDays()}</h1>
+            <h5>to fulfill your needs.</h5>
             <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-            <ul class="list-unstyled">
-                <%
-                    wf = currentRound.Workflow
-                    active = wf.getActiveStage()
-                %>
-
-                %for i, stage in enumerate(wf.sortedStages):
-                    <li>
-                        <a class="workflow-link${' active' if active.name == stage.name else ''}${' done' if stage.completed else ''}" href="#target-${stage.slug}">
-                            <span class="position">${i+1}</span>
-                            ${stage.display_name}
-                        </a>
-                    </li>
-                %endfor
-            </ul>
+            <a href="#" class="btn btn-primary btn-block">Spread the word</a>
         </div>
-    </div>
-    <div class="mar-top-2 highlight-target">
-        <div id="target-publish" class="highlight-anchor"></div>
-        <a href="#" class="btn btn-primary btn-block btn-humonguous disabled"><span>Publish</span></a>
-    </div>
+    %else:
+
+        <%
+            wf = currentRound.Workflow
+            active = wf.getActiveStage()
+        %>
+        <div class="wtf-box company-dashboard">
+            <h5 class="box-title">
+                Steps
+            </h5>
+            <div class="box-content">
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                <ul class="list-unstyled">
+                    %for i, stage in enumerate(wf.sortedStages):
+                        <li>
+                            <a class="workflow-link${' active' if active and active.name == stage.name else ''}${' done' if stage.completed else ''}" href="#target-${stage.slug}">
+                                <span class="position">${i+1}</span>
+                                ${stage.display_name}
+                            </a>
+                        </li>
+                    %endfor
+                </ul>
+            </div>
+        </div>
+        <div class="mar-top-2 highlight-target">
+            <div id="target-publish" class="highlight-anchor"></div>
+            %if wf.canPublish():
+                <a href="${url("website_publish_round", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-humonguous"><span>Publish</span></a>
+            %else:
+                <a class="btn btn-primary btn-block btn-humonguous disabled"><span>Publish</span></a>
+            %endif
+        </div>
+    %endif
+
 </%def>
 
 

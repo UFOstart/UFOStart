@@ -93,4 +93,5 @@ GetInviteDetailsProc = ClientTokenProc("/web/company/getInvite", result_cls=Invi
 AcceptInviteProc = ClientTokenProc("/web/company/acceptInvite")
 
 
+PublishRoundProc = ClientTokenProc("/web/round/publish")
 

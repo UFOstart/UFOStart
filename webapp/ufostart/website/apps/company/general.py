@@ -1,9 +1,10 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, MultipleFormField, EmailField, HORIZONTAL_GRID
+from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, HORIZONTAL_GRID
 from hnc.forms.handlers import FormHandler
-from hnc.forms.messages import GenericSuccessMessage
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.renderers import render_to_response
-from ufostart.website.apps.models.procs import CreateCompanyProc, CreateRoundProc, InviteToCompanyProc
+from ufostart.website.apps.auth.social import require_login
+from ufostart.website.apps.models.procs import CreateCompanyProc, CreateRoundProc, PublishRoundProc
 
 
 def index(context, request):
@@ -11,15 +12,13 @@ def index(context, request):
     if not company:
         request.fwd("website_index")
 
-    return render_to_response("ufostart:website/templates/company/index.html", {'company': company, 'currentRound':company.getCurrentRound()}, request)
+    return render_to_response("ufostart:website/templates/company/index.html", {'company': company, 'currentRound':company.currentRound}, request)
 
 def create_round(context, request):
     company = context.company
-    if not company.getCurrentRound():
+    if not company.currentRound:
         round = CreateRoundProc(request, {'slug': company.slug})
     request.fwd("website_company", **context.urlArgs)
-
-
 
 
 class SetupCompanyForm(BaseForm):
@@ -47,3 +46,15 @@ class SetupCompanyForm(BaseForm):
 class SetupCompanyHandler(FormHandler):
     form = SetupCompanyForm
 
+
+@require_login('ufostart:website/templates/auth/login.html')
+def publish_round(context, request):
+    round = context.company.currentRound
+    if not round:
+        raise HTTPNotFound()
+    wf = round.Workflow
+    if not wf or not wf.canPublish():
+        request.fwd("website_company", **context.urlArgs)
+    else:
+        PublishRoundProc(request, {'token': round.token})
+        request.fwd("website_company", **context.urlArgs)
