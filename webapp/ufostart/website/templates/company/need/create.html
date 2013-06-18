@@ -1,71 +1,76 @@
-<%inherit file="index.html"/>
+<%inherit file="edit.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="bodyContent(need)">
+    <div class="box-content box-dark">
+        ${self.build_form(need, view.form, values.get(view.form.id), errors.get(view.form.id))}
+    </div>
+</%def>
+
+
 
 <%def name="content()">
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
                 <h1 class="site-slogan">
-                    Create New Need
+                    Create a new need
                 </h1>
             </div>
         </div>
+    </div>
+    <div class="container">
         <div class="row mar-top-1">
-            <div class="col col-lg-12">
-                ${self.buildPrivateNeed(vctxt.need)}
+            <div class="col col-lg-8">
+                ${self.bodyContent(vctxt.need)}
             </div>
         </div>
     </div>
 </%def>
 
 
-<%def name="buildPrivateNeed(need)">
-    <div class="box-framed box-shaded">
-        <div class="box-title">
-            <a class="btn btn-default" href="${url("website_company", **vctxt.urlArgs)}">Cancel</a>
-            Create New Need
-        </div>
-        <div class="box-content">
-            <div class="description mar-top-1">
-                ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
-            </div>
-        </div>
-    </div>
-</%def>
-
-
-
-<%def name="build_form(form, values, errors)">
-    <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+<%def name="build_form(need, form, values, errors)">
+    <form class="${form.grid.form_classes} labels-capitalized" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
 
         ${form.fieldMap['name'].render(form.id, request, values, errors, view)|n}
-        ${form.fieldMap['cash'].render(form.id, request, values, errors, view)|n}
-        ${form.fieldMap['equity'].render(form.id, request, values, errors, view)|n}
-        ${form.fieldMap['picture'].render(form.id, request, values, errors, view)|n}
+        <div class="row">
+            <div class="col col-lg-3">
+                ${form.fieldMap['picture'].render(form.id, request, values, errors, view)|n}
+            </div>
+            <div class="col col-lg-4 col-offset-1">
+                ${form.fieldMap['total'].render(form.id, request, values, errors, view)|n}
+                <div class="control-group">
+                    <div class="control-label">
+                        Cash Value
+                    </div>
+                    <div class="pseudo-controls data-target cash" data-currency-symbol="$">
+                        $---
+                    </div>
+                    <input type="hidden" name="${form.id}.cash" value="${values.get('cash', '')}"/>
+                </div>
+            </div>
+            <div class="col col-lg-4">
+                ${form.fieldMap['ratio'].render(form.id, request, values, errors, view)|n}
+
+                <div class="control-group">
+                    <div class="control-label">
+                        Equity Value
+                    </div>
+                    <div class="pseudo-controls data-target equity" data-currency-symbol="$">
+                        $---
+                    </div>
+                    <input type="hidden" name="${form.id}.equity" value="${values.get('equity', '')}"/>
+                </div>
+            </div>
+        </div>
+
         ${form.fieldMap['description'].render(form.id, request, values, errors, view)|n}
         <div class="label-list">
             ${form.fieldMap['Tags'].render(form.id, request, values, errors, view)|n}
         </div>
-        <div class="form-actions row">
-            <div class="col col-lg-3 col-offset-3">
-                <button type="submit" class="btn btn-primary btn-block">Save</button>
-            </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-block">Save</button>
         </div>
     </form>
-</%def>
-
-
-<%def name="post_scripts()">
-    <script type="text/javascript">
-        (function(a){if(window.filepicker){return}var b=a.createElement("script");b.type="text/javascript";b.async=!0;b.src=("https:"===a.location.protocol?"https:":"http:")+"//api.filepicker.io/v1/filepicker.js";var c=a.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c);var d={};d._queue=[];var e="pick,pickMultiple,pickAndStore,read,write,writeUrl,export,convert,store,storeUrl,remove,stat,setKey,constructWidget,makeDropPane".split(",");var f=function(a,b){return function(){b.push([a,arguments])}};for(var g=0;g<e.length;g++){d[e[g]]=f(e[g],d._queue)}window.filepicker=d})(document);
-    </script>
-    <script>
-        require(["form"], function(View){
-            filepicker.setKey('A0Me4BRKSLSnOkrY6Jb2xz');
-            $(".form-validated").each(function(idx, form){
-                new View({el:form})
-            });
-        });
-    </script>
 </%def>

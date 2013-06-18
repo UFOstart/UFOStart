@@ -30,10 +30,12 @@ class NeedCreateForm(BaseForm):
     id="NeedCreate"
     label = ""
     fields = [
-        FileUploadField("picture", 'Picture')
+        FileUploadField("picture", 'Picture', group_classes='file-upload-control')
         , StringField('name', "Need Name", REQUIRED)
-        , IntField('cash', "Cash value", REQUIRED)
-        , IntField('equity', "Equity value", REQUIRED)
+        , IntField('total', "Total value ($)", REQUIRED, input_classes='data-input value')
+        , IntField('ratio', "of this Equity (%)", REQUIRED, input_classes='data-input ratio')
+        , DecimalField('cash', None)
+        , DecimalField('equity', None)
         , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3))
     ]
