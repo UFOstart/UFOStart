@@ -172,7 +172,7 @@
                 ${widgets.logo(company.logo_url)}
             </div>
             <div class="col col-lg-6">
-                <a href="${url("website_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
+                <strong><a href="${url("website_company", **vctxt.urlArgs)}" class="overflow">${company.display_name}</a></strong>
                 <div class="tagline">${company.description | html.trunc(50)}</div>
                 <a href="${url("website_company", **vctxt.urlArgs)}"><small>More...</small></a>
             </div>
@@ -189,9 +189,13 @@
                 ${widgets.logo(company.product_picture)}
             </div>
             <div class="col col-lg-6">
-                <a href="${url("website_company_product", **vctxt.urlArgs)}"><strong>${company.product_name}</strong></a>
-                <div class="description">${company.product_description}</div>
-                <a href="${url("website_company_product", **vctxt.urlArgs)}"><small>More...</small></a>
+                %if company.product_is_setup:
+                    <a href="${url("website_company_product", **vctxt.urlArgs)}"><strong>${company.product_name}</strong></a>
+                    <div class="description">${company.product_description}</div>
+                    <a href="${url("website_company_product", **vctxt.urlArgs)}"><small>More...</small></a>
+                %else:
+                    <strong>Not setup yet</strong>
+                %endif
             </div>
             <div class="col col-lg-3">
                 <h5 class="text-muted no-margin">Pledges</h5>

@@ -83,8 +83,8 @@
                                     <div class="col col-sm-10">
                                         <div class="pull-right">${application.display_date}</div>
                                         <div class="overflow"><a href="#"><strong>${application.need}</strong></a></div>
-                                        <div class="overflow"><small>${application.companyName}</small></div>
-                                        <div class="application-message">${application.description | html.trunc(50)}
+                                        <p class="overflow"><small>${application.companyName}</small></p>
+                                        <div class="application-message">${application.message | html.trunc(50)}
                                             <a href="#applications">Read more</a>
                                         </div>
                                     </div>

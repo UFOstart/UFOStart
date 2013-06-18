@@ -127,6 +127,13 @@ class ProductPledgeForm(BaseForm):
 
 class ProductOfferHandler(FormHandler):
     forms = [ProductOfferForm, ProductPledgeForm]
+    def __init__(self, context=None, request=None):
+        if not context.company.product_is_setup:
+            if context.isTeamMember:
+                request.fwd("website_company_product_create", **context.urlArgs)
+            else:
+                request.fwd("website_company", **context.urlArgs)
+        super(ProductOfferHandler, self).__init__(context, request)
 
     def pre_fill_values(self, request, result):
         company = request.root.company
