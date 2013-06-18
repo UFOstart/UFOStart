@@ -32,7 +32,7 @@
                         <div class="row">
                             %for need in needs_close_by:
                                 <div class="col col-lg-3">
-                                    ${widgets.publicNeedCard(need)}
+                                    ${widgets.publicNeedCard(need, descr_len = 300)}
                                 </div>
                             %endfor
                         </div>
