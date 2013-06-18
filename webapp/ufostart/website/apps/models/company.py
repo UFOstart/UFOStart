@@ -444,16 +444,16 @@ class CompanyModel(BaseCompanyModel):
 
     @reify
     def product_picture(self):
-        video = self.Round.Product.video if self.Round and self.Round.Product else ''
-        picture = self.Round.Product.picture if self.Round and self.Round.Product else ''
-
-        if not video and not picture: return
-        elif 'youtube' in video:
-            youtubeId  = getYoutubeVideoId(video)
+        product = self.Round.Product
+        if not product: return None
+        media = product.video or product.picture
+        if not media: return None
+        if 'youtube' in media:
+            youtubeId  = getYoutubeVideoId(media)
             return 'http://img.youtube.com/vi/{}/0.jpg'.format(youtubeId)
-        elif 'vimeo' in video:
+        elif 'vimeo' in media:
             try:
-                vimeoId =  getVimeoVideoId(video)
+                vimeoId =  getVimeoVideoId(media)
                 h = Http()
                 resp, data = h.request("http://vimeo.com/api/v2/video/{}.json".format(vimeoId))
                 json = simplejson.loads(data)
@@ -461,7 +461,7 @@ class CompanyModel(BaseCompanyModel):
             except:
                 return None
         else:
-            return picture
+            return media
 
     @property
     def display_tags(self):
