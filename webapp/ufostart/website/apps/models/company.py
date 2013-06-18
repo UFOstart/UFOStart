@@ -129,6 +129,7 @@ SKILLS = ['abandon'
 class CompanyUserModel(Mapping):
     token = TextField()
     name = TextField()
+    headline = TextField()
     picture = TextField()
     unconfirmed = BooleanField()
 
@@ -138,7 +139,7 @@ class CompanyUserModel(Mapping):
 
     @property
     def position(self):
-        return 'Founder'
+        return self.headline
 
 
 class IntroducerModel(Mapping):
