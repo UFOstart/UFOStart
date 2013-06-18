@@ -212,6 +212,8 @@ class ApplicationModel(Mapping):
         return format_date(self.created, format='medium', locale='en')
 
 
+
+
 class BaseCompanyModel(Mapping):
     token = TextField()
     slug = TextField()

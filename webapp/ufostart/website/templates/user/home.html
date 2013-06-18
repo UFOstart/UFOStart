@@ -7,48 +7,86 @@
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
-                <h5 class="site-slogan">Welcome ${vctxt.user.name}</h5>
+                <div class="box-framed box-shaded">
+                    <div class="box-content clearfix">
+                        <div class="col col-lg-2">
+                            ${widgets.logo(vctxt.user.picture, alt=vctxt.user.name, classes="fixed-w")}
+                        </div>
+                        <div class="col col-lg-9">
+                            <h1 class="site-slogan">Welcome ${vctxt.user.name}</h1>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
         <div class="row mar-top-1">
             <div class="col col-lg-6">
                 <div class="box-framed">
                     <h5 class="box-title">
                         <span class="pull-right">${len(profile.Companies)}</span>
-                        Companies
+                        Your Companies
                     </h5>
                     <div class="box-content">
-                    %for company in profile.Companies:
-                        <div class="row single-company">
-                            <div class="col col-sm-2">
-                                ${widgets.logo(company.logo_url)}
-                            </div>
-                            <div class="col col-sm-5">
-                                <div class="overflow"><a href="${url("website_company", slug = company.slug)}"><strong>${company.name}</strong></a></div>
-                                <div><strong>Round not published</strong></div>
-                            </div>
-                            <div class="col col-lg-5">
-                                <div class="member-pile">
-                                    %for member in company.Users:
-                                        <div class="picture micro">
-                                            <img src="${member.picture_url}"/>
-                                        </div>
-                                    %endfor
+                    %if len(profile.Companies):
+                        %for company in profile.Companies:
+                            <div class="row single-company">
+                                <div class="col col-sm-2">
+                                    ${widgets.logo(company.logo_url)}
                                 </div>
-                            </div>
+                                <div class="col col-sm-5">
+                                    <div class="overflow"><a href="${url("website_company", slug = company.slug)}"><strong>${company.name}</strong></a></div>
+                                    <div><strong>Round not published</strong></div>
+                                </div>
+                                <div class="col col-lg-5">
+                                    <div class="member-pile">
+                                        %for member in company.Users:
+                                            <div class="picture micro">
+                                                <img src="${member.picture_url}"/>
+                                            </div>
+                                        %endfor
+                                    </div>
+                                </div>
 
+                            </div>
+                        %endfor
+                    %else:
+                        <div class="empty">
+                            No Companies yet<br/>
+                            <a href="${url('website_template_basic')}" class="btn btn-primary">Start a Company now</a>
                         </div>
-                    %endfor
+                    %endif
                     </div>
                 </div>
             </div>
             <div class="col col-lg-6">
                 <div class="box-framed">
                     <h5 class="box-title">
-                        Applications
+                        Your Applications
                     </h5>
                     <div class="box-content">
-
+                        %if len(profile.Applications):
+                            %for application in profile.Applications:
+                                <div class="row single-company">
+                                    <div class="col col-sm-2">
+                                        ${widgets.logo(application.comapnyLogo)}
+                                    </div>
+                                    <div class="col col-sm-10">
+                                        <div class="pull-right">${application.display_date}</div>
+                                        <div class="overflow"><a href="#"><strong>${application.need}</strong></a></div>
+                                        <div class="overflow"><small>${application.companyName}</small></div>
+                                        <div class="application-message">${application.short_description}
+                                            <a href="#applications">Read more</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            %endfor
+                        %else:
+                            <div class="empty">
+                                No Companies yet<br/>
+                                <a href="${url('website_template_basic')}" class="btn btn-primary">Start a Company now</a>
+                            </div>
+                        %endif
                     </div>
                 </div>
             </div>

@@ -1,7 +1,8 @@
 from hnc.apiclient import Mapping, TextField, IntegerField, ListField, DictField
+from hnc.tools.tools import word_truncate_by_letters
 from pyramid.decorator import reify
 import simplejson
-from ufostart.website.apps.models.company import CompanyModel
+from ufostart.website.apps.models.company import CompanyModel, ApplicationModel
 from ufostart.website.apps.social import SocialNetworkProfileModel
 
 
@@ -14,6 +15,16 @@ class WebUserNetworkProfile(SocialNetworkProfileModel):
     type = TextField()
 
 
+class UserApplicationModel(ApplicationModel):
+    comapnyLogo = TextField()
+    companyName = TextField()
+    companyToken = TextField()
+    companySlug = TextField()
+    need = TextField()
+
+    @property
+    def short_description(self):
+        return word_truncate_by_letters(self.message, 50)
 
 
 class UserModel(Mapping):
@@ -25,6 +36,7 @@ class UserModel(Mapping):
     Profile = ListField(DictField(WebUserNetworkProfile))
     Company = DictField(CompanyModel)
     Companies = ListField(DictField(CompanyModel))
+    Applications = ListField(DictField(UserApplicationModel))
 
     def isAnon(self):
         return self.token is None

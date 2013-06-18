@@ -14,39 +14,40 @@
             </div>
         </div>
     </div>
-%if vctxt.isTeamMember:
-    <div class="container">
-        <div class="row mar-top-1">
-            <div class="col col-lg-8">
-                ${self.bodyContent(vctxt.need)}
-            </div>
-            <div class="col col-lg-4">
-                <div class="box-framed">${self.privateInfoBox(vctxt.company, vctxt.need)}</div>
+    %if vctxt.isTeamMember:
+        <div class="container">
+            <div class="row mar-top-1">
+                <div class="col col-lg-8">
+                    ${self.bodyContent(vctxt.need)}
+                </div>
+                <div class="col col-lg-4">
+                    <div class="box-framed">${self.privateInfoBox(vctxt.company, vctxt.need)}</div>
+                </div>
             </div>
         </div>
+    %else:
+        <div class="container">
+            <div class="row mar-top-1">
+                <div class="col col-lg-8">
+                    <div class="box-title">${vctxt.need.name}</div>
+                    ${self.needDetails(vctxt.need)}
+                </div>
+                <div class="col col-lg-4">
+                    <div class="box-framed">${self.publicInfoBox(vctxt.company, vctxt.need)}</div>
+                    <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary btn-block mar-top-1">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
+                </div>
+            </div>
+        </div>
+    %endif
+    <div class="container">
         <div class="row mar-top-2">
             <div class="col col-lg 12">
                 <div class="box-title">Applications</div>
-            </div>
-        </div>
-        ${self.applications(vctxt.need.Applications)}
-    </div>
-%else:
-    <div class="container">
-        <div class="row mar-top-1">
-            <div class="col col-lg-8">
-                <div class="box-title">${vctxt.need.name}</div>
-                ${self.needDetails(vctxt.need)}
-            </div>
-            <div class="col col-lg-4">
-                <div class="box-framed">${self.publicInfoBox(vctxt.company, vctxt.need)}</div>
-                <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary btn-block mar-top-1">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
+                ${self.applications(vctxt.need.Applications)}
             </div>
         </div>
     </div>
-%endif
 </%def>
-
 
 <%def name="bodyContent(need)">
     <div class="box-framed">
@@ -54,8 +55,6 @@
         <div class="box-content">${self.needDetails(need)}</div>
     </div>
 </%def>
-
-
 
 <%def name="needDetails(need)">
     <div class="description mar-top-1">
@@ -160,9 +159,6 @@
         Info
     </div>
     <div class="box-content">
-
-        ${widgets.valuation(need)}
-
         <h5 class="upper text-muted">
             Company
         </h5>
@@ -204,8 +200,8 @@
 
 <%def name="applications(applications)">
 %if applications:
-    %for application in applications:
-        <div class="row mar-top-1 single-application">
+    %for application in sorted(applications, reverse = True):
+        <div class="row mar-top-1 single-application" id="applications">
             <div class="col col-lg-12">
             <div class="application">
                 <div class="row">

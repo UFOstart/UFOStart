@@ -1,8 +1,8 @@
-<%def name="logo(url, alt='')">
+<%def name="logo(url, alt='', classes='')">
 %if url:
-    <div class="logo-picture"><img src="${url}" alt="${alt}"/></div>
+    <div class="logo-picture ${classes}"><img src="${url}" alt="${alt}"/></div>
 %else:
-    <div class="logo-picture empty"></div>
+    <div class="logo-picture empty ${classes}"></div>
 %endif
 </%def>
 
