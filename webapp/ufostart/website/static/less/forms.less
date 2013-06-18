@@ -50,6 +50,28 @@ ul.styled {
 }
 
 .file-upload-control {
-  min-width: 120px;
-  .upload-picture-display {min-height:120px;}
+  .upload-picture-display {
+    height:120px;
+    width: 120px;
+    padding-bottom: 0;
+    position: relative;
+    &.empty:before {
+      font-family: 'Glyphicons Halflings';
+      font-style: normal;
+      font-weight: normal;
+      font-size: 3em;
+      -webkit-font-smoothing: antialiased;
+      content: "\e060";
+      color:@wtf-active-bg-color;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      line-height: 0;
+      margin-left: -.5em;
+    }
+    &.empty.drop-target:before {
+      content: "\e025";
+    }
+    > .info {color:@text-color;}
+  }
 }
