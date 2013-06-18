@@ -79,6 +79,7 @@ class ExpertModel(Mapping):
         return ', '.join([])
     @property
     def introducers(self):
+        if not self.introFirstName: return []
         return [IntroducerModel(picture = self.introPicture, firstName = self.introFirstName, lastName = self.introLastName)]#self.Introducer
 
 class ServiceModel(Mapping):
