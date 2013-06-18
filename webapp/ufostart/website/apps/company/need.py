@@ -36,7 +36,7 @@ class NeedCreateForm(BaseForm):
         , IntField('ratio', "of this Equity (%)", REQUIRED, input_classes='data-input ratio')
         , DecimalField('cash', None)
         , DecimalField('equity', None)
-        , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
+        , TextareaField("customText", "Description", REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3))
     ]
     @classmethod
@@ -67,7 +67,7 @@ class NeedEditForm(BaseForm):
         , IntField('ratio', "of this Equity (%)", REQUIRED, input_classes='data-input ratio')
         , DecimalField('cash', None)
         , DecimalField('equity', None)
-        , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
+        , TextareaField("customText", "Description", REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3))
     ]
 

@@ -78,7 +78,7 @@
         <div class="col col-lg-9">
             <a href="${company.url}"><strong>${company.name}</strong></a>
                 <div class="mar-top-1">
-                    ${company.description | html.nn}
+                    ${html.nn(company.description)}
                 </div>
         </div>
     </div>

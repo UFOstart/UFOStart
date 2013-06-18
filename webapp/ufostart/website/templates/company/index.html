@@ -165,7 +165,7 @@
 
             <h5><a href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">${need.name}</a></h5>
             <div class="description">
-                ${ html.coalesce(need.description, need.summary) | html.trunc(300) }
+                ${ html.coalesce(need.customText, need.summary) | html.trunc(300) }
             </div>
             %if need.customized:
                 ${widgets.valuation(need)}

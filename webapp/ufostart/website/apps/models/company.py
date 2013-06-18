@@ -238,7 +238,7 @@ class NeedModel(Mapping):
     summary = TextField()
     status = TextField()
     category = TextField()
-    description = TextField()
+    customText = TextField()
     picture = TextField()
     cash = IntegerField(default = 0)
     equity = IntegerField(default = 0)
@@ -289,8 +289,9 @@ class NeedModel(Mapping):
     def services(self):
         return self.Services
 
-
     # TODO: actual implementation
+
+
 
     currency = 'USD'
     currency_symbol = get_currency_symbol('USD', locale = 'en')

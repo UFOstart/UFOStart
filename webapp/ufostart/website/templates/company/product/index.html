@@ -28,7 +28,7 @@
                     <div class="product-image large mar-top-1">${self.product_media(product)}</div>
 
                     <div class="mar-top-1">
-                        ${product.description | html.nn}
+                        ${html.nn(product.description)}
                     </div>
 
                     %if vctxt.isTeamMember:

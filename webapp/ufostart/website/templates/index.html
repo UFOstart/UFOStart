@@ -21,26 +21,30 @@
             </div>
         </div>
     </div>
+
     <div class="home-page-section">
         <div class="container">
             <div class="row">
                 <div class="col col-lg-12">
-                    <h2><strong>Opportunities near you,</strong> ${vctxt.location}</h2>
 
-                    <div class="row">
-
-                        %for need in needs_close_by:
-                            <div class="col col-lg-3">
-                                ${widgets.publicNeedCard(need)}
-                            </div>
-                        %endfor
-
-                    </div>
+                    <h2><strong>Opportunities near by</strong></h2>
+                    %if len(needs_close_by):
+                        <div class="row">
+                            %for need in needs_close_by:
+                                <div class="col col-lg-3">
+                                    ${widgets.publicNeedCard(need)}
+                                </div>
+                            %endfor
+                        </div>
+                    %else:
+                        <div class="empty">No Needs matching your location</div>
+                    %endif
 
                 </div>
             </div>
         </div>
     </div>
+
     <div class="home-page-section">
         <div class="container">
             <div class="row">
@@ -57,11 +61,13 @@
             </div>
         </div>
     </div>
+
     <div class="home-page-section">
         <div class="container">
             <div class="row">
                 <div class="col col-lg-12">
                     <h1 class="brand-primary">Newest Projects</h1>
+                    ${products}
                 </div>
             </div>
         </div>

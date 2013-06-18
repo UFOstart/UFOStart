@@ -43,7 +43,7 @@
             </div>
         </div>
         <h5><a href="${need_url}">${need.name}</a></h5>
-        <div class="need-description">${need.description | html.trunc(descr_len)}</div>
+        <div class="need-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
 
         ${self.valuation(need)}
 

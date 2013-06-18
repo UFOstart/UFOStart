@@ -19,7 +19,7 @@
                                 <div class="col col-lg-8">
                                     ${widgets.logo(profile.picture, alt=profile.name, classes="left-aligned")}
                                     <h1 class="brand-teal site-slogan">${profile.name}</h1>
-                                    <div>${profile.headline | html.nn}</div>
+                                    <div>${html.nn(profile.headline)}</div>
                                 </div>
                                 <div class="col col-lg-4">
                                     <h5>Skills</h5>
@@ -48,7 +48,7 @@
                             <div class="col col-lg-8">
                                 ${widgets.logo(profile.picture, alt=profile.name, classes="left-aligned")}
                                 <h1 class="brand-teal site-slogan">${profile.name}</h1>
-                                <div>${profile.headline | html.nn}</div>
+                                <div>${html.nn(profile.headline)}</div>
                             </div>
                             <div class="col col-lg-4">
                                 <h5>Skills</h5>
@@ -150,5 +150,26 @@
 
             </div>
         </div>
+
+        <div class="row mar-top-2">
+            <div class="col col-lg-12">
+                <h5 class="box-title">Current Needs close by</h5>
+                %if len(location_needs):
+                    <div class="row">
+                        %for need in location_needs:
+                            <div class="col col-lg-3">
+                                ${widgets.publicNeedCard(need)}
+                            </div>
+                        %endfor
+                    </div>
+
+                %else:
+                    <div class="empty">No Needs matching ${'your' if isMyProfile else "{}'s".format(profile.name)} skill set found</div>
+                %endif
+
+            </div>
+        </div>
+
+
     </div>
 </%def>

@@ -1,11 +1,12 @@
-from ufostart.website.apps.models.procs import FindPublicNeeds, GetPopularNeeds, GetNewProductsProc
+from ufostart.website.apps.models.procs import FindPublicNeeds, GetPopularNeeds, GetNewProductsProc, FindPublicNeedsByLocation
 
 
 def index(context, request):
-    tag_needs = FindPublicNeeds(request, {'Search': {'tags': ['Agile']}})
     popular_needs = GetPopularNeeds(request)
     new_products = GetNewProductsProc(request)
-    return {'popular_needs':popular_needs[:4], 'needs_close_by': tag_needs}
+    location = FindPublicNeedsByLocation(request)
+    products = GetNewProductsProc(request)
+    return {'popular_needs':popular_needs, 'needs_close_by': location, 'products': products}
 
 
 def logout(context, request):

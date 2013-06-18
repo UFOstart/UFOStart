@@ -1,6 +1,5 @@
-from decimal import Decimal
-from babel.numbers import get_currency_symbol
 from hnc.tools.tools import word_truncate_by_letters
+from markupsafe import Markup
 
 __author__ = 'Martin'
 
