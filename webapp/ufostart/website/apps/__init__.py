@@ -31,10 +31,10 @@ ROUTE_LIST = [
     , ClassRoute     ("website_company_product_edit"       , "/c/:slug/product/edit", contexts.WebsiteCompanyContext                         , company.product.ProductEditHandler, "company/product/create.html", view_attrs = JSON_FORM_ATTRS)
     , OAuthLoginRoute('website_company_product_pledge'     , '/c/:slug/pledge', contexts.WebsiteCompanyContext                               , company.product.login, 'auth/login.html')
 
-    , FunctionRoute  ("website_company_import_start"       , "/angellist/import/start", contexts.WebsiteRootContext                                 , company.imp.company_import_start, "company/import/list.html")
-    , FunctionRoute  ("website_company_import"             , "/angellist/import", contexts.WebsiteRootContext                                       , company.imp.company_import, "company/import/list.html")
-    , FunctionRoute  ("website_company_import_list"        , "/angellist/import/:user_id/:token", contexts.WebsiteRootContext                       , company.imp.company_import_list, "company/import/list.html")
-    , FunctionRoute  ("website_company_import_confirm"     , "/angellist/import/confirm/:company_id/:token", contexts.WebsiteRootContext            , company.imp.company_import_confirm, None)
+    , FunctionRoute  ("website_company_import_start"       , "/angellist/import/start", contexts.WebsiteRootContext                          , company.imp.company_import_start, "company/import/list.html")
+    , FunctionRoute  ("website_company_import"             , "/angellist/import", contexts.WebsiteRootContext                                , company.imp.company_import, "company/import/list.html")
+    , FunctionRoute  ("website_company_import_list"        , "/angellist/import/:user_id/:token", contexts.WebsiteRootContext                , company.imp.company_import_list, "company/import/list.html")
+    , FunctionRoute  ("website_company_import_confirm"     , "/angellist/import/confirm/:company_id/:token", contexts.WebsiteRootContext     , company.imp.company_import_confirm, None)
 
     , ClassRoute     ("website_round_need_create"          , '/c/:slug/need/create', contexts.WebsiteCompanyContext                          , company.need.NeedCreateHandler, "company/need/create.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute     ("website_round_need_edit"            , '/c/:slug/:need/edit', contexts.WebsiteCompanyFounderContext                    , company.need.NeedEditHandler, "company/need/edit.html", view_attrs = JSON_FORM_ATTRS)

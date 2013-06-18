@@ -4,6 +4,38 @@
 
 
 <%def name="content()">
+    %if profile:
+        ${self.member()}
+    %else:
+        <div class="container">
+            <div class="row">
+                <div class="col col-lg-12">
+                    <div class="box-framed">
+                        <div class="box-title">
+                            User Info
+                        </div>
+                        <div class="box-content clearfix">
+                            <div class="row">
+                                <div class="col col-lg-8">
+                                    ${widgets.logo(profile.picture, alt=profile.name, classes="left-aligned")}
+                                    <h1 class="brand-teal site-slogan">${profile.name}</h1>
+                                    <div>${profile.headline | html.nn}</div>
+                                </div>
+                                <div class="col col-lg-4">
+                                    <h5>Skills</h5>
+                                    ${', '.join(profile.display_skills)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    %endif
+</%def>
+
+
+<%def name="member()">
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
@@ -15,7 +47,7 @@
                         <div class="row">
                             <div class="col col-lg-8">
                                 ${widgets.logo(profile.picture, alt=profile.name, classes="left-aligned")}
-                                <h1 class="brand-teal site-slogan">Welcome ${profile.name}</h1>
+                                <h1 class="brand-teal site-slogan">${profile.name}</h1>
                                 <div>${profile.headline | html.nn}</div>
                             </div>
                             <div class="col col-lg-4">
@@ -33,7 +65,7 @@
                 <div class="box-framed">
                     <h5 class="box-title">
                         <span class="pull-right">${len(profile.Companies)}</span>
-                        Your Companies
+                        ${'Your' if isMyProfile else "{}'s".format(profile.name)} Companies
                     </h5>
                     <div class="box-content">
                     %if len(profile.Companies):
@@ -71,7 +103,7 @@
                 <div class="box-framed">
                     <h5 class="box-title">
                         <span class="pull-right">${len(profile.Applications)}</span>
-                        Your Applications
+                        ${'Your' if isMyProfile else "{}'s".format(profile.name)} Applications
                     </h5>
                     <div class="box-content">
                         %if len(profile.Applications):
@@ -102,7 +134,7 @@
 
         <div class="row mar-top-2">
             <div class="col col-lg-12">
-                <h5 class="box-title">Needs that best match your skills</h5>
+                <h5 class="box-title">Needs that best match ${'your' if isMyProfile else "{}'s".format(profile.name)} skills</h5>
                 %if len(best_match):
                     <div class="row">
                         %for need in best_match:
@@ -113,14 +145,10 @@
                     </div>
 
                 %else:
-                    <div class="empty">No Needs matching your skill set found</div>
+                    <div class="empty">No Needs matching ${'your' if isMyProfile else "{}'s".format(profile.name)} skill set found</div>
                 %endif
 
             </div>
         </div>
-
-
-
-
     </div>
 </%def>
