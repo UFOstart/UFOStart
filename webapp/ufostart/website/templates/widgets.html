@@ -1,8 +1,14 @@
-<%def name="logo(url, alt='', classes='')">
-%if url:
-    <div class="logo-picture ${classes}"><img src="${url}" alt="${alt}"/></div>
+<%def name="company_logo(company)">${self.logo(company.logo_url, company.name, link = url("website_company", slug = company.slug))}</%def>
+<%def name="app_company_logo(application)">${self.logo(application.comapnyLogo, application.companyName, link = url("website_company", slug = application.companySlug))}</%def>
+<%def name="product_logo(company)">${self.logo(company.product_picture, company.product_name, link = url("website_company_product", slug = company.slug))}</%def>
+
+<%def name="logo(url, alt='', classes='', link = '')">
+%if url and link:
+<div class="logo-picture ${classes}"><a href="${link}"><img src="${url}" alt="${alt}"/></a></div>\
+%elif url:
+<div class="logo-picture ${classes}"><img src="${url}" alt="${alt}"/></div>\
 %else:
-    <div class="logo-picture empty ${classes}"></div>
+<div class="logo-picture empty ${classes}"></div>\
 %endif
 </%def>
 
@@ -35,7 +41,7 @@
     <div class="need-card-inner">
         <div class="row">
             <div class="col col-sm-3" style="margin-top:10px">
-                <img src="${need.Company.logo}">
+                <a href="${url("website_company", slug = need.Company.slug)}"><img src="${need.Company.logo}"></a>
             </div>
             <div class="col col-sm-9">
                 <h5><a href="${need_url}" class="overflow">${need.Company.name}</a></h5>

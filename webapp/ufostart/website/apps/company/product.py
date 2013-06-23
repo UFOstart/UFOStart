@@ -118,7 +118,7 @@ class ProductPledgeForm(BaseForm):
     label = ""
     fields=[
         OfferChoiceField('offer', 'Your Offer', offer_choices, REQUIRED, input_classes='radio')
-        , TextareaField('comment', 'Comment', REQUIRED)
+        , TextareaField('comment', 'Comment')
     ]
     @classmethod
     def on_success(cls, request, values):

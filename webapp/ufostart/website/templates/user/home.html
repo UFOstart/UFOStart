@@ -70,7 +70,7 @@
                         %for company in profile.Companies:
                             <div class="row single-company">
                                 <div class="col col-sm-2">
-                                    ${widgets.logo(company.logo_url)}
+                                    ${widgets.company_logo(company)}
                                 </div>
                                 <div class="col col-sm-5">
                                     <div class="overflow"><a href="${url("website_company", slug = company.slug)}"><strong>${company.name}</strong></a></div>
@@ -85,7 +85,7 @@
                                     <div class="member-pile face-pile-mini">
                                         %for member in company.Users:
                                             <div class="picture micro">
-                                                <img src="${member.picture_url}"/>
+                                                <a href="${url("website_user", slug = member.token)}"><img src="${member.picture_url}"/></a>
                                             </div>
                                         %endfor
                                     </div>
@@ -113,7 +113,7 @@
                             %for application in profile.Applications:
                                 <div class="row single-company">
                                     <div class="col col-sm-2">
-                                        ${widgets.logo(application.comapnyLogo)}
+                                        ${widgets.app_company_logo(application)}
                                     </div>
                                     <div class="col col-sm-10">
                                         <div class="pull-right">${application.display_date}</div>

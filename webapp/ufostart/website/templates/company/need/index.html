@@ -166,12 +166,11 @@
         </h5>
         <div class="row">
             <div class="col col-lg-3">
-                ${widgets.logo(company.logo_url)}
+                ${widgets.company_logo(company)}
             </div>
             <div class="col col-lg-6">
                 <strong><a href="${url("website_company", **vctxt.urlArgs)}" class="overflow">${company.display_name}</a></strong>
                 <div class="tagline">${company.description | html.trunc(50)}</div>
-                <a href="${url("website_company", **vctxt.urlArgs)}"><small>More...</small></a>
             </div>
             <div class="col col-lg-3">
                 <h5 class="text-muted no-margin">Team members</h5>
@@ -183,13 +182,12 @@
         </h5>
         <div class="row">
             <div class="col col-lg-3">
-                ${widgets.logo(company.product_picture)}
+                ${widgets.product_logo(company)}
             </div>
             <div class="col col-lg-6">
                 %if company.product_is_setup:
                     <a href="${url("website_company_product", **vctxt.urlArgs)}"><strong>${company.product_name}</strong></a>
                     <div class="description">${company.product_description | html.trunc(50) }</div>
-                    <a href="${url("website_company_product", **vctxt.urlArgs)}"><small>More...</small></a>
                 %else:
                     <strong>Not setup yet</strong>
                 %endif
@@ -215,11 +213,11 @@
                         <div class="row">
                             <div class="col col-sm-3">
                                 <div class="picture">
-                                    <img src="${application.User.picture}"/>
+                                    <a href="${url("website_user", slug = application.User.token)}"><img src="${application.User.picture}"/></a>
                                 </div>
                             </div>
                             <div class="col col-sm-9">
-                                <a href="#" class="name"><strong>${application.User.name}</strong></a>
+                                <a href="${url("website_user", slug = application.User.token)}" class="name"><strong>${application.User.name}</strong></a>
                                 <p class="text-small">${html.nn(application.User.position)}</p>
                                 <p class="text-small">${application.display_date}</p>
                             </div>

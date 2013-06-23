@@ -237,6 +237,8 @@ class PledgeModel(Mapping):
     offer = TextField()
     comment = TextField()
 
+    def is_native(self):
+        return self.network.lower() == 'uf'
 
 class EventModel(Mapping):
     name = TextField()

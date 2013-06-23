@@ -65,20 +65,19 @@
                 <div class="box-content">
                     <div class="row">
                         <div class="col col-sm-3">
-                            ${widgets.logo(company.logo_url)}
+                            ${widgets.company_logo(company)}
                         </div>
                         <div class="col col-sm-9">
                             <a href="${url("website_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
                             <p>
                                 ${company.description | html.trunc(50)}
                             </p>
-                            <a href="${url("website_company", **vctxt.urlArgs)}"><small>More...</small></a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="box-framed mar-top-1">
-                <div class="box-title">Pledges</div>
+                <div class="box-title">Customers</div>
                 <div class="box-content">
                     <div class="row">
                         %if company.no_pledgees:
@@ -91,7 +90,7 @@
                             %endfor
                         %else:
                             <div class="empty">
-                                No Pledges yet
+                                No Customers yet
                             </div>
                         %endif
                     </div>
@@ -161,7 +160,7 @@
             <a class="btn btn-primary show-contracted" data-toggle-target=".expander" data-toggle-class="expanded">Pledge Now</a>
             <a class="btn btn-default show-expanded" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
         %endif
-        Pledges
+        Customers
     </div>
     %if not vctxt.isTeamMember and not vctxt.user.isAnon():
         <div class="show-expanded box-shaded box-framed">
@@ -205,11 +204,21 @@
                         <div class="row">
                             <div class="col col-sm-4">
                                 <div class="picture">
+                                %if pledge.is_native:
+                                    <a href="${url("website_user", slug = pledge.networkId)}">
+                                        <img src="${pledge.picture}"/>
+                                    </a>
+                                %else:
                                     <img src="${pledge.picture}"/>
+                                %endif
                                 </div>
                             </div>
                             <div class="col col-sm-8">
-                                <p class="name"><a href="#"><strong>${pledge.name}</strong></a></p>
+                                %if pledge.is_native:
+                                    <p class="name"><a href="${url("website_user", slug = pledge.networkId)}"><strong>${pledge.name}</strong></a></p>
+                                %else:
+                                    <p class="name"><strong>${pledge.name}</strong></p>
+                                %endif
                                 <div class="text-small text-muted">Offer Option</div>
                                 <ul class="styled">
                                     <li><span class="text-small">${pledge.offer}</span></li>
@@ -218,13 +227,13 @@
                         </div>
                     </div>
                     <div class="col col-lg-8 control-group">
-                        ${pledge.comment}
+                        ${html.nn(pledge.comment)}
                     </div>
                 </div>
             %endfor
         %else:
             <div class="empty">
-                No Pledges yet
+                No Customers yet
             </div>
         %endif
 
@@ -232,34 +241,6 @@
 
 
 
-
-
-<%def name="pledgeBox(pledges)">
-    <h5 class="box-title">${pluralize("{num} Pledge", "{num} Pledges", len(pledges))}</h5>
-    %if pledges:
-
-        <div class="picture-pile pledges">
-            %for pledge in pledges:
-                ${self.renderPledge(pledge)}
-            %endfor
-        </div>
-
-    %else:
-
-        <div class="empty">
-            No Pledges Yet
-        </div>
-
-    %endif
-</%def>
-<%def name="renderPledge(pledge)">
-    <div class="member">
-        <div class="picture">
-            <img src="${pledge.picture}" class="img-thumbnail medium"/>
-        </div>
-        <a href="#" class="link">${pledge.name}</a>
-    </div>
-</%def>
 
 
 
