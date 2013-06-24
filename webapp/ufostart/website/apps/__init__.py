@@ -30,7 +30,9 @@ ROUTE_LIST = [
     , ClassRoute     ("website_company_product_create"     , "/c/:slug/product/create", contexts.WebsiteCompanyContext                       , company.product.ProductCreateHandler, "company/product/create.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute     ("website_company_product_edit"       , "/c/:slug/product/edit", contexts.WebsiteCompanyContext                         , company.product.ProductEditHandler, "company/product/create.html", view_attrs = JSON_FORM_ATTRS)
     , OAuthLoginRoute('website_company_product_pledge'     , '/c/:slug/pledge', contexts.WebsiteCompanyContext                               , company.product.login, 'auth/login.html')
-    , OAuthLoginRoute("website_publish_round"              , '/c/:slug/publish', contexts.WebsiteCompanyContext                              , company.general.publish_round, None)
+
+    , OAuthLoginRoute("website_round_approve_ask"          , '/c/:slug/askforapproval', contexts.WebsiteCompanyContext                              , company.general.ask_for_approval, None)
+    , OAuthLoginRoute("website_round_publish"              , '/c/:slug/publish', contexts.WebsiteCompanyContext                              , company.general.publish_round, None)
 
     , FunctionRoute  ("website_company_import_start"       , "/angellist/import/start", contexts.WebsiteRootContext                          , company.imp.company_import_start, "company/import/list.html")
     , FunctionRoute  ("website_company_import"             , "/angellist/import", contexts.WebsiteRootContext                                , company.imp.company_import, "company/import/list.html")

@@ -95,10 +95,17 @@ class WebsiteCompanyContext(WebsiteRootContext):
     @reify
     def isTeamMember(self):
         return self.company.isMember(self.user.token)
-
     @reify
     def canEditCompany(self):
+        token = self.user.token
+        company = self.company
+        return company.isFounder(token) or company.isMentor(token)
+    @reify
+    def canAskForApproval(self):
         return self.company.isFounder(self.user.token)
+    @reify
+    def canApproveCompany(self):
+        return self.company.isMentor(self.user.token)
 
 class WebsiteCompanyFounderContext(WebsiteCompanyContext):
     def is_allowed(self, request):

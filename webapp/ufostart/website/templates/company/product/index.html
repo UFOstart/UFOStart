@@ -70,7 +70,7 @@
                         <div class="col col-sm-9">
                             <a href="${url("website_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
                             <p>
-                                ${company.description | html.trunc(50)}
+                                ${html.nn(company.description) | html.trunc(50)}
                             </p>
                         </div>
                     </div>

@@ -237,14 +237,23 @@
         </div>
         <div class="mar-top-2 highlight-target">
             <div id="target-publish" class="highlight-anchor"></div>
-            %if wf.canPublish():
-                <a href="${url("website_publish_round", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-humonguous"><span>Publish</span></a>
-            %else:
-                <a class="btn btn-primary btn-block btn-humonguous disabled"><span>Publish</span></a>
+            %if vctxt.canAskForApproval:
+                %if wf.canAskForApproval():
+                    <a href="${url("website_round_approve_ask", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-humonguous"><span>Ask For<br/>Approval</span></a>
+                %elif wf.canPublish():
+                    <a class="btn btn-primary btn-block btn-humonguous disabled"><span>Waiting For<br/>Approval</span></a>
+                %else:
+                    <a class="btn btn-primary btn-block btn-humonguous disabled"><span>Ask For<br/>Approval</span></a>
+                %endif
+            %elif vctxt.canApproveCompany:
+                %if wf.canPublish():
+                    <a href="${url("website_round_publish", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-humonguous"><span>Approve<br/>& Publish</span></a>
+                %else:
+                    <a class="btn btn-primary btn-block btn-humonguous disabled"><span>Approve<br/>& Publish</span></a>
+                %endif
             %endif
         </div>
     %endif
-
 </%def>
 
 

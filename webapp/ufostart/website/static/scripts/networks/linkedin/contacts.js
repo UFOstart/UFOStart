@@ -1,26 +1,9 @@
-define(["tools/hash", "tools/ajax"], function(hashlib, ajax){
-    var
-    defaultRollback = function () {
-        document.body.style.cursor = "";
-    }
-    , Contact = ajax.Model.extend({
-        getPicture: function(){
-            return this.get('pictureUrl')
-        }
-        , getName: function(){
-            return this.get('firstName') + ' ' + this.get('lastName');
-        }
-        , getPosition: function(){
-            return this.get("headline")
-        }
-        , matches: function(query){
-            return !!~this.get("firstName").toLowerCase().indexOf(query) || !!~this.get("lastName").toLowerCase().indexOf(query);
-        }
-    })
-    , Contacts = ajax.Collection.extend({model: Contact})
-
-
-    , numberMap = {48:0,  49:1, 50:2, 51:3, 52:4, 53:5, 54:6, 55:7, 56:8, 57:9, 96:0, 97:1, 98:2, 99:3, 100:4, 101:5, 102:6, 103:7, 104:8, 105:9}
+define(["tools/hash"
+        , "tools/ajax"
+        , "networks/linkedin/models"
+        ]
+        , function(hashlib, ajax, models){
+    var numberMap = {48:0,  49:1, 50:2, 51:3, 52:4, 53:5, 54:6, 55:7, 56:8, 57:9, 96:0, 97:1, 98:2, 99:3, 100:4, 101:5, 102:6, 103:7, 104:8, 105:9}
     , AbstractSearch = Backbone.View.extend({
             PAGE_SIZE: 5
             , initialize: function(opts){
@@ -39,7 +22,7 @@ define(["tools/hash", "tools/ajax"], function(hashlib, ajax){
                 this.listenTo(this.model, "updated", this.onSearchResult, this);
                 this.listenTo(this.model, "emptied", this.onSearchResult, this);
                 this.$resultNode = this.$('.results');
-                this.$resultNode.on({'mouseenter' : $.proxy(this.mouseenter, this),
+                this.$resultNode.on({'mouseenter' : $.proxy(this.mouseenter, this),'mouseleave' : $.proxy(this.mouseleave, this),
                         'click':_.bind(this.disAmbiguateEvent, this)}, '.search-result-item');
                 this.setLoading();
             }
@@ -179,70 +162,39 @@ define(["tools/hash", "tools/ajax"], function(hashlib, ajax){
                 this.$resultNode.find(".active").removeClass("active");
                 $(e.target).closest(".search-result-item").addClass("active");
             }
-        })
+            , mouseleave: function(e){
+                this.$resultNode.find(".active").removeClass("active");
+            }
+        });
 
 
-    , LinkedContactSearch = Backbone.View.extend({
-        initialize: function(opts){
-            var view = this;
-            this.model = new Contacts();
-            this.search = new AbstractSearch({
-                el: this.$el
-                , model: new Contacts()
-                , template: _.template(this.$("script.contact-template").html())
+    return function(opts){
+        var queryId = null, results = new models.Contacts()
+            , search = new AbstractSearch({
+                el: opts.$el
+                , model: results
+                , template: _.template(opts.$el.find("script.contact-template").html())
                 , blacklist: []
                 , doSearch: function(query){
                     var result = [];
-                    if(query){
-                        var queryId = view.queryId = hashlib.UUID();
-                        _.each(view.model.models, function(model){
-                            if(model.matches(query))result.push(model.attributes);
-                        });
-                    } else {
-                        view.model.each(function(m){result.push(m.attributes)});
-                    }
-                    this.model.addOrUpdate(result);
+                    opts.auth.getContacts(function(collection){
+                        if(query){
+                            var queryId = queryId = hashlib.UUID();
+                            _.each(collection.models, function(model){
+                                if(model.matches(query))result.push(model.attributes);
+                            });
+                        } else {
+                            collection.each(function(m){result.push(m.attributes)});
+                        }
+                        results.addOrUpdate(result);
+                    })
                 }
-            });
-            opts.auth.api('/people/~/connections', function(data, xhr, status){
-                var result = [];
-                view.model.addOrUpdate(data.values);
-                view.model.each(function(m){result.push(m.attributes)});
-                view.search.model.addOrUpdate(result);
-            }, this);
-        }
-    })
-    , AuthHandler = function (options, user, apiUrl) { /* app_id, fbRootNode */
-        var _t = this, loadDefs, loginDefs, e;
-        this.prefix = '/net/li';
-        this.user = user || {};
-        this.apiUrl = apiUrl;
-        this.whenLoaded = $.Deferred();
-        this.whenLoggedIn = $.Deferred();
-        this.initialize && this.initialize(options);
-    };
-    _.extend(AuthHandler.prototype, Backbone.Events, {
-        widgets: {
-            'LinkedContactSearch': LinkedContactSearch
-        }
-        , isLoggedIn : function () {
-            return this.options.accessToken
-        }
-        , api: function(path, cb, ctxt){
-            $.get(this.prefix + path+ '?oauth2_access_token='+this.options.accessToken, function(data, status, xhr){
-                cb.apply(ctxt, [data, status, xhr]);
-            });
-        }
-        , initialize: function(options){
-            var _t = this;
-            this.options = options;
-            $(".linkedin-widget").each(function(idx, el){
-                var $el = $(el), widget = _t.widgets[$el.data('widget')];
-                new widget(_.extend({el:$el, auth : _t}, options));
-            })
-        }
-    });
-    return {AuthHandler: AuthHandler};
+        });
+        opts.auth.getContacts(function(collection){
+            var result = [];
+            collection.each(function(m){result.push(m.attributes)});
+            search.model.addOrUpdate(result);
+        });
+        return search;
+    }
 });
-
-

@@ -91,7 +91,7 @@ require(["tools/ajax", "misc"], function(ajax, misc){
         var socials = _.keys(options.socials), i= 0;
         if(socials.length){
             hnc.socials = {};
-            require(_.map(socials, function(e){return "networks/"+e}), function(){
+            require(_.map(socials, function(e){return "networks/"+e+"/handler"}), function(){
                 var name, lib;
                 for(i;i<socials.length;i++){
                     name = socials[i];

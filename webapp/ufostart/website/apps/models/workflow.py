@@ -23,9 +23,11 @@ def stage_sorter(a,b):
 
 STAGE_NAMES = {
     u'CREATE_COMPANY':'Setup Project'
+    , u'ADD_MENTOR':'Add a Mentor'
+    , u'INVITE_TEAM':'Invite Team Members'
     , u'CREATE_PRODUCT':'Customize Product'
     , u'CUSTOMISE_NEEDS': 'Customize Needs'
-    , u'INVITE_TEAM':'Invite Team Members'
+    , u'SENT_FOR_MENTOR_APRROVAL':'Ask Mentor for Approval'
     , u'PUBLISH': 'Publish Round'
 }
 
@@ -82,6 +84,9 @@ class WorkflowModel(WorkflowBluePrintModel):
     def getActiveStage(self):
         for stage in self.sortedStages:
             if not stage.completed: return stage
+    def canAskForApproval(self):
+        a_s = self.getActiveStage()
+        return a_s.name == 'SENT_FOR_MENTOR_APRROVAL' if a_s else False
     def canPublish(self):
         a_s = self.getActiveStage()
         return a_s.name == 'PUBLISH' if a_s else False

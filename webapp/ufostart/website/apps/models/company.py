@@ -23,6 +23,9 @@ TEMPLATE_STYLE_KEYS = {
     , 'SERIES_B':'seriesb'
 }
 
+def getRoleName(role):
+    return role.title().replace("_", " ")
+
 
 class CompanyUserModel(Mapping):
     token = TextField()
@@ -38,7 +41,7 @@ class CompanyUserModel(Mapping):
 
     @property
     def position(self):
-        return self.role.title().replace("_", " ")
+        return getRoleName(self.role)
 
 
 class IntroducerModel(Mapping):
@@ -331,6 +334,10 @@ class CompanyModel(BaseCompanyModel):
         if not userToken: return False
         user = self.memberMap.get(userToken)
         return user.role == 'FOUNDER' if user else False
+    def isMentor(self, userToken):
+        if not userToken: return False
+        user = self.memberMap.get(userToken)
+        return user.role == 'MENTOR' if user else False
 
     @property
     def no_users(self):
@@ -406,4 +413,9 @@ class InviteModel(Mapping):
     companySlug = TextField()
     companyName = TextField()
     name = TextField()
+    role = TextField()
     inviteToken = TextField()
+
+    @property
+    def position(self):
+        return getRoleName(self.role)

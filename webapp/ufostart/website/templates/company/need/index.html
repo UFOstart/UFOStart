@@ -110,7 +110,7 @@
         <div class="box-framed">
             <div class="box-title">Endorse your contacts for this need</div>
             <div class="box-content">
-                <div class="linkedin-widget" data-widget="LinkedContactSearch">
+                <div class="linkedin-widget" data-widget="ContactSearch">
                     <script type="text/template" class="contact-template">
                         <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">
                             <div class="col col-sm-3">
@@ -151,16 +151,29 @@
                             <img src="${expert.picture_url}" alt="${expert.name}"/>
                         </div>
                     </div>
-                    <div class="col col-lg-7">
-                        <a href="#" class="overflow"><strong>${expert.name}</strong></a>
-                        <p class="text-muted text-small">${html.nn(expert.position)}</p>
-                    </div>
-                    <div class="col col-lg-2">
-                        <a class="expander btn btn-default btn-large btn-block" data-toggle-target=".expert-briefing" data-toggle-class="expanded" data-toggle-text="▼">◀</a>
-                    </div>
+                    %if expert.introducers:
+                        <div class="col col-lg-7">
+                            <a href="#" class="overflow"><strong>${expert.name}</strong></a>
+                            <p class="text-muted text-small">${html.nn(expert.position)}</p>
+                        </div>
+                        <div class="col col-lg-2">
+                                <a class="expander btn btn-default btn-large btn-block" data-toggle-target=".expert-briefing" data-toggle-class="expanded" data-toggle-text="▼">◀</a>
+                        </div>
+                    %else:
+                        <div class="col col-lg-9">
+                            <div class="pull-right linkedin-widget" data-widget="SendMessage" data-entity-id="${expert.linkedinId}">
+                                <a class=" btn btn-primary btn-small">Send Message</a>
+                            </div>
+                            <a href="#" class="overflow"><strong>${expert.name}</strong></a>
+                            <p class="text-muted text-small">${html.nn(expert.position)}</p>
+                        </div>
+                    %endif
+
+
                 </div>
                 <div class="expert-details row show-expanded">
                     <div class="col col-lg-12">
+                        ${expert._data}
                         %if expert.introducers:
                             <h6 class="text-muted">Introducers</h6>
                             %for intro in expert.introducers:
