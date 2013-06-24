@@ -13,6 +13,11 @@
 </%def>
 
 
+<%def name="login_btn(name)">
+<a href="${url('website_login_login', traverse = [name], _query=[('furl', request.url)])}" class="btn btn-primary btn-linkedin">Log in with ${name.title()}</a>
+</%def>
+
+
 <%def name="valuation(need)">
     <div class="valuation">
         <div class="number total">

@@ -199,3 +199,23 @@
   float:left;
   margin-right:10px;
 }
+
+
+.endorsement-search {
+  min-height: 420px;
+  .show-loading {
+    padding: 20px;
+    text-align: center;
+  }
+  > .search-result-item {
+    padding-top:10px;
+    padding-bottom:10px;
+    cursor:pointer;
+    + .search-result-item {
+      border-top:1px solid @text-muted;
+    }
+    &.active {
+      background: @body-bg-muted;
+    }
+  }
+}

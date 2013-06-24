@@ -42,7 +42,11 @@ def login_success(exc, request):
     route = request.matched_route.name.rsplit('_', 1)[0]
     params = request.matchdict.copy()
     params.pop('traverse')
-    route = request.fwd_url(route, **params)
+    redirections = request.session.pop_flash('redirections')
+    if redirections:
+        route = redirections[0]
+    else:
+        route = request.fwd_url(route, **params)
     return Response("Resource Found!", 302, headerlist = [('location', route)])
 
 

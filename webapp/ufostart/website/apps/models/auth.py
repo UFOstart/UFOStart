@@ -16,6 +16,9 @@ SOCIAL_NETWORK_TYPES_REVERSE = {v:k for k,v in SOCIAL_NETWORK_TYPES.items()}
 class WebUserNetworkProfile(SocialNetworkProfileModel):
     type = TextField()
 
+    def inferredNetwork(self):
+        return SOCIAL_NETWORK_TYPES[self.type]
+
 
 class UserApplicationModel(ApplicationModel):
     comapnyLogo = TextField()
@@ -42,13 +45,15 @@ class UserModel(Mapping):
         return self.token is None
     def toJSON(self, stringify = True):
         json = self.unwrap(sparse = True).copy()
-        json.pop("Profile")
-        json['networks'] = self.getSocialProfileJSON(False)
+        json.pop("Profile", None)
+        json.pop("Companies", None)
+        json.pop("Company", None)
         return simplejson.dumps(json) if stringify else json
 
     def getSocialProfileJSON(self, stringify = True):
-        result = {n.network:n.unwrap(sparse = True) for n in self.Profile if n.id}
+        result = {n.inferredNetwork():n.unwrap(sparse = True) for n in self.Profile if n.id}
         return simplejson.dumps(result) if stringify else result
+
     def getPicture(self):
         if self.picture:
             return self.picture

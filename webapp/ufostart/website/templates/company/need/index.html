@@ -21,32 +21,26 @@
             </div>
         </div>
     </div>
-    %if vctxt.isTeamMember:
         <div class="container">
             <div class="row mar-top-1">
                 <div class="col col-lg-8">
+                %if vctxt.isTeamMember:
                     ${self.bodyContent(vctxt.need)}
-                </div>
-                <div class="col col-lg-4">
-                    <div class="box-framed">${self.privateInfoBox(vctxt.company, vctxt.need)}</div>
-                    <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary btn-block mar-top-1">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
-                </div>
-            </div>
-        </div>
-    %else:
-        <div class="container">
-            <div class="row mar-top-1">
-                <div class="col col-lg-8">
+                %else:
                     <div class="box-title">${vctxt.need.name}</div>
                     ${self.needDetails(vctxt.need)}
+                %endif
                 </div>
                 <div class="col col-lg-4">
-                    <div class="box-framed">${self.publicInfoBox(vctxt.company, vctxt.need)}</div>
-                    <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary btn-block mar-top-1">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
+                    %if vctxt.isTeamMember:
+                        ${self.privateInfoBox(vctxt.company, vctxt.need)}
+                    %else:
+                        ${self.publicInfoBox(vctxt.company, vctxt.need)}
+                    %endif
+                    ${self.endorsementBox(vctxt.company, vctxt.need)}
                 </div>
             </div>
         </div>
-    %endif
     <div class="container">
         <div class="row mar-top-2">
             <div class="col col-lg 12">
@@ -87,7 +81,61 @@
     </div>
 </%def>
 
+<%def name="endorsementBox(company, need)">
+    <div class="box-framed endorsements">
+    <div class="box-title">Endorsed Experts</div>
+    <script type="text/template" class="endorsement-template">
+        <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">
+            <div class="col col-sm-3">
+                <div class="picture">
+                    <img src="{{ model.getPicture() }}"/>
+                </div>
+            </div>
+            <div class="col col-sm-9">
+                <strong>{{ model.getName() }}</strong>
+                <p class="text-small">{{ model.getPosition() }}</p>
+            </div>
+        </div>
+    </script>
+    <div class="box-content"></div>
+    </div>
+    %if vctxt.user.isAnon():
+        <div class="box-framed">
+            <div class="box-title">Login to endorse</div>
+            <div class="box-content text-center">
+                ${widgets.login_btn('linkedin')}
+            </div>
+        </div>
+    %else:
+        <div class="box-framed">
+            <div class="box-title">Endorse your contacts for this need</div>
+            <div class="box-content">
+                <div class="linkedin-widget" data-widget="LinkedContactSearch">
+                    <script type="text/template" class="contact-template">
+                        <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">
+                            <div class="col col-sm-3">
+                                <div class="picture">
+                                    <img src="{{ model.getPicture() }}"/>
+                                </div>
+                            </div>
+                            <div class="col col-sm-9">
+                                <a class="pull-right btn btn-small btn-primary">Endorse</a>
+                                <strong>{{ model.getName() }}</strong>
+                                <p class="text-small">{{ model.getPosition() }}</p>
+                            </div>
+                        </div>
+                    </script>
+                    <div class="search-field">
+                        <input type="text" class="query" placeholder="Find a contact by name">
+                    </div>
+                    <div class="results endorsement-search"></div>
+                </div>
+            </div>
+    %endif
+</%def>
+
 <%def name="privateInfoBox(company, need)">
+<div class="box-framed">
 <div class="box-title">Suggested Solutions</div>
 <div class="box-content">
     %if need.experts:
@@ -152,49 +200,52 @@
     %endfor
     </div>
 </div>
+</div>
 </%def>
 
 
 
 <%def name="publicInfoBox(company, need)">
-    <div class="box-title">
-        Info
-    </div>
-    <div class="box-content">
-        <h5 class="upper text-muted">
-            Company
-        </h5>
-        <div class="row">
-            <div class="col col-lg-3">
-                ${widgets.company_logo(company)}
-            </div>
-            <div class="col col-lg-6">
-                <strong><a href="${url("website_company", **vctxt.urlArgs)}" class="overflow">${company.display_name}</a></strong>
-                <div class="tagline">${company.description | html.trunc(50)}</div>
-            </div>
-            <div class="col col-lg-3">
-                <h5 class="text-muted no-margin">Team members</h5>
-                <h5 class="no-margin brand-primary">${company.no_users}</h5>
-            </div>
+    <div class="box-framed">
+        <div class="box-title">
+            Info
         </div>
-        <h5 class="upper text-muted">
-            Product
-        </h5>
-        <div class="row">
-            <div class="col col-lg-3">
-                ${widgets.product_logo(company)}
+        <div class="box-content">
+            <h5 class="upper text-muted">
+                Company
+            </h5>
+            <div class="row">
+                <div class="col col-lg-3">
+                    ${widgets.company_logo(company)}
+                </div>
+                <div class="col col-lg-6">
+                    <strong><a href="${url("website_company", **vctxt.urlArgs)}" class="overflow">${company.display_name}</a></strong>
+                    <div class="tagline">${company.description | html.trunc(50)}</div>
+                </div>
+                <div class="col col-lg-3">
+                    <h5 class="text-muted no-margin">Team members</h5>
+                    <h5 class="no-margin brand-primary">${company.no_users}</h5>
+                </div>
             </div>
-            <div class="col col-lg-6">
-                %if company.product_is_setup:
-                    <a href="${url("website_company_product", **vctxt.urlArgs)}"><strong>${company.product_name}</strong></a>
-                    <div class="description">${company.product_description | html.trunc(50) }</div>
-                %else:
-                    <strong>Not setup yet</strong>
-                %endif
-            </div>
-            <div class="col col-lg-3">
-                <h5 class="text-muted no-margin">Pledges</h5>
-                <h5 class="no-margin brand-primary">${company.no_pledgees}</h5>
+            <h5 class="upper text-muted">
+                Product
+            </h5>
+            <div class="row">
+                <div class="col col-lg-3">
+                    ${widgets.product_logo(company)}
+                </div>
+                <div class="col col-lg-6">
+                    %if company.product_is_setup:
+                        <a href="${url("website_company_product", **vctxt.urlArgs)}"><strong>${company.product_name}</strong></a>
+                        <div class="description">${company.product_description | html.trunc(50) }</div>
+                    %else:
+                        <strong>Not setup yet</strong>
+                    %endif
+                </div>
+                <div class="col col-lg-3">
+                    <h5 class="text-muted no-margin">Pledges</h5>
+                    <h5 class="no-margin brand-primary">${company.no_pledgees}</h5>
+                </div>
             </div>
         </div>
     </div>
@@ -236,4 +287,15 @@
         No Applications Yet
     </div>
 %endif
+<div class="text-center">
+    <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary mar-top-1">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
+</div>
+</%def>
+
+<%def name="post_scripts()">
+    <script>
+        require(["views/company/endorse"], function(View){
+            new View({el: $(".endorsements"), watch: $(".linkedin-widget")})
+        })
+    </script>
 </%def>
