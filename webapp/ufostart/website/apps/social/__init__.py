@@ -8,8 +8,20 @@ __all__ = ['AbstractSocialResource', 'SocialNetworkProfileModel', 'angellist', '
 
 log = logging.getLogger(__name__)
 
+class SocialResult(Exception):
+    def get_redirection(self, request):
+        redirections = request.session.pop_flash('redirections')
+        if redirections:
+            route = redirections[-1]
+        else:
+            route = request.matched_route.name.rsplit('_', 1)[0]
+            params = request.matchdict.copy()
+            params.pop('traverse')
+            route = request.fwd_url(route, **params)
+        return route
 
-class SocialLoginFailed(Exception):
+
+class SocialLoginFailed(SocialResult):
     def __init__(self, msg):
         self.message = msg
 
@@ -20,7 +32,7 @@ class ExpiredException(SocialLoginFailed):pass
 class CustomProcessException(SocialLoginFailed):pass
 
 
-class SocialLoginSuccessful(Exception):
+class SocialLoginSuccessful(SocialResult):
     def __init__(self, profile):
         self.profile = profile
 
@@ -53,7 +65,9 @@ class AbstractSocialResource(object):
         return simplejson.dumps(result) if stringify else result
 
     def start_process(self, request):
-        request.session.flash(request.furl, 'redirections')
+        furl = request.params.get('furl')
+        if furl:
+            request.session.flash(furl, 'redirections')
 
 
 

@@ -22,6 +22,16 @@
             </div>
             <div class="col col-lg-4">
                 ${self.teamMembers(company.Users)}
+
+                %if vctxt.canEditCompany:
+                    <div class="box-framed">
+                        <div class="box-title">
+                            Team Members
+                        </div>
+                        ${self.build_forms(view.forms, values, errors)}
+                    </div>
+                %endif
+
             </div>
         </div>
     </div>
@@ -31,37 +41,21 @@
 <%def name="teamMembers(members)">
     <div class="box-framed expander expanded">
         <div class="box-title">
-            %if vctxt.isTeamMember:
-                <a class="btn btn-primary show-contracted" data-toggle-target=".expander" data-toggle-class="expanded">Invite More</a>
-                <a class="btn btn-default show-expanded" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
-            %endif
             Team Members
         </div>
-        %if vctxt.isTeamMember:
-            <div class="show-expanded box-dark">
-                ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
-            </div>
-        %endif
-
         <div class="box-content">
             <div class="member-pile">
                 %for member in members:
-                    <div class="row mar-top-half">
-                        <div class="col col-lg-3">
-                            <div class="picture">
-                                <img src="${member.picture_url}" width="100%"/>
-                                %if member.unconfirmed:
-                                    <span title="unconfirmed" class="unconfirmed">unconfirmed</span>
-                                %endif
-                            </div>
-                        </div>
-                        <div class="col col-lg-9">
-                            %if member.token:
-                                <a href="${url("website_user", slug = member.token)}"><strong>${member.name}</strong></a>
-                            %else:
+                    <div class="name-card mar-top-half">
+                        ${widgets.userPic(member)|n}
+                        <div class="card-contents">
+                            %if member.unconfirmed:
                                 <strong>${member.name}</strong>
+                            %else:
+                                <a href="${vctxt.userURL(member.token)}"><strong>${member.name}</strong></a>
                             %endif
                             <div class="text-muted">${html.nn(member.position)}</div>
+                            <small class="headline">${html.nn(member.headline)}</small>
                         </div>
                     </div>
                 %endfor
@@ -91,22 +85,32 @@
 
 
 
-<%def name="build_form(form, values, errors)">
-    <div class="box-content">
-        <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
-            ${baseform.prelims(form)}
-            %for field in view.form.fields:
-                ${field.render(form.id, request, values, errors, view)|n}
-            %endfor
-            <button type="submit" class="btn btn-primary btn-block mar-top-1">Invite member</button>
-        </form>
-    </div>
+<%def name="build_forms(forms, values, errors)">
+    %for form in forms:
+        <div class="box-content expander">
+            <a class="show-contracted" data-toggle-target=".expander" data-toggle-class="expanded">Invite ${form.label}</a>
+            <a class="show-expanded" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
+            <div class="show-expanded box-dark">
+                <div class="box-content">
+                    <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+                        ${baseform.prelims(form)}
+                        ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                        ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                        ${form.fieldMap['role'].render(form.id, request, dict(role = form.role), errors, view)|n}
+                        <button type="submit" class="btn btn-primary btn-block mar-top-1">Invite member</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    %endfor
 </%def>
 
 <%def name="post_scripts()">
     <script>
         require(["tools/ajax"], function(ajax){
-            ajax.ifyForm({root: $("#${view.form.id}")}, {repeatables: true});
+            $(".form-validated").each(function(idx, form){
+                ajax.ifyForm({root: $(form)});
+            })
         });
     </script>
 </%def>

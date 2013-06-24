@@ -36,30 +36,21 @@ def login_user(context, request, profile):
     else:
         return user.toJSON()
 
+
+
+
+
 @view_config(context = SocialLoginSuccessful)
 def login_success(exc, request):
     login_user(request.root, request, exc.profile)
-    route = request.matched_route.name.rsplit('_', 1)[0]
-    params = request.matchdict.copy()
-    params.pop('traverse')
-    redirections = request.session.pop_flash('redirections')
-    if redirections:
-        route = redirections[0]
-    else:
-        route = request.fwd_url(route, **params)
+    route = exc.get_redirection(request)
     return Response("Resource Found!", 302, headerlist = [('location', route)])
-
-
 
 
 @view_config(context = SocialLoginFailed)
 def login_failure(exc, request):
     request.session.flash(GenericErrorMessage(exc.message), "generic_messages")
-
-    route = request.matched_route.name.rsplit('_', 1)[0]
-    params = request.matchdict.copy()
-    params.pop('traverse')
-    route = request.fwd_url(route, **params)
+    route = exc.get_redirection(request)
     return Response("Resource Found!", 302, headerlist = [('location', route)])
 
 
@@ -73,7 +64,6 @@ class RequiresLoginException(Exception):
 
 @view_config(context = RequiresLoginException)
 def auth_required_view(exc, request):
-    # TODO: can this be a class based view to use as email login handler?
     return render_to_response(exc.template, {}, request)
 
 

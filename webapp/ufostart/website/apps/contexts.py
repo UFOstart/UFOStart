@@ -18,6 +18,11 @@ class WebsiteRootContext(RootContext):
     @reify
     def user(self):
         return self.request.session.get(USER_SESSION_KEY) or AnonUser()
+    def userURL(self, token):
+        if token == self.user.token:
+            return self.request.fwd_url("website_user_home")
+        else:
+            return self.request.fwd_url("website_user", slug = token)
 
     def setUser(self, user):
         self.request.session[USER_SESSION_KEY] = self.user = user
@@ -91,11 +96,15 @@ class WebsiteCompanyContext(WebsiteRootContext):
     def isTeamMember(self):
         return self.company.isMember(self.user.token)
 
+    @reify
+    def canEditCompany(self):
+        return self.company.isFounder(self.user.token)
+
 class WebsiteCompanyFounderContext(WebsiteCompanyContext):
     def is_allowed(self, request):
         if self.user.isAnon():
             request.fwd("website_login", request.furl)
-        if not self.isTeamMember:
+        if not self.canEditCompany:
             raise HTTPForbidden()
 
 

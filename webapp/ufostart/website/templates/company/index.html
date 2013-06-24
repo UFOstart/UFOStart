@@ -10,7 +10,7 @@
         </div>
         <div class="row mar-top-1">
             <div class="col col-lg-3 pull-right">
-                %if vctxt.isTeamMember:
+                %if vctxt.canEditCompany:
                     ${self.wtfBox()}
                 %endif
             </div>
@@ -36,7 +36,7 @@
                     <div class="col col-lg-2">
                         ${widgets.company_logo(company)}
                     </div>
-                    <div class="col col-lg-6">
+                    <div class="col col-lg-6 middle">
                         <a href="${url("website_company_company", **vctxt.urlArgs)}" class="overflow"><strong>${company.display_name}</strong></a>
                         <div class="tagline">${company.description | html.trunc(50)}</div>
                     </div>
@@ -45,16 +45,11 @@
                             Team members
                         </h5>
                         <div class="picture-pile">
-                        %for member in company.Users[:8]:
-                            <div class="picture mini">
-                                <img src="${member.picture_url}"/>
-                                %if member.unconfirmed:
-                                    <span title="unconfirmed" class="unconfirmed">unconfirmed</span>
-                                %endif
-                            </div>
+                        %for user in company.Users[:8]:
+                            ${widgets.userPic(user, classes='mini')|n}
                         %endfor
                         </div>
-                        %if vctxt.isTeamMember:
+                        %if vctxt.canEditCompany:
                             <a href="${url("website_company_company", **vctxt.urlArgs)}"><small>Invite team</small></a>
                         %endif
                     </div>
@@ -63,7 +58,7 @@
                 %if not company.is_setup:
                     <div class="disabled-overlay">
                         <div class="overlay-action">
-                            %if vctxt.isTeamMember:
+                            %if vctxt.canEditCompany:
                                 <a href="${url("website_company_company", **vctxt.urlArgs)}" class="btn btn-primary btn-block">Create Your Company</a>
                             %else:
                                 <h3>Not Setup yet</h3>
@@ -85,7 +80,7 @@
                     <div class="col col-lg-3">
                         ${widgets.product_logo(company)}
                     </div>
-                    <div class="col col-lg-5">
+                    <div class="col col-lg-5 middle">
                         <a href="${url("website_company_product", **vctxt.urlArgs)}" class="overflow"><strong>${company.product_name}</strong></a>
                         <div class="description">${company.product_description | html.trunc(60) }</div>
                     </div>
@@ -105,7 +100,7 @@
                 %if not company.product_is_setup:
                     <div class="disabled-overlay">
                         <div class="overlay-action">
-                            %if vctxt.isTeamMember:
+                            %if vctxt.canEditCompany:
                                 <a href="${url("website_company_product_create", **vctxt.urlArgs)}" class="btn btn-primary btn-block">Create Your Product</a>
                             %else:
                                 <h3>Not Setup yet</h3>
@@ -136,7 +131,7 @@
                     ${self.buildNeed(need, company.Round.published)}
                 %endfor
                 </div>
-                %if not i and vctxt.isTeamMember:
+                %if not i and vctxt.canEditCompany:
                     <a href="${url("website_round_need_create", **vctxt.urlArgs)}" class="need-card-inner add-card">
                         <img src="${STATIC_URL}img/addneed.png"/>
                         <h5>Create a new Need</h5>
@@ -150,7 +145,7 @@
 
 <%def name="buildNeed(need, published)">
     <div class="need-card ${need.status}" data-entity-id="${need.token}">
-        %if vctxt.isTeamMember:
+        %if vctxt.canEditCompany:
             %if not need.customized:
                 <a class="customize danger" href="${url("website_round_need_edit", need=need.slug, **vctxt.urlArgs)}"><span class="glyphicon glyphicon-exclamation-sign"></span> Customize Need</a>
             %else:
@@ -158,7 +153,7 @@
             %endif
         %endif
         <div class="need-card-inner">
-            %if not published and vctxt.isTeamMember:
+            %if not published and vctxt.canEditCompany:
                 <a class="remove" data-target=".need-card">×</a>
             %endif
 

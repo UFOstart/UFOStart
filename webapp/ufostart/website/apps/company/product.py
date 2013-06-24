@@ -30,7 +30,7 @@ class ProductCreateHandler(FormHandler):
     form = ProductCreateForm
 
     def __init__(self, context=None, request=None):
-        if not context.isTeamMember:
+        if not context.canEditCompany:
             raise HTTPForbidden()
         super(ProductCreateHandler, self).__init__(context, request)
 
@@ -64,7 +64,7 @@ class ProductEditHandler(FormHandler):
     form = ProductEditForm
 
     def __init__(self, context=None, request=None):
-        if not context.isTeamMember:
+        if not context.canEditCompany:
             raise HTTPForbidden()
         super(ProductEditHandler, self).__init__(context, request)
 
@@ -141,7 +141,7 @@ class ProductOfferHandler(FormHandler):
     forms = [ProductOfferForm, ProductPledgeForm]
     def __init__(self, context=None, request=None):
         if not context.company.product_is_setup:
-            if context.isTeamMember:
+            if context.canEditCompany:
                 request.fwd("website_company_product_create", **context.urlArgs)
             else:
                 request.fwd("website_company", **context.urlArgs)

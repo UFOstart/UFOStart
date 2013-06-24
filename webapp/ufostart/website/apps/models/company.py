@@ -27,6 +27,7 @@ TEMPLATE_STYLE_KEYS = {
 class CompanyUserModel(Mapping):
     token = TextField()
     name = TextField()
+    role = TextField()
     headline = TextField()
     picture = TextField()
     unconfirmed = BooleanField()
@@ -37,7 +38,7 @@ class CompanyUserModel(Mapping):
 
     @property
     def position(self):
-        return self.headline
+        return self.role.title().replace("_", " ")
 
 
 class IntroducerModel(Mapping):
@@ -319,10 +320,17 @@ class CompanyModel(BaseCompanyModel):
     @property
     def currentRound(self):
         return self.Round if self.Round else None
+    @reify
+    def memberMap(self):
+        return {u.token:u for u in self.Users}
 
     def isMember(self, userToken):
         if not userToken: return False
-        return len(filter(lambda x: x.token == userToken, self.Users))
+        return bool(self.memberMap.get(userToken))
+    def isFounder(self, userToken):
+        if not userToken: return False
+        user = self.memberMap.get(userToken)
+        return user.role == 'FOUNDER' if user else False
 
     @property
     def no_users(self):

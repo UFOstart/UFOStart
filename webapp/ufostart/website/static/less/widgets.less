@@ -1,0 +1,120 @@
+.wtf-box {
+  background-color: @wtf-active-bg-color;
+  color: @wtf-active-color;
+  > .box-title {
+    background-color: transparent;
+    color: @wtf-active-color;
+  }
+  > .box-content {
+    padding-top:0;
+  }
+}
+
+.empty {
+  padding: @line-height-computed 0;
+  color:@text-muted;
+  font-weight: @font-weight-bold;
+  text-align: center;
+}
+
+.picture {
+  position: relative;
+  > .unconfirmed {
+    position: absolute;
+    display: block;
+    text-align: center;
+    top: 0;
+    left: 0;
+    background-color: @corp-color;
+    font-size: 10px;
+    padding: 0;
+    width: 100%;
+    .text-overflow();
+    color: white;
+  }
+}
+
+.picture.micro {width:25px;min-height:25px; >img {width:100%;}}
+.picture.mini {width:34px;min-height:34px; >img {width:100%;}}
+.picture.small {width:50px;min-height:50px; >img {width:100%;}}
+.picture.medium {width:60px;min-height:60px; >img {width:100%;}}
+.picture.maxi {
+  height:0;padding-bottom:50%;overflow:hidden;
+   >img {width:100%;}
+}
+
+.logo-picture {
+  text-align: center;
+  position: relative;
+  background-color: @body-bg-muted;
+  box-shadow: -1px 1px 2px rgba(0,0,0,.3) inset;
+  padding: 3px;
+  overflow:hidden;
+
+  &.left-aligned {
+    max-height:120px;
+    max-width: 120px;
+    float:left;
+    margin-right: 15px;
+  }
+
+  &.empty {
+    height:0;
+    line-height:1em;
+    padding-bottom: 100%;
+  }
+   > .info {
+      position: absolute;
+      top:50%;
+      left:0;
+      width:100%;
+      text-align: center;
+      line-height:1em;
+      margin-top:-.5em;
+      color: white;
+   }
+   + .info {
+    font-size: @font-size-small;
+   }
+}
+
+
+.disabled-overlay {
+  position: absolute;
+  height:100%;
+  width:100%;
+  background-color:rgba(255,255,255,.7);
+  top:0;
+  left:0;
+  > .overlay-action {
+    position: relative;
+    top: 20px;
+    left: 0;
+    margin-left: 0;
+    margin-top: 0;
+    max-width: 100%;
+    text-align: center;
+    &.larger {
+      margin-left: -200px;
+      width: 400px;
+    }
+  }
+}
+
+
+
+
+
+.name-card {
+  .clearfix;
+  >.card-contents > .headline {display: inline-block; line-height:1.2em;}
+  > .picture {
+    float:left;
+    margin-right:15px;
+    width:20%;
+    max-width: 75px;
+    .image {width:100%;}
+  }
+}
+
+.col.middle {padding:0;}

@@ -13,6 +13,17 @@
 </%def>
 
 
+<%def name="userPic(member, classes='')">
+    <div class="picture ${classes}">
+        %if member.unconfirmed:
+            <img class="image" src="${member.picture_url}"/>
+            <span title="unconfirmed" class="unconfirmed">unconfirmed</span>
+        %else:
+            <a href="${vctxt.userURL(member.token)}"><img class="image" src="${member.picture_url}"/></a>
+        %endif
+    </div>
+</%def>
+
 <%def name="login_btn(name)">
 <a href="${url('website_login_login', traverse = [name], _query=[('furl', request.url)])}" class="btn btn-primary btn-linkedin">Log in with ${name.title()}</a>
 </%def>

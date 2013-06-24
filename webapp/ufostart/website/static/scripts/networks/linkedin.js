@@ -20,8 +20,6 @@ define(["tools/hash", "tools/ajax"], function(hashlib, ajax){
     , Contacts = ajax.Collection.extend({model: Contact})
 
 
-
-
     , numberMap = {48:0,  49:1, 50:2, 51:3, 52:4, 53:5, 54:6, 55:7, 56:8, 57:9, 96:0, 97:1, 98:2, 99:3, 100:4, 101:5, 102:6, 103:7, 104:8, 105:9}
     , AbstractSearch = Backbone.View.extend({
             PAGE_SIZE: 5
@@ -30,20 +28,19 @@ define(["tools/hash", "tools/ajax"], function(hashlib, ajax){
                 this.template = this.options.template;
 
                 var view = this;
+                this.blacklist = opts.blacklist;
                 this.doSearch = opts.doSearch;
                 this.$searchBox = this.$el.find(".query");
                 this.$searchBoxC = this.$el.find(".search-field");
                 this.$searchBox
                     .on('keydown', $.proxy(this.keypress, this))
-                    .on('keyup',    $.proxy(this.keyup, this))
-                    .on('focus', function(e){view.doSearch(e.target.value);});
+                    .on('keyup',    $.proxy(this.keyup, this));
 
                 this.listenTo(this.model, "updated", this.onSearchResult, this);
                 this.listenTo(this.model, "emptied", this.onSearchResult, this);
                 this.$resultNode = this.$('.results');
                 this.$resultNode.on({'mouseenter' : $.proxy(this.mouseenter, this),
                         'click':_.bind(this.disAmbiguateEvent, this)}, '.search-result-item');
-                this.lastQuery;
                 this.setLoading();
             }
             , prev: function(){
@@ -82,7 +79,6 @@ define(["tools/hash", "tools/ajax"], function(hashlib, ajax){
                     case 27: // escape
                         this.$searchBox.val('')
                         break;
-                    case 9: // tab
                     case 33:
                         this.first();
                         break;
@@ -100,19 +96,15 @@ define(["tools/hash", "tools/ajax"], function(hashlib, ajax){
             }
             , keypress: function (e) {
                 switch(e.keyCode) {
-                    case 9: // tab
-                        break;
                     case 13: // enter
                     case 27: // escape
                         e.preventDefault()
                         break
-
                     case 38: // up arrow
                         if (e.type != 'keydown') break
                         e.preventDefault()
                         this.prev()
                         break
-
                     case 40: // down arrow
                         if (e.type != 'keydown') break
                         e.preventDefault()
@@ -125,9 +117,9 @@ define(["tools/hash", "tools/ajax"], function(hashlib, ajax){
                         this.$resultNode.find(".search-result-item.active").removeClass("active");
                         this.$resultNode.find(".search-result-item[shortcut="+number+"]").addClass("active");
                         if(number == 0){
-                            this._extraItemSelected();
+                            this._extraItemSelected()
                         } else {
-                            this.disAmbiguateEvent(e);
+                            this.disAmbiguateEvent(e)
                         }
                         e.stopPropagation();
                         e.preventDefault();
@@ -158,13 +150,22 @@ define(["tools/hash", "tools/ajax"], function(hashlib, ajax){
                     this._extraItemSelected();
                 } else {
                     var id = item.attr("data-entity-id"), model = this.model.get(id);
-                    if(model)this.$el.trigger("selected", model)
+                    if(model){
+                        this.$el.trigger("selected", model)
+                        this.blacklist.push(model.id);
+                        item.remove();
+                        model.destroy();
+                        this.model.addOrUpdate(this.backlog.unshift(), {preserve:true});
+                    }
                     else this.trigger("unknownterm:selected", this.$searchBox.val().trim());
                 }
             }
             , onSearchResult: function(collection){
                 if(collection){
-                    var models = collection.models.slice(0, this.PAGE_SIZE);
+                    var all = collection.filter(function(m){return !~this.blacklist.indexOf(m.id)}, this)
+                        , models = all.slice(0, this.PAGE_SIZE);
+                    this.backlog = all.slice(this.PAGE_SIZE);
+
                     this.$resultNode.html('');
                     _.each(models, function(model){
                         this.$resultNode.append(this.template({model:model}));
@@ -189,20 +190,18 @@ define(["tools/hash", "tools/ajax"], function(hashlib, ajax){
                 el: this.$el
                 , model: new Contacts()
                 , template: _.template(this.$("script.contact-template").html())
+                , blacklist: []
                 , doSearch: function(query){
-                    if(!_.isEqual(this.lastQuery, query)){
-                        var result = [];
-                        if(query){
-                            var queryId = view.queryId = hashlib.UUID();
-                            _.each(view.model.models, function(model){
-                                if(model.matches(query))result.push(model.attributes);
-                            });
-                        } else {
-                            view.model.each(function(m){result.push(m.attributes)});
-                        }
-                        this.lastQuery = query;
-                        this.model.addOrUpdate(result);
+                    var result = [];
+                    if(query){
+                        var queryId = view.queryId = hashlib.UUID();
+                        _.each(view.model.models, function(model){
+                            if(model.matches(query))result.push(model.attributes);
+                        });
+                    } else {
+                        view.model.each(function(m){result.push(m.attributes)});
                     }
+                    this.model.addOrUpdate(result);
                 }
             });
             opts.auth.api('/people/~/connections', function(data, xhr, status){

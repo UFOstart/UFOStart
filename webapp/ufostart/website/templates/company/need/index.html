@@ -24,7 +24,7 @@
         <div class="container">
             <div class="row mar-top-1">
                 <div class="col col-lg-8">
-                %if vctxt.isTeamMember:
+                %if vctxt.canEditCompany:
                     ${self.bodyContent(vctxt.need)}
                 %else:
                     <div class="box-title">${vctxt.need.name}</div>
@@ -32,7 +32,7 @@
                 %endif
                 </div>
                 <div class="col col-lg-4">
-                    %if vctxt.isTeamMember:
+                    %if vctxt.canEditCompany:
                         ${self.privateInfoBox(vctxt.company, vctxt.need)}
                     %else:
                         ${self.publicInfoBox(vctxt.company, vctxt.need)}
@@ -131,6 +131,7 @@
                     <div class="results endorsement-search"></div>
                 </div>
             </div>
+        </div>
     %endif
 </%def>
 

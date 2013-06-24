@@ -20,7 +20,7 @@
         <div class="col col-lg-8 company-customer-dashboard">
             <div class="box-framed">
                 <div class="box-title">
-                    %if vctxt.isTeamMember:
+                    %if vctxt.canEditCompany:
                         <a href="${url("website_company_product_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
                     %endif
                     Product Details
@@ -33,7 +33,7 @@
                         ${html.nn(product.description)}
                     </div>
 
-                    %if vctxt.isTeamMember:
+                    %if vctxt.canEditCompany:
                         <% form = view.schemas['ProductOffer'] %>
                         ${self.create_offer_form(product, form, values.get(form.id), errors.get(form.id))}
                     %else:
@@ -156,13 +156,13 @@
     <div class="box-title">
         %if vctxt.user.isAnon():
             <a href="${url("website_company_product_pledge", **vctxt.urlArgs)}" class="btn btn-primary">Login to Pledge</a>
-        %elif not vctxt.isTeamMember:
+        %elif not vctxt.canEditCompany:
             <a class="btn btn-primary show-contracted" data-toggle-target=".expander" data-toggle-class="expanded">Pledge Now</a>
             <a class="btn btn-default show-expanded" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
         %endif
         Customers
     </div>
-    %if not vctxt.isTeamMember and not vctxt.user.isAnon():
+    %if not vctxt.canEditCompany and not vctxt.user.isAnon():
         <div class="show-expanded box-shaded box-framed">
             <div class="box-content">
                 <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
