@@ -105,7 +105,8 @@
                                  </a>
                                  <ul class="dropdown-menu">
                                     %for company in user.Companies:
-                                        <li><a href="${url("website_company", slug = company.slug)}">${company.name}</a></li>
+                                        <li>
+                                            <a href="${url("website_company", slug = company.slug)}">${company.name}</a></li>
                                     %endfor
                                  </ul>
                              </li>

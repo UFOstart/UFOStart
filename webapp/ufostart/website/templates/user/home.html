@@ -51,6 +51,13 @@
                             <div class="col col-lg-4">
                                 <h5>Skills</h5>
                                 ${', '.join(profile.display_skills)}
+
+                                <h5>Pending Approvals</h5>
+                                %for company in approvals:
+                                <div>
+                                    ${company.name}
+                                </div>
+                                %endfor
                             </div>
                         </div>
                     </div>
@@ -79,7 +86,6 @@
                                     %else:
                                         <div>Round not published</div>
                                     %endif
-
                                 </div>
                                 <div class="col col-lg-5">
                                     <div class="member-pile face-pile-mini">

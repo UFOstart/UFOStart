@@ -237,6 +237,7 @@
         </div>
         <div class="mar-top-2 highlight-target">
             <div id="target-publish" class="highlight-anchor"></div>
+            <div id="target-sent-for-mentor-aprroval" class="highlight-anchor"></div>
             %if vctxt.canAskForApproval:
                 %if wf.canAskForApproval():
                     <a href="${url("website_round_approve_ask", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-humonguous"><span>Ask For<br/>Approval</span></a>

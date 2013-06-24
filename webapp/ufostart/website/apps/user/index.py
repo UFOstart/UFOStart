@@ -8,7 +8,13 @@ def home(context, request):
     profile = RefreshProfileProc(request, {'token': context.user.token})
     best_match = FindPublicNeeds(request, {'Search': {'tags': profile.display_skills}})
     location = FindPublicNeedsByLocation(request)
-    return {'profile': profile, 'best_match':best_match, 'isMyProfile': True, 'location_needs':location}
+    return {
+        'profile': profile
+        , 'best_match':best_match
+        , 'isMyProfile': True
+        , 'location_needs':location
+        , 'approvals': [comp for comp in profile.Companies if comp.currentRound.Workflow.canPublish()]
+    }
 
 
 

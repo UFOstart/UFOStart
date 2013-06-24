@@ -3,7 +3,7 @@ from hnc.forms.formfields import BaseForm, StringField, EmailField, REQUIRED, Hi
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage, GenericErrorMessage
 from ufostart.website.apps.auth.social import require_login
-from ufostart.website.apps.models.procs import InviteToCompanyProc, GetInviteDetailsProc, AcceptInviteProc
+from ufostart.website.apps.models.procs import InviteToCompanyProc, GetInviteDetailsProc, AcceptInviteProc, RefreshProfileProc
 
 
 def InviteCompanyForm(role_):
@@ -58,7 +58,7 @@ def confirm(context, request):
 
     invite = GetInviteDetailsProc(request, {'inviteToken': token})
     AcceptInviteProc(request, {'inviteToken':token, 'userToken': context.user.token})
-
+    RefreshProfileProc(request, {'token': context.user.token})
     request.fwd("website_company_company", slug = invite.companySlug)
 
 
