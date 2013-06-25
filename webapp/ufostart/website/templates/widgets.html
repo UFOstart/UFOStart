@@ -48,26 +48,41 @@
     </div>
 </%def>
 
+<%def name="valuation_sml(need)">
+    <div class="valuation small">
+        <div class="thirds">
+            <strong>VALUE</strong>
+            <div class="brand-primary"><strong>${need.display_total}</strong></div>
+        </div><div class="thirds">
+            <div>Equity</div>
+            <div class="brand-primary">${need.display_mix}</div>
+        </div><div class="thirds">
+            <div>Cash</div>
+            <div class="brand-primary">${need.display_cash}</div>
+        </div>
+    </div>
+</%def>
+
 
 <%def name="publicNeedCard(need, descr_len = 50)">
-    <%
-        need_url = url("website_round_need", slug = need.Company.slug, need = need.token)
-    %>
-    <div class="need-card home">
+<%
+    need_url = url("website_round_need", slug = need.Company.slug, need = need.token)
+%>
+<div class="need-card home">
     <div class="need-card-inner">
-        <div class="row">
-            <div class="col col-sm-3" style="margin-top:10px">
+        <div class="need-header muted">
+            <div class="picture">
                 <a href="${url("website_company", slug = need.Company.slug)}"><img src="${need.Company.logo}"></a>
             </div>
-            <div class="col col-sm-9">
-                <h5><a href="${need_url}" class="overflow">${need.Company.name}</a></h5>
-                <div class="description">${need.Company.description | html.trunc(50)}</div>
-            </div>
+            <h5><a href="${need_url}" class="overflow">${need.Company.name}</a></h5>
+            <div class="description">${need.Company.description | html.trunc(50)}</div>
         </div>
-        <h5><a href="${need_url}">${need.name}</a></h5>
-        <div class="long-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
+        <div class="need-body">
+            <h5><a href="${need_url}">${need.name}</a></h5>
+            <div class="long-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
+        </div>
 
-        ${self.valuation(need)}
+        ${self.valuation_sml(need)}
 
         <div class="label-list">
             %for tag in need.tags:
@@ -75,7 +90,7 @@
             %endfor
         </div>
     </div>
-    </div>
+</div>
 </%def>
 
 
@@ -86,26 +101,20 @@
     %>
     <div class="need-card home product">
     <div class="need-card-inner">
-        <div class="picture maxi">
+        <div class="picture-header">
             <img src="${company.product_picture}"/>
         </div>
-        <h5><a href="${product_url}" class="overflow">${company.product_name}</a></h5>
-        <div class="long-description">${company.product_description | html.trunc(descr_len)}</div>
-        %if company.no_pledgees:
-            <div class="valuation">
-                <div class="number total">
-                    <strong>PLEDGES</strong>
-                    <h2><strong>${company.no_pledgees or ''}</strong></h2>
-                </div>
+        <div class="need-body">
+            <h5><a href="${product_url}" class="overflow">${company.product_name}</a></h5>
+            <div class="long-description">${company.product_description | html.trunc(descr_len)}</div>
+        </div>
+
+        <div class="valuation small">
+            <div class="number total">
+                <strong>PLEDGES</strong>
+                <h3 class="no-margin brand-primary">${company.no_pledgees or '0'}</h3>
             </div>
-        %else:
-            <div class="valuation">
-                <div class="number total">
-                    <strong>&nbsp;</strong>
-                    <h2><strong>&nbsp;</strong></h2>
-                </div>
-            </div>
-        %endif
+        </div>
     </div>
     </div>
 </%def>

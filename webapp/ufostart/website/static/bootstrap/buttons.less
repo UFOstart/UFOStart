@@ -19,10 +19,9 @@
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  border: 2px solid @btn-default-border;
-  border-radius: @border-radius-large;
   white-space: nowrap;
-  .box-shadow(0 2px 3px rgba(0,0,0,.4));
+  border: 1px solid @btn-default-border;
+  .box-shadow(0 2px 0 lighten(@btn-default-border, 30%));
 
   &:focus {
     .tab-focus();
@@ -130,14 +129,14 @@ fieldset[disabled] .btn-link {
 
 .btn-large {
   padding: @padding-large-vertical @padding-large-horizontal;
-  font-size: @font-size-large;
-  border-radius: @border-radius-large;
+  font-size: 22px;
+  line-height:26px;
+  font-weight:500;
 }
 .btn-small {
   padding: @padding-small-vertical @padding-small-horizontal;
   font-size: @font-size-small;
   line-height: 1.5; // ensure proper height of button next to small input
-  border-radius: @border-radius-small;
 }
 
 .btn-form-field {

@@ -1,79 +1,76 @@
 <%inherit file="layout.html"/>
 <%namespace file="widgets.html" name="widgets"/>
 
-<%def name="footer_classes()"></%def>
 <%def name="content()">
     <div class="home-band">
         <div class="container homepage">
-            <div class="row">
-                <div class="col col-lg-6">
+            <div class="row  mar-top-1">
+                <div class="col col-lg-12">
                     <h1 class="site-slogan">The first market place<br/>
                     giving equity for expertise</h1>
                     <h2>Create a project or contribute<br/>
                     to existing companies</h2>
                     <div class="mar-top-2">
-                        <a class="btn btn-primary" href="${url("website_template_basic")}">Setup Your Project Now</a>
+                        <a class="btn btn-primary btn-large" href="${url("website_template_basic")}">Get Started Now</a>
+                    </div>
+                    <div class="mar-top-2">
+                        <img src="${STATIC_URL}img/press.png"/>
                     </div>
                 </div>
-                <div class="col col-lg-6">
-                    <img src="${STATIC_URL}img/homeinfo.png"/>
-                </div>
             </div>
         </div>
     </div>
 
-    <div class="home-page-section">
-        <div class="container">
-            <div class="row">
-                <div class="col col-lg-12">
-
-                    <h2><strong>Opportunities near by</strong></h2>
-                    %if len(needs_close_by):
-                        <div class="row">
-                            %for need in needs_close_by:
-                                <div class="col col-lg-3">
-                                    ${widgets.publicNeedCard(need, descr_len = 300)}
-                                </div>
-                            %endfor
-                        </div>
-                    %else:
-                        <div class="empty">No Needs matching your location</div>
-                    %endif
-
-                </div>
+    <div class="container">
+        <div class="row mar-top-2">
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    <span class="brand-primary">Opportunities near by</span>
+                </h1>
             </div>
         </div>
-    </div>
-
-    <div class="home-page-section">
-        <div class="container">
-            <div class="row">
-                <div class="col col-lg-12">
-                    <h1>Most Popular</h1>
-                </div>
-            </div>
-            <div class="row">
-                %for need in popular_needs:
-                    <div class="col col-lg-3">
-                        ${widgets.publicNeedCard(need, descr_len = 300)}
+        <div class="row">
+            <div class="col col-lg-12">
+                %if len(needs_close_by):
+                    <div class="row">
+                        %for need in needs_close_by:
+                            <div class="col col-lg-3">
+                                ${widgets.publicNeedCard(need, descr_len = 300)}
+                            </div>
+                        %endfor
                     </div>
-                %endfor
+                %else:
+                    <div class="empty">No Needs matching your location</div>
+                %endif
             </div>
         </div>
-    </div>
-
-    <div class="home-page-section">
-        <div class="container">
-            <div class="row">
-                <div class="col col-lg-12">
-                    <h1 class="brand-primary">Newest Projects</h1>
-                    %for company in products:
-                        <div class="col col-lg-3">
-                            ${widgets.publicProductCard(company, descr_len = 300)}
-                        </div>
-                    %endfor
-                </div>
+        <div class="row">
+            <div class="col col-lg-12">
+            <h1 class="section-title">
+                <span>Most Popular</span>
+            </h1>
             </div>
+        </div>
+        <div class="row">
+            %for need in popular_needs:
+                <div class="col col-lg-3">
+                    ${widgets.publicNeedCard(need, descr_len = 300)}
+                </div>
+            %endfor
+        </div>
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    <span class="brand-primary">Newest Projects</span>
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            %for company in products:
+                <div class="col col-lg-3">
+                    ${widgets.publicProductCard(company, descr_len = 300)}
+                </div>
+            %endfor
         </div>
     </div>
 </%def>

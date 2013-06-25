@@ -352,7 +352,8 @@
 // and disabled options for all buttons
 .btn-pseudo-states(@color, @background, @border) {
   color: @color;
-  background-color: @background;
+  background-color: darken(@background, 10%);
+  .box-shadow(0 2px 0 lighten(@background, 10%) inset);
   #gradient > .vertical(@background, darken(@background, 10%));
   border-color: @border;
 
@@ -360,7 +361,8 @@
   &:focus,
   &:active,
   &.active {
-    background-color: darken(@background, 5%);
+    .box-shadow(0 2px 0 darken(@background, 10%) inset);
+    background: darken(@background, 5%);
         border-color: darken(@border, 10%);
   }
 
@@ -371,6 +373,7 @@
     &:focus,
     &:active,
     &.active {
+      .box-shadow(none);
       background-color: @background;
           border-color: @border
     }
