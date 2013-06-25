@@ -184,7 +184,7 @@
                     <a class="remove" data-target=".need-card">×</a>
                 %endif
                 <h5>
-                    %if not need.customized:
+                    %if not need.customized and vctxt.canEditCompany:
                         <a href="${url("website_round_need_edit", need=need.slug, **vctxt.urlArgs)}">${need.name}</a>
                     %else:
                         <a href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">${need.name}</a>

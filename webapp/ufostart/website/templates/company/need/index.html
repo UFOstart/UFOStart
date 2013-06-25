@@ -232,10 +232,12 @@
     </div>
     %if not need.fulfilled and withSearch:
         %if vctxt.user.isAnon():
-            <div class="box-title">Login to endorse</div>
-            <div class="text-center">
-                ${widgets.login_btn('linkedin')}
-            </div>
+                <div class="box-title">Login to endorse</div>
+                <div class="text-center">
+                    <div class="mar-top-1">
+                        ${widgets.login_btn('linkedin')}
+                    </div>
+                </div>
         %else:
             <div class="box-title">Endorse your contacts for this need</div>
             <div class="linkedin-widget" data-widget="ContactSearch">
