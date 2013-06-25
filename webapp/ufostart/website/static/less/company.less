@@ -32,29 +32,26 @@
 }
 
 .need-card-list.col {padding-left:10px;padding-right: 10px;}
+
 .need-card {
   margin-top: 25px;
   border:1px solid #b2b2b2;
 
-  > .customize {
+   .customize {
     display: block;
-    margin-bottom: 7px;
     text-align: left;
     font-weight: @font-weight-bold;
     padding: 7px;
     line-height:1em;
     font-size: @font-size-small;
-    border-radius:@border-radius-large;
 
     &.danger {
-      background-color: fadeout(@label-danger-bg, 70%);
-      color: @label-danger-bg;
-      border: 1px solid @label-danger-bg;
+      background-color: @label-danger-bg;
+      color: white;
     }
     &.success {
       background-color: fadeout(@label-success-bg, 70%);
-      color: @label-success-bg;
-      border: 1px solid @label-success-bg;
+      color: darken(@label-success-bg, 10%);
     }
     &:hover {text-decoration: none;}
     > .glyphicon {
@@ -66,45 +63,10 @@
       display: inline-block
     }
   }
-}
-
-.need-card-inner {
-  position: relative;
-  > .need-header {
-    .clearfix;
-    padding: 12px 12px 24px;
-    position: relative;
-    .background-image("../img/arrowdbg.png");
-    background-position: 0 100%;
-    background-repeat: no-repeat;
-    &.muted {
-      background-color: @light-muted;
-    }
-
-    > .picture {
-      float: left;
-      width: 20%;
-      max-width: 75px;
-      margin-right: 12px;
-    }
-    > h5 {margin:0;}
-    > .description {
-      font-size: @font-size-small;
-      min-height:34px;
-    }
-  }
-  > .need-body{
-      padding: 12px;
-      height:230px;
-      overflow:hidden;
-      &.mini {height:80px;}
-  }
-  > .label-list{margin: 12px 12px;border-top: 1px solid #b2b2b2;padding-top: 12px;height:58px;overflow: hidden;}
-
-  >.remove {
+  .remove {
     display: block;
     cursor:pointer;
-    background: black;
+    background: @text-muted;
     color: white;
     text-shadow: none;
     border-radius: 100%;
@@ -118,20 +80,17 @@
     font-size: 20px;
     text-indent: -1px;
   }
-  >.customize {
-    z-index:1;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    width: 90px;
-    height: 90px;
-    .background-image("../img/customize.png");
-    background-position: 0 0;
-    background-repeat: no-repeat;
-    color:transparent;
-  }
+}
 
-  > .label-list{margin-top:15px;}
+.need-card-inner {
+  position: relative;
+  > .need-body{
+      overflow:hidden;
+      padding: 12px;
+      &.mini {height:80px;}
+      &.medium {height:230px;}
+  }
+  > .label-list{margin: 12px;border-top: 1px solid #b2b2b2;padding-top: 12px;height:58px;overflow: hidden;}
 
   &.add-card {
     margin-top: 25px;
@@ -140,6 +99,39 @@
     display: block;
   }
 }
+
+
+
+.box-header {
+    .clearfix;
+    padding: 12px 12px 24px;
+    position: relative;
+    .background-image("../img/arrowdbg.png");
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    > .picture {
+      float: left;
+      width: 20%;
+      max-width: 75px;
+      margin-right: 12px;
+    }
+    > h5 {margin:0;}
+    > .description {
+      font-size: @font-size-small;
+      min-height:34px;
+    }
+}
+.box-header-muted {
+  background-color: @light-muted;
+}
+.box-header-wtf{
+  .box-shadow(0 0 25px @wtf-color inset);
+}
+.box-header-square{
+  height:0;
+  padding: 0 0 70%;
+}
+
 
 .picture-header{
   position: relative;
@@ -167,7 +159,7 @@
 .valuation {
   .clearfix;
   .number {
-   > h2 {margin-top:0;}
+   > h2 {margin-top:0;font-weight:normal;}
   }
   > .secondary > .number{
     float:left;

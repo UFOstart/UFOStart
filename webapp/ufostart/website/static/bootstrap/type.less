@@ -21,7 +21,7 @@ p {
 // -------------------------
 
 // Ex: 14px base font * 85% = about 12px
-small   { font-size: 85%; }
+small   { font-size: 85%; line-height:1.2em; display: inline-block;}
 
 strong  { font-weight: bold; }
 em      { font-style: italic; }
@@ -72,10 +72,13 @@ h3 {
   margin-bottom: (@line-height-computed / 2);
 }
 h4,
-h5,
-h6 {
+h5 {
   margin-top: (@line-height-computed / 2);
   margin-bottom: (@line-height-computed / 2);
+}
+h6 {
+  margin-top: (@line-height-computed / 4);
+  margin-bottom: (@line-height-computed / 4);
 }
 
 h1, .h1 { font-size: 24px;font-weight:@font-weight-bold;color:#000; } // ~34px
@@ -83,7 +86,7 @@ h2, .h2 { font-size: 24px;color:@corp-color;} // ~34px
 h3, .h3 { font-size: 24px;font-weight: @font-weight-bold;} // ~24px
 h4, .h4 { font-size: ceil(@font-size-base * 1.25); } // ~18px
 h5, .h5 { font-size:  @font-size-base; font-weight: @font-weight-bold;}
-h6, .h6 { font-size:  @font-size-small; font-weight: @font-weight-bold; } // ~12px
+h6, .h6 { font-size:  @font-size-small; font-weight: @font-weight-bold;color:@text-muted;} // ~12px
 
 h1 small, .h1 small { font-size: ceil(@font-size-base * 1.70); } // ~24px
 h2 small, .h2 small { font-size: ceil(@font-size-base * 1.25); } // ~18px
@@ -164,7 +167,7 @@ dd {
 
 // Horizontal rules
 hr {
-  margin: @line-height-computed 0;
+  margin: @line-height-computed/2 0;
   border: 0;
   border-top: 1px solid @hr-border;
   border-bottom: 1px solid #fff;
@@ -172,6 +175,9 @@ hr {
   &.corp-color {
     border-top: 1px solid @corp-color;
     border-bottom: none;
+  }
+  &.boxed {
+    margin: 0 12px;
   }
 }
 

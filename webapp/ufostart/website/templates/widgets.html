@@ -4,11 +4,11 @@
 
 <%def name="logo(url, alt='', classes='', link = '')">
 %if url and link:
-<div class="logo-picture ${classes}"><a href="${link}"><img src="${url}" alt="${alt}"/></a></div>\
+<div class="picture ${classes}"><a href="${link}"><img src="${url}" alt="${alt}"/></a></div>\
 %elif url:
-<div class="logo-picture ${classes}"><img src="${url}" alt="${alt}"/></div>\
+<div class="picture ${classes}"><img src="${url}" alt="${alt}"/></div>\
 %else:
-<div class="logo-picture empty ${classes}"></div>\
+<div class="picture empty ${classes}"></div>\
 %endif
 </%def>
 
@@ -32,16 +32,16 @@
 <%def name="valuation(need)">
     <div class="valuation">
         <div class="number total">
-            <strong>VALUE</strong>
+            <strong class="text-muted">VALUE</strong>
             <h2><strong>${need.display_total}</strong></h2>
         </div>
         <div class="secondary">
             <div class="number equity">
-                <strong>Equity</strong>
+                <div class="text-muted">Equity</div>
                 <h2>${need.display_mix}</h2>
             </div>
             <div class="number cash">
-                <strong>Cash</strong>
+                <div class="text-muted">Cash</div>
                 <h2>${need.display_cash}</h2>
             </div>
         </div>
@@ -70,14 +70,14 @@
 %>
 <div class="need-card home">
     <div class="need-card-inner">
-        <div class="need-header muted">
+        <div class="box-header box-header-muted">
             <div class="picture">
                 <a href="${url("website_company", slug = need.Company.slug)}"><img src="${need.Company.logo}"></a>
             </div>
             <h5><a href="${need_url}" class="overflow">${need.Company.name}</a></h5>
             <div class="description">${need.Company.description | html.trunc(50)}</div>
         </div>
-        <div class="need-body equalized">
+        <div class="need-body medium">
             <h5><a href="${need_url}">${need.name}</a></h5>
             <div class="long-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
         </div>
@@ -104,7 +104,7 @@
         <div class="picture-header">
             <img src="${company.product_picture}"/>
         </div>
-        <div class="need-body">
+        <div class="need-body medium">
             <h5><a href="${product_url}" class="overflow">${company.product_name}</a></h5>
             <div class="long-description">${company.product_description | html.trunc(descr_len)}</div>
         </div>

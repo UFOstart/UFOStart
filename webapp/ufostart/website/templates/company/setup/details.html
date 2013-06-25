@@ -13,7 +13,7 @@
                 <div class="picture-header">
                     <img src="${STATIC_URL}img/templates/${template.getStyleKey()}.png"/>
                 </div>
-                <div class="number-widget border-bottom mar-top-2">
+                <div class="number-widget mar-top-2">
                     <div class="thirds">
                         <div class="heading">Needs</div>
                         <div class="value">${len(template.Need)}</div>
@@ -21,6 +21,7 @@
                         <div class="heading">Time</div>
                         <div class="value">90 <span class="sub-value">Days</span></div>
                     </div>
+                    <hr/>
                 </div>
             </div>
             <div class="col col-lg-8">
@@ -55,7 +56,7 @@
 <%def name="buildNeed(need)">
     <div class="need-card">
     <div class="need-card-inner">
-        <div class="need-header muted">
+        <div class="box-header box-header-muted">
             <h5>${need.name}</h5>
             <div class="description">
                 ${need.summary | html.trunc(200)}
