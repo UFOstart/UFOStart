@@ -369,6 +369,10 @@ class CompanyModel(BaseCompanyModel):
     def no_users(self):
         return len(self.Users)
 
+    @reify
+    def mentors(self):
+        return [u for u in self.Users if u.role == 'MENTOR']
+
     @property
     def product_is_setup(self):
         try:

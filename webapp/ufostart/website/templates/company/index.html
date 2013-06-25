@@ -56,7 +56,12 @@
         <hr/>
         <div>
             <h6>Mentors</h6>
-            <a href="${url("website_company_company", **vctxt.urlArgs)}" class="btn btn-primary">Add Mentor</a>
+            <div class="picture-pile">
+                %for user in company.mentors[:8]:
+                    ${widgets.userPic(user, classes='mini')|n}
+                %endfor
+                <a href="${url("website_company_add_mentor", **vctxt.urlArgs)}" class="btn btn-primary">Add Mentor</a>
+            </div>
         </div>
         <hr/>
     </div>

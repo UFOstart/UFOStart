@@ -1,0 +1,64 @@
+<%inherit file="../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="../widgets.html" name="widgets"/>
+
+<%def name="header_buttons()">
+    <div class="pull-right">
+        Company: <a href="${url('website_company', **vctxt.urlArgs)}">${vctxt.company.name}</a>
+    </div>
+</%def>
+
+
+<%def name="content()">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    <span class="brand-primary">Add a Mentor</span>
+                </h1>
+            </div>
+        </div>
+        <div class="row mar-top-1">
+            <div class="col col-lg-6">
+                ${self.build_form(view.form, values, errors)}
+            </div>
+            <div class="col col-lg-3 col-offset-3">
+                <div class="wtf-box">
+                    <h2 class="wtf-title">
+                        Why do I need to add a Mentor?
+                    </h2>
+                    <div class="wtf-content">
+                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>
+
+
+
+
+<%def name="build_form(form, values, errors)">
+    <div class="box-dark">
+        <div class="box-content">
+            <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+                ${baseform.prelims(form)}
+                ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                ${form.fieldMap['role'].render(form.id, request, dict(role = form.role), errors, view)|n}
+                <button type="submit" class="btn btn-primary btn-block mar-top-1">Invite Mentor</button>
+            </form>
+        </div>
+    </div>
+</%def>
+
+<%def name="post_scripts()">
+    <script>
+        require(["tools/ajax"], function(ajax){
+            $(".form-validated").each(function(idx, form){
+                ajax.ifyForm({root: $(form)});
+            })
+        });
+    </script>
+</%def>

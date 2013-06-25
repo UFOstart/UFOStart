@@ -39,6 +39,14 @@ class InviteCompanyHandler(FormHandler):
         result['company'] = company
         return super(InviteCompanyHandler, self).pre_fill_values(request, result)
 
+class AddMentorHandler(FormHandler):
+    form = InviteCompanyForm('MENTOR')
+    def pre_fill_values(self, request, result):
+        company = request.root.company
+        result['company'] = company
+        return super(AddMentorHandler, self).pre_fill_values(request, result)
+
+
 
 def answer(context, request):
     token = request.matchdict['token']

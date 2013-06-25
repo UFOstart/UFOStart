@@ -26,6 +26,7 @@ ROUTE_LIST = [
 
     , FunctionRoute  ('website_company'                    , '/c/:slug', contexts.WebsiteCompanyContext                                      , company.general.index, None)
     , ClassRoute     ("website_company_company"            , "/c/:slug/company", contexts.WebsiteCompanyContext                              , company.invite.InviteCompanyHandler, "company/company.html", view_attrs = JSON_FORM_ATTRS)
+    , ClassRoute     ("website_company_add_mentor"         , "/c/:slug/mentor", contexts.WebsiteCompanyContext                               , company.invite.AddMentorHandler, "company/addmentor.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute     ("website_company_product"            , "/c/:slug/product", contexts.WebsiteCompanyContext                              , company.product.ProductOfferHandler, "company/product/index.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute     ("website_company_product_create"     , "/c/:slug/product/create", contexts.WebsiteCompanyContext                       , company.product.ProductCreateHandler, "company/product/create.html", view_attrs = JSON_FORM_ATTRS)
     , ClassRoute     ("website_company_product_edit"       , "/c/:slug/product/edit", contexts.WebsiteCompanyContext                         , company.product.ProductEditHandler, "company/product/create.html", view_attrs = JSON_FORM_ATTRS)
