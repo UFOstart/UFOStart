@@ -11,12 +11,12 @@
             </div>
         </div>
         <div class="row mar-top-1">
-            <div class="col col-lg-2 pull-right">
+            <div class="col col-lg-3 pull-right">
                 %if vctxt.canEditCompany:
                     ${self.wtfBox()}
                 %endif
             </div>
-            <div class="col col-lg-10">
+            <div class="col col-lg-9">
                 ${self.upperContent()}
                 ${self.lowerContent()}
             </div>
@@ -113,7 +113,7 @@
                 %if not i and vctxt.canEditCompany:
                     <a href="${url("website_round_need_create", **vctxt.urlArgs)}" class="need-card-inner add-card">
                         <img src="${STATIC_URL}img/addneed.png"/>
-                        <h5>Create a new Need</h5>
+                        <h4>Create a new Need</h4>
                     </a>
                 %endif
             </div>
@@ -166,7 +166,7 @@
                     <div class="experts">
                         <h6>Recomended Experts</h6>
                         <div class="picture-pile">
-                        %for expert in need.experts[:5]:
+                        %for expert in need.experts[:4]:
                             <div class="picture small">
                                 <img src="${expert.picture}" alt="${expert.name}"/>
                             </div>
@@ -181,7 +181,7 @@
                 <div class="services">
                     <h6>Recomended Cloud Services</h6>
                     <div class="picture-pile">
-                    %for service in need.services[:5]:
+                    %for service in need.services[:4]:
                         <div class="picture small">
                             <img src="${service.logo_url}" name="${service.name}"/>
                         </div>
@@ -213,39 +213,39 @@
             active = wf.getActiveStage()
         %>
         <div class="wtf-box company-dashboard">
-            <h5 class="box-title">
+            <h2 class="wtf-title">
                 Steps
-            </h5>
-            <div class="box-content">
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-                <ul class="list-unstyled">
-                    %for i, stage in enumerate(wf.sortedStages):
-                        <li>
-                            <a class="workflow-link${' active' if active and active.name == stage.name else ''}${' done' if stage.completed else ''}" href="#target-${stage.slug}">
-                                <span class="position">${i+1}</span>
-                                ${stage.display_name}
-                            </a>
-                        </li>
-                    %endfor
-                </ul>
+            </h2>
+            <div class="wtf-content">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
             </div>
         </div>
+        <ul class="workflow-wtf">
+            %for i, stage in enumerate(wf.sortedStages):
+                <li>
+                    <a class="workflow-link${' active' if active and active.name == stage.name else ''}${' done' if stage.completed else ''} wtf-${i+1}" href="#target-${stage.slug}">
+                        <span class="position">${i+1}</span>${stage.display_name}
+                    </a>
+                </li>
+            %endfor
+        </ul>
+
         <div class="mar-top-2 highlight-target">
             <div id="target-publish" class="highlight-anchor"></div>
             <div id="target-sent-for-mentor-aprroval" class="highlight-anchor"></div>
             %if vctxt.canAskForApproval:
                 %if wf.canAskForApproval():
-                    <a href="${url("website_round_approve_ask", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-humonguous"><span>Ask For<br/>Approval</span></a>
+                    <a href="${url("website_round_approve_ask", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-large">Get Approval</a>
                 %elif wf.canPublish():
-                    <a class="btn btn-primary btn-block btn-humonguous disabled"><span>Waiting For<br/>Approval</span></a>
+                    <a class="btn btn-primary btn-block btn-large disabled">Waiting For<br/>Approval</a>
                 %else:
-                    <a class="btn btn-primary btn-block btn-humonguous disabled"><span>Ask For<br/>Approval</span></a>
+                    <a class="btn btn-primary btn-block btn-large disabled">Get Approval</a>
                 %endif
             %elif vctxt.canApproveCompany:
                 %if wf.canPublish():
-                    <a href="${url("website_round_publish", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-humonguous"><span>Approve<br/>& Publish</span></a>
+                    <a href="${url("website_round_publish", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-large btn-humonguous">Publish</a>
                 %else:
-                    <a class="btn btn-primary btn-block btn-humonguous disabled"><span>Approve<br/>& Publish</span></a>
+                    <a class="btn btn-primary btn-block btn-large disabled">Publish</a>
                 %endif
             %endif
         </div>

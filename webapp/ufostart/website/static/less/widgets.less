@@ -24,7 +24,9 @@
   .wtf-X(@lines);
   // Apply the styles
   .wtf-(@num) {
-    background-color: desaturate(lighten(@wtf-color, 10% * @num), 10% * @num);
+    @bg : desaturate(lighten(@wtf-color, 10% * @num), 10% * @num);
+    background-color: @bg;
+    color: contrast(@bg, darken(@wtf-color, 5%), lighten(@wtf-color, 50%));
   }
 }
 .generate-wtf-colors(7);

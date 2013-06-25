@@ -97,6 +97,7 @@
     text-align: center;
     padding: 50px 15px 30px;
     display: block;
+    .btn-pseudo-states(@btn-default-color, @btn-default-bg, @btn-default-border);
   }
 }
 
@@ -184,46 +185,37 @@
 }
 
 
+.workflow-wtf {
+  .list-unstyled;
 
+}
 
 .workflow-link {
-    display: block;
-    padding: 8px 15px;
-    margin: 15px -15px;
-    color: @wtf-color;
-    font-weight: @font-weight-bold;
+  display: block;
+  padding: 58px 15px 10px 62px;
+  font-weight: @font-weight-bold;
+  font-size:@font-size-small;
+  position: relative;
+  .box-shadow(0 4px 6px rgba(0,0,0,.4) inset);
+  &:hover {text-decoration: none;}
   > .position {
-    display: inline-block;
-    width: 40px;
-    height:40px;
-    line-height:34px;
-    font-size:20px;
-    margin-right: 5px;
-    text-align: center;
-    border-radius: 100%;
-    border: 3px solid @wtf-color;
-  }
-  &.done > .position {
-    position: relative;
-    &:after {
-      content: "✓";
-      border:2px solid white;
-      color:white;
-      background-color: green;
-      position: absolute;
-      top:-8px;
-      right:-10px;
-      border-radius: 100%;
-      width: 16px;
-      height:16px;
-      line-height:16px;
-      text-align: center;
-      font-size:12px;
-    }
+    display: block;
+    position: absolute;
+    bottom: 12px;
+    left:0;
+    width:50px;
+    line-height:50px;
+    font-size: 60px;
+    text-align: right;
+    font-weight: 300;
   }
   &.active {
     background-color: @wtf-color;
     color:white;
+    font-size:40px;
+    line-height:40px;
+    font-weight: 300;
+    padding-top:30px;
     > .position{
       border-color: white;
       color:white;
