@@ -45,7 +45,9 @@ class CompanyUserModel(Mapping):
     @property
     def position(self):
         return getRoleName(self.role) if self.role else self.headline
-
+    @property
+    def displayStartupValue(self):
+        return format_currency(self.startupValue)
 
 class IntroducerModel(Mapping):
     firstName = TextField()
@@ -359,6 +361,9 @@ class CompanyModel(BaseCompanyModel):
     @reify
     def startupValue(self):
         return sum(map(attrgetter('startupValue'), self.Users))
+    @property
+    def displayStartupValue(self):
+        return format_currency(self.startupValue)
     @property
     def currentRound(self):
         return self.Round if self.Round else None

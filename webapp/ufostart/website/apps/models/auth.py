@@ -3,6 +3,7 @@ from hnc.apiclient import Mapping, TextField, IntegerField, ListField, DictField
 from hnc.tools.tools import word_truncate_by_letters
 from pyramid.decorator import reify
 import simplejson
+from ufostart.lib.tools import format_currency
 from ufostart.models.tasks import NamedModel
 from ufostart.website.apps.models.company import CompanyModel, ApplicationModel
 from ufostart.website.apps.social import SocialNetworkProfileModel
@@ -84,6 +85,9 @@ class UserModel(Mapping):
     @property
     def display_skills(self):
         return map(attrgetter('name'), self.Skills)
+    @property
+    def displayStartupValue(self):
+        return format_currency(self.startupValue)
 
 def AnonUser():
     return UserModel()

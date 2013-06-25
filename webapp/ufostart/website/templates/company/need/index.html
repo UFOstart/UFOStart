@@ -169,7 +169,7 @@
 </%def>
 
 
-<%def name="endorsedExperts(company, need)">
+<%def name="endorsedExperts(company, need, withSearch = True)">
     <div class="endorsements" data-entity-id="${need.token}" data-entity="Need">
         <script type="text/template" class="endorsement-template">
             <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">
@@ -200,36 +200,37 @@
             %endfor
         </div>
     </div>
-
-    %if vctxt.user.isAnon():
-        <div class="box-title">Login to endorse</div>
-        <div class="text-center">
-            ${widgets.login_btn('linkedin')}
-        </div>
-    %else:
-        <div class="box-title">Endorse your contacts for this need</div>
-        <div class="linkedin-widget" data-widget="ContactSearch">
-            <script type="text/template" class="contact-template">
-                <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">
-                    <div class="col col-sm-2">
-                        <div class="picture medium">
-                            <img src="{{ model.getPicture() }}"/>
+    %if withSearch:
+        %if vctxt.user.isAnon():
+            <div class="box-title">Login to endorse</div>
+            <div class="text-center">
+                ${widgets.login_btn('linkedin')}
+            </div>
+        %else:
+            <div class="box-title">Endorse your contacts for this need</div>
+            <div class="linkedin-widget" data-widget="ContactSearch">
+                <script type="text/template" class="contact-template">
+                    <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">
+                        <div class="col col-sm-2">
+                            <div class="picture medium">
+                                <img src="{{ model.getPicture() }}"/>
+                            </div>
+                        </div>
+                        <div class="col col-sm-10">
+                            <a class="pull-right btn btn-small btn-primary">Endorse</a>
+                            <strong>{{ model.getName() }}</strong>
+                            <p class="text-small">{{ model.getPosition() }}</p>
                         </div>
                     </div>
-                    <div class="col col-sm-10">
-                        <a class="pull-right btn btn-small btn-primary">Endorse</a>
-                        <strong>{{ model.getName() }}</strong>
-                        <p class="text-small">{{ model.getPosition() }}</p>
-                    </div>
+                </script>
+                <div class="search-field">
+                    <input type="text" class="query" placeholder="Find a contact by name">
                 </div>
-            </script>
-            <div class="search-field">
-                <input type="text" class="query" placeholder="Find a contact by name">
+                <div class="endorsement-search">
+                    <div class="results show-expanded"></div>
+                </div>
             </div>
-            <div class="endorsement-search">
-                <div class="results show-expanded"></div>
-            </div>
-        </div>
+        %endif
     %endif
 </%def>
 
