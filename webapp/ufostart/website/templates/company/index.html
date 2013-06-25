@@ -171,11 +171,13 @@
 
 <%def name="buildNeed(need, published)">
     <div class="need-card ${need.status}" data-entity-id="${need.token}">
-        %if not published and vctxt.canEditCompany:
-            %if not need.customized:
-                <a class="customize danger" href="${url("website_round_need_edit", need=need.slug, **vctxt.urlArgs)}"><span class="glyphicon glyphicon-exclamation-sign"></span> Customize Need</a>
-            %else:
+        %if need.fulfilled:
+            <a class="customize success" href="#"><span class="glyphicon glyphicon-ok-sign"></span> Need Fulfilled</a>
+        %elif not published and vctxt.canEditCompany:
+            %if need.customized:
                 <a class="customize success" href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}"><span class="glyphicon glyphicon-ok-sign"></span> Customized</a>
+            %else:
+                <a class="customize danger" href="${url("website_round_need_edit", need=need.slug, **vctxt.urlArgs)}"><span class="glyphicon glyphicon-exclamation-sign"></span> Customize Need</a>
             %endif
         %endif
         <div class="need-card-inner">
