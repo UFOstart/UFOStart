@@ -79,10 +79,11 @@ ul.styled {
   .info {font-size: @font-size-small;}
 }
 
-.tagsearch-container .current-tags {
-  margin-top: 20px;
-  padding:10px;
-  .box-shadow(inset -1px 1px 3px rgba(0,0,0,.15));
-  background-color: @input-bg;
-  border: 1px solid @input-border;  padding: 10px;
+.tagsearch-container {
+  .search-field{ background-color: @input-bg; }
+  .query {width:auto;border:none;}
+  .current-tags {
+    padding:5px 10px 6px;
+    float:left;
+  }
 }

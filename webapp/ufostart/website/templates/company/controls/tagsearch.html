@@ -7,12 +7,11 @@
             ${self.tagTempl(widget, '{{ pos }}', '{{ model.getSearchLabel() }}', '{{ model.id }}')}
         </script>
         <div class="search-field">
-            <input type="text" class="query ${widget.getClasses()}" autocomplete="off" ${widget.attrs.getInputAttrs(request)|n}/>
-        </div>
-        <div class="${widget.tag_container_class}">
-            %for i, tag in enumerate(value):
-                ${self.tagTempl(widget, str(i), tag['name'], tag['name'])}
-            %endfor
+            <div class="${widget.tag_container_class}">
+                %for i, tag in enumerate(value):
+                    ${self.tagTempl(widget, str(i), tag['name'], tag['name'])}
+                %endfor
+            </div><input type="text" class="query ${widget.getClasses()}" autocomplete="off" ${widget.attrs.getInputAttrs(request)|n}/>
         </div>
     </div>
 </%block>

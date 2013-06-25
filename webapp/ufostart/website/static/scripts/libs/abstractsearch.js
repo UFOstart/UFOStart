@@ -164,7 +164,7 @@ define(["tools/hash", "tools/ajax", "text!libs/templates/searchresult.html"]
                 if(item.hasClass("create-new-entity")){
                     this._extraItemSelected();
                 } else {
-                    var id = item.attr("data-entity-id"), model = this.model.get(id);
+                    var id = item.data("entityId"), model = this.model.get(id);
                     if(model)this.trigger("selected", model)
                     else this.trigger("unknownterm:selected", this.$searchBox.val().trim());
                 }

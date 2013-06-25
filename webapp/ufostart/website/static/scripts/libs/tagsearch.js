@@ -23,7 +23,9 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
         })
         , TagView = Backbone.View.extend({
             events: {'click .close':"destroy"}
-            , initialize: function(){}
+            , initialize: function(){
+                this.listenTo(this.model, "destroy", this.remove, this);
+            }
             , destroy: function(e){
                 this.remove();
                 this.model.destroy();
@@ -40,6 +42,13 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
             }
             , delKey: function(e){
                 return true;
+            }
+            , otherKey: function(e){
+                if(e.keyCode == 8 && !this.$searchBox.val()){
+                    this.trigger("delKey");
+                    return false;
+                }
+                else return true;
             }
         })
         , TagSearchView = Backbone.View.extend({
@@ -60,7 +69,6 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
 
                 this.$result = this.$(".current-tags");
                 this.tagTemplate = _.template(this.$(".tag-template").html().trim());
-                var view = this;
 
                 this.model = new this.MODEL_CLS();
                 this.model.on("add", this.addOne, this);
@@ -71,6 +79,11 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
                     view.search.hide();
                     view.model.add(term);
                     view.$input.val("");
+                });
+                this.search.on("delKey", function(e){
+                    var id = view.$result.children().last().find("input").val()
+                        , model = view.model.get(id);
+                        if (model) model.destroy();
                 });
 
                 if(opts.onCreate){
@@ -100,10 +113,16 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
                         view.model.add(model, {silent:true});
                         new TagView({model: model,el:el});
                     });
+                this.adjustInput();
             }
             , addOne: function(model){
                 this.$result.append((new TagView({model: model})).render({template: this.tagTemplate, prefix: this.options.prefix, pos: this.model.length - 1}));
+                this.adjustInput();
                 this.search.rePosition();
+            }
+            , adjustInput: function(){
+                var w = (this.$(".search-field").width() - this.$result.width() -21);
+                this.$input.css({width: w>100?w+'px':'100%'})
             }
             , reIndex: function(){
                 this.$result.find("input[name]").each(function(idx, elem){
@@ -111,6 +130,7 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
                     elem.attr('name', elem.attr('name').replace(re, "-"+(idx)+"."));
                 });
                 this.$input.trigger("change");
+                this.adjustInput();
             }
             , getSearch: function(opts){
                 return new TagSearch({
