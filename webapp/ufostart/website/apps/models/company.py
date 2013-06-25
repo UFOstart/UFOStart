@@ -15,12 +15,11 @@ from ufostart.models.tasks import NamedModel
 from ufostart.website.apps.models.workflow import WorkflowModel
 
 TEMPLATE_STYLE_KEYS = {
-    'EARLY_STAGE_ECOMMERCE':'ecommerce'
-    , 'HI-TECH':'hitech'
-    , 'INTERNATIONALISING':'internat'
-    , 'JUST_GETTING_STARTED':'started'
-    , 'SEED_STAGE':'seed'
-    , 'SERIES_B':'seriesb'
+    'E-COMMERCE':'ecommerce'
+    , 'STEVE_BLANK':'hitech'
+    , 'START':'started'
+    , 'LAUNCH':'seed'
+    , 'SCALE':'seriesb'
 }
 
 def getRoleName(role):

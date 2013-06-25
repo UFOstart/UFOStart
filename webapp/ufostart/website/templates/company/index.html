@@ -17,98 +17,123 @@
                 %endif
             </div>
             <div class="col col-lg-9">
-                ${self.upperContent()}
+                ${self.upperContent(company.currentRound.published)}
                 ${self.lowerContent()}
             </div>
         </div>
     </div>
 </%def>
 
-<%def name="upperContent()">
-<div class="row">
-    <div class="col col-lg-6">
-        <div class="box-title highlight-target">
-            <div id="target-invite-team" class="highlight-anchor"></div>
-            Company
-        </div>
-        <div class="box-header box-header-muted box-card">
-            ${widgets.company_logo(company)}
-            <div class="right-box">
-                <a href="${url("website_company_company", **vctxt.urlArgs)}" class="overflow"><strong>${company.display_name}</strong></a>
-                <div class="description">${html.nn(company.description) | html.trunc(50)}</div>
-                <div class="number-widget">
-                    <h6>Startup Value</h6>
-                    <div class="value">${company.startupValue}</div>
+<%def name="upperContent(isPublished)">
+    %if isPublished:
+        <div class="row">
+            <div class="col col-lg-6">
+                <div class="box-title">Company</div>
+                ${self.companyBox(company)}
+
+                <div class="mar-top-1">
+                    <div class="box-title">Product</div>
+                    ${self.productBox(company)}
                 </div>
             </div>
+            <div class="col col-lg-6"></div>
         </div>
-        <div class="mar-top-half">
-            <h6>Team members</h6>
-            <div class="picture-pile">
-            %for user in company.Users[:8]:
+    %else:
+        <div class="row">
+            <div class="col col-lg-6">
+                <div class="box-title highlight-target">
+                    <div id="target-invite-team" class="highlight-anchor"></div>
+                    Company
+                </div>
+                ${self.companyBox(company)}
+            </div>
+            <div class="col col-lg-6">
+                <div class="box-title highlight-target">
+                    <div id="target-create-product" class="highlight-anchor"></div>
+                    Product
+                </div>
+                ${self.productBox(company)}
+            </div>
+        </div>
+    %endif
+</%def>
+
+<%def name="companyBox(company)">
+    <div class="box-header box-header-muted box-card">
+        ${widgets.company_logo(company)}
+        <div class="right-box">
+            <a href="${url("website_company_company", **vctxt.urlArgs)}" class="overflow"><strong>${company.display_name}</strong></a>
+            <div class="description">${html.nn(company.description) | html.trunc(50)}</div>
+            <div class="number-widget">
+                <h6>Startup Value</h6>
+                <div class="value">${company.startupValue}</div>
+            </div>
+        </div>
+    </div>
+    <div class="mar-top-half">
+        <h6>Team members</h6>
+        <div class="picture-pile">
+        %for user in company.Users[:8]:
+            ${widgets.userPic(user, classes='mini')|n}
+        %endfor
+        %if vctxt.canEditCompany:
+            <a href="${url("website_company_company", **vctxt.urlArgs)}"><small>Invite team<br/>members</small></a>
+        %endif
+        </div>
+    </div>
+    <hr/>
+    <div>
+        <h6>Mentors</h6>
+        <div class="picture-pile">
+            %for user in company.mentors[:8]:
                 ${widgets.userPic(user, classes='mini')|n}
             %endfor
-            %if vctxt.canEditCompany:
-                <a href="${url("website_company_company", **vctxt.urlArgs)}"><small>Invite team<br/>members</small></a>
-            %endif
-            </div>
+            <a href="${url("website_company_add_mentor", **vctxt.urlArgs)}" class="btn btn-primary">Add Mentor</a>
         </div>
-        <hr/>
-        <div>
-            <h6>Mentors</h6>
-            <div class="picture-pile">
-                %for user in company.mentors[:8]:
-                    ${widgets.userPic(user, classes='mini')|n}
-                %endfor
-                <a href="${url("website_company_add_mentor", **vctxt.urlArgs)}" class="btn btn-primary">Add Mentor</a>
-            </div>
-        </div>
-        <hr/>
     </div>
-
-    <div class="col col-lg-6">
-        <div class="box-title highlight-target">
-            <div id="target-create-product" class="highlight-anchor"></div>
-            Product
-        </div>
-        %if not company.product_is_setup:
-            <div class="box-header box-header-muted box-header-square"></div>
-            <div class="mar-top-1">
-            %if vctxt.canEditCompany:
-                <a href="${url("website_company_product_create", **vctxt.urlArgs)}" class="btn btn-primary">Setup Your Product</a>
-            %else:
-                <h3>Not Setup yet</h3>
-            %endif
-            </div>
-        %else:
-            <div class="picture-header">
-                <img src="${company.product_picture}"/>
-            </div>
-            <div class="mar-top-half">
-                <a href="${url("website_company_product", **vctxt.urlArgs)}" class="overflow"><strong>${company.product_name}</strong></a>
-                <div class="description">${html.nn(company.product_description) | html.trunc(50)}</div>
-            </div>
-        %endif
-        <hr/>
-        <div class="number-widget">
-            <div class="thirds">
-                <h6>Pledges</h6>
-                <div class="value">${company.no_pledges}</div>
-            </div><div class="two thirds">
-                <h6>Customers</h6>
-                <div class="picture-pile">
-                    %for pledge in company.pledgees[:4]:
-                        <div class="picture mini">
-                            <img src="${pledge.picture}"/>
-                        </div>
-                    %endfor
-                </div>
-            </div>
-        </div>
-        <hr/>
-    </div>
-</div>
+    <hr/>
 </%def>
+
+
+<%def name="productBox(company)">
+    %if not company.product_is_setup:
+        <div class="box-header box-header-muted box-header-square"></div>
+        <div class="mar-top-1">
+        %if vctxt.canEditCompany:
+            <a href="${url("website_company_product_create", **vctxt.urlArgs)}" class="btn btn-primary">Setup Your Product</a>
+        %else:
+            <h3>Not Setup yet</h3>
+        %endif
+        </div>
+    %else:
+        <div class="picture-header">
+            <img src="${company.product_picture}"/>
+        </div>
+        <div class="mar-top-half">
+            <a href="${url("website_company_product", **vctxt.urlArgs)}" class="overflow"><strong>${company.product_name}</strong></a>
+            <div class="description">${html.nn(company.product_description) | html.trunc(50)}</div>
+        </div>
+    %endif
+    <hr/>
+    <div class="number-widget">
+        <div class="thirds">
+            <h6>Pledges</h6>
+            <div class="value">${company.no_pledges}</div>
+        </div><div class="two thirds">
+            <h6>Customers</h6>
+            <div class="picture-pile">
+                %for pledge in company.pledgees[:4]:
+                    <div class="picture mini">
+                        <img src="${pledge.picture}"/>
+                    </div>
+                %endfor
+            </div>
+        </div>
+    </div>
+    <hr/>
+</%def>
+
+
 
 <%def name="lowerContent()">
     <div class="row mar-top-2">
