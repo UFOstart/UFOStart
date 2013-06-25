@@ -13,7 +13,6 @@ def home(context, request):
         , 'best_match':best_match
         , 'isMyProfile': True
         , 'location_needs':location
-        , 'approvals': [comp for comp in profile.Companies if comp.currentRound.Workflow.canPublish()]
     }
 
 
