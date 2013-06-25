@@ -107,6 +107,7 @@ class ServiceModel(Mapping):
 
 class ApplicationModel(Mapping):
 
+    token = TextField()
     message = TextField()
     created = DateTimeField()
     User = DictField(CompanyUserModel)

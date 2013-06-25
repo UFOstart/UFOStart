@@ -87,6 +87,7 @@ SetCompanyAngelListPitchProc = ClientTokenProc("/web/company/angellist")
 CreateNeedProc = ClientTokenProc("/web/round/needcreate")
 EditNeedProc = ClientTokenProc("/web/round/need", result_cls=RoundModel, root_key="Round")
 ApplyForNeedProc = ClientTokenProc("/web/need/application")
+ApproveApplicationProc = ClientTokenProc("/web/need/approveapplication")
 
 InviteToCompanyProc = ClientTokenProc("/web/company/invite")
 GetInviteDetailsProc = ClientTokenProc("/web/company/getInvite", result_cls=InviteModel, root_key="Invite")

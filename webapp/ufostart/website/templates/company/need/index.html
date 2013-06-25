@@ -268,6 +268,9 @@
                             <a href="${url("website_user", slug = application.User.token)}" class="name"><strong>${application.User.name}</strong></a>
                             <p class="text-small">${html.nn(application.User.position)}</p>
                             <p class="text-small">${application.display_date}</p>
+                            %if vctxt.canEditCompany:
+                                <a href="${url("website_need_application_accept", applicationToken=application.token, **vctxt.urlArgs)}" class="btn btn-primary">Accept</a>
+                            %endif
                         </div>
                     </div>
                 </div>

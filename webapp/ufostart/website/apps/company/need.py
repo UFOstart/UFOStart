@@ -4,11 +4,18 @@ from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from ufostart.website.apps.forms.controls import FileUploadField, TagSearchField
 from ufostart.website.apps.auth.social import AuthedFormHandler
-from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc
+from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc
 
 
 def index(context, request):
     return {}
+
+
+def accept_application(context, request):
+    ApproveApplicationProc(request, {'token': request.matchdict['applicationToken']})
+    request.fwd("website_round_need", **context.urlArgs)
+
+
 
 class ApplicationForm(BaseForm):
     id="Application"
