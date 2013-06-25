@@ -1,16 +1,14 @@
 <%inherit file="layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
-<%def name="slogan()">
-    ${self.crumbs(1)}
-    <h1 class="mar-top-2">Your Project Template</h1>
-    <h2>Pick one that describes your company.</h2>
-</%def>
+<%def name="slogan()">${self.crumbs(1)}</%def>
+<%def name="sectionTitle()">Choose a Template</%def>
+
 
 <%def name="bodyContent()">
 <div class="row">
     %for t in templates:
-        <div class="col col-lg-6">
+        <div class="col col-lg-6 text-center">
             <div class="single-template">
                 <a href="${url("website_template_details", template=t.key)}" class="single-template-button ${t.getStyleKey()} no-btn">
                     <img src="${STATIC_URL}img/templates/${t.getStyleKey()}.png"/>
@@ -23,4 +21,15 @@
         </div>
     %endfor
 </div>
+</%def>
+
+<%def name="wtfBox()">
+    <div class="wtf-box active">
+        <h2 class="wtf-title">
+            Whats happening here?
+        </h2>
+        <div class="wtf-content mar-top-1">
+            Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ...
+        </div>
+    </div>
 </%def>

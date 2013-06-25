@@ -34,18 +34,15 @@
 .min-height-15 {  min-height: 330px; }
 .mar-top-half {margin-top: ceil(@line-height-computed / 2);}
 
-.right-bordered {
-  border-right:1px solid black;
-}
 .box-title {
   display: block;
-  background-color: #ff792a;
-  text-transform: uppercase;
-
-  line-height: 2em;
-  padding: 0 15px;
+  background-color: #808080;
+  border:1px solid #6d6d6d;
+  color:white;
+  font-weight: 600;
+  padding: 3px 12px;
   margin:0;
-  color: white;
+
   &.dark {
     background-color:@text-muted;
   }
@@ -94,7 +91,7 @@ div.box-title{font-weight: 600;}
 
 h1.section-title {
   position: relative;
-  font-size:@font-size-large;
+  font-size:@font-size-xlarge;
   &:before {
       content: ".";
       text-indent: -999em;

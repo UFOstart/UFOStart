@@ -1,31 +1,39 @@
 <%inherit file="layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
-<%def name="slogan()">
-    ${self.crumbs(2)}
-    <h1 class="mar-top-2">${template.name} <span class="template-icon ${template.getStyleKey()}"></span></h1>
-</%def>
+<%def name="slogan()">${self.crumbs(2)}</%def>
+<%def name="sectionTitle()">${template.name}</%def>
 
 <%def name="bodyContent()">
-    <div class="row">
-        <div class="col col-lg-12">
-            <div class="box-title">
-                Template Description
-            </div>
-            <div class="mar-top-1">
-                <div class="picture xx-large no-margin pull-left single-template-mock">
-                    <img src="${STATIC_URL}img/templates/${template.getStyleKey()}.png"/>
-                    <span class="name">${template.name}</span>
+        <div class="row mar-top-1">
+            <div class="col col-lg-4 template-details">
+                <div class="box-title">
+                    Template Details
                 </div>
+                <div class="picture-header">
+                    <img src="${STATIC_URL}img/templates/${template.getStyleKey()}.png"/>
+                </div>
+                <div class="number-widget border-bottom mar-top-2">
+                    <div class="thirds">
+                        <div class="heading">Needs</div>
+                        <div class="value">${len(template.Need)}</div>
+                    </div><div class="thirds">
+                        <div class="heading">Time</div>
+                        <div class="value">90 <span class="sub-value">Days</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-8">
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
                 Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-            </div>
-            <div class="mar-top-1">
-                <a href="${url("website_template_create", template = template.key)}" class="btn btn-primary btn-humonguous pull-right "><span>Use this</span></a>
-                <a href="${url("website_template_basic")}">&laquo;Back</a>
+
+                <div class="mar-top-1">
+                    <a href="${url("website_template_basic")}" class="btn btn-default btn-large pull-right">Back to Overview</a>
+                    <a href="${url("website_template_create", template = template.key)}" class="btn btn-primary btn-large">Use this Template</a>
+                </div>
+
             </div>
         </div>
-    </div>
     <div class="row mar-top-2">
         <div class="col col-lg-12">
             <div class="box-title">Needs</div>
@@ -47,11 +55,13 @@
 <%def name="buildNeed(need)">
     <div class="need-card">
     <div class="need-card-inner">
-        <h5>${need.name}</h5>
-        <div class="description">
-            ${need.summary | html.trunc(50)}
+        <div class="need-header muted">
+            <h5>${need.name}</h5>
+            <div class="description">
+                ${need.summary | html.trunc(200)}
+            </div>
         </div>
-        <div class="label-list">
+        <div class="need-body mini">
             %for tag in need.tags:
                 <span class="label label-info spaced text-small">${tag}</span>
             %endfor
@@ -62,11 +72,11 @@
 
 
 <%def name="wtfBox()">
-    <div class="wtf-box">
-        <h5 class="box-title">
+    <div class="wtf-box active">
+        <h2 class="wtf-title">
             Whats happening here?
-        </h5>
-        <div class="box-content mar-top-1">
+        </h2>
+        <div class="wtf-content mar-top-1">
             Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna. Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ...
         </div>
     </div>

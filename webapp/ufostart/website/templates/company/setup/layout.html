@@ -3,16 +3,25 @@
 
 <%def name="content()">
     <div class="container">
-        <div class="row">
-            <div class="col col-lg-9">
+        <div class="row mar-top-1">
+            <div class="col col-lg-10">
                 ${self.slogan()}
             </div>
         </div>
-        <div class="row mar-top-2">
-            <div class="col col-lg-3 pull-right">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    <span class="brand-primary">
+                        ${self.sectionTitle()}
+                    </span>
+                </h1>
+            </div>
+        </div>
+        <div class="row mar-top-1">
+            <div class="col col-lg-2 pull-right">
                 ${self.wtfBox()}
             </div>
-            <div class="col col-lg-9">
+            <div class="col col-lg-10">
                 ${self.bodyContent()}
             </div>
         </div>
@@ -22,12 +31,13 @@
 
 <%def name="crumbs(no)">
     <ul class="list-unstyled breadcrumbs">
-        <li class="crumb after ${'active' if no == 1 else ''}">
-            Choose a Template</li><li class="crumb before after ${'active' if no == 2 else ''}">
-            Review Template</li><li class="crumb before ${'active' if no == 3 else ''}">
+        <li class="crumb wtf-1 after ${'active' if no == 1 else ''}">
+            Choose a Template</li><li class="crumb wtf-2 before after ${'active' if no == 2 else ''}">
+            Review Template</li><li class="crumb wtf-3 before ${'active' if no == 3 else ''}">
             Setup Project
         </li>
     </ul>
     <div style="clear:both"></div>
 </%def>
 <%def name="wtfBox()"></%def>
+<%def name="sectionTitle()"></%def>

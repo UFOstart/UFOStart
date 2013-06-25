@@ -77,7 +77,7 @@
             <h5><a href="${need_url}" class="overflow">${need.Company.name}</a></h5>
             <div class="description">${need.Company.description | html.trunc(50)}</div>
         </div>
-        <div class="need-body">
+        <div class="need-body equalized">
             <h5><a href="${need_url}">${need.name}</a></h5>
             <div class="long-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
         </div>

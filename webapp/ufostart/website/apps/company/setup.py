@@ -20,11 +20,10 @@ def details(context, request):
 
 class CompanyCreateForm(BaseForm):
     id="CompanyCreate"
-    grid = HORIZONTAL_GRID
     label = ""
     fields=[
         StringField('name', 'Project Name', REQUIRED)
-        , TextareaField("description", "Description", input_classes='x-high')
+        , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
         , FileUploadField('logo', 'Project Logo')
     ]
     @classmethod

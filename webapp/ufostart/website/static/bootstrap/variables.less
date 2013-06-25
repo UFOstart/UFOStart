@@ -5,14 +5,12 @@
 @corp-color: #ff792a;
 @corp-color-semi: fadeout(@corp-color, 40%);
 @corp-color-teal: #009399;
+@wtf-color: #440071;
+
 
 @text-muted: #666;
 @light-muted: #f4f4f4;
 
-@wtf-bg-color: #e5e5e5;
-@wtf-color: darken(@wtf-bg-color, 40%);
-@wtf-active-bg-color: rgb(218, 204, 227);
-@wtf-active-color: darken(@wtf-active-bg-color, 40%);
 
 // Global values
 // --------------------------------------------------
@@ -70,6 +68,7 @@
 
 @font-weight-bold: 700;
 @font-size-base:          14px;
+@font-size-xlarge:        24px;
 @font-size-large:         ceil(@font-size-base + 2px);
 @font-size-small:         ceil(@font-size-base - 2px); // ~12px
 @font-size-mini:          ceil(@font-size-base * 0.75); // ~11px
@@ -86,7 +85,7 @@
 // Based on 14px font-size and 1.428 line-height (~20px to start)
 
 @padding-base-vertical:          8px;
-@padding-base-horizontal:        12px;
+@padding-base-horizontal:        20px;
 
 @padding-large-vertical:         10px;
 @padding-large-horizontal:       30px;
@@ -116,7 +115,7 @@
 
 @btn-default-color:              #fff;
 @btn-default-bg:                 #b2b2b2;
-@btn-default-border:             #fff;
+@btn-default-border:             darken(@btn-default-bg, 10%);
 
 @btn-primary-color:              @btn-default-color;
 @btn-primary-bg:                 @corp-color-teal;

@@ -1,14 +1,36 @@
 .wtf-box {
-  background-color: @wtf-active-bg-color;
-  color: @wtf-active-color;
-  > .box-title {
-    background-color: transparent;
-    color: @wtf-active-color;
+  background-color: @wtf-color;
+  padding:12px;
+  > .wtf-title {
+    color:white;
+    margin:0;
+    font-weight: 300;
   }
-  > .box-content {
-    padding-top:0;
+  > .wtf-content {
+    color:white;
+    font-size: @font-size-small;
+  }
+  &.active {color: white;}
+}
+
+// Small grid columns
+.generate-wtf-colors(@lines) {
+  .wtf-X (@index) when (@index > 0) {
+    .wtf-@{index} { .wtf-(@index); }
+    .wtf-X((@index - 1));
+  }
+  .wtf-X (0) {}
+  // Generate columns
+  .wtf-X(@lines);
+  // Apply the styles
+  .wtf-(@num) {
+    background-color: desaturate(lighten(@wtf-color, 10% * @num), 10% * @num);
   }
 }
+.generate-wtf-colors(7);
+
+
+
 
 .empty {
   padding: @line-height-computed 0;
@@ -116,3 +138,26 @@
 }
 
 .col.middle {padding:0;}
+
+
+.number-widget{
+  >.thirds {
+    width:33%;
+    display: inline-block;
+    vertical-align: top;
+  }
+  .heading {
+    color: @text-muted;
+    font-weight:@font-weight-bold;
+    font-size: @font-size-small;
+  }
+  .value {
+    color: @brand-primary;
+    font-weight: @font-weight-bold;
+    font-size:@font-size-xlarge;
+    > .sub-value {font-size:@font-size-base;vertical-align: middle;}
+  }
+  &.border-bottom {
+    border-bottom: 1px solid #b2b2b2;
+  }
+}
