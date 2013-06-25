@@ -31,7 +31,7 @@
             <div id="target-invite-team" class="highlight-anchor"></div>
             Company
         </div>
-        <div class="box-header box-header-muted">
+        <div class="box-header box-header-muted box-card">
             ${widgets.company_logo(company)}
             <a href="${url("website_company_company", **vctxt.urlArgs)}" class="overflow"><strong>${company.display_name}</strong></a>
             <div class="description">${company.description | html.trunc(50)}</div>
@@ -132,7 +132,7 @@
             %endif
         %endif
         <div class="need-card-inner">
-            <div class="box-header box-header-muted">
+            <div class="box-header box-header-muted box-card">
                 %if not published and vctxt.canEditCompany:
                     <a class="remove" data-target=".need-card">×</a>
                 %endif

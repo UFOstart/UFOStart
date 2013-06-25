@@ -8,200 +8,97 @@
     </div>
 </%def>
 
+<%def name="needOverview(need)">
+    <div class="box-title">Need Details</div>
 
-<%def name="content()">
-    <div class="container">
+    %if need.picture:
+        <div class="picture-header">
+            <img src="${need.picture}"/>
+        </div>
+    %endif
+
+    <div class="mar-top-1">
+        ${widgets.valuation(need)}
+    </div>
+
+    <hr/>
+    %for tag in need.tags:
+        <span class="label label-info spaced text-small">${tag}</span>
+    %endfor
+</%def>
+
+<%def name="companyInfo(company)">
+    <div class="box-dark box-card">
+        <h2>Company Info</h2>
+        <div class="mar-top-1"></div>
+        ${widgets.company_logo(company)}
+        <div class="right-box">
+            <a href="${url("website_company_company", **vctxt.urlArgs)}" class="overflow"><strong>${company.display_name}</strong></a>
+            <div class="description">${company.description | html.trunc(50)}</div>
+            <div class="number-widget">
+                <h6>Startup Value</h6>
+                <div class="value">$2.346.708</div>
+            </div>
+        </div>
+    </div>
+    <div class="mar-top-1">
+        <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary btn-block">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
+    </div>
+</%def>
+
+<%def name="recommendedExperts(company, need)">
+    <div class="expert-list">
+    %for expert in need.experts:
+    <div class="expert-briefing">
         <div class="row">
-            <div class="col col-lg-12">
-                <h1 class="site-slogan">
-                    ${vctxt.need.name}
-                </h1>
-
-                <p>${html.nn(vctxt.need.summary)}</p>
+            <div class="col col-sm-2">
+                <div class="picture medium">
+                    <img src="${expert.picture_url}" alt="${expert.name}"/>
+                </div>
             </div>
-        </div>
-    </div>
-        <div class="container">
-            <div class="row mar-top-1">
-                <div class="col col-lg-8">
-                %if vctxt.canEditCompany:
-                    ${self.bodyContent(vctxt.need)}
+            <div class="col col-sm-8">
+                <strong>${expert.name}</strong>
+                <p class="text-muted text-small">${html.nn(expert.position)}</p>
+            </div>
+            <div class="col col-sm-2">
+                %if expert.introducers:
+                    <a class="expander btn btn-default btn-large btn-block" data-toggle-target=".expert-briefing" data-toggle-class="expanded" data-toggle-text="▼">◀</a>
                 %else:
-                    <div class="box-title">${vctxt.need.name}</div>
-                    ${self.needDetails(vctxt.need)}
+                    <div class="pull-right linkedin-widget" data-widget="SendMessage" data-entity-id="${expert.linkedinId}">
+                        <a class=" btn btn-primary btn-small">Send Message</a>
+                    </div>
                 %endif
-                </div>
-                <div class="col col-lg-4">
-                    %if vctxt.canEditCompany:
-                        ${self.privateInfoBox(vctxt.company, vctxt.need)}
-                    %else:
-                        ${self.publicInfoBox(vctxt.company, vctxt.need)}
-                    %endif
-                    ${self.endorsementBox(vctxt.company, vctxt.need)}
-                </div>
             </div>
         </div>
-    <div class="container">
-        <div class="row mar-top-2">
-            <div class="col col-lg 12">
-                <div class="box-title">Applications</div>
-                ${self.applications(vctxt.need.Applications)}
-            </div>
-        </div>
-    </div>
-</%def>
-
-<%def name="bodyContent(need)">
-    <div class="box-framed">
-        <div class="box-title"><a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>Need Details</div>
-        <div class="box-content">${self.needDetails(need)}</div>
-    </div>
-</%def>
-
-<%def name="needDetails(need)">
-    <div class="description mar-top-1">
-        %if need.picture:
-            <div class="picture need empty">
-                <img src="${need.picture}"/>
+        %if expert.introducers:
+            <div class="row expert-details show-expanded">
+                <div class="col col-lg-10 col-offset-2">
+                    <h6 class="text-muted">Introducers</h6>
+                    %for intro in expert.introducers:
+                    <div class="row mar-top-half">
+                        <div class="col col-sm-2">
+                            <div class="picture mini">
+                                <img src="${intro.picture}" alt="${intro.name}"/>
+                            </div>
+                        </div>
+                        <div class="col col-sm-4">
+                            <a class="overflow" href="#"><strong>${intro.name}</strong></a>
+                            <p class="text-muted text-small">${intro.position}</p>
+                        </div>
+                        <div class="col col-lg-6">
+                            <a href="#" class="btn btn-primary btn-small btn-block ">Get Introduction</a>
+                        </div>
+                    </div>
+                    %endfor
+                </div>
             </div>
         %endif
-        ${widgets.valuation(need)}
-
-        <div>
-            ${html.nn(vctxt.need.customText)}
         </div>
-    </div>
-    <h5 class="text-muted">
-        Related Tags
-    </h5>
-    <div class="label-list">
-        %for tag in need.tags:
-            <span class="label label-info spaced text-small">${tag}</span>
-        %endfor
+    %endfor
     </div>
 </%def>
 
-<%def name="endorsementBox(company, need)">
-    <div class="box-framed endorsements">
-    <div class="box-title">Endorsed Experts</div>
-    <script type="text/template" class="endorsement-template">
-        <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">
-            <div class="col col-sm-3">
-                <div class="picture">
-                    <img src="{{ model.getPicture() }}"/>
-                </div>
-            </div>
-            <div class="col col-sm-9">
-                <strong>{{ model.getName() }}</strong>
-                <p class="text-small">{{ model.getPosition() }}</p>
-            </div>
-        </div>
-    </script>
-    <div class="box-content"></div>
-    </div>
-    %if vctxt.user.isAnon():
-        <div class="box-framed">
-            <div class="box-title">Login to endorse</div>
-            <div class="box-content text-center">
-                ${widgets.login_btn('linkedin')}
-            </div>
-        </div>
-    %else:
-        <div class="box-framed">
-            <div class="box-title">Endorse your contacts for this need</div>
-            <div class="box-content">
-                <div class="linkedin-widget" data-widget="ContactSearch">
-                    <script type="text/template" class="contact-template">
-                        <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">
-                            <div class="col col-sm-3">
-                                <div class="picture">
-                                    <img src="{{ model.getPicture() }}"/>
-                                </div>
-                            </div>
-                            <div class="col col-sm-9">
-                                <a class="pull-right btn btn-small btn-primary">Endorse</a>
-                                <strong>{{ model.getName() }}</strong>
-                                <p class="text-small">{{ model.getPosition() }}</p>
-                            </div>
-                        </div>
-                    </script>
-                    <div class="search-field">
-                        <input type="text" class="query" placeholder="Find a contact by name">
-                    </div>
-                    <div class="results endorsement-search"></div>
-                </div>
-            </div>
-        </div>
-    %endif
-</%def>
-
-<%def name="privateInfoBox(company, need)">
-<div class="box-framed">
-<div class="box-title">Suggested Solutions</div>
-<div class="box-content">
-    %if need.experts:
-        <div class="experts">
-            <h5 class="text-muted no-margin upper">Recommended Experts</h5>
-            <div class="expert-list">
-            %for expert in need.experts:
-            <div class="expert-briefing">
-                <div class="row">
-                    <div class="col col-lg-3">
-                        <div class="picture medium">
-                            <img src="${expert.picture_url}" alt="${expert.name}"/>
-                        </div>
-                    </div>
-                    %if expert.introducers:
-                        <div class="col col-lg-7">
-                            <a href="#" class="overflow"><strong>${expert.name}</strong></a>
-                            <p class="text-muted text-small">${html.nn(expert.position)}</p>
-                        </div>
-                        <div class="col col-lg-2">
-                                <a class="expander btn btn-default btn-large btn-block" data-toggle-target=".expert-briefing" data-toggle-class="expanded" data-toggle-text="▼">◀</a>
-                        </div>
-                    %else:
-                        <div class="col col-lg-9">
-                            <div class="pull-right linkedin-widget" data-widget="SendMessage" data-entity-id="${expert.linkedinId}">
-                                <a class=" btn btn-primary btn-small">Send Message</a>
-                            </div>
-                            <a href="#" class="overflow"><strong>${expert.name}</strong></a>
-                            <p class="text-muted text-small">${html.nn(expert.position)}</p>
-                        </div>
-                    %endif
-
-
-                </div>
-                <div class="expert-details row show-expanded">
-                    <div class="col col-lg-12">
-                        ${expert._data}
-                        %if expert.introducers:
-                            <h6 class="text-muted">Introducers</h6>
-                            %for intro in expert.introducers:
-                            <div class="row mar-top-half">
-                                <div class="col col-sm-2">
-                                    <div class="picture mini">
-                                        <img src="${intro.picture}" alt="${intro.name}"/>
-                                    </div>
-                                </div>
-                                <div class="col col-sm-4">
-                                    <a class="overflow" href="#"><strong>${intro.name}</strong></a>
-                                    <p class="text-muted text-small">${intro.position}</p>
-                                </div>
-                                <div class="col col-lg-6">
-                                    <a href="#" class="btn btn-primary btn-small btn-block ">Get Introduction</a>
-                                </div>
-                            </div>
-                            %endfor
-                        %endif
-                    </div>
-                </div>
-                </div>
-            %endfor
-            </div>
-        </div>
-    %endif
-    <h5 class="text-muted no-margin upper mar-top-2">Recommended Cloud Services</h5>
-    <div class="service-list row">
+<%def name="recommendedServices(company, need)">
     %for service in need.services:
         <div class="col col-lg-4 service-briefing">
             <div class="picture medium">
@@ -212,58 +109,125 @@
             <a href="${service.url or '#'}" target="_blank" class="btn btn-small btn-block btn-primary">See Details</a>
         </div>
     %endfor
+</%def>
+
+
+<%def name="needDetails(canEdit, company, need)">
+    ${html.nn(need.customText)}
+
+    <div class="mar-top-2">
+        <div class="box-title">Endorsed Experts</div>
+        ${self.endorsedExperts(company, need)}
     </div>
-</div>
-</div>
+
+    %if canEdit:
+        %if need.experts:
+            <div class="box-title mar-top-2">Suggested Experts</div>
+            <div class="experts">
+                ${self.recommendedExperts(company, need)}
+            </div>
+        %endif
+
+        %if need.services:
+            <div class="box-title mar-top-2">
+                Recommended Cloud Services
+            </div>
+            <div class="service-list row">
+                ${self.recommendedServices(company, need)}
+            </div>
+        %endif
+    %endif
 </%def>
 
 
 
-<%def name="publicInfoBox(company, need)">
-    <div class="box-framed">
-        <div class="box-title">
-            Info
-        </div>
-        <div class="box-content">
-            <h5 class="upper text-muted">
-                Company
-            </h5>
-            <div class="row">
-                <div class="col col-lg-3">
-                    ${widgets.company_logo(company)}
-                </div>
-                <div class="col col-lg-6">
-                    <strong><a href="${url("website_company", **vctxt.urlArgs)}" class="overflow">${company.display_name}</a></strong>
-                    <div class="tagline">${company.description | html.trunc(50)}</div>
-                </div>
-                <div class="col col-lg-3">
-                    <h5 class="text-muted no-margin">Team members</h5>
-                    <h5 class="no-margin brand-primary">${company.no_users}</h5>
-                </div>
-            </div>
-            <h5 class="upper text-muted">
-                Product
-            </h5>
-            <div class="row">
-                <div class="col col-lg-3">
-                    ${widgets.product_logo(company)}
-                </div>
-                <div class="col col-lg-6">
-                    %if company.product_is_setup:
-                        <a href="${url("website_company_product", **vctxt.urlArgs)}"><strong>${company.product_name}</strong></a>
-                        <div class="description">${company.product_description | html.trunc(50) }</div>
-                    %else:
-                        <strong>Not setup yet</strong>
+<%def name="content()">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    %if vctxt.canEditCompany:
+                        <span class="btn-wrapper">
+                            <a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
+                        </span>
                     %endif
-                </div>
-                <div class="col col-lg-3">
-                    <h5 class="text-muted no-margin">Pledges</h5>
-                    <h5 class="no-margin brand-primary">${company.no_pledgees}</h5>
-                </div>
+                    <span class="brand-primary">${vctxt.need.name}</span>
+                </h1>
+            </div>
+        </div>
+
+        <div class="row mar-top-1">
+            <div class="col col-lg-3">
+                ${self.needOverview(vctxt.need)}
+            </div>
+            <div class="col col-lg-6">
+                ${self.needDetails(vctxt.canEditCompany, vctxt.company, vctxt.need)}
+            </div>
+            <div class="col col-lg-3">
+                ${self.companyInfo(vctxt.company)}
+            </div>
+        </div>
+
+        <div class="row mar-top-2">
+            <div class="col col-lg 12">
+                <div class="box-title">Applications</div>
+                ${self.applications(vctxt.need.Applications)}
             </div>
         </div>
     </div>
 </%def>
+
+
+<%def name="endorsedExperts(company, need)">
+    <div class="endorsements">
+        <script type="text/template" class="endorsement-template">
+            <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">
+                <div class="col col-sm-2">
+                    <div class="picture medium">
+                        <img src="{{ model.getPicture() }}"/>
+                    </div>
+                </div>
+                <div class="col col-sm-10">
+                    <strong>{{ model.getName() }}</strong>
+                    <p class="text-small">{{ model.getPosition() }}</p>
+                </div>
+            </div>
+        </script>
+        <div class="box-content"></div>
+    </div>
+
+    %if vctxt.user.isAnon():
+        <div class="box-title">Login to endorse</div>
+        <div class="text-center">
+            ${widgets.login_btn('linkedin')}
+        </div>
+    %else:
+        <div class="box-title">Endorse your contacts for this need</div>
+        <div class="linkedin-widget" data-widget="ContactSearch">
+            <script type="text/template" class="contact-template">
+                <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">
+                    <div class="col col-sm-2">
+                        <div class="picture medium">
+                            <img src="{{ model.getPicture() }}"/>
+                        </div>
+                    </div>
+                    <div class="col col-sm-10">
+                        <a class="pull-right btn btn-small btn-primary">Endorse</a>
+                        <strong>{{ model.getName() }}</strong>
+                        <p class="text-small">{{ model.getPosition() }}</p>
+                    </div>
+                </div>
+            </script>
+            <div class="search-field">
+                <input type="text" class="query" placeholder="Find a contact by name">
+            </div>
+            <div class="endorsement-search">
+                <div class="results show-expanded"></div>
+            </div>
+        </div>
+    %endif
+</%def>
+
 
 
 
@@ -301,9 +265,6 @@
         No Applications Yet
     </div>
 %endif
-<div class="text-center">
-    <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary mar-top-1">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
-</div>
 </%def>
 
 <%def name="post_scripts()">

@@ -17,13 +17,15 @@ define(["tools/hash"
                 this.$searchBoxC = this.$el.find(".search-field");
                 this.$searchBox
                     .on('keydown', $.proxy(this.keypress, this))
-                    .on('keyup',    $.proxy(this.keyup, this));
+                    .on('keyup',    $.proxy(this.keyup, this))
+                    .on('focus', function(e){view.doSearch(e.target.value);})
+                    .on('blur', $.proxy(this.hideonBlur, this));
 
                 this.listenTo(this.model, "updated", this.onSearchResult, this);
                 this.listenTo(this.model, "emptied", this.onSearchResult, this);
                 this.$resultNode = this.$('.results');
-                this.$resultNode.on({'mouseenter' : $.proxy(this.mouseenter, this),'mouseleave' : $.proxy(this.mouseleave, this),
-                        'click':_.bind(this.disAmbiguateEvent, this)}, '.search-result-item');
+                this.$resultNode.on({'mouseenter' : $.proxy(this.mouseenter, this)
+                        , 'click':$.proxy(this.disAmbiguateEvent, this)}, '.search-result-item');
                 this.setLoading();
             }
             , prev: function(){
@@ -153,6 +155,7 @@ define(["tools/hash"
                     _.each(models, function(model){
                         this.$resultNode.append(this.template({model:model}));
                     }, this);
+                    this.show();
                 }
             }
             , setLoading: function(){
@@ -162,8 +165,25 @@ define(["tools/hash"
                 this.$resultNode.find(".active").removeClass("active");
                 $(e.target).closest(".search-result-item").addClass("active");
             }
-            , mouseleave: function(e){
-                this.$resultNode.find(".active").removeClass("active");
+            , hideonBlur : function(e){
+                var view = this;
+                // timeout to allow for clickevent to happen to select item
+                setTimeout(function(){
+                    view.hide();
+                }, 200);
+            }
+            , show: function(){
+                this.$resultNode.show();
+                this.shown = true;
+                this.$el.addClass("expanded");
+                this.trigger("show");
+            }
+            , hide: function(){
+                this.lastQuery = null;
+                this.shown = false;
+                this.$el.removeClass("expanded");
+                this.$resultNode.empty().hide();
+                this.trigger("hide");
             }
         });
 
@@ -189,11 +209,6 @@ define(["tools/hash"
                         results.addOrUpdate(result);
                     })
                 }
-        });
-        opts.auth.getContacts(function(collection){
-            var result = [];
-            collection.each(function(m){result.push(m.attributes)});
-            search.model.addOrUpdate(result);
         });
         return search;
     }
