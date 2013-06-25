@@ -69,7 +69,12 @@
                 </div>
                 ${widgets.userPic(member)}
                 <div class="right-box">
-                    <a href="${vctxt.userURL(member.token)}"><strong>${ member.name }</strong></a>
+                    %if member.token:
+                        <a href="${vctxt.userURL(member.token)}"><strong>${ member.name }</strong></a>
+                    %else:
+                        <strong>${ member.name }</strong>
+                    %endif
+
                     <div class="text-muted">${html.nn(member.position)}</div>
                     <small class="headline">${html.nn(member.headline)}</small>
                 </div>
