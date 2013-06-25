@@ -8,98 +8,93 @@
     </div>
 </%def>
 
-
-
 <%def name="content()">
-    ${self.details(company, product)}
-</%def>
-
-<%def name="details(company, product)">
-<div class="container">
-    <div class="row">
-        <div class="col col-lg-8 company-customer-dashboard">
-            <div class="box-framed">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    <span class="brand-primary">${product.name}</span>
+                </h1>
+            </div>
+        </div>
+        <div class="row mar-top-1">
+            <div class="col col-lg-3">
+                <div class="box-title">Customers</div>
+                ${self.customers(company.Round.Pledges)}
+            </div>
+            <div class="col col-lg-6">
                 <div class="box-title">
                     %if vctxt.canEditCompany:
                         <a href="${url("website_company_product_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
                     %endif
                     Product Details
                 </div>
-                <div class="box-content">
-                    <h3 class="site-slogan">${product.name}</h3>
-                    <div class="product-image large mar-top-1">${self.product_media(product)}</div>
-
-                    <div class="mar-top-1">
-                        ${html.nn(product.description)}
-                    </div>
-
-                    %if vctxt.canEditCompany:
-                        <% form = view.schemas['ProductOffer'] %>
-                        ${self.create_offer_form(product, form, values.get(form.id), errors.get(form.id))}
-                    %else:
-                        %if len(product.offers):
-                        <div class="mar-top-2"></div>
-                        <div class="box-title">
-                            Offers
-                        </div>
-                            <div class="mar-top-1">
-                                <p>This product can be acquired in the following options:</p>
-                                <ul class="styled">
-                                    %for offer in product.offers:
-                                        <li><span>${offer.name}</span></li>
-                                    %endfor
-                                </ul>
-                            </div>
-                        %endif
-                    %endif
-                    %if product.Offers:
-                        <% form = view.schemas['ProductPledge'] %>
-                        ${self.pledge_offer_form(form, values.get(form.id), errors.get(form.id))}
-                    %endif
-                </div>
+                ${self.details(company, product)}
+            </div>
+            <div class="col col-lg-3">
+                ${widgets.companyInfo(vctxt.company)}
             </div>
         </div>
-        <div class="col col-lg-4">
-            <div class="box-framed">
-                <div class="box-title">Company Info</div>
-                <div class="box-content">
-                    <div class="row">
-                        <div class="col col-sm-3">
-                            ${widgets.company_logo(company)}
-                        </div>
-                        <div class="col col-sm-9">
-                            <a href="${url("website_company", **vctxt.urlArgs)}"><strong>${company.display_name}</strong></a>
-                            <p>
-                                ${html.nn(company.description) | html.trunc(50)}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="box-framed mar-top-1">
-                <div class="box-title">Customers</div>
-                <div class="box-content">
-                    <div class="row">
-                        %if company.no_pledgees:
-                            %for pledge in company.Round.Pledges:
-                            <div class="col col-sm-3">
-                                <div class="picture medium">
-                                    <img src="${pledge.picture}"/>
-                                </div>
-                            </div>
-                            %endfor
-                        %else:
-                            <div class="empty">
-                                No Customers yet
-                            </div>
-                        %endif
-                    </div>
-                </div>
-            </div>
-        </div>
+        <h1 class="section-title">
+            <span class="brand-primary">${pluralize("{num} Customer", "{num} Customers", company.no_pledges)}</span>
+        </h1>
+        ${self.pledgeList(company.Round.Pledges)}
     </div>
-</div>
 </%def>
+
+<%def name="customers(customers)">
+    <div class="row mar-top-half">
+        %if len(customers):
+            %for pledge in customers:
+            <div class="col col-sm-3">
+                <div class="picture medium">
+                    <img src="${pledge.picture}"/>
+                </div>
+            </div>
+            %endfor
+        %else:
+            <div class="empty">
+                No Customers yet
+            </div>
+        %endif
+    </div>
+</%def>
+
+
+<%def name="details(company, product)">
+    <div class="company-customer-dashboard">
+        <div class="picture-header">${self.product_media(product)}</div>
+
+        <div class="mar-top-1">
+            ${html.nn(product.description)}
+        </div>
+
+        %if vctxt.canEditCompany:
+            <% form = view.schemas['ProductOffer'] %>
+            ${self.create_offer_form(product, form, values.get(form.id), errors.get(form.id))}
+        %else:
+            %if len(product.offers):
+            <div class="mar-top-2"></div>
+            <div class="box-title">
+                Offers
+            </div>
+                <div class="mar-top-1">
+                    <p>This product can be acquired in the following options:</p>
+                    <ul class="styled">
+                        %for offer in product.offers:
+                            <li><span>${offer.name}</span></li>
+                        %endfor
+                    </ul>
+                </div>
+            %endif
+        %endif
+        %if product.Offers:
+            <% form = view.schemas['ProductPledge'] %>
+            ${self.pledge_offer_form(form, values.get(form.id), errors.get(form.id))}
+        %endif
+    </div>
+</%def>
+
 
 
 <%def name="create_offer_form(product, form, values, errors)">
@@ -196,50 +191,49 @@
         </div>
     %endif
     </div>
-
-        %if company.no_pledgees:
-            %for pledge in company.Round.Pledges:
-                <div class="row mar-top-1">
-                    <div class="col col-lg-4">
-                        <div class="row">
-                            <div class="col col-sm-4">
-                                <div class="picture">
-                                %if pledge.is_native:
-                                    <a href="${url("website_user", slug = pledge.networkId)}">
-                                        <img src="${pledge.picture}"/>
-                                    </a>
-                                %else:
-                                    <img src="${pledge.picture}"/>
-                                %endif
-                                </div>
-                            </div>
-                            <div class="col col-sm-8">
-                                %if pledge.is_native:
-                                    <p class="name"><a href="${url("website_user", slug = pledge.networkId)}"><strong>${pledge.name}</strong></a></p>
-                                %else:
-                                    <p class="name"><strong>${pledge.name}</strong></p>
-                                %endif
-                                <div class="text-small text-muted">Offer Option</div>
-                                <ul class="styled">
-                                    <li><span class="text-small">${pledge.offer}</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col col-lg-8 control-group">
-                        ${html.nn(pledge.comment)}
-                    </div>
-                </div>
-            %endfor
-        %else:
-            <div class="empty">
-                No Customers yet
-            </div>
-        %endif
-
 </%def>
 
-
+<%def name="pledgeList(pledges)">
+%if len(pledges):
+    %for pledge in pledges:
+        <div class="row mar-top-1">
+            <div class="col col-lg-4">
+                <div class="row">
+                    <div class="col col-sm-4">
+                        <div class="picture">
+                        %if pledge.is_native:
+                            <a href="${url("website_user", slug = pledge.networkId)}">
+                                <img src="${pledge.picture}"/>
+                            </a>
+                        %else:
+                            <img src="${pledge.picture}"/>
+                        %endif
+                        </div>
+                    </div>
+                    <div class="col col-sm-8">
+                        %if pledge.is_native:
+                            <p class="name"><a href="${url("website_user", slug = pledge.networkId)}"><strong>${pledge.name}</strong></a></p>
+                        %else:
+                            <p class="name"><strong>${pledge.name}</strong></p>
+                        %endif
+                        <div class="text-small text-muted">Offer Option</div>
+                        <ul class="styled">
+                            <li><span class="text-small">${pledge.offer}</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-8 control-group">
+                ${html.nn(pledge.comment)}
+            </div>
+        </div>
+    %endfor
+%else:
+    <div class="empty">
+        No Customers yet
+    </div>
+%endif
+</%def>
 
 
 

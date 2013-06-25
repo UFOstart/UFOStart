@@ -5,8 +5,10 @@
 <%def name="content()">
     <div class="container">
         <div class="row">
-            <div class="col col-lg-9">
-                ${self.slogan()}
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    <span class="brand-primary">Your product</span>
+                </h1>
             </div>
         </div>
         <div class="row mar-top-2">
@@ -21,21 +23,20 @@
 </%def>
 
 
-<%def name="slogan()">
-    <h1 class="mar-top-2">
-        Your product
-    </h1>
-</%def>
-
 
 <%def name="bodyContent()">
     <div class="container">
         <div class="row">
-            <div class="col col-lg-8 right-bordered">
-                ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+            <div class="col col-lg-6 right-bordered">
+                <div class="box-dark">
+                    <div class="box-content">
+                        ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+                    </div>
+                </div>
             </div>
-            <div class="col col-lg-4">
-                <a href="${url("website_company_import_start", _query=[('furl', request.furl)])}" class="btn btn-primary btn-form-field btn-block">Import from Angellist</a>
+            <div class="col col-lg-6">
+                <h4>Or import your Data from Angellist</h4>
+                <a href="${url("website_company_import_start", _query=[('furl', request.furl)])}" class="btn btn-primary btn-form-field">Angellist Import</a>
             </div>
         </div>
     </div>
@@ -49,15 +50,8 @@
         %for field in view.form.fields:
             ${field.render(form.id, request, values, errors, view, grid = form.grid)|n}
         %endfor
-        <div class="row">
-            <div class="col col-lg-9">
-                <div class="row">
-                    <div class="col col-lg-9 col-offset-3">
-                      <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a href="${url("website_company_product", **vctxt.urlArgs)}" class="btn btn-default">Cancel</a>
     </form>
 </%def>
 
@@ -78,10 +72,10 @@
 
 <%def name="wtfBox()">
 <div class="wtf-box">
-    <h5 class="box-title">
+    <h2 class="wtf-title">
         Whats going on here?
-    </h5>
-    <div class="box-content">
+    </h2>
+    <div class="wtf-content">
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
     </div>
 </div>

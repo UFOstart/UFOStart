@@ -33,7 +33,10 @@
                 ${self.needDetails(vctxt.canEditCompany, vctxt.company, vctxt.need)}
             </div>
             <div class="col col-lg-3">
-                ${self.companyInfo(vctxt.company)}
+                ${widgets.companyInfo(vctxt.company)}
+                <div class="mar-top-1">
+                    <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary btn-block">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
+                </div>
             </div>
         </div>
 
@@ -69,24 +72,6 @@
     %endfor
 </%def>
 
-<%def name="companyInfo(company)">
-    <div class="box-dark box-card">
-        <h2>Company Info</h2>
-        <div class="mar-top-1"></div>
-        ${widgets.company_logo(company)}
-        <div class="right-box">
-            <a href="${url("website_company_company", **vctxt.urlArgs)}" class="overflow"><strong>${company.display_name}</strong></a>
-            <div class="description">${company.description | html.trunc(50)}</div>
-            <div class="number-widget">
-                <h6>Startup Value</h6>
-                <div class="value">$2.346.708</div>
-            </div>
-        </div>
-    </div>
-    <div class="mar-top-1">
-        <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary btn-block">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
-    </div>
-</%def>
 
 <%def name="recommendedExperts(company, need)">
     <div class="expert-list">

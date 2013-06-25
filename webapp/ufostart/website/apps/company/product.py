@@ -13,10 +13,9 @@ from ufostart.website.apps.forms.controls import FileUploadField
 class ProductCreateForm(BaseForm):
     id="ProductCreate"
     label = ""
-    grid = HORIZONTAL_GRID
     fields=[
-        StringField('name', "Name")
-        , TextareaField('description', "Description", input_classes="x-high")
+        StringField('name', "Name", REQUIRED)
+        , TextareaField('description', "Description", REQUIRED, input_classes="x-high")
         , FileUploadField("picture", "Product Picture")
         , StringField("video", "Vimeo/YouTube")
     ]

@@ -3,179 +3,183 @@
 <%namespace file="../widgets.html" name="widgets"/>
 
 <%def name="content()">
-    %if profile:
-        ${self.member()}
-    %else:
-        <div class="container">
-            <div class="row">
-                <div class="col col-lg-12">
-                    <div class="box-framed">
-                        <div class="box-title">
-                            User Info
-                        </div>
-                        <div class="box-content clearfix">
-                            <div class="row">
-                                <div class="col col-lg-8">
-                                    ${widgets.logo(profile.picture, alt=profile.name, classes="left-aligned")}
-                                    <h1 class="brand-teal site-slogan">${profile.name}</h1>
-                                    <div>${html.nn(profile.headline)}</div>
-                                </div>
-                                <div class="col col-lg-4">
-                                    <h5>Skills</h5>
-                                    ${', '.join(profile.display_skills)}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    %endif
-</%def>
-
-<%def name="member()">
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
-                <div class="box-framed">
-                    <div class="box-title">
-                        User Info
-                    </div>
-                    <div class="box-content clearfix">
-                        <div class="row">
-                            <div class="col col-lg-8">
-                                ${widgets.logo(profile.picture, alt=profile.name, classes="left-aligned")}
-                                <h1 class="brand-teal site-slogan">${profile.name}</h1>
-                                <div>${html.nn(profile.headline)}</div>
-                            </div>
-                            <div class="col col-lg-4">
-                                <h5>Skills</h5>
-                                ${', '.join(profile.display_skills)}
+                <h1 class="section-title">
+                    <span class="brand-primary">User Profile</span>
+                </h1>
+            </div>
+        </div>
 
-                                <h5>Pending Approvals</h5>
-                                %for company in approvals:
-                                <div>
-                                    ${company.name}
-                                </div>
-                                %endfor
-                            </div>
-                        </div>
-                    </div>
+        <div class="row">
+            <div class="col col-lg-6">
+                ${widgets.logo(profile.picture, alt=profile.name, classes="left-aligned")}
+                <div class="right-box">
+                    <h2 class="brand-teal no-margin">${profile.name}</h2>
+                    <div>${html.nn(profile.headline)}</div>
+                </div>
+            </div>
+            <div class="col col-lg-6">
+                <div class="number-widget">
+                    <h6>Value</h6>
+                    <div class="value">${profile.startupValue}</div>
                 </div>
             </div>
         </div>
 
+        %if len(profile.mentoredStartups):
         <div class="row mar-top-2">
             <div class="col col-lg-6">
-                <div class="box-framed">
-                    <h5 class="box-title">
-                        <span class="pull-right">${len(profile.Companies)}</span>
-                        ${'Your' if isMyProfile else u"{}'s".format(profile.name)} Companies
-                    </h5>
-                    <div class="box-content">
-                    %if len(profile.Companies):
-                        %for company in profile.Companies:
-                            <div class="row single-company">
-                                <div class="col col-sm-2">
-                                    ${widgets.company_logo(company)}
-                                </div>
-                                <div class="col col-sm-5">
-                                    <div class="overflow"><a href="${url("website_company", slug = company.slug)}"><strong>${company.name}</strong></a></div>
-                                    %if company.currentRound and company.currentRound.published:
-                                        <div><strong>${company.currentRound.getExpiryDays()}</strong></div>
-                                    %else:
-                                        <div>Round not published</div>
-                                    %endif
-                                </div>
-                                <div class="col col-lg-5">
-                                    <div class="member-pile face-pile-mini">
-                                        %for member in company.Users:
-                                            <div class="picture micro">
-                                                <a href="${url("website_user", slug = member.token)}"><img src="${member.picture_url}"/></a>
-                                            </div>
-                                        %endfor
-                                    </div>
-                                </div>
+                ${self.pendingApprovals(profile.mentoredStartups)}
+            </div>
+        </div>
+        %endif
 
-                            </div>
-                        %endfor
-                    %else:
-                        <div class="empty">
-                            No Companies yet<br/>
-                            <a href="${url('website_template_basic')}" class="btn btn-primary">Start a Company now</a>
-                        </div>
-                    %endif
-                    </div>
-                </div>
+        <div class="row mar-top-2">
+            <div class="col col-lg-6">
+                ${self.companies(profile.Companies)}
             </div>
             <div class="col col-lg-6">
-                <div class="box-framed">
-                    <h5 class="box-title">
-                        <span class="pull-right">${len(profile.Applications)}</span>
-                        ${'Your' if isMyProfile else u"{}'s".format(profile.name)} Applications
-                    </h5>
-                    <div class="box-content">
-                        %if len(profile.Applications):
-                            %for application in profile.Applications:
-                                <div class="row single-company">
-                                    <div class="col col-sm-2">
-                                        ${widgets.app_company_logo(application)}
-                                    </div>
-                                    <div class="col col-sm-10">
-                                        <div class="pull-right">${application.display_date}</div>
-                                        <div class="overflow"><a href="${url("website_round_need", slug = application.companySlug, need = application.needToken)}"><strong>${application.need}</strong></a></div>
-                                        <p class="overflow"><small>${application.companyName}</small></p>
-                                        <div class="application-message">${application.message | html.trunc(50)}</div>
-                                    </div>
-                                </div>
-                            %endfor
-                        %else:
-                            <div class="empty">
-                                No Applications yet
-                            </div>
-                        %endif
-                    </div>
-                </div>
+                ${self.applications(profile.Applications)}
             </div>
         </div>
 
         <div class="row mar-top-2">
             <div class="col col-lg-12">
-                <h5 class="box-title">Needs that best match ${'your' if isMyProfile else u"{}'s".format(profile.name)} skills</h5>
-                %if len(best_match):
-                    <div class="row">
-                        %for need in best_match:
-                            <div class="col col-lg-3">
-                                ${widgets.publicNeedCard(need)}
-                            </div>
-                        %endfor
-                    </div>
-
-                %else:
-                    <div class="empty">No Needs matching ${'your' if isMyProfile else u"{}'s".format(profile.name)} skill set found</div>
-                %endif
-
+                ${self.bestMatchNeeds(isMyProfile, best_match)}
             </div>
         </div>
 
         <div class="row mar-top-2">
             <div class="col col-lg-12">
-                <h5 class="box-title">Current Needs close by</h5>
-                %if len(location_needs):
-                    <div class="row">
-                        %for need in location_needs:
-                            <div class="col col-lg-3">
-                                ${widgets.publicNeedCard(need)}
-                            </div>
-                        %endfor
-                    </div>
-
-                %else:
-                    <div class="empty">No Needs matching ${'your' if isMyProfile else u"{}'s".format(profile.name)} skill set found</div>
-                %endif
-
+                ${self.bestMatchNeeds(isMyProfile, location_needs)}
             </div>
         </div>
 
     </div>
+</%def>
+
+<%def name="pendingApprovals(companies)">
+    <div class="box-title">Mentoring</div>
+    %for company in companies:
+        %if company.currentRound:
+            <div class="row single-company">
+                <div class="col col-sm-2">
+                    ${widgets.company_logo(company)}
+                </div>
+                <div class="col col-sm-10">
+                    <div class="overflow"><a href="${url("website_company", slug = company.slug)}"><strong>${company.name}</strong></a></div>
+                    %if company.currentRound.published:
+                        <div><strong>${company.currentRound.getExpiryDays()}</strong></div>
+                    %elif company.currentRound.pendingApproval:
+                        <div><strong class="brand-primary">Pending Approval</strong></div>
+                    %else:
+                        <div>Round not published</div>
+                    %endif
+                </div>
+            </div>
+        %endif
+    %endfor
+</%def>
+
+<%def name="companies(companies)">
+    <div class="box-title">
+        <span class="pull-right">${len(companies)}</span>
+        ${'Your' if isMyProfile else u"{}'s".format(profile.name)} Companies
+    </div>
+    <div class="box-content">
+    %if len(companies):
+        %for company in companies:
+            <div class="row single-company">
+                <div class="col col-sm-2">
+                    ${widgets.company_logo(company)}
+                </div>
+                <div class="col col-sm-5">
+                    <div class="overflow"><a href="${url("website_company", slug = company.slug)}"><strong>${company.name}</strong></a></div>
+                    %if company.currentRound and company.currentRound.published:
+                        <div><strong>${company.currentRound.getExpiryDays()}</strong></div>
+                    %else:
+                        <div>Round not published</div>
+                    %endif
+                </div>
+                <div class="col col-lg-5">
+                    <div class="member-pile face-pile-mini">
+                        %for member in company.Users:
+                            <div class="picture micro">
+                                <a href="${url("website_user", slug = member.token)}"><img src="${member.picture_url}"/></a>
+                            </div>
+                        %endfor
+                    </div>
+                </div>
+
+            </div>
+        %endfor
+    %else:
+        <div class="empty">
+            No Companies yet<br/>
+            <a href="${url('website_template_basic')}" class="btn btn-primary">Start a Company now</a>
+        </div>
+    %endif
+    </div>
+</%def>
+
+
+<%def name="applications(applications)">
+    <div class="box-title">
+        <span class="pull-right">${len(applications)}</span>
+        ${'Your' if isMyProfile else u"{}'s".format(profile.name)} Applications
+    </div>
+    <div class="box-content">
+        %if len(applications):
+            %for application in applications:
+                <div class="row single-company">
+                    <div class="col col-sm-2">
+                        ${widgets.app_company_logo(application)}
+                    </div>
+                    <div class="col col-sm-10">
+                        <div class="pull-right">${application.display_date}</div>
+                        <div class="overflow"><a href="${url("website_round_need", slug = application.companySlug, need = application.needToken)}"><strong>${application.need}</strong></a></div>
+                        <p class="overflow"><small>${application.companyName}</small></p>
+                        <div class="application-message">${application.message | html.trunc(50)}</div>
+                    </div>
+                </div>
+            %endfor
+        %else:
+            <div class="empty">
+                No Applications yet
+            </div>
+        %endif
+    </div>
+</%def>
+
+<%def name="bestMatchNeeds(isMyProfile, needs)">
+    <div class="box-title">Needs that best match ${'your' if isMyProfile else u"{}'s".format(profile.name)} skills</div>
+    %if len(needs):
+        <div class="row">
+            %for need in needs:
+                <div class="col col-lg-3">
+                    ${widgets.publicNeedCard(need)}
+                </div>
+            %endfor
+        </div>
+    %else:
+        <div class="empty">No Needs matching ${'your' if isMyProfile else u"{}'s".format(profile.name)} skill set found</div>
+    %endif
+</%def>
+
+<%def name="closeByNeeds(isMyProfile, needs)">
+    <div class="box-title">Current Needs close by</div>
+    %if len(needs):
+        <div class="row">
+            %for need in needs:
+                <div class="col col-lg-3">
+                    ${widgets.publicNeedCard(need)}
+                </div>
+            %endfor
+        </div>
+    %else:
+        <div class="empty">No Needs matching ${'your' if isMyProfile else u"{}'s".format(profile.name)} skill set found</div>
+    %endif
+
 </%def>

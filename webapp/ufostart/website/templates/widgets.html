@@ -74,8 +74,10 @@
             <div class="picture">
                 <a href="${url("website_company", slug = need.Company.slug)}"><img src="${need.Company.logo}"></a>
             </div>
-            <h5><a href="${need_url}" class="overflow">${need.Company.name}</a></h5>
-            <div class="description">${need.Company.description | html.trunc(50)}</div>
+            <div class="right-box">
+                <h5><a href="${need_url}" class="overflow">${need.Company.name}</a></h5>
+                <div class="description">${need.Company.description | html.trunc(50)}</div>
+            </div>
         </div>
         <div class="need-body medium">
             <h5><a href="${need_url}">${need.name}</a></h5>
@@ -112,10 +114,27 @@
         <div class="valuation small">
             <div class="number total">
                 <strong>PLEDGES</strong>
-                <h3 class="no-margin brand-primary">${company.no_pledgees or '0'}</h3>
+                <h3 class="no-margin brand-primary">${company.no_pledges or '0'}</h3>
             </div>
         </div>
     </div>
+    </div>
+</%def>
+
+
+<%def name="companyInfo(company)">
+    <div class="box-dark box-card">
+        <h2>Company Info</h2>
+        <div class="mar-top-1"></div>
+        ${self.company_logo(company)}
+        <div class="right-box">
+            <a href="${url("website_company_company", **vctxt.urlArgs)}" class="overflow"><strong>${company.display_name}</strong></a>
+            <div class="description">${company.description | html.trunc(50)}</div>
+            <div class="number-widget">
+                <h6>Startup Value</h6>
+                <div class="value">${company.startupValue}</div>
+            </div>
+        </div>
     </div>
 </%def>
 

@@ -35,6 +35,7 @@ class UserModel(Mapping):
     email = TextField()
     headline = TextField()
     picture = TextField()
+    startupValue = IntegerField()
     Skills = ListField(DictField(NamedModel))
     Profile = ListField(DictField(WebUserNetworkProfile))
     Company = DictField(CompanyModel)
@@ -67,6 +68,10 @@ class UserModel(Mapping):
         return self.Company.slug if self.Company else None
     def getDefaultCompanyName(self):
         return self.Company.name if self.Company else None
+
+    @reify
+    def mentoredStartups(self):
+        return [c for c in self.Companies if c.isMentor(self.token)]
 
     @reify
     def profileMap(self):

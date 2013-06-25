@@ -112,14 +112,14 @@
     max-width: 75px;
     margin-right: 12px;
   }
-  > h5, > h2 {margin:0;}
+  .right-box > h5, > h2 {margin:0;}
   .description {
     font-size: @font-size-small;
     min-height:34px;
   }
   > .right-box { margin-left:25%; }
-  a {color:#d4f3f5;}
   &.box-dark {
+    a {color:#d4f3f5;}
     > h2, h6{color:white;}
   }
 
@@ -139,9 +139,7 @@
 .picture-header{
   position: relative;
   overflow:hidden;
-  height: 0;
-  padding-bottom: 70%;
-  > img {width:100%;}
+  > img {width:100%;margin-bottom:-12px;}
   &:after {
     content:".";
     text-indent: -999em;

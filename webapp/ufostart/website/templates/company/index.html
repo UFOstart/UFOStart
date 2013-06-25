@@ -33,11 +33,13 @@
         </div>
         <div class="box-header box-header-muted box-card">
             ${widgets.company_logo(company)}
-            <a href="${url("website_company_company", **vctxt.urlArgs)}" class="overflow"><strong>${company.display_name}</strong></a>
-            <div class="description">${company.description | html.trunc(50)}</div>
-            <div class="number-widget">
-                <h6>Startup Value</h6>
-                <div class="value">$2.346.708</div>
+            <div class="right-box">
+                <a href="${url("website_company_company", **vctxt.urlArgs)}" class="overflow"><strong>${company.display_name}</strong></a>
+                <div class="description">${html.nn(company.description) | html.trunc(50)}</div>
+                <div class="number-widget">
+                    <h6>Startup Value</h6>
+                    <div class="value">${company.startupValue}</div>
+                </div>
             </div>
         </div>
         <div class="mar-top-half">
@@ -60,35 +62,45 @@
     </div>
 
     <div class="col col-lg-6">
-            <div class="box-title highlight-target">
-                <div id="target-create-product" class="highlight-anchor"></div>
-                Product
-            </div>
-            %if not company.product_is_setup:
-                <div class="box-header box-header-muted box-header-square"></div>
-                <div class="mar-top-1">
-                %if vctxt.canEditCompany:
-                    <a href="${url("website_company_product_create", **vctxt.urlArgs)}" class="btn btn-primary">Setup Your Product</a>
-                %else:
-                    <h3>Not Setup yet</h3>
-                %endif
-                </div>
-                <hr/>
-                <div class="number-widget">
-                    <div class="thirds">
-                        <h6>Pledges</h6>
-                        <div class="value">0</div>
-                    </div><div class="two thirds">
-                        <h6>Customers</h6>
-                        <div class="value"></div>
-                    </div>
-                </div>
-                <hr/>
+        <div class="box-title highlight-target">
+            <div id="target-create-product" class="highlight-anchor"></div>
+            Product
+        </div>
+        %if not company.product_is_setup:
+            <div class="box-header box-header-muted box-header-square"></div>
+            <div class="mar-top-1">
+            %if vctxt.canEditCompany:
+                <a href="${url("website_company_product_create", **vctxt.urlArgs)}" class="btn btn-primary">Setup Your Product</a>
             %else:
-                <div class="picture-header">
-                    <img src="${company.product_picture}"/>
-                </div>
+                <h3>Not Setup yet</h3>
             %endif
+            </div>
+        %else:
+            <div class="picture-header">
+                <img src="${company.product_picture}"/>
+            </div>
+            <div class="mar-top-half">
+                <a href="${url("website_company_product", **vctxt.urlArgs)}" class="overflow"><strong>${company.product_name}</strong></a>
+                <div class="description">${html.nn(company.product_description) | html.trunc(50)}</div>
+            </div>
+        %endif
+        <hr/>
+        <div class="number-widget">
+            <div class="thirds">
+                <h6>Pledges</h6>
+                <div class="value">${company.no_pledges}</div>
+            </div><div class="two thirds">
+                <h6>Customers</h6>
+                <div class="picture-pile">
+                    %for pledge in company.pledgees[:4]:
+                        <div class="picture mini">
+                            <img src="${pledge.picture}"/>
+                        </div>
+                    %endfor
+                </div>
+            </div>
+        </div>
+        <hr/>
     </div>
 </div>
 </%def>
@@ -243,7 +255,7 @@
                 %endif
             %elif vctxt.canApproveCompany:
                 %if wf.canPublish():
-                    <a href="${url("website_round_publish", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-large btn-humonguous">Publish</a>
+                    <a href="${url("website_round_publish", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-large">Publish</a>
                 %else:
                     <a class="btn btn-primary btn-block btn-large disabled">Publish</a>
                 %endif
@@ -278,7 +290,7 @@
             </div>
             <div class="col col-lg-4">
                 <h5 class="upper no-margin text-muted">Pledges</h5>
-                <div class="primary-number">${company.no_pledgees}</div>
+                <div class="primary-number">${company.no_pledges}</div>
                 <h5 class="upper no-margin text-muted mar-top-1">Customers</h5>
                 <div class="picture-pile">
                     %for pledge in company.pledgees[:4]:

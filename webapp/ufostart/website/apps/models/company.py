@@ -34,6 +34,7 @@ class CompanyUserModel(Mapping):
     headline = TextField()
     picture = TextField()
     unconfirmed = BooleanField()
+    startupValue = IntegerField()
 
     @property
     def picture_url(self):
@@ -326,6 +327,10 @@ class RoundModel(Mapping):
     def published(self):
         return self.status == 'PUBLISHED'
 
+    @reify
+    def pendingApproval(self):
+        return self.Workflow.canPublish()
+
 
 class CompanyModel(BaseCompanyModel):
     tagString = TextField()
@@ -333,12 +338,14 @@ class CompanyModel(BaseCompanyModel):
     angelListId = TextField()
     angelListToken = TextField()
 
-
     Template = DictField(TemplateModel)
     Round = DictField(RoundModel)
     Rounds = ListField(DictField(RoundModel))
     Users = ListField(DictField(CompanyUserModel))
 
+    @reify
+    def startupValue(self):
+        return sum(map(attrgetter('startupValue'), self.Users))
     @property
     def currentRound(self):
         return self.Round if self.Round else None
@@ -410,7 +417,7 @@ class CompanyModel(BaseCompanyModel):
             return ''
 
     @property
-    def no_pledgees(self):
+    def no_pledges(self):
         return len(self.pledgees)
     @property
     def pledgees(self):
