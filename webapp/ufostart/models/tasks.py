@@ -8,6 +8,12 @@ class NamedModel(Mapping):
     def toQuery(self):
         return {'value':self.name, 'label': self.name}
 
+class RoleModel(NamedModel):
+    key = TextField()
+    label = TextField()
+    def getKey(self, request):return self.key
+    def getLabel(self, request):return self.label
+
 
 
 class TaskCategoriesModel(NamedModel):

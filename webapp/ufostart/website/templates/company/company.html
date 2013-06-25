@@ -16,93 +16,80 @@
                 <h1 class="site-slogan">${company.name}</h1>
             </div>
         </div>
-        <div class="row">
-            <div class="col col-lg-8">
+        <div class="row mar-top-1">
+            <div class="col col-lg-3">
                 ${self.companyMainInfo(company)}
             </div>
-            <div class="col col-lg-4">
-                ${self.teamMembers(company.Users)}
+            <div class="col col-lg-6">
+                ${html.nn(company.description)}
+                <div class="mar-top-1">
+                    ${self.teamMembers(company.Users)}
+                </div>
 
                 %if vctxt.canEditCompany:
-                    <div class="box-framed">
-                        <div class="box-title">
-                            Team Members
-                        </div>
-                        ${self.build_forms(view.forms, values, errors)}
-                    </div>
+                    ${self.build_forms(view.form, values, errors)}
                 %endif
 
             </div>
-        </div>
-    </div>
-</%def>
 
+            <div class="col col-lg-3">
 
-<%def name="teamMembers(members)">
-    <div class="box-framed expander expanded">
-        <div class="box-title">
-            Team Members
-        </div>
-        <div class="box-content">
-            <div class="member-pile">
-                %for member in members:
-                    <div class="name-card mar-top-half">
-                        ${widgets.userPic(member)|n}
-                        <div class="card-contents">
-                            %if member.unconfirmed:
-                                <strong>${member.name}</strong>
-                            %else:
-                                <a href="${vctxt.userURL(member.token)}"><strong>${member.name}</strong></a>
-                            %endif
-                            <div class="text-muted">${html.nn(member.position)}</div>
-                            <small class="headline">${html.nn(member.headline)}</small>
-                        </div>
-                    </div>
-                %endfor
             </div>
         </div>
     </div>
 </%def>
-
 
 <%def name="companyMainInfo(company)">
     <div class="box-title">
-        Company Information
+        Company Details
     </div>
-    <div class="row mar-top-1">
-        <div class="col col-lg-3">
-            ${widgets.company_logo(company)}
-        </div>
-        <div class="col col-lg-9">
-            <a href="${url('website_company', **vctxt.urlArgs)}"><strong>${company.name}</strong></a>
-                <div class="mar-top-1">
-                    ${html.nn(company.description)}
-                </div>
+    <div class="picture-header">
+        ${widgets.company_logo(company)}
+    </div>
+    <div class="number-widget">
+        <h6>Startup Value</h6>
+        <div class="value">
+            ${company.startupValue}
         </div>
     </div>
 </%def>
 
+<%def name="teamMembers(members)">
+    <div class="box-title">
+        Team Members
+    </div>
+    <div class="member-pile">
+        %for member in members:
+            <div class="single-team-member box-card">
+                <div class="number-widget pull-right">
+                    <h6>Startup Value</h6>
+                    <div class="value">${company.startupValue}</div>
+                </div>
 
-
-
-<%def name="build_forms(forms, values, errors)">
-    %for form in forms:
-        <div class="box-content expander">
-            <a class="show-contracted" data-toggle-target=".expander" data-toggle-class="expanded">Invite ${form.label}</a>
-            <a class="show-expanded" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
-            <div class="show-expanded box-dark">
-                <div class="box-content">
-                    <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
-                        ${baseform.prelims(form)}
-                        ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                        ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                        ${form.fieldMap['role'].render(form.id, request, dict(role = form.role), errors, view)|n}
-                        <button type="submit" class="btn btn-primary btn-block mar-top-1">Invite member</button>
-                    </form>
+                ${widgets.company_logo(company)}
+                <div class="right-box">
+                    <a href="${vctxt.userURL(member.token)}"><strong>${ member.name }</strong></a>
+                    <div class="text-muted">${html.nn(member.position)}</div>
+                    <small class="headline">${html.nn(member.headline)}</small>
                 </div>
             </div>
+
+        %endfor
+    </div>
+</%def>
+
+<%def name="build_forms(form, values, errors)">
+    <div class="box-dark">
+        <div class="box-content">
+            <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+                ${baseform.prelims(form)}
+                ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                ${form.fieldMap['role'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                <button type="submit" class="btn btn-primary">Invite member</button>
+            </form>
         </div>
-    %endfor
+    </div>
 </%def>
 
 <%def name="post_scripts()">

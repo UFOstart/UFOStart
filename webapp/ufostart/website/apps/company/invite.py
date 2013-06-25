@@ -1,21 +1,15 @@
+from hnc.apiclient import TextField
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, StringField, EmailField, REQUIRED, HiddenField
+from hnc.forms.formfields import BaseForm, StringField, EmailField, REQUIRED, HiddenField, ChoiceField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage, GenericErrorMessage
+from ufostart.models.tasks import NamedModel, RoleModel
 from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.models.procs import InviteToCompanyProc, GetInviteDetailsProc, AcceptInviteProc, RefreshProfileProc
 
 
-def InviteCompanyForm(role_):
-    class InviteForm(BaseForm):
-        id="InviteCompany_{}".format(role_)
-        label = role_.title().replace("_", " ")
-        role = role_
-        fields = [
-            StringField("name", "Name", REQUIRED)
-            , EmailField("email", "email address", REQUIRED)
-            , HiddenField("role")
-        ]
+class BaseInviteForm(BaseForm):
+        id="InviteCompany"
         @classmethod
         def on_success(cls, request, values):
             user = request.root.user
@@ -29,10 +23,28 @@ def InviteCompanyForm(role_):
 
             request.session.flash(GenericSuccessMessage("You successfully invited {name} to your company!".format(**values)), "generic_messages")
             return {'success':True, 'redirect': request.fwd_url("website_company_company", slug = request.matchdict['slug'])}
+
+def InviteMentorForm(role_):
+    class InviteForm(BaseInviteForm):
+        fields = [
+            StringField("name", "Name", REQUIRED)
+            , EmailField("email", "email address", REQUIRED)
+            , HiddenField("role")
+        ]
+
     return InviteForm
 
+ROLES = [RoleModel(key = "FOUNDER", label = "Founder"), RoleModel(key = "TEAM_MEMBER", label = "Team Member")]
+
+class InviteTeamForm(BaseInviteForm):
+        fields = [
+            StringField("name", "Name", REQUIRED)
+            , EmailField("email", "email address", REQUIRED)
+            , ChoiceField("role", "Invitee is", lambda x: ROLES)
+        ]
+
 class InviteCompanyHandler(FormHandler):
-    forms = [InviteCompanyForm(role) for role in ['MENTOR', 'FOUNDER', 'TEAM_MEMBER']]
+    form = InviteTeamForm
 
     def pre_fill_values(self, request, result):
         company = request.root.company
@@ -40,7 +52,7 @@ class InviteCompanyHandler(FormHandler):
         return super(InviteCompanyHandler, self).pre_fill_values(request, result)
 
 class AddMentorHandler(FormHandler):
-    form = InviteCompanyForm('MENTOR')
+    form = InviteMentorForm('MENTOR')
     def pre_fill_values(self, request, result):
         company = request.root.company
         result['company'] = company
