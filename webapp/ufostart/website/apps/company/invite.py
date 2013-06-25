@@ -26,12 +26,12 @@ class BaseInviteForm(BaseForm):
 
 def InviteMentorForm(role_):
     class InviteForm(BaseInviteForm):
+        role = role_
         fields = [
             StringField("name", "Name", REQUIRED)
             , EmailField("email", "email address", REQUIRED)
             , HiddenField("role")
         ]
-
     return InviteForm
 
 ROLES = [RoleModel(key = "FOUNDER", label = "Founder"), RoleModel(key = "TEAM_MEMBER", label = "Team Member")]
