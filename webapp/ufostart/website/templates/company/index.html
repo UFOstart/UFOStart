@@ -310,10 +310,6 @@
         %if vctxt.canAskForApproval:
             %if wf.canAskForApproval():
                 <a href="${url("website_round_approve_ask", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-large">Get Approval</a>
-            %elif wf.canPublish():
-                <a class="btn btn-primary btn-block btn-large disabled">Waiting For<br/>Approval</a>
-            %else:
-                <a class="btn btn-primary btn-block btn-large disabled">Get Approval</a>
             %endif
         %elif vctxt.canApproveCompany:
             %if wf.canPublish():
