@@ -40,6 +40,11 @@ require(["tools/ajax", "misc"], function(ajax, misc){
         initialize: function(options){
             this.LOCALE = options.LOCALE || LOCALE
         }
+
+        , getUserToken: function(){
+            return this.options.user.token;
+        }
+
         , rld: function(){
             window.location.href = "//" + window.location.host + window.location.pathname + '?' + window.location.search;
         }
@@ -86,7 +91,6 @@ require(["tools/ajax", "misc"], function(ajax, misc){
 
     if(_.isEmpty(root.hnc)){
         var hnc = new HNC(options);
-
 
         var socials = _.keys(options.socials), i= 0;
         if(socials.length){

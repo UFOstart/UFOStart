@@ -19,14 +19,36 @@ define(["tools/ajax"], function(ajax){
         events: {
         }
         , initialize:function(opts){
-            this.$results = this.$(".box-content");
+            this.needToken = this.$el.data('entityId');
+
+            this.$results = this.$(".results");
             this.template = _.template(this.$(".endorsement-template").html());
             opts.watch.on({'selected': _.bind(this.onSelected, this)});
             this.model = new Endorsements();
             this.listenTo(this.model, "updated", this.render, this);
         }
         , onSelected: function(e, model){
+            var view = this;
             this.model.addOrUpdate(model.attributes, {preserve: true});
+
+            ajax.submitPrefixed({url: '/web/round/endorse'
+                , data:{
+                    token: this.needToken
+                    , Endorsement: {
+                        endorserToken: hnc.getUserToken()
+                        , endorseeName: model.getName()
+                        , endorseeHeadline: model.getPosition()
+                        , endorseeLinkedinId: model.id
+                        , endorseePicture: model.getPicture()
+                    }
+                }
+                , success:function(data, status, xhr){
+                    console.log(data)
+                }
+                , error: function(err){
+                      view.model.get(model.id).destroy();
+                }
+            })
         }
         , render: function(){
             var html = [];

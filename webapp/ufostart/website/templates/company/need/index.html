@@ -8,6 +8,48 @@
     </div>
 </%def>
 
+
+
+<%def name="content()">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    %if vctxt.canEditCompany:
+                        <span class="btn-wrapper">
+                            <a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
+                        </span>
+                    %endif
+                    <span class="brand-primary">${vctxt.need.name}</span>
+                </h1>
+            </div>
+        </div>
+
+        <div class="row mar-top-1">
+            <div class="col col-lg-3">
+                ${self.needOverview(vctxt.need)}
+            </div>
+            <div class="col col-lg-6">
+                ${self.needDetails(vctxt.canEditCompany, vctxt.company, vctxt.need)}
+            </div>
+            <div class="col col-lg-3">
+                ${self.companyInfo(vctxt.company)}
+            </div>
+        </div>
+
+        <div class="row mar-top-2">
+            <div class="col col-lg 12">
+                <h1 class="section-title">
+                    <span class="brand-primary">Applications</span>
+                </h1>
+                ${self.applications(vctxt.need.Applications)}
+            </div>
+        </div>
+    </div>
+</%def>
+
+
+
 <%def name="needOverview(need)">
     <div class="box-title">Need Details</div>
 
@@ -122,17 +164,19 @@
 
     %if canEdit:
         %if need.experts:
-            <div class="box-title mar-top-2">Suggested Experts</div>
-            <div class="experts">
+            <div class="experts mar-top-2">
+                <div class="box-title">Suggested Experts</div>
                 ${self.recommendedExperts(company, need)}
             </div>
         %endif
 
         %if need.services:
-            <div class="box-title mar-top-2">
-                Recommended Cloud Services
-            </div>
-            <div class="service-list row">
+            <div class="service-list row  mar-top-2">
+                <div class="col col-lg-12">
+                    <div class="box-title">
+                        Recommended Cloud Services
+                    </div>
+                </div>
                 ${self.recommendedServices(company, need)}
             </div>
         %endif
@@ -140,46 +184,8 @@
 </%def>
 
 
-
-<%def name="content()">
-    <div class="container">
-        <div class="row">
-            <div class="col col-lg-12">
-                <h1 class="section-title">
-                    %if vctxt.canEditCompany:
-                        <span class="btn-wrapper">
-                            <a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
-                        </span>
-                    %endif
-                    <span class="brand-primary">${vctxt.need.name}</span>
-                </h1>
-            </div>
-        </div>
-
-        <div class="row mar-top-1">
-            <div class="col col-lg-3">
-                ${self.needOverview(vctxt.need)}
-            </div>
-            <div class="col col-lg-6">
-                ${self.needDetails(vctxt.canEditCompany, vctxt.company, vctxt.need)}
-            </div>
-            <div class="col col-lg-3">
-                ${self.companyInfo(vctxt.company)}
-            </div>
-        </div>
-
-        <div class="row mar-top-2">
-            <div class="col col-lg 12">
-                <div class="box-title">Applications</div>
-                ${self.applications(vctxt.need.Applications)}
-            </div>
-        </div>
-    </div>
-</%def>
-
-
 <%def name="endorsedExperts(company, need)">
-    <div class="endorsements">
+    <div class="endorsements" data-entity-id="${need.token}" data-entity="Need">
         <script type="text/template" class="endorsement-template">
             <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">
                 <div class="col col-sm-2">
@@ -193,7 +199,21 @@
                 </div>
             </div>
         </script>
-        <div class="box-content"></div>
+        <div class="results">
+            %for model in need.Endorsements:
+                <div class="row single-candidate search-result-item" data-entity-id="${ model.id }">
+                    <div class="col col-sm-2">
+                        <div class="picture medium">
+                            <img src="${ model.getPicture() }"/>
+                        </div>
+                    </div>
+                    <div class="col col-sm-10">
+                        <strong>${ model.getName() }</strong>
+                        <p class="text-small">${ model.getPosition() }</p>
+                    </div>
+                </div>
+            %endfor
+        </div>
     </div>
 
     %if vctxt.user.isAnon():
@@ -233,33 +253,31 @@
 
 <%def name="applications(applications)">
 %if applications:
+    <div id="applications">
     %for application in sorted(applications, reverse = True):
-        <div class="row mar-top-1 single-application" id="applications">
-            <div class="col col-lg-12">
-            <div class="application">
-                <div class="row">
-                    <div class="col col-lg-4">
-                        <div class="row">
-                            <div class="col col-sm-3">
-                                <div class="picture">
-                                    <a href="${url("website_user", slug = application.User.token)}"><img src="${application.User.picture}"/></a>
-                                </div>
-                            </div>
-                            <div class="col col-sm-9">
-                                <a href="${url("website_user", slug = application.User.token)}" class="name"><strong>${application.User.name}</strong></a>
-                                <p class="text-small">${html.nn(application.User.position)}</p>
-                                <p class="text-small">${application.display_date}</p>
+        <div class="mar-top-1 single-application">
+            <div class="row">
+                <div class="col col-lg-4">
+                    <div class="row">
+                        <div class="col col-sm-3">
+                            <div class="picture">
+                                <a href="${url("website_user", slug = application.User.token)}"><img src="${application.User.picture}"/></a>
                             </div>
                         </div>
-                    </div>
-                    <div class="col col-lg-8 control-group">
-                        ${application.message}
+                        <div class="col col-sm-9">
+                            <a href="${url("website_user", slug = application.User.token)}" class="name"><strong>${application.User.name}</strong></a>
+                            <p class="text-small">${html.nn(application.User.position)}</p>
+                            <p class="text-small">${application.display_date}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="col col-lg-8 control-group">
+                    ${application.message}
+                </div>
             </div>
         </div>
     %endfor
+    </div>
 %else:
     <div class="empty">
         No Applications Yet

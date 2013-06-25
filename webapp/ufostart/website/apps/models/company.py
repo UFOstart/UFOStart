@@ -41,7 +41,7 @@ class CompanyUserModel(Mapping):
 
     @property
     def position(self):
-        return getRoleName(self.role)
+        return getRoleName(self.role) if self.role else self.headline
 
 
 class IntroducerModel(Mapping):
@@ -139,6 +139,24 @@ class BaseCompanyModel(Mapping):
     def logo_url(self):
         return self.logo
 
+
+class EndorsementModel(Mapping):
+    endorserToken = TextField()
+    endorseeName = TextField()
+    endorseeHeadline = TextField()
+    endorseeLinkedinId = TextField()
+    endorseePicture = TextField()
+
+    @property
+    def id(self):
+        return self.endorseeLinkedinId
+    def getPicture(self):
+        return self.endorseePicture
+    def getName(self):
+        return self.endorseeName
+    def getPosition(self):
+        return self.endorseeHeadline
+
 class NeedModel(Mapping):
     token = TextField()
     name = TextField()
@@ -151,7 +169,7 @@ class NeedModel(Mapping):
     equity = IntegerField(default = 0)
     Tags = ListField(DictField(NamedModel))
     Applications = ListField(DictField(ApplicationModel))
-
+    Endorsements = ListField(DictField(EndorsementModel))
     Company = DictField(BaseCompanyModel)
 
     Services = ListField(DictField(ServiceModel))
