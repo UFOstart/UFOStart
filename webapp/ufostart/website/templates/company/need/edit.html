@@ -2,16 +2,68 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
 
-<%def name="bodyContent(need)">
-    <div class="box-content box-dark">
-        ${self.build_form(need, view.form, values.get(view.form.id), errors.get(view.form.id))}
-    </div>
 
-    <div class="box-framed mar-top-2">
-        <div class="box-title">Preview</div>
-        <div class="box-content">${self.needDetails(need)}</div>
+<%def name="content()">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    %if vctxt.canEditCompany:
+                        <span class="btn-wrapper">
+                            <a href="${url("website_round_need", **vctxt.urlArgs)}" class="btn btn-primary">Cancel</a>
+                        </span>
+                    %endif
+                    <span class="brand-primary">${vctxt.need.name}</span>
+                </h1>
+            </div>
+        </div>
+        <div class="row mar-top-2">
+            <div class="col col-lg-9">
+                <div class="box-content box-dark">
+                    ${self.build_form(vctxt.need, view.form, values.get(view.form.id), errors.get(view.form.id))}
+                </div>
+            </div>
+            <div class="col col-lg-3">
+                %if vctxt.need.summary:
+                    <div class="wtf-box active">
+                        <h2 class="wtf-title">
+                            Before you go on
+                        </h2>
+                        <div class="wtf-content mar-top-1">
+                            ${vctxt.need.summary}
+                        </div>
+                    </div>
+                %endif
+            </div>
+
+        </div>
+
+        <div class="row mar-top-2">
+            <div class="col col-lg-3">
+                ${self.needOverview(vctxt.need)}
+            </div>
+            <div class="col col-lg-6">
+                ${self.needDetails(vctxt.canEditCompany, vctxt.company, vctxt.need)}
+            </div>
+            <div class="col col-lg-3">
+                ${self.companyInfo(vctxt.company)}
+            </div>
+        </div>
+
+        <div class="row mar-top-2">
+            <div class="col col-lg 12">
+                <h1 class="section-title">
+                    <span class="brand-primary">Applications</span>
+                </h1>
+                ${self.applications(vctxt.need.Applications)}
+            </div>
+        </div>
     </div>
 </%def>
+
+
+
+
 
 <%def name="build_form(need, form, values, errors)">
     <form class="${form.grid.form_classes} labels-capitalized" id="${form.id}" method="POST">

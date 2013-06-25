@@ -1,8 +1,8 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, TagSearchField, IntField, HtmlAttrs, HORIZONTAL_GRID, DecimalField
+from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, IntField, HtmlAttrs, HORIZONTAL_GRID, DecimalField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
-from ufostart.website.apps.forms.controls import FileUploadField
+from ufostart.website.apps.forms.controls import FileUploadField, TagSearchField
 from ufostart.website.apps.auth.social import AuthedFormHandler
 from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc
 
