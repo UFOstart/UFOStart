@@ -27,6 +27,10 @@
     @bg : desaturate(lighten(@wtf-color, 10% * @num), 10% * @num);
     background-color: @bg;
     color: contrast(@bg, darken(@wtf-color, 5%), lighten(@wtf-color, 50%));
+    &[href]:hover{
+      text-decoration: none;
+      color: contrast(@bg, lighten(@wtf-color, 20%), lighten(@wtf-color, 70%));
+    }
   }
 }
 .generate-wtf-colors(7);

@@ -220,7 +220,7 @@
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
             </div>
         </div>
-        <ul class="workflow-wtf">
+        <ul class="list-unstyled">
             %for i, stage in enumerate(wf.sortedStages):
                 <li>
                     <a class="workflow-link${' active' if active and active.name == stage.name else ''}${' done' if stage.completed else ''} wtf-${i+1}" href="#target-${stage.slug}">
