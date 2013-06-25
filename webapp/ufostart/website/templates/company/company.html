@@ -1,6 +1,7 @@
 <%inherit file="../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../widgets.html" name="widgets"/>
+<%namespace file="index.html" name="compView"/>
 
 <%def name="header_buttons()">
     <div class="pull-right">
@@ -35,7 +36,7 @@
             </div>
 
             <div class="col col-lg-3">
-
+                ${compView.sideBar(company.currentRound, vctxt.canEditCompany)}
             </div>
         </div>
     </div>
@@ -98,12 +99,19 @@
     </div>
 </%def>
 
+
+<%def name="extra_head()">
+    %if vctxt.company.currentRound.published:
+        <script type="text/javascript" src="${ROOT_STATIC_URL}scripts/dist/raphael-min.js"></script>
+    %endif
+</%def>
 <%def name="post_scripts()">
     <script>
-        require(["tools/ajax"], function(ajax){
+        require(["tools/ajax", "libs/tachymeter"], function(ajax, Tacho){
             $(".form-validated").each(function(idx, form){
                 ajax.ifyForm({root: $(form)});
-            })
+            });
+            new Tacho({el: document.getElementById('tachymeter'), fillRatio: ${vctxt.company.currentRound.getExpiryPercentage()}});
         });
     </script>
 </%def>

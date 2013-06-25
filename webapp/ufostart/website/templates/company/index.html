@@ -12,7 +12,7 @@
         </div>
         <div class="row mar-top-1">
             <div class="col col-lg-3 pull-right">
-                ${self.sideBar(company.currentRound.published, vctxt.canEditCompany)}
+                ${self.sideBar(company.currentRound, vctxt.canEditCompany)}
             </div>
             <div class="col col-lg-9">
                 ${self.upperContent(company.currentRound.published)}
@@ -84,13 +84,16 @@
         </div>
     </div>
     <hr/>
-    <div>
+    <div class="">
         <h6>Mentors</h6>
         <div class="picture-pile">
             %for user in company.mentors[:8]:
                 ${widgets.userPic(user, classes='mini')|n}
             %endfor
-            <a href="${url("website_company_add_mentor", **vctxt.urlArgs)}" class="btn btn-primary">Add Mentor</a>
+            <span class="highlight-target" style="display:inline-block;">
+                <span id="target-add-mentor" class="highlight-anchor"></span>
+                <a href="${url("website_company_add_mentor", **vctxt.urlArgs)}" class="btn btn-primary">Add Mentor</a>
+            </span>
         </div>
     </div>
     <hr/>
@@ -241,10 +244,10 @@
 
 
 
-<%def name="sideBar(published, canEdit)">
-    %if published:
+<%def name="sideBar(currentRound, canEdit)">
+    %if currentRound.published:
         ${self.timerBox(currentRound, canEdit)}
-    %else:
+    %elif canEdit:
         ${self.workflowBox(currentRound.Workflow, canEdit)}
     %endif
 </%def>
@@ -334,13 +337,13 @@
 </%def>
 <%def name="post_scripts()">
 <script>
-    require(["views/company/dashboard"], function(View){
+    require(["views/company/dashboard", "libs/tachymeter"], function(View, Tacho){
         var view =new View({
             el: $("#project-round-need-dashboard")
-            %if company.currentRound.published:
-                , tacho:{el: document.getElementById('tachymeter'), fillRatio: ${company.currentRound.getExpiryPercentage()}}
-            %endif
         });
+        %if company.currentRound.published:
+            new Tacho({el: document.getElementById('tachymeter'), fillRatio: ${company.currentRound.getExpiryPercentage()}});
+        %endif
     });
 </script>
 </%def>
