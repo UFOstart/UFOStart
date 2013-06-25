@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col col-lg-12">
                 <h1 class="section-title">
-                    %if vctxt.canEditCompany:
+                    %if not vctxt.need.fulfilled and vctxt.canEditCompany:
                         <span class="btn-wrapper">
                             <a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
                         </span>
@@ -34,18 +34,25 @@
             </div>
             <div class="col col-lg-3">
                 ${widgets.companyInfo(vctxt.company)}
-                <div class="mar-top-1">
-                    <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary btn-block">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
-                </div>
+                %if not vctxt.need.fulfilled:
+                    <div class="mar-top-1">
+                        <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary btn-block">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
+                    </div>
+                %endif
             </div>
         </div>
 
         <div class="row mar-top-2">
             <div class="col col-lg 12">
                 <h1 class="section-title">
-                    <span class="brand-primary">Applications</span>
+                    %if vctxt.need.fulfilled:
+                        <span class="brand-primary">Accepted Application</span>
+                    %else:
+                        <span class="brand-primary">Applications</span>
+                    %endif
+
                 </h1>
-                ${self.applications(vctxt.need.Applications)}
+                ${self.applications(vctxt.need, vctxt.need.Applications)}
             </div>
         </div>
     </div>
@@ -54,7 +61,11 @@
 
 
 <%def name="needOverview(need)">
-    <div class="box-title">Need Details</div>
+    %if need.fulfilled:
+        <div class="box-title success"><span class="glyphicon glyphicon-ok-sign"></span> Need Fulfilled</div>
+    %else:
+        <div class="box-title">Need Details</div>
+    %endif
 
     %if need.picture:
         <div class="picture-header">
@@ -65,6 +76,25 @@
     <div class="mar-top-1">
         ${widgets.valuation(need)}
     </div>
+
+    %if need.fulfilled:
+        <hr/>
+        <h6>Accepted Application</h6>
+        <div class="box-card">
+            ${widgets.userPic(need.acceptedApplication.User)}
+            <div class="right-box">
+                %if need.acceptedApplication.User.token:
+                    <a href="${vctxt.userURL(need.acceptedApplication.User.token)}"><strong>${ need.acceptedApplication.User.name }</strong></a>
+                %else:
+                    <strong>${ need.acceptedApplication.User.name }</strong>
+                %endif
+                <div class="description">
+                    ${need.acceptedApplication.message | html.trunc(50)}
+                </div>
+            </div>
+        </div>
+    %endif
+
 
     <hr/>
     %for tag in need.tags:
@@ -147,7 +177,7 @@
         ${self.endorsedExperts(company, need)}
     </div>
 
-    %if canEdit:
+    %if canEdit and not need.fulfilled:
         %if need.experts:
             <div class="experts mar-top-2">
                 <div class="box-title">Suggested Experts</div>
@@ -200,7 +230,7 @@
             %endfor
         </div>
     </div>
-    %if withSearch:
+    %if not need.fulfilled and withSearch:
         %if vctxt.user.isAnon():
             <div class="box-title">Login to endorse</div>
             <div class="text-center">
@@ -237,10 +267,11 @@
 
 
 
-<%def name="applications(applications)">
+<%def name="applications(need, applications)">
 %if applications:
     <div id="applications">
     %for application in sorted(applications, reverse = True):
+        %if application.approved or not need.fulfilled:
         <div class="mar-top-1 single-application">
             <div class="row">
                 <div class="col col-lg-4">
@@ -254,8 +285,12 @@
                             <a href="${url("website_user", slug = application.User.token)}" class="name"><strong>${application.User.name}</strong></a>
                             <p class="text-small">${html.nn(application.User.position)}</p>
                             <p class="text-small">${application.display_date}</p>
-                            %if vctxt.canEditCompany:
-                                <a href="${url("website_need_application_accept", applicationToken=application.token, **vctxt.urlArgs)}" class="btn btn-primary">Accept</a>
+                            %if need.fulfilled:
+
+                            %else:
+                                %if vctxt.canEditCompany:
+                                    <a href="${url("website_need_application_accept", applicationToken=application.token, **vctxt.urlArgs)}" class="btn btn-primary">Accept</a>
+                                %endif
                             %endif
                         </div>
                     </div>
@@ -265,6 +300,7 @@
                 </div>
             </div>
         </div>
+        %endif
     %endfor
     </div>
 %else:

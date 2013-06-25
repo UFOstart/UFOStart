@@ -171,7 +171,7 @@
 
 <%def name="buildNeed(need, published)">
     <div class="need-card ${need.status}" data-entity-id="${need.token}">
-        %if vctxt.canEditCompany:
+        %if not published and vctxt.canEditCompany:
             %if not need.customized:
                 <a class="customize danger" href="${url("website_round_need_edit", need=need.slug, **vctxt.urlArgs)}"><span class="glyphicon glyphicon-exclamation-sign"></span> Customize Need</a>
             %else:
@@ -322,10 +322,6 @@
 </%def>
 
 
-
-
-
-
 <%def name="extra_head()">
     %if company.currentRound.published:
         <script type="text/javascript" src="${ROOT_STATIC_URL}scripts/dist/raphael-min.js"></script>
@@ -344,33 +340,3 @@
 </script>
 </%def>
 
-
-
-
-
-
-<%doc>
-    <div class="box-content min-height-5">
-        <div class="row">
-            <div class="col col-lg-3">
-                ${widgets.product_logo(company)}
-            </div>
-            <div class="col col-lg-5 middle">
-                <a href="${url("website_company_product", **vctxt.urlArgs)}" class="overflow"><strong>${company.product_name}</strong></a>
-                <div class="description">${company.product_description | html.trunc(60) }</div>
-            </div>
-            <div class="col col-lg-4">
-                <h5 class="upper no-margin text-muted">Pledges</h5>
-                <div class="primary-number">${company.no_pledges}</div>
-                <h5 class="upper no-margin text-muted mar-top-1">Customers</h5>
-                <div class="picture-pile">
-                    %for pledge in company.pledgees[:4]:
-                        <div class="picture mini">
-                            <img src="${pledge.picture}"/>
-                        </div>
-                    %endfor
-                </div>
-            </div>
-        </div>
-    </div>
-</%doc>

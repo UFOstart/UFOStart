@@ -23,8 +23,6 @@ TEMPLATE_STYLE_KEYS = {
 }
 
 
-
-
 def getRoleName(role):
     return role.title().replace("_", " ")
 
@@ -114,6 +112,7 @@ class ApplicationModel(Mapping):
 
     token = TextField()
     message = TextField()
+    approved = BooleanField()
     created = DateTimeField()
     User = DictField(CompanyUserModel)
 
@@ -189,7 +188,14 @@ class NeedModel(Mapping):
         return self.status != 'PENDING'
     @property
     def fulfilled(self):
-        return self.status == 'FULFILLED'
+        return self.status == 'FULFILED'
+
+    @reify
+    def acceptedApplication(self):
+        try:
+            return [a for a in self.Applications if a.approved][0]
+        except IndexError, e:
+            return None
 
     @property
     def tags(self):

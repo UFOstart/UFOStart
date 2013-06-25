@@ -46,6 +46,18 @@
   &.dark {
     background-color:@text-muted;
   }
+  &.success {
+    background-color: @alert-success-bg;
+    color: @alert-success-text;
+    > .glyphicon {
+      position: relative;
+      top: -3px;
+      font-size: 14px;
+      line-height: 10px;
+      height: 9px;
+      display: inline-block
+    }
+  }
   > .btn {
     float:right;
     padding: 4px 25px;

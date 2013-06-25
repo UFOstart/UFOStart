@@ -51,7 +51,12 @@
             ${field.render(form.id, request, values, errors, view, grid = form.grid)|n}
         %endfor
         <button type="submit" class="btn btn-primary">Submit</button>
-        <a href="${url("website_company_product", **vctxt.urlArgs)}" class="btn btn-default">Cancel</a>
+        %if request.matched_route.name == 'website_company_product_create':
+            <a href="${url("website_company", **vctxt.urlArgs)}" class="btn btn-default">Cancel</a>
+        %else:
+            <a href="${url("website_company_product", **vctxt.urlArgs)}" class="btn btn-default">Cancel</a>
+        %endif
+
     </form>
 </%def>
 
