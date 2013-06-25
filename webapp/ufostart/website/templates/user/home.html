@@ -106,13 +106,10 @@
                 <div class="col col-lg-5">
                     <div class="member-pile face-pile-mini">
                         %for member in company.Users:
-                            <div class="picture micro">
-                                <a href="${url("website_user", slug = member.token)}"><img src="${member.picture_url}"/></a>
-                            </div>
+                            ${widgets.userPic(member, 'micro')}
                         %endfor
                     </div>
                 </div>
-
             </div>
         %endfor
     %else:
