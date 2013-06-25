@@ -191,7 +191,26 @@
   border-top:1px solid @text-muted;
   padding-top:@line-height-computed;
 }
-
+.tachymeter {
+  position: relative;
+  margin: 25px;
+  > h1 {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    line-height: 50px;
+    text-align: center;
+    color: white;
+    font-weight: 300;
+    font-size: 60px;
+    margin-top: -30px;
+    width: 100%;
+      > small {
+        font-size:18px;
+        color:white;
+      }
+  }
+}
 
 
 .workflow-link {
@@ -225,6 +244,16 @@
     }
   }
 }
+.progress-step {
+  padding: 12px;
+  > h2 {color:white;margin:0;}
+  > .offset {margin-top:50px;display: top;}
+  +.progress-step {
+    .box-shadow(0 4px 6px rgba(0,0,0,.4) inset);
+  }
+}
+
+
 .highlight-target {
   .transition(box-shadow .1s ease-in-out);
   &.highlighted {

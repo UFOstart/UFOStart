@@ -313,6 +313,7 @@ class RoundModel(Mapping):
     def expiry(self):
         return self.start+timedelta(90)
 
+
     def getExpiryDays(self, singular = "{} Day Left", plural="{} Days Left", closed = "Closed"):
         delta = (self.start+timedelta(90)) - datetime.today()
         days = delta.days + 1
@@ -324,6 +325,9 @@ class RoundModel(Mapping):
             return closed
     def getExpiryDate(self):
         return format_date(self.start+timedelta(90), format="medium", locale='en')
+    def getExpiryPercentage(self):
+        delta = (self.start+timedelta(90)) - datetime.today()
+        return 100.0 * (90-delta.days) / 90
 
     @property
     def published(self):

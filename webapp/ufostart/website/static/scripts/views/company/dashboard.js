@@ -1,4 +1,4 @@
-define(["tools/messaging", "tools/ajax"], function(messaging, ajax){
+define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging, ajax, Tachymeter){
     var View = Backbone.View.extend({
         events: {
             'click .remove': "removeNeed"
@@ -9,6 +9,7 @@ define(["tools/messaging", "tools/ajax"], function(messaging, ajax){
         }
         , initialize:function(opts){
             var lengths = [], max, min;
+            if(opts.tacho) this.tacho = new Tachymeter(opts.tacho);
         }
 
         , highlightTarget: function(e){

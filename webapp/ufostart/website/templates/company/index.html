@@ -12,9 +12,7 @@
         </div>
         <div class="row mar-top-1">
             <div class="col col-lg-3 pull-right">
-                %if vctxt.canEditCompany:
-                    ${self.wtfBox()}
-                %endif
+                ${self.sideBar(company.currentRound.published, vctxt.canEditCompany)}
             </div>
             <div class="col col-lg-9">
                 ${self.upperContent(company.currentRound.published)}
@@ -36,7 +34,11 @@
                     ${self.productBox(company)}
                 </div>
             </div>
-            <div class="col col-lg-6"></div>
+            <div class="col col-lg-6">
+                <div class="box-title">
+                    Recent Activity
+                </div>
+            </div>
         </div>
     %else:
         <div class="row">
@@ -239,66 +241,99 @@
 
 
 
-<%def name="wtfBox()">
-    %if currentRound.published:
-        <div class="company-dashboard box-shaded box-content">
-            <h5>You have got</h5>
-            <h1 class="super">${currentRound.getExpiryDays()}</h1>
-            <h5>to fulfill your needs.</h5>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-            <a href="#" class="btn btn-primary btn-block">Spread the word</a>
-        </div>
+<%def name="sideBar(published, canEdit)">
+    %if published:
+        ${self.timerBox(currentRound, canEdit)}
     %else:
-
-        <%
-            wf = currentRound.Workflow
-            active = wf.getActiveStage()
-        %>
-        <div class="wtf-box company-dashboard">
-            <h2 class="wtf-title">
-                Steps
-            </h2>
-            <div class="wtf-content">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-            </div>
-        </div>
-        <ul class="list-unstyled">
-            %for i, stage in enumerate(wf.sortedStages):
-                <li>
-                    <a class="workflow-link${' active' if active and active.name == stage.name else ''}${' done' if stage.completed else ''} wtf-${i+1}" href="#target-${stage.slug}">
-                        <span class="position">${i+1}</span>${stage.display_name}
-                    </a>
-                </li>
-            %endfor
-        </ul>
-
-        <div class="mar-top-2 highlight-target">
-            <div id="target-publish" class="highlight-anchor"></div>
-            <div id="target-sent-for-mentor-aprroval" class="highlight-anchor"></div>
-            %if vctxt.canAskForApproval:
-                %if wf.canAskForApproval():
-                    <a href="${url("website_round_approve_ask", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-large">Get Approval</a>
-                %elif wf.canPublish():
-                    <a class="btn btn-primary btn-block btn-large disabled">Waiting For<br/>Approval</a>
-                %else:
-                    <a class="btn btn-primary btn-block btn-large disabled">Get Approval</a>
-                %endif
-            %elif vctxt.canApproveCompany:
-                %if wf.canPublish():
-                    <a href="${url("website_round_publish", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-large">Publish</a>
-                %else:
-                    <a class="btn btn-primary btn-block btn-large disabled">Publish</a>
-                %endif
-            %endif
-        </div>
+        ${self.workflowBox(currentRound.Workflow, canEdit)}
     %endif
 </%def>
 
+<%def name="timerBox(currentRound, canEdit)">
+    <div class="company-dashboard">
+        <ul class="list-unstyled">
+            <li class="progress-step progress-1">
+                <h2 class="no-margin">You've got</h2>
+                <div class="tachymeter" id="tachymeter">
+                    <h1>${currentRound.getExpiryDays(singular = "{}<small>Day Left</small>", plural="{}<small>Days Left</small>")|n}</h1>
+                </div>
+                <h2>to fulfill your needs.</h2>
+            </li>
+            <li class="progress-step progress-2">
+                <h2 class="no-margin">You successfully fulfilled</h2>
+                <h2 class="offset">15 needs</h2>
+            </li>
+            <li class="progress-step progress-3">
+                <h2>Spread the word</h2>
+                <a href="#" class="btn btn-primary offset">Spread the word</a>
+            </li>
+        </ul>
+    </div>
+</%def>
 
+
+<%def name="workflowBox(wf, canEdit)">
+    <%
+        active = wf.getActiveStage()
+    %>
+    <div class="wtf-box company-dashboard">
+        <h2 class="wtf-title">
+            Steps
+        </h2>
+        <div class="wtf-content">
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+        </div>
+    </div>
+    <ul class="list-unstyled">
+        %for i, stage in enumerate(wf.sortedStages):
+            <li>
+                <a class="workflow-link${' active' if active and active.name == stage.name else ''}${' done' if stage.completed else ''} wtf-${i+1}" href="#target-${stage.slug}">
+                    <span class="position">${i+1}</span>${stage.display_name}
+                </a>
+            </li>
+        %endfor
+    </ul>
+
+    <div class="mar-top-2 highlight-target">
+        <div id="target-publish" class="highlight-anchor"></div>
+        <div id="target-sent-for-mentor-aprroval" class="highlight-anchor"></div>
+        %if vctxt.canAskForApproval:
+            %if wf.canAskForApproval():
+                <a href="${url("website_round_approve_ask", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-large">Get Approval</a>
+            %elif wf.canPublish():
+                <a class="btn btn-primary btn-block btn-large disabled">Waiting For<br/>Approval</a>
+            %else:
+                <a class="btn btn-primary btn-block btn-large disabled">Get Approval</a>
+            %endif
+        %elif vctxt.canApproveCompany:
+            %if wf.canPublish():
+                <a href="${url("website_round_publish", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-large">Publish</a>
+            %else:
+                <a class="btn btn-primary btn-block btn-large disabled">Publish</a>
+            %endif
+        %endif
+    </div>
+</%def>
+
+
+
+
+
+
+<%def name="extra_head()">
+    %if company.currentRound.published:
+        <script type="text/javascript" src="${ROOT_STATIC_URL}scripts/dist/raphael-min.js"></script>
+    %endif
+</%def>
 <%def name="post_scripts()">
 <script>
     require(["views/company/dashboard"], function(View){
-        var view =new View({el: $("#project-round-need-dashboard")});
+        var view =new View({
+            el: $("#project-round-need-dashboard")
+            %if company.currentRound.published:
+                , tacho:{el: document.getElementById('tachymeter'), fillRatio: ${company.currentRound.getExpiryPercentage()}}
+            %endif
+        });
     });
 </script>
 </%def>

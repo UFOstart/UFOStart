@@ -24,7 +24,7 @@
   .wtf-X(@lines);
   // Apply the styles
   .wtf-(@num) {
-    @bg : desaturate(lighten(@base-color, 10% * @num), 10% * @num);
+    @bg : desaturate(lighten(@base-color, 10% * (@num - 1)), 10% * (@num - 1));
     background-color: @bg;
     color: contrast(@bg, darken(@base-color, 5%), lighten(@base-color, 50%));
     &[href]:hover{
@@ -46,7 +46,7 @@
   .progress-X(@lines);
   // Apply the styles
   .progress-(@num) {
-    @bg : desaturate(lighten(@base-color, 10% * @num), 10% * @num);
+    @bg : desaturate(lighten(@base-color, 10% * (@num - 1)), 10% * (@num - 1));
     background-color: @bg;
     color: contrast(@bg, darken(@base-color, 5%), lighten(@base-color, 50%));
     &[href]:hover{
