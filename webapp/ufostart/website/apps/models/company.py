@@ -186,6 +186,10 @@ class NeedModel(Mapping):
     def customized(self):
         return self.status != 'PENDING'
     @property
+    def fulfilled(self):
+        return self.status == 'FULFILLED'
+
+    @property
     def tags(self):
         return map(attrgetter('name'), self.Tags)
 
@@ -328,15 +332,18 @@ class RoundModel(Mapping):
     def getExpiryPercentage(self):
         delta = (self.start+timedelta(90)) - datetime.today()
         return 100.0 * (90-delta.days) / 90
-
     @property
     def published(self):
         return self.status == 'PUBLISHED'
-
     @reify
     def pendingApproval(self):
         return self.Workflow.canPublish()
-
+    @reify
+    def noFulfilledNeeds(self):
+        return len([n for n in self.Needs if n.fulfilled])
+    @property
+    def noTotalNeeds(self):
+        return len(self.Needs)
 
 class CompanyModel(BaseCompanyModel):
     tagString = TextField()

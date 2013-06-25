@@ -261,7 +261,14 @@
             </li>
             <li class="progress-step progress-2">
                 <h2 class="no-margin">You successfully fulfilled</h2>
-                <h2 class="offset">15 needs</h2>
+                <div class="progress-container">
+                    <div class="progress">
+                        <div class="progress-bar" style="width: ${100.0 * currentRound.noFulfilledNeeds / currentRound.noTotalNeeds}%"></div>
+                    </div>
+                    <h2 class="offset">
+                        ${currentRound.noFulfilledNeeds}<small>${pluralize("need", "needs", currentRound.noFulfilledNeeds)}</small>
+                    </h2>
+                </div>
             </li>
             <li class="progress-step progress-3">
                 <h2>Spread the word</h2>
