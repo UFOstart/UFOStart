@@ -14,7 +14,7 @@
 }
 
 // Small grid columns
-.generate-wtf-colors(@lines) {
+.generate-wtf-colors(@base-color, @lines) {
   .wtf-X (@index) when (@index > 0) {
     .wtf-@{index} { .wtf-(@index); }
     .wtf-X((@index - 1));
@@ -24,16 +24,39 @@
   .wtf-X(@lines);
   // Apply the styles
   .wtf-(@num) {
-    @bg : desaturate(lighten(@wtf-color, 10% * @num), 10% * @num);
+    @bg : desaturate(lighten(@base-color, 10% * @num), 10% * @num);
     background-color: @bg;
-    color: contrast(@bg, darken(@wtf-color, 5%), lighten(@wtf-color, 50%));
+    color: contrast(@bg, darken(@base-color, 5%), lighten(@base-color, 50%));
     &[href]:hover{
       text-decoration: none;
-      color: contrast(@bg, lighten(@wtf-color, 20%), lighten(@wtf-color, 70%));
+      color: contrast(@bg, lighten(@base-color, 20%), lighten(@base-color, 70%));
     }
   }
 }
-.generate-wtf-colors(7);
+.generate-wtf-colors(@wtf-color, 7);
+
+// Small grid columns
+.generate-progress-colors(@base-color, @lines) {
+  .progress-X (@index) when (@index > 0) {
+    .progress-@{index} { .progress-(@index); }
+    .progress-X((@index - 1));
+  }
+  .progress-X (0) {}
+  // Generate columns
+  .progress-X(@lines);
+  // Apply the styles
+  .progress-(@num) {
+    @bg : desaturate(lighten(@base-color, 10% * @num), 10% * @num);
+    background-color: @bg;
+    color: contrast(@bg, darken(@base-color, 5%), lighten(@base-color, 50%));
+    &[href]:hover{
+      text-decoration: none;
+      color: contrast(@bg, lighten(@base-color, 20%), lighten(@base-color, 70%));
+    }
+  }
+}
+.generate-progress-colors(#808080, 5);
+
 
 .empty {
   padding: @line-height-computed 0;

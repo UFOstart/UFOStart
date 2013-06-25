@@ -17,10 +17,13 @@ from ufostart.website.apps.models.workflow import WorkflowModel
 TEMPLATE_STYLE_KEYS = {
     'E-COMMERCE':'ecommerce'
     , 'STEVE_BLANK':'hitech'
-    , 'START':'started'
-    , 'LAUNCH':'seed'
-    , 'SCALE':'seriesb'
+    , 'SCALE':'seed'
+    , 'LAUNCH':'started'
+    , 'START':'seriesb'
 }
+
+
+
 
 def getRoleName(role):
     return role.title().replace("_", " ")
