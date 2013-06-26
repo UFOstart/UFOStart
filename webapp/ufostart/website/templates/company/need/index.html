@@ -269,10 +269,10 @@
 
 
 
-<%def name="applications(need, applications)">
-%if applications:
+<%def name="applications(need, apps)">
+%if apps:
     <div id="applications">
-    %for application in sorted(applications, reverse = True):
+    %for application in sorted(apps, reverse = True):
         %if application.approved or not need.fulfilled:
         <div class="mar-top-1 single-application">
             <div class="row">
