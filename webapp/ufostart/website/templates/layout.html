@@ -5,7 +5,7 @@
 
 <div id="global-frame" class="${self.page_class()}">
     <%block name="header">
-        ${self.menu(vctxt.user)}
+        ${self.menu(root.user)}
         <div class="navbar navbar-static-top">
             <div class="container">
                 <div class="row">
@@ -105,12 +105,12 @@
                                  <ul class="dropdown-menu">
                                     %for company in user.Companies:
                                         <li>
-                                            <a href="${url("website_company", slug = company.slug)}">${company.name}</a></li>
+                                            <a href="${request.resource_url(root, 'c', company.slug)}">${company.name}</a></li>
                                     %endfor
                                  </ul>
                              </li>
                         %elif len(user.Companies) == 1:
-                            <li><a href="${url("website_company", slug = user.getDefaultCompanySlug())}">${user.getDefaultCompanyName()}</a></li>
+                            <li><a href="${request.resource_url(root, 'c', user.getDefaultCompanySlug())}">${user.getDefaultCompanyName()}</a></li>
                         %endif
                         <li><a href="${url("website_logout")}">Log out</a></li>
                     </ul>

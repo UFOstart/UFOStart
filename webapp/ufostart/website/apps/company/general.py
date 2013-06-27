@@ -11,8 +11,7 @@ def index(context, request):
     company = context.company
     if not company:
         request.fwd("website_index")
-
-    return render_to_response("ufostart:website/templates/company/index.html", {'company': company, 'currentRound':company.currentRound}, request)
+    return {'company': company, 'currentRound':company.currentRound}
 
 def create_round(context, request):
     company = context.company

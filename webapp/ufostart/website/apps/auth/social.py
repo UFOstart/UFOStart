@@ -10,9 +10,7 @@ from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES, SOCIAL_NETWO
 from ufostart.website.apps.models.procs import SocialConnectProc
 from ufostart.website.apps.social import SocialNetworkProfileModel, SocialLoginSuccessful, SocialLoginFailed
 
-
 log = logging.getLogger(__name__)
-
 
 def login_user(context, request, profile):
     if isinstance(profile, SocialNetworkProfileModel):
@@ -36,38 +34,14 @@ def login_user(context, request, profile):
     else:
         return user.toJSON()
 
-
-
-
-
-@view_config(context = SocialLoginSuccessful)
-def login_success(exc, request):
-    login_user(request.root, request, exc.profile)
-    route = exc.get_redirection(request)
-    return Response("Resource Found!", 302, headerlist = [('location', route)])
-
-
-@view_config(context = SocialLoginFailed)
-def login_failure(exc, request):
-    request.session.flash(GenericErrorMessage(exc.message), "generic_messages")
-    route = exc.get_redirection(request)
-    return Response("Resource Found!", 302, headerlist = [('location', route)])
-
-
-
-
-
-
 class RequiresLoginException(Exception):
     def __init__(self, template):
         self.template = template
 
-@view_config(context = RequiresLoginException)
-def auth_required_view(exc, request):
-    return render_to_response(exc.template, {}, request)
 
+# AUTH DECORATORS
 
-def require_login(template = "ufostart:website/templates/auth/login.html"):
+def require_login(template):
     def require_login_real(fn):
         def require_login_inner(context, request):
             if request.root.user.isAnon():
@@ -78,18 +52,38 @@ def require_login(template = "ufostart:website/templates/auth/login.html"):
     return require_login_real
 
 
-class AuthedFormHandler(FormHandler):
-    template = "ufostart:website/templates/auth/login.html"
-    def __init__(self, context=None, request=None):
-        if request.root.user.isAnon():
-            raise RequiresLoginException(self.template)
-        else:
-            super(AuthedFormHandler, self).__init__(context, request)
+def require_login_cls(template):
+    def require_login_cls_inner(cls):
+        backup = cls.__init__
+        def __init__(self, context=None, request=None):
+            if request.root.user.isAnon():
+                raise RequiresLoginException(template)
+            else:
+                backup(self, context, request)
+        cls.__init__ = __init__
+        return cls
+    return require_login_cls_inner
 
+# AUTH VIEWS
+
+@view_config(context = RequiresLoginException)
+def auth_required_view(exc, request):
+    return render_to_response(exc.template, {}, request)
+
+@view_config(context = SocialLoginSuccessful)
+def login_success(exc, request):
+    login_user(request.root, request, exc.profile)
+    route = exc.get_redirection(request)
+    return Response("Resource Found!", 302, headerlist = [('location', route)])
+
+@view_config(context = SocialLoginFailed)
+def login_failure(exc, request):
+    request.session.flash(GenericErrorMessage(exc.message), "generic_messages")
+    route = exc.get_redirection(request)
+    return Response("Resource Found!", 302, headerlist = [('location', route)])
 
 @require_login('ufostart:website/templates/auth/login.html')
 def login(context, request):
     route, args, kwargs = context.getPostLoginUrlParams()
     request.fwd(route, *args, **kwargs)
-
 

@@ -47,7 +47,7 @@
 <%def name="layout_scripts()"></%def>
 <%def name="jsoptions()">
     <script>
-        window.__options__ = {socials : ${vctxt.user.getSocialProfileJSON()|n}, user : ${vctxt.user.toJSON(True)|n}
+        window.__options__ = {socials : ${root.user.getSocialProfileJSON()|n}, user : ${root.user.toJSON(True)|n}
             , messagingContainer: "#message-container"
             , staticPrefix: '${ROOT_STATIC_URL}'
             , loadingHtml : '<div class="show-loading"><img src="${ROOT_STATIC_URL}/img/ajax-loader-light.gif"/></div>'

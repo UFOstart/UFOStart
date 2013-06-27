@@ -1,12 +1,20 @@
 from datetime import datetime, date
+import logging
+from pyramid.authentication import SessionAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
+from pyramid.interfaces import IAuthorizationPolicy
 from pyramid.mako_templating import renderer_factory
 from pyramid.renderers import JSON
+from pyramid.security import Authenticated, Everyone
 from pyramid_beaker import session_factory_from_settings
 
 from hnc.tools import request
 from .lib.subscribers import context_authorization, add_renderer_variables
 from .lib.globals import Globals
+from .website.apps.contexts import WebsiteRootContext
+
+log = logging.getLogger(__name__)
 
 def format_date(val, request): return val.strftime('%Y-%m-%d')
 def format_datetime(val, request): return val.strftime('%Y-%m-%dT%H-%M-%S')
@@ -15,12 +23,29 @@ jsonRenderer.add_adapter(datetime, format_datetime)
 jsonRenderer.add_adapter(date, format_date)
 
 
+class Security(SessionAuthenticationPolicy):
+    def authenticated_userid(self, request):
+        return request.root.user.token
+
+    def effective_principals(self, request, *args, **kwargs):
+        principals = [Everyone]
+        user = request.root.user
+        if user:
+            principals += [Authenticated, 'u:%s' % user.token]
+        return principals
+
+
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
     settings["g"] = g = Globals(**settings)
     config = Configurator(settings=settings
-        , session_factory = session_factory_from_settings(settings))
+        , root_factory=WebsiteRootContext
+        , session_factory = session_factory_from_settings(settings)
+        , authentication_policy= Security()
+        , authorization_policy= ACLAuthorizationPolicy()
+        , default_permission='view'
+        )
 
     request.extend_request(config)
 

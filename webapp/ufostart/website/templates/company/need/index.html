@@ -2,41 +2,41 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../../widgets.html" name="widgets"/>
 
-<%def name="header_buttons()">
-    <div class="pull-right">
-        Company: <a href="${url('website_company', **vctxt.urlArgs)}">${vctxt.company.name}</a>
-    </div>
-</%def>
-
-
 
 <%def name="content()">
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
+                <a href="${request.resource_url(resource.__parent__.__parent__)}">${resource.company.name}</a> &raquo;
+                <a href="${request.resource_url(resource.__parent__)}">Round 1</a> &raquo;
+                <a href="${request.resource_url(resource)}">${resource.need.name}</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-12">
                 <h1 class="section-title">
-                    %if not vctxt.need.fulfilled and vctxt.canEditCompany:
+                    %if not resource.need.fulfilled and resource.canEdit:
                         <span class="btn-wrapper">
-                            <a href="${url("website_round_need_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
+                            <a href="${request.resource_url(resource, 'edit')}" class="btn btn-primary">Edit</a>
                         </span>
                     %endif
-                    <span class="brand-primary">${vctxt.need.name}</span>
+                    <span class="brand-primary">${resource.need.name}</span>
                 </h1>
             </div>
         </div>
 
         <div class="row mar-top-1">
             <div class="col col-lg-3">
-                ${self.needOverview(vctxt.need)}
+                ${self.needOverview(resource.need)}
             </div>
             <div class="col col-lg-6">
-                ${self.needDetails(vctxt.canEditCompany, vctxt.company, vctxt.need)}
+                ${self.needDetails(resource.canEdit, resource.company, resource.need)}
             </div>
             <div class="col col-lg-3">
-                ${widgets.companyInfo(vctxt.company)}
-                %if not vctxt.need.fulfilled:
+                ${widgets.companyInfo(resource.company)}
+                %if not resource.need.fulfilled:
                     <div class="mar-top-1">
-                        <a href="${url("website_round_need_apply", _anchor='application-form', **vctxt.urlArgs)}" class="btn btn-primary btn-block">${'Login to Apply' if vctxt.user.isAnon() else 'Apply'}</a>
+                        <a href="${request.resource_url(resource, 'apply')}#application-form" class="btn btn-primary btn-block">${'Login to Apply' if root.user.isAnon() else 'Apply'}</a>
                     </div>
                 %endif
             </div>
@@ -45,14 +45,14 @@
         <div class="row mar-top-2">
             <div class="col col-lg 12">
                 <h1 class="section-title">
-                    %if vctxt.need.fulfilled:
+                    %if resource.need.fulfilled:
                         <span class="brand-primary">Accepted Application</span>
                     %else:
                         <span class="brand-primary">Applications</span>
                     %endif
 
                 </h1>
-                ${self.applications(vctxt.need, vctxt.need.Applications)}
+                ${self.applications(resource.need, resource.need.Applications)}
             </div>
         </div>
     </div>
@@ -84,7 +84,7 @@
             ${widgets.userPic(need.acceptedApplication.User)}
             <div class="right-box">
                 %if need.acceptedApplication.User.token:
-                    <a href="${vctxt.userURL(need.acceptedApplication.User.token)}"><strong>${ need.acceptedApplication.User.name }</strong></a>
+                    <a href="${root.userURL(need.acceptedApplication.User.token)}"><strong>${ need.acceptedApplication.User.name }</strong></a>
                 %else:
                     <strong>${ need.acceptedApplication.User.name }</strong>
                 %endif
@@ -231,7 +231,7 @@
         </div>
     </div>
     %if not need.fulfilled and withSearch:
-        %if vctxt.user.isAnon():
+        %if root.user.isAnon():
             <div class="box-title">Login to endorse</div>
             <div class="text-center">
                 <div class="mar-top-1">
@@ -290,8 +290,8 @@
                             %if need.fulfilled:
 
                             %else:
-                                %if vctxt.canEditCompany:
-                                    <a href="${url("website_need_application_accept", applicationToken=application.token, **vctxt.urlArgs)}" class="btn btn-primary">Accept</a>
+                                %if resource.canEdit:
+                                    <a href="${request.resource_url(resource, application.token, 'accept')}" class="btn btn-primary">Accept</a>
                                 %endif
                             %endif
                         </div>

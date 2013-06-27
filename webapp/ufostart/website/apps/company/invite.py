@@ -10,10 +10,14 @@ from ufostart.website.apps.models.procs import InviteToCompanyProc, GetInviteDet
 
 class BaseInviteForm(BaseForm):
         id="InviteCompany"
+
+        @property
+        def success_route(self):raise NotImplementedError()
+
         @classmethod
         def on_success(cls, request, values):
             user = request.root.user
-            company = request.root.company
+            company = request.context.company
 
             values['invitorToken'] = user.token
             values['invitorName'] = user.name
@@ -22,11 +26,12 @@ class BaseInviteForm(BaseForm):
             InviteToCompanyProc(request, {'Invite': [values]})
 
             request.session.flash(GenericSuccessMessage("You successfully invited {name} to your company!".format(**values)), "generic_messages")
-            return {'success':True, 'redirect': request.fwd_url("website_company_company", slug = request.matchdict['slug'])}
+            return {'success':True, 'redirect': request.fwd_url(cls.success_route, slug = request.matchdict['slug'])}
 
 def InviteMentorForm(role_):
     class InviteForm(BaseInviteForm):
         role = role_
+        success_route = "website_company"
         fields = [
             StringField("name", "Name", REQUIRED)
             , EmailField("email", "email address", REQUIRED)
@@ -37,17 +42,18 @@ def InviteMentorForm(role_):
 ROLES = [RoleModel(key = "FOUNDER", label = "Founder"), RoleModel(key = "TEAM_MEMBER", label = "Team Member")]
 
 class InviteTeamForm(BaseInviteForm):
-        fields = [
-            StringField("name", "Name", REQUIRED)
-            , EmailField("email", "email address", REQUIRED)
-            , ChoiceField("role", "Invitee is", lambda x: ROLES)
-        ]
+    success_route = "website_company_company"
+    fields = [
+        StringField("name", "Name", REQUIRED)
+        , EmailField("email", "email address", REQUIRED)
+        , ChoiceField("role", "Invitee is", lambda x: ROLES)
+    ]
 
 class InviteCompanyHandler(FormHandler):
     form = InviteTeamForm
 
     def pre_fill_values(self, request, result):
-        company = request.root.company
+        company = request.context.company
         result['company'] = company
         return super(InviteCompanyHandler, self).pre_fill_values(request, result)
 

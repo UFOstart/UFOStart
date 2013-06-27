@@ -164,6 +164,7 @@ class EndorsementModel(Mapping):
 
 class NeedModel(Mapping):
     token = TextField()
+    slug = TextField()
     name = TextField()
     summary = TextField()
     status = TextField()
@@ -180,22 +181,23 @@ class NeedModel(Mapping):
     Services = ListField(DictField(ServiceModel))
     Experts = ListField(DictField(ExpertModel))
 
-    @property
-    def slug(self):
-        return self.token
-    @property
-    def customized(self):
-        return self.status != 'PENDING'
-    @property
-    def fulfilled(self):
-        return self.status == 'FULFILED'
-
+    @reify
+    def applicationMap(self):
+        return {a.token:a for a in self.Applications}
     @reify
     def acceptedApplication(self):
         try:
             return [a for a in self.Applications if a.approved][0]
         except IndexError, e:
             return None
+
+
+    @property
+    def customized(self):
+        return self.status != 'PENDING'
+    @property
+    def fulfilled(self):
+        return self.status == 'FULFILED'
 
     @property
     def tags(self):
@@ -324,7 +326,9 @@ class RoundModel(Mapping):
     @reify
     def expiry(self):
         return self.start+timedelta(90)
-
+    @reify
+    def needMap(self):
+        return {n.slug:n for n in self.Needs}
 
     def getExpiryDays(self, singular = "{} Day Left", plural="{} Days Left", closed = "Closed"):
         delta = (self.start+timedelta(90)) - datetime.today()

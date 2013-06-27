@@ -1,7 +1,8 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, REQUIRED, StringField, TextareaField, HORIZONTAL_GRID
+from hnc.forms.formfields import BaseForm, REQUIRED, StringField, TextareaField
+from hnc.forms.handlers import FormHandler
 from pyramid.decorator import reify
-from ufostart.website.apps.auth.social import AuthedFormHandler
+from ufostart.website.apps.auth.social import require_login_cls
 from ufostart.website.apps.company.imp import SESSION_SAVE_TOKEN
 from ufostart.website.apps.models.procs import GetAllCompanyTemplatesProc, GetTemplateDetailsProc, CreateCompanyProc
 from ufostart.website.apps.forms.controls import FileUploadField
@@ -46,7 +47,8 @@ class CompanyCreateForm(BaseForm):
         else:
             return {'success':True, 'redirect': request.fwd_url("website_company", slug = request.root.user.getDefaultCompanySlug())}
 
-class CreateProjectHandler(AuthedFormHandler):
+@require_login_cls("ufostart:website/templates/auth/login.html")
+class CreateProjectHandler(FormHandler):
     template = "ufostart:website/templates/company/setup/login.html"
     form = CompanyCreateForm
 

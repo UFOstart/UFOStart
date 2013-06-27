@@ -5,6 +5,12 @@
     <div class="container" id="project-round-need-dashboard">
         <div class="row">
             <div class="col col-lg-12">
+                <a href="${request.resource_url(resource.__parent__)}">${resource.company.name}</a> &raquo;
+                <a href="${request.resource_url(resource)}">Round 1</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-12">
                 <h1 class="section-title">
                     <span class="brand-primary">${company.display_name} <span class="sub-title">Company Dashboard</span> </span>
                 </h1>
@@ -12,10 +18,10 @@
         </div>
         <div class="row mar-top-1">
             <div class="col col-lg-3 pull-right">
-                ${self.sideBar(company.currentRound, vctxt.canEditCompany)}
+                ${self.sideBar(resource.round, canEdit)}
             </div>
             <div class="col col-lg-9">
-                ${self.upperContent(company.currentRound.published)}
+                ${self.upperContent(resource.round.published)}
                 ${self.lowerContent()}
             </div>
         </div>
@@ -64,7 +70,7 @@
     <div class="box-header box-header-muted box-card">
         ${widgets.company_logo(company)}
         <div class="right-box">
-            <a href="${url("website_company_company", **vctxt.urlArgs)}" class="overflow"><strong>${company.display_name}</strong></a>
+            <a href="${request.resource_url(resource.__parent__)}" class="overflow"><strong>${company.display_name}</strong></a>
             <div class="description">${html.nn(company.description) | html.trunc(50)}</div>
             <div class="number-widget">
                 <h6>Startup Value</h6>
@@ -78,8 +84,8 @@
         %for user in company.Users[:8]:
             ${widgets.userPic(user, classes='mini')|n}
         %endfor
-        %if vctxt.canEditCompany:
-            <a href="${url("website_company_company", **vctxt.urlArgs)}"><small>Invite team<br/>members</small></a>
+        %if resource.canEdit:
+            <a href="${request.resource_url(resource.__parent__)}"><small>Invite team<br/>members</small></a>
         %endif
         </div>
     </div>
@@ -92,7 +98,7 @@
             %endfor
             <span class="highlight-target" style="display:inline-block;">
                 <span id="target-add-mentor" class="highlight-anchor"></span>
-                <a href="${url("website_company_add_mentor", **vctxt.urlArgs)}" class="btn btn-primary">Add Mentor</a>
+                <a href="${request.resource_url(resource.__parent__)}" class="btn btn-primary">Add Mentor</a>
             </span>
         </div>
     </div>
@@ -105,7 +111,7 @@
         <div class="box-header box-header-muted box-header-square"></div>
         <div class="mar-top-1">
         %if vctxt.canEditCompany:
-            <a href="${url("website_company_product_create", **vctxt.urlArgs)}" class="btn btn-primary">Setup Your Product</a>
+            <a href="${request.resource_url(resource, 'product', 'create')}" class="btn btn-primary">Setup Your Product</a>
         %else:
             <h3>Not Setup yet</h3>
         %endif
@@ -115,7 +121,7 @@
             <img src="${company.product_picture}"/>
         </div>
         <div class="mar-top-half">
-            <a href="${url("website_company_product", **vctxt.urlArgs)}" class="overflow"><strong>${company.product_name}</strong></a>
+            <a href="${request.resource_url(resource, 'product')}" class="overflow"><strong>${company.product_name}</strong></a>
             <div class="description">${html.nn(company.product_description) | html.trunc(50)}</div>
         </div>
     %endif
@@ -149,16 +155,16 @@
             </div>
         </div>
     </div>
-    <div class="row" id="project-round-need-dashboard" data-entity-id=${company.Round.token}>
+    <div class="row" id="project-round-need-dashboard" data-entity-id=${resource.round.token}>
         %for i, col in enumerate(company.groupedNeeds(3)):
             <div class="col col-lg-4 need-card-list">
                 <div class="js-need-card-list">
                 %for need in col:
-                    ${self.buildNeed(need, company.Round.published)}
+                    ${self.buildNeed(need, resource.round.published)}
                 %endfor
                 </div>
-                %if not i and vctxt.canEditCompany:
-                    <a href="${url("website_round_need_create", **vctxt.urlArgs)}" class="need-card-inner add-card">
+                %if not i and resource.canEdit and not resource.round.published:
+                    <a href="${request.resource_url(resource, 'need', 'create')}" class="need-card-inner add-card">
                         <img src="${STATIC_URL}img/addneed.png"/>
                         <h4>Create a new Need</h4>
                     </a>
@@ -173,11 +179,11 @@
     <div class="need-card ${need.status}" data-entity-id="${need.token}">
         %if need.fulfilled:
             <a class="customize success" href="#"><span class="glyphicon glyphicon-ok-sign"></span> Need Fulfilled</a>
-        %elif not published and vctxt.canEditCompany:
+        %elif not published  and resource.canEdit:
             %if need.customized:
-                <a class="customize success" href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}"><span class="glyphicon glyphicon-ok-sign"></span> Customized</a>
+                <a class="customize success" href="${request.resource_url(resource, need.slug)}"><span class="glyphicon glyphicon-ok-sign"></span> Customized</a>
             %else:
-                <a class="customize danger" href="${url("website_round_need_edit", need=need.slug, **vctxt.urlArgs)}"><span class="glyphicon glyphicon-exclamation-sign"></span> Customize Need</a>
+                <a class="customize danger" href="${request.resource_url(resource, need.slug, 'edit')}"><span class="glyphicon glyphicon-exclamation-sign"></span> Customize Need</a>
             %endif
         %endif
         <div class="need-card-inner">
@@ -186,10 +192,10 @@
                     <a class="remove" data-target=".need-card">×</a>
                 %endif
                 <h5>
-                    %if not need.customized and vctxt.canEditCompany:
-                        <a href="${url("website_round_need_edit", need=need.slug, **vctxt.urlArgs)}">${need.name}</a>
+                    %if not need.customized and resource.canEdit:
+                        <a href="${request.resource_url(resource, need.slug, 'edit')}">${need.name}</a>
                     %else:
-                        <a href="${url("website_round_need", need=need.slug, **vctxt.urlArgs)}">${need.name}</a>
+                        <a href="${request.resource_url(resource, need.slug)}">${need.name}</a>
                     %endif
                 </h5>
 
@@ -309,13 +315,13 @@
     <div class="mar-top-2 highlight-target">
         <div id="target-publish" class="highlight-anchor"></div>
         <div id="target-sent-for-mentor-aprroval" class="highlight-anchor"></div>
-        %if vctxt.canAskForApproval:
+        %if resource.canEdit:
             %if wf.canAskForApproval():
-                <a href="${url("website_round_approve_ask", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-large">Get Approval</a>
+                <a href="${request.resource_url(resource, 'askforapproval')}" class="btn btn-primary btn-block btn-large">Get Approval</a>
             %endif
-        %elif vctxt.canApproveCompany:
+        %elif resource.canApprove:
             %if wf.canPublish():
-                <a href="${url("website_round_publish", **vctxt.urlArgs)}" class="btn btn-primary btn-block btn-large">Publish</a>
+                <a href="${request.resource_url(resource, 'publish')}" class="btn btn-primary btn-block btn-large">Publish</a>
             %else:
                 <a class="btn btn-primary btn-block btn-large disabled">Publish</a>
             %endif
@@ -325,7 +331,7 @@
 
 
 <%def name="extra_head()">
-    %if company.currentRound.published:
+    %if resource.round.published:
         <script type="text/javascript" src="${ROOT_STATIC_URL}scripts/dist/raphael-min.js"></script>
     %endif
 </%def>
@@ -335,8 +341,8 @@
         var view =new View({
             el: $("#project-round-need-dashboard")
         });
-        %if company.currentRound.published:
-            new Tacho({el: document.getElementById('tachymeter'), fillRatio: ${company.currentRound.getExpiryPercentage()}});
+        %if resource.round.published:
+            new Tacho({el: document.getElementById('tachymeter'), fillRatio: ${resource.round.getExpiryPercentage()}});
         %endif
     });
 </script>

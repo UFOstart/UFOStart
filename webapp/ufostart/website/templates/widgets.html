@@ -1,6 +1,6 @@
-<%def name="company_logo(company)">${self.logo(company.logo_url, company.name, link = url("website_company", slug = company.slug))}</%def>
-<%def name="app_company_logo(application)">${self.logo(application.comapnyLogo, application.companyName, link = url("website_company", slug = application.companySlug))}</%def>
-<%def name="product_logo(company)">${self.logo(company.product_picture, company.product_name, link = url("website_company_product", slug = company.slug))}</%def>
+<%def name="company_logo(company)">${self.logo(company.logo_url, company.name, link = request.resource_url(request.root, company.slug))}</%def>
+<%def name="app_company_logo(application)">${self.logo(application.comapnyLogo, application.companyName, link = request.resource_url(request.root, application.companySlug))}</%def>
+<%def name="product_logo(company)">${self.logo(company.product_picture, company.product_name, link = request.resource_url(request.root, company.slug))}</%def>
 
 <%def name="logo(url, alt='', classes='', link = '')">
 %if url and link:
@@ -19,7 +19,7 @@
             <img class="image" src="${member.picture_url}"/>
             <span title="unconfirmed" class="unconfirmed">unconfirmed</span>
         %else:
-            <a href="${vctxt.userURL(member.token)}"><img class="image" src="${member.picture_url}"/></a>
+            <a href="${root.userURL(member.token)}"><img class="image" src="${member.picture_url}"/></a>
         %endif
     </div>
 </%def>
@@ -128,7 +128,7 @@
         <div class="mar-top-1"></div>
         ${self.company_logo(company)}
         <div class="right-box">
-            <a href="${url("website_company_company", **vctxt.urlArgs)}" class="overflow"><strong>${company.display_name}</strong></a>
+            <a href="${request.resource_url(root, 'c', company.slug)}" class="overflow"><strong>${company.display_name}</strong></a>
             <div class="description">${company.description | html.trunc(50)}</div>
             <div class="number-widget">
                 <h6>Startup Value</h6>
