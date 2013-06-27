@@ -23,7 +23,7 @@
                     ${self.teamMembers(company.Users)}
                 </div>
 
-                %if resource.canEditCompany:
+                %if resource.canEdit:
                     ${self.build_forms(view.form, values, errors)}
                 %endif
 

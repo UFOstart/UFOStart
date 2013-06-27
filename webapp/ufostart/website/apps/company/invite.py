@@ -60,7 +60,7 @@ class InviteCompanyHandler(FormHandler):
 class AddMentorHandler(FormHandler):
     form = InviteMentorForm('MENTOR')
     def pre_fill_values(self, request, result):
-        company = request.root.company
+        company = self.context.company
         result['company'] = company
         return super(AddMentorHandler, self).pre_fill_values(request, result)
 
