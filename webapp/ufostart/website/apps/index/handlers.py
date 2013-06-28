@@ -3,7 +3,6 @@ from ufostart.website.apps.models.procs import FindPublicNeeds, GetPopularNeeds,
 
 def index(context, request):
     popular_needs = GetPopularNeeds(request)
-    new_products = GetNewProductsProc(request)
     location = FindPublicNeedsByLocation(request)
     products = GetNewProductsProc(request)
     return {'popular_needs':popular_needs, 'needs_close_by': location, 'products': products}

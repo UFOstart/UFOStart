@@ -28,6 +28,7 @@ class UserApplicationModel(ApplicationModel):
     companySlug = TextField()
     need = TextField()
     needToken = TextField()
+    needSlug = TextField()
 
 class UserModel(Mapping):
     token = TextField()

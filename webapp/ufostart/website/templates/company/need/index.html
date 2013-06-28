@@ -84,7 +84,7 @@
             ${widgets.userPic(need.acceptedApplication.User)}
             <div class="right-box">
                 %if need.acceptedApplication.User.token:
-                    <a href="${root.userURL(need.acceptedApplication.User.token)}"><strong>${ need.acceptedApplication.User.name }</strong></a>
+                    <a href="${root.profile_url(need.acceptedApplication.User.token)}"><strong>${ need.acceptedApplication.User.name }</strong></a>
                 %else:
                     <strong>${ need.acceptedApplication.User.name }</strong>
                 %endif

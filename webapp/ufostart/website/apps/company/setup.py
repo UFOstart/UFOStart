@@ -9,14 +9,10 @@ from ufostart.website.apps.forms.controls import FileUploadField
 
 
 def basics(context, request):
-    templates = GetAllCompanyTemplatesProc(request)
-    return {'templates': templates}
-
+    return {'templates': context.templates}
 
 def details(context, request):
-    templateKey = request.matchdict['template']
-    template = GetTemplateDetailsProc(request, {'key': templateKey})
-    return {'template': template}
+    return {'template': context.template}
 
 
 class CompanyCreateForm(BaseForm):
@@ -29,7 +25,7 @@ class CompanyCreateForm(BaseForm):
     ]
     @classmethod
     def on_success(cls, request, values):
-        templateKey = request.matchdict['template']
+        templateKey = request.context.__name__
         values['Template'] = {'key': templateKey}
 
         al_company = request.session.get(SESSION_SAVE_TOKEN)
@@ -45,9 +41,9 @@ class CompanyCreateForm(BaseForm):
             else:
                 return {'success':False, 'message': 'Something went wrong: {}'.format(e.message)}
         else:
-            return {'success':True, 'redirect': request.fwd_url("website_company", slug = request.root.user.getDefaultCompanySlug())}
+            return {'success':True, 'redirect': request.root.company_url(request.root.user.getDefaultCompanySlug())}
 
-@require_login_cls("ufostart:website/templates/auth/login.html")
+
 class CreateProjectHandler(FormHandler):
     template = "ufostart:website/templates/company/setup/login.html"
     form = CompanyCreateForm

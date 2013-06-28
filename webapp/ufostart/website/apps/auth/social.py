@@ -2,8 +2,10 @@ import logging
 from hnc.apiclient.backend import DBNotification
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
+from pyramid.httpexceptions import HTTPForbidden
 from pyramid.renderers import render_to_response
 from pyramid.response import Response
+from pyramid.security import NO_PERMISSION_REQUIRED
 from pyramid.view import view_config
 from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES, SOCIAL_NETWORK_TYPES_REVERSE
 
@@ -66,17 +68,22 @@ def require_login_cls(template):
 
 # AUTH VIEWS
 
-@view_config(context = RequiresLoginException)
+@view_config(context = RequiresLoginException, permission = NO_PERMISSION_REQUIRED)
+@view_config(context = HTTPForbidden, permission = NO_PERMISSION_REQUIRED)
 def auth_required_view(exc, request):
-    return render_to_response(exc.template, {}, request)
+    if isinstance(exc, RequiresLoginException):
+        template = exc.template
+    else:
+        template = request.context.__auth_template__
+    return render_to_response(template, {}, request)
 
-@view_config(context = SocialLoginSuccessful)
+@view_config(context = SocialLoginSuccessful, permission = NO_PERMISSION_REQUIRED)
 def login_success(exc, request):
     login_user(request.root, request, exc.profile)
     route = exc.get_redirection(request)
     return Response("Resource Found!", 302, headerlist = [('location', route)])
 
-@view_config(context = SocialLoginFailed)
+@view_config(context = SocialLoginFailed, permission = NO_PERMISSION_REQUIRED)
 def login_failure(exc, request):
     request.session.flash(GenericErrorMessage(exc.message), "generic_messages")
     route = exc.get_redirection(request)

@@ -27,7 +27,7 @@ class ApplicationForm(BaseForm):
     def on_success(cls, request, values):
         ApplyForNeedProc(request, {'token':request.root.need.token, 'Application': {'User':{'token':request.root.user.token}, 'message':values['message']}})
         request.session.flash(GenericSuccessMessage("You have applied for this need successfully. One of the team members will contact you shortly."), "generic_messages")
-        return {'success':True, 'redirect': request.fwd_url("website_round_need", **request.root.urlArgs)}
+        return {'success':True, 'redirect': request.resource_url(request.context)}
 
 @require_login_cls("ufostart:website/templates/auth/login.html")
 class ApplicationHandler(FormHandler):
@@ -59,7 +59,7 @@ class NeedCreateForm(BaseForm):
                 raise e
 
         request.session.flash(GenericSuccessMessage("Need created successfully!"), "generic_messages")
-        return {'success':True, 'redirect': request.fwd_url("website_company", **request.matchdict)}
+        return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class NeedCreateHandler(FormHandler):
     form = NeedCreateForm
@@ -93,7 +93,7 @@ class NeedEditForm(BaseForm):
                 raise e
 
         request.session.flash(GenericSuccessMessage("Need edited successfully!"), "generic_messages")
-        return {'success':True, 'redirect': request.fwd_url("website_round_need", **request.matchdict)}
+        return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class NeedEditHandler(FormHandler):
     form = NeedEditForm

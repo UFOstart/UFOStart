@@ -30,7 +30,7 @@ class Security(SessionAuthenticationPolicy):
     def effective_principals(self, request, *args, **kwargs):
         principals = [Everyone]
         user = request.root.user
-        if user:
+        if not user.isAnon():
             principals += [Authenticated, 'u:%s' % user.token]
         return principals
 

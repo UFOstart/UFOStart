@@ -19,7 +19,7 @@
             <img class="image" src="${member.picture_url}"/>
             <span title="unconfirmed" class="unconfirmed">unconfirmed</span>
         %else:
-            <a href="${root.userURL(member.token)}"><img class="image" src="${member.picture_url}"/></a>
+            <a href="${root.profile_url(member.token)}"><img class="image" src="${member.picture_url}"/></a>
         %endif
     </div>
 </%def>
@@ -66,13 +66,13 @@
 
 <%def name="publicNeedCard(need, descr_len = 50)">
 <%
-    need_url = url("website_round_need", slug = need.Company.slug, need = need.token)
+    need_url = root.need_url(need.Company.slug, need.slug)
 %>
 <div class="need-card home">
     <div class="need-card-inner">
         <div class="box-header box-header-muted box-card">
             <div class="picture">
-                <a href="${url("website_company", slug = need.Company.slug)}"><img src="${need.Company.logo}"></a>
+                <a href="${root.company_url(need.Company.slug)}"><img src="${need.Company.logo}"></a>
             </div>
             <div class="right-box">
                 <h5><a href="${need_url}" class="overflow">${need.Company.name}</a></h5>
@@ -99,7 +99,7 @@
 
 <%def name="publicProductCard(company, descr_len = 50)">
     <%
-        product_url = url("website_company_product", slug = company.slug)
+        product_url = root.product_url(company.slug)
     %>
     <div class="need-card home product">
     <div class="need-card-inner">
@@ -128,7 +128,7 @@
         <div class="mar-top-1"></div>
         ${self.company_logo(company)}
         <div class="right-box">
-            <a href="${request.resource_url(root, 'c', company.slug)}" class="overflow"><strong>${company.display_name}</strong></a>
+            <a href="${root.company_url(company.slug)}" class="overflow"><strong>${company.display_name}</strong></a>
             <div class="description">${company.description | html.trunc(50)}</div>
             <div class="number-widget">
                 <h6>Startup Value</h6>

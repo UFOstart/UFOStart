@@ -1,5 +1,6 @@
 import logging, simplejson
 from hnc.apiclient import Mapping, TextField, DictField
+from pyramid.security import Everyone, Allow
 
 __all__ = ['AbstractSocialResource', 'SocialNetworkProfileModel', 'angellist', 'facebook', 'linkedin', 'twitter', 'xing'
     , 'SocialLoginSuccessful', 'SocialLoginFailed', 'UserRejectedNotice', 'InvalidSignatureException', 'SocialNetworkException'
@@ -51,9 +52,11 @@ class SocialNetworkProfileModel(Mapping):
 
 
 class AbstractSocialResource(object):
+    __acl__ = [(Allow, Everyone, 'view')]
     http_options = {'disable_ssl_certificate_validation' : True}
     default_picture = "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
     def __init__(self, network, appid, appsecret, **kwargs):
+        self.__name__ = network
         self.network = network
         self.appid = appid
         self.appsecret = appsecret

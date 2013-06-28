@@ -16,9 +16,6 @@ ROUTE_LIST = [
     , OAuthLoginRoute('website_login'                      , '/login', contexts.WebsiteRootContext                                           , auth.social.login, 'auth/login.html')
     , FunctionRoute  ('website_logout'                     , '/user/logout', contexts.WebsiteRootContext                                     , index.logout, None)
 
-    , OAuthLoginRoute('website_user_home'                  , '/home', contexts.WebsiteRootContext                                            , user.index.home, "user/home.html")
-    , FunctionRoute  ('website_user'                       , '/u/:slug', contexts.WebsiteRootContext                                         , user.index.user, "user/home.html")
-
     , FunctionRoute  ("website_company_import_start"       , "/angellist/import/start", contexts.WebsiteRootContext                          , company.imp.company_import_start, "company/import/list.html")
     , FunctionRoute  ("website_company_import"             , "/angellist/import", contexts.WebsiteRootContext                                , company.imp.company_import, "company/import/list.html")
     , FunctionRoute  ("website_company_import_list"        , "/angellist/import/:user_id/:token", contexts.WebsiteRootContext                , company.imp.company_import_list, "company/import/list.html")
@@ -26,10 +23,6 @@ ROUTE_LIST = [
 
     , OAuthLoginRoute("website_invite_confirm"             , '/invite/:token/confirm', contexts.WebsiteRootContext                           , company.invite.confirm, "company/invite_confirm.html")
     , OAuthLoginRoute("website_invite_answer"              , '/invite/:token', contexts.WebsiteRootContext                                   , company.invite.answer, "company/invite_confirm.html")
-
-    , FunctionRoute  ('website_template_basic'             , '/templates', contexts.WebsiteRootContext                                       , company.setup.basics, "company/setup/basic.html")                #   Step 1
-    , FunctionRoute  ('website_template_details'           , '/template/:template', contexts.WebsiteRootContext                              , company.setup.details, "company/setup/details.html")             #   Step 2
-    , OAuthClassRoute('website_template_create'            , '/setup/:template', contexts.WebsiteRootContext                                 , company.setup.CreateProjectHandler, 'company/setup/create.html', view_attrs = JSON_FORM_ATTRS) #   Step 3
 ]
 
 
@@ -63,4 +56,5 @@ def includeme(config):
     settings = config.registry.settings
     settings['g'].setSettings(WebsiteSettings, settings)
     route_factory('ufostart', ROUTE_LIST, App("website"), config, template_path_prefix = 'website')
-    config.include("ufostart.website.apps.company", route_prefix = '/c')
+    config.include("ufostart.website.apps.company")
+    config.include("ufostart.website.apps.user")

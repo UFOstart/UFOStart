@@ -10,7 +10,7 @@
     %for t in templates:
         <div class="col col-lg-6 text-center">
             <div class="single-template">
-                <a href="${url("website_template_details", template=t.key)}" class="single-template-button ${t.getStyleKey()} no-btn">
+                <a href="${root.template_url(t.key)}" class="single-template-button ${t.getStyleKey()} no-btn">
                     <img src="${STATIC_URL}img/templates/${t.getStyleKey()}.png"/>
                     <span class="name">${t.name}</span>
                 </a>

@@ -1,8 +1,6 @@
 <%inherit file="../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../widgets.html" name="widgets"/>
-<%namespace file="index.html" name="compView"/>
-
 
 <%def name="content()">
     <div class="container">
@@ -65,7 +63,7 @@
                 ${widgets.userPic(member)}
                 <div class="right-box">
                     %if member.token:
-                        <a href="${root.userURL(member.token)}"><strong>${ member.name }</strong></a>
+                        <a href="${root.profile_url(member.token)}"><strong>${ member.name }</strong></a>
                     %else:
                         <strong>${ member.name }</strong>
                     %endif

@@ -96,7 +96,7 @@
                     ${widgets.company_logo(company)}
                 </div>
                 <div class="col col-sm-5">
-                    <div class="overflow"><a href="${url("website_company", slug = company.slug)}"><strong>${company.name}</strong></a></div>
+                    <div class="overflow"><a href="${root.company_url(company.slug)}"><strong>${company.name}</strong></a></div>
                     %if company.currentRound and company.currentRound.published:
                         <div><strong>${company.currentRound.getExpiryDays()}</strong></div>
                     %else:
@@ -137,7 +137,8 @@
                     </div>
                     <div class="col col-sm-10">
                         <div class="pull-right">${application.display_date}</div>
-                        <div class="overflow"><a href="${url("website_round_need", slug = application.companySlug, need = application.needToken)}"><strong>${application.need}</strong></a></div>
+                        <!-- TODO: check application.needToken -->
+                        <div class="overflow"><a href="${root.need_url(application.companySlug, application.needSlug)}"><strong>${application.need}</strong></a></div>
                         <p class="overflow"><small>${application.companyName}</small></p>
                         <div class="application-message">${application.message | html.trunc(50)}</div>
                     </div>

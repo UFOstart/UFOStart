@@ -3,9 +3,8 @@ from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.models.procs import RefreshProfileProc, FindPublicNeeds, FindPublicNeedsByLocation, GetNewProductsProc, GetProfileProc
 
 
-@require_login("ufostart:website/templates/auth/login.html")
 def home(context, request):
-    profile = RefreshProfileProc(request, {'token': context.user.token})
+    profile = context.user
     best_match = FindPublicNeeds(request, {'Search': {'tags': profile.display_skills}})
     location = FindPublicNeedsByLocation(request)
     return {
@@ -18,7 +17,7 @@ def home(context, request):
 
 
 def user(context, request):
-    profile = GetProfileProc(request, {'token': request.matchdict['slug']})
+    profile = context.profile
     location = FindPublicNeedsByLocation(request)
     if not profile:
         raise HTTPNotFound()

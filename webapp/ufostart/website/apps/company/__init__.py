@@ -2,12 +2,41 @@ from pyramid.decorator import reify
 from pyramid.security import Allow, Everyone, Authenticated, has_permission
 from .tasks import *
 import product, general, invite, need, imp, setup
-from ufostart.website.apps.models.procs import GetCompanyProc
+from ufostart.website.apps.models.procs import GetCompanyProc, GetTemplateDetailsProc
 
 
 def canEdit(self): return has_permission('edit', self, self.request)
 def canApprove(self): return has_permission('approve', self, self.request)
 
+
+
+class TemplateContext(object):
+    __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'create')]
+    __auth_template__ = "ufostart:website/templates/auth/login.html"
+
+    def __init__(self, parent, name, template):
+        self.__name__ = name
+        self.__parent__ = parent
+        self.request = parent.request
+        self.template = template
+
+
+class TemplatesRootContext(object):
+    def __init__(self, parent, name):
+        self.__name__ = name
+        self.__parent__ = parent
+        self.request = parent.request
+
+
+    def __getitem__(self, item):
+        template = GetTemplateDetailsProc(self.request, {'key': item})
+        if not template: raise KeyError()
+        else:
+            return TemplateContext(self, item, template)
+
+    @reify
+    def templates(self):
+        return GetAllCompanyTemplatesProc(self.request)
 
 
 class ApplicationContext(object):
@@ -52,6 +81,23 @@ class NeedContext(object):
     def round(self):
         return self.__parent__.round
 
+class ProductContext(object):
+    canEdit = reify(canEdit)
+    canApprove = reify(canApprove)
+
+    def __init__(self, parent, name, acl):
+        self.__parent__ = parent
+        self.__name__ = name
+        self.__acl__ = acl
+        self.request = parent.request
+    @reify
+    def company(self):
+        return self.__parent__.company
+    @reify
+    def round(self):
+        return self.__parent__.round
+
+
 
 class RoundContext(object):
     canEdit = reify(canEdit)
@@ -65,6 +111,7 @@ class RoundContext(object):
         self.round = round
     def __getitem__(self, item):
         if item in ['publish', 'askforapproval']: return None
+        if item == 'product': return ProductContext(self, 'product', self.__acl__)
         return NeedContext(self, item, self.__acl__, self.round.needMap[item])
 
     @reify
@@ -107,23 +154,24 @@ class ProtoCompanyContext(object):
             return CompanyContext(self, item, company)
 
 def includeme(config):
+    config.add_view(setup.basics                , context = TemplatesRootContext                 , renderer = "ufostart:website/templates/company/setup/basic.html")
+    config.add_view(setup.details               , context = TemplateContext                      , renderer = "ufostart:website/templates/company/setup/details.html")
+    config.add_view(setup.CreateProjectHandler  , context = TemplateContext,name = 'startcompany', renderer = "ufostart:website/templates/company/setup/create.html", permission = 'create')
+
+
     config.add_view(invite.InviteCompanyHandler , context = CompanyContext                       , renderer = "ufostart:website/templates/company/company.html")
     config.add_view(invite.AddMentorHandler     , context = CompanyContext    , name='mentor'    , renderer = "ufostart:website/templates/company/addmentor.html")
 
     config.add_view(general.index               , context = RoundContext                         , renderer = "ufostart:website/templates/company/round.html")
     config.add_view(general.publish_round       , context = RoundContext      , name='publish'   , permission='approve')
-    config.add_view(general.ask_for_approval    , context = RoundContext      , name='askforapproval'      , permission='edit')
+    config.add_view(general.ask_for_approval    , context = RoundContext      , name='askforapproval', permission='edit')
+
+    config.add_view(product.ProductOfferHandler , context = ProductContext                       , renderer = "ufostart:website/templates/company/product/index.html")
+    config.add_view(product.ProductCreateHandler, context = ProductContext    , name = 'create'  , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
+    config.add_view(product.ProductEditHandler  , context = ProductContext    , name = 'edit'    , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
 
     config.add_view(need.NeedCreateHandler      , context = RoundContext      , name='addneed'   , renderer = "ufostart:website/templates/company/need/create.html", permission='edit')
-
     config.add_view(need.index                  , context = NeedContext                          , renderer = "ufostart:website/templates/company/need/index.html")
     config.add_view(need.ApplicationHandler     , context = NeedContext       , name = 'apply'   , renderer = "ufostart:website/templates/company/need/apply.html")
     config.add_view(need.accept_application     , context = ApplicationContext, name = 'accept')
     config.add_view(need.NeedEditHandler        , context = NeedContext       , name = 'edit'    , renderer = "ufostart:website/templates/company/need/edit.html", permission='edit')
-
-
-
-    # , ClassRoute     ("website_company_product"            , "/c/:slug/product", contexts.WebsiteRootContext                       , company.product.ProductOfferHandler, "company/product/index.html", view_attrs = JSON_FORM_ATTRS)
-    # , ClassRoute     ("website_company_product_create"     , "/c/:slug/product/create", contexts.WebsiteRootContext                , company.product.ProductCreateHandler, "company/product/create.html", view_attrs = JSON_FORM_ATTRS)
-    # , ClassRoute     ("website_company_product_edit"       , "/c/:slug/product/edit", contexts.WebsiteRootContext                  , company.product.ProductEditHandler, "company/product/create.html", view_attrs = JSON_FORM_ATTRS)
-    # , OAuthLoginRoute('website_company_product_pledge'     , '/c/:slug/pledge', contexts.WebsiteRootContext                        , company.product.login, 'auth/login.html')
