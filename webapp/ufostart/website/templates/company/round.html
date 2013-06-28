@@ -1,14 +1,17 @@
 <%inherit file="../layout.html"/>
 <%namespace file="../widgets.html" name="widgets"/>
 
+<%def name="breadcrumbs()">
+<div class="row">
+    <div class="col col-lg-12">
+        <a href="${request.resource_url(resource.__parent__)}">${resource.company.name}</a> &raquo;
+        <a href="${request.resource_url(resource)}">Round 1</a>
+    </div>
+</div>
+</%def>
+
 <%def name="content()">
     <div class="container" id="project-round-need-dashboard">
-        <div class="row">
-            <div class="col col-lg-12">
-                <a href="${request.resource_url(resource.__parent__)}">${resource.company.name}</a> &raquo;
-                <a href="${request.resource_url(resource)}">Round 1</a>
-            </div>
-        </div>
         <div class="row">
             <div class="col col-lg-12">
                 <h1 class="section-title">

@@ -31,6 +31,8 @@ class CompanyCreateForm(BaseForm):
     @classmethod
     def on_success(cls, request, values):
         templateKey = request.context.__name__
+        if isinstance(values.get('pictures'), basestring):values['pictures'] = [values['pictures']]
+        values['pictures'] = [{'url':url} for url in values['pictures']]
         values['Template'] = {'key': templateKey}
 
         al_company = request.session.get(SESSION_SAVE_TOKEN)

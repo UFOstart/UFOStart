@@ -17,11 +17,11 @@
        </div>
     </%block>
 
-    %if hasattr(next, 'header_buttons'):
-        <div class="container header-btns">
+    %if hasattr(next, 'breadcrumbs'):
+        <div class="container breadcrumbs">
             <div class="row">
-                <div class="col col-lg-12">
-                    ${next.header_buttons()}
+                <div class="col col-lg-12 crumbs-inner">
+                    ${next.breadcrumbs()}
                 </div>
             </div>
         </div>

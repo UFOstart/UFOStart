@@ -1,3 +1,7 @@
+
+<%def name="round_logo(company, round)"><% t = round.Template %>
+${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name, link = root.round_url(company.slug, company.round_no(round))))}
+</%def>
 <%def name="company_logo(company)">${self.logo(company.logo_url, company.name, link = request.resource_url(request.root, company.slug))}</%def>
 <%def name="app_company_logo(application)">${self.logo(application.comapnyLogo, application.companyName, link = request.resource_url(request.root, application.companySlug))}</%def>
 <%def name="product_logo(company)">${self.logo(company.product_picture, company.product_name, link = request.resource_url(request.root, company.slug))}</%def>
@@ -10,6 +14,59 @@
 %else:
 <div class="picture empty ${classes}"></div>\
 %endif
+</%def>
+
+
+
+<%def name="gallery(title, play_btn_text, pictures)">
+    <div class="picture-gallery-preview">
+        <div class="box-title major">
+            ${title|n}
+        </div>
+        <div class="play">
+            <div class="picture"></div>
+            <div class="btn-label">${play_btn_text}</div>
+        </div>
+        %for picture in pictures:
+            <div class="picture"><img src="${picture}"/></div>
+        %endfor
+
+    </div>
+</%def>
+
+
+<%def name="main_media(title, video_url = None, slideshare_url = None, picture_url = None)" filter="trim">
+    <div class="media-container">
+        <div class="box-title major">${title|n}</div>
+        ${self.media(video_url, slideshare_url, picture_url)}
+    </div>
+</%def>
+
+<%def name="media(video_url = None, slideshare_url = None, picture_url = None)" filter="trim">
+    <%
+        youtube_id = html.getYoutubeVideoId(video_url)
+        vimeo_id = html.getVimeoVideoId(video_url)
+    %>
+    %if youtube_id:
+        <div class="iframe-container">
+            <iframe src="//www.youtube.com/embed/${youtube_id}" width="847" height="400" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameborder="0"></iframe>
+        </div>
+    %elif vimeo_id:
+        <div class="iframe-container">
+            <iframe src="//player.vimeo.com/video/${vimeo_id}" width="847" height="400" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameborder="0"></iframe>
+        </div>
+    %elif slideshare_url:
+        <% slideshare_id = html.getSlideShareId(slideshare_url) %>
+        <div class="iframe-container">
+            <iframe src="//www.slideshare.net/slideshow/embed_code/${slideshare_id}" width="847" height="400" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameborder="0"></iframe>
+        </div>
+    %elif video_url:
+        <a href="${video_url}">${video_url}</a>
+    %elif picture_url:
+        <div class="picture">
+            <img src="${picture_url}"/>
+        </div>
+    %endif
 </%def>
 
 

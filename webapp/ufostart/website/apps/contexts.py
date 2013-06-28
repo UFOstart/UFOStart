@@ -82,6 +82,9 @@ class WebsiteRootContext(RootContext):
         return self.request.resource_url(self, 'template', slug)
     def company_url(self, slug):
         return self.request.resource_url(self, 'c', slug)
+    def round_url(self, slug, round_no):
+        return self.request.resource_url(self, 'c', slug, round_no)
+
     def need_url(self, company_slug, need_slug):
         return self.request.resource_url(self, 'c', company_slug, 1, need_slug)
 

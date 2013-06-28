@@ -10,7 +10,8 @@ from hnc.tools.tools import word_truncate_by_letters
 from httplib2 import Http
 from pyramid.decorator import reify
 import simplejson
-from ufostart.lib.tools import getYoutubeVideoId, getVimeoVideoId, format_currency
+from ufostart.lib.html import getYoutubeVideoId, getVimeoVideoId
+from ufostart.lib.tools import format_currency
 from ufostart.models.tasks import NamedModel
 from ufostart.website.apps.models.workflow import WorkflowModel
 
@@ -121,15 +122,25 @@ class ApplicationModel(Mapping):
         return format_date(self.created, format='medium', locale='en')
 
 
-
+class PictureModel(Mapping):
+    url = TextField()
+    def __repr__(self):
+        return self.url
 
 class BaseCompanyModel(Mapping):
     token = TextField()
     slug = TextField()
-    name = TextField()
-    logo = TextField()
+
     url = TextField()
+
+    name = TextField()
+    pitch = TextField()
     description = TextField()
+    logo = TextField()
+    Pictures = ListField(DictField(PictureModel))
+    video = TextField()
+    slideShare = TextField()
+
     @property
     def display_name(self):
         if self.is_setup:
@@ -329,10 +340,16 @@ class RoundModel(Mapping):
     @reify
     def needMap(self):
         return {n.slug:n for n in self.Needs}
+    @reify
+    def display_name(self):
+        return self.Template.name
+    @reify
+    def expiry_days(self):
+        delta = (self.start+timedelta(90)) - datetime.today()
+        return delta.days + 1
 
     def getExpiryDays(self, singular = "{} Day Left", plural="{} Days Left", closed = "Closed"):
-        delta = (self.start+timedelta(90)) - datetime.today()
-        days = delta.days + 1
+        days = self.expiry_days
         if 0 < days <= 1:
             return singular.format(days)
         elif days > 1:
@@ -374,9 +391,6 @@ class CompanyModel(BaseCompanyModel):
     @property
     def displayStartupValue(self):
         return format_currency(self.startupValue)
-    @property
-    def currentRound(self):
-        return self.Round if self.Round else None
     @reify
     def memberMap(self):
         return {u.token:u for u in self.Users}
@@ -400,6 +414,15 @@ class CompanyModel(BaseCompanyModel):
     @reify
     def mentors(self):
         return [u for u in self.Users if u.role == 'MENTOR']
+
+    @property
+    def rounds(self):
+        return [self.Round]
+    @property
+    def currentRound(self):
+        return self.Round if self.Round else None
+    def round_no(self, round):
+        return 1
 
     @property
     def product_is_setup(self):

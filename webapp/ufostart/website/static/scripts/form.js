@@ -8,14 +8,13 @@ define(['tools/ajax'], function(ajax){
         }
         , removeLink: '<a class="remove-link link close">&times;</a>'
         , initialize: function(opts){
-            var view = this, validPromise = $.Deferred();
+            var view = this;
             var valid_params = {form: this.$el};
 
             this.widgets = [];
-            this.setupWidgets(this.$el, validPromise);
+            this.setupWidgets(this.$el);
 
             ajax.ifyForm(_.extend(valid_params, opts), opts.validatorOpts);
-            validPromise.resolve(this.$el);
 
             this.wrapperSelector = opts.wrapperSelector || '[data-closure="form"], .form-validated';
             this.templateSelector = opts.templateSelector || "[data-sequence], .form-validated";

@@ -2,12 +2,28 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../widgets.html" name="widgets"/>
 
+<%def name="breadcrumbs()">
+    <a class="crumb" href="${request.resource_url(resource)}"><span class="title">Company</span><br/>${resource.company.name}</a>
+</%def>
+
+
 <%def name="content()">
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col col-lg-12">
                 <h1 class="section-title">
-                    <span class="brand-primary">${company.name}</span>
+                    %if resource.canEdit:
+                        <span class="btn-wrapper"><a title="Edit" href="${request.resource_url(resource, 'edit')}"><span class="glyphicon glyphicon-pencil"></span></a></span>
+                    %endif
+                    <span class="brand-primary">
+                        <span class="sub-title">Company Profile</span> ${company.name}
+                    </span>
                 </h1>
             </div>
         </div>
@@ -16,77 +32,108 @@
                 ${self.companyMainInfo(company)}
             </div>
             <div class="col col-lg-6">
-                ${html.nn(company.description)}
-                <div class="mar-top-1">
-                    ${self.teamMembers(company.Users)}
+                ${widgets.main_media("Company Introduction", company.video, company.slideShare)}
+                <div class="main-description">
+                    ${company.description | html.html,n}
                 </div>
-
-                %if resource.canEdit:
-                    ${self.build_forms(view.form, values, errors)}
-                %endif
-
             </div>
 
             <div class="col col-lg-3">
-                <a href="${request.resource_url(resource, 1)}">Round ${1}</a>
+
+                ${widgets.gallery("Picture Gallery", "Play Slideshow", company.Pictures)}
+
             </div>
         </div>
     </div>
 </%def>
 
 <%def name="companyMainInfo(company)">
-    <div class="box-title">
-        Company Details
-    </div>
-    <div class="picture-header">
-        ${widgets.company_logo(company)}
-    </div>
-    <div class="number-widget">
+    ${widgets.company_logo(company)}
+    <a class="entity-link  mar-top-1" href="${request.resource_url(resource)}">${resource.company.name}</a>
+    <div class="pitch">${html.nn(company.pitch)}</div>
+    <div class="number-widget mar-top-1">
         <h6>Startup Value</h6>
-        <div class="value">
+        <div class="value light">
             ${company.displayStartupValue}
         </div>
     </div>
+    <div class="mar-top-2">
+        ${self.team_members(company.Users)}
+    </div>
+
+    %if resource.canEdit:
+        ${self.build_forms(view.form, values, errors)}
+    %endif
+
+    <div class="mar-top-2">
+        ${self.rounds(company, company.rounds)}
+    </div>
 </%def>
 
-<%def name="teamMembers(members)">
+<%def name="rounds(company, rounds)">
+    <div class="box-title">
+        Rounds
+    </div>
+    %for i, round in enumerate(rounds):
+    <div class="box-card">
+        ${widgets.round_logo(company, round)}
+        <div class="right-box">
+            <a href="${root.round_url(company.slug, company.round_no(round))}" class="overflow"><strong>${round.display_name}</strong></a>
+            <div class="description">${html.format_date(round.start, 'short')}</div>
+            <div class="number-widget small">
+                <div class="halves">
+                    <div class="heading">Time left</div>
+                    <div class="small-value">${round.expiry_days} Days</div>
+                </div><div class="halves">
+                    <div class="heading">Needs</div>
+                    <div class="small-value">${round.noFulfilledNeeds}/${round.noTotalNeeds}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    %endfor
+</%def>
+<%def name="team_members(members)">
     <div class="box-title">
         Team Members
     </div>
     <div class="member-pile">
         %for member in members:
             <div class="single-team-member box-card">
-                <div class="number-widget pull-right">
-                    <h6>Startup Value</h6>
-                    <div class="value">${member.displayStartupValue}</div>
-                </div>
                 ${widgets.userPic(member)}
                 <div class="right-box">
+                    <div class="position">${html.nn(member.position)}</div>
                     %if member.token:
-                        <a href="${root.profile_url(member.token)}"><strong>${ member.name }</strong></a>
+                        <a class="entity-link" href="${root.profile_url(member.token)}"><strong>${ member.name }</strong></a>
                     %else:
                         <strong>${ member.name }</strong>
                     %endif
-
-                    <div class="text-muted">${html.nn(member.position)}</div>
                     <small class="headline">${html.nn(member.headline)}</small>
+                    <small>
+                        <strong class="text-muted">Startup Value</strong> <span class="brand-primary">${member.displayStartupValue}</span>
+                    </small>
                 </div>
             </div>
-
         %endfor
     </div>
 </%def>
 
 <%def name="build_forms(form, values, errors)">
-    <div class="box-dark">
-        <div class="box-content">
-            <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
-                ${baseform.prelims(form)}
-                ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                ${form.fieldMap['role'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                <button type="submit" class="btn btn-primary">Invite member</button>
-            </form>
+    <div class="expander">
+        <a class="btn btn-primary btn-small show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Invite Team Members</a>
+        <div class="show-expanded">
+            <div class="box-dark">
+                <div class="box-content">
+                    <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+                        ${baseform.prelims(form)}
+                        ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                        ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                        ${form.fieldMap['role'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                        <button type="submit" class="btn btn-primary">Invite member</button>
+                        <a class="btn btn-default" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </%def>

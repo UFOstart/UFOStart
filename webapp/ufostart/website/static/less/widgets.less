@@ -142,18 +142,32 @@
     display: inline-block;
     vertical-align: top;
   }
+  >.halves {
+    width:50%;
+    display: inline-block;
+    vertical-align: top;
+  }
   >.two.thirds {
     width:67%;
   }
+
+  h6 {margin:0;}
   .heading {
     color: @text-muted;
     font-weight:@font-weight-bold;
     font-size: @font-size-small;
+    line-height: 1em;
   }
+  .light {font-weight: 300;}
   .value {
     color: @brand-primary;
     font-weight: @font-weight-bold;
     font-size:@font-size-xlarge;
     > .sub-value {font-size:@font-size-base;vertical-align: middle;}
+  }
+  .small-value {
+    color: @brand-primary;
+    font-weight: @font-weight-bold;
+    font-size:@font-size-small;
   }
 }

@@ -9,19 +9,6 @@ def group_by_n(array, n=2):
 
 
 
-def getYoutubeVideoId(url):
-    scheme, netloc, url, params, query, fragment = urlparse(url)
-    params = dict(parse_qsl(query))
-    return params.get('v')
-
-def getVimeoVideoId(vurl):
-    scheme, netloc, url, params, query, fragment = urlparse(vurl)
-    for e in url.split("/"):
-        try:
-            return int(e)
-        except: pass
-    return None
-
 
 def format_int_amount(number, locale = 'en'):
     if number is None:

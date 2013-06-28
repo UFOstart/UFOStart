@@ -29,6 +29,7 @@ requires = [
     "dogpile.cache>=0.4.1",
     "redis",
     "httplib2",
+    "docutils",
     'hnc>=0.0.8dev'
     ]
 

@@ -4,7 +4,6 @@
         initialize:function(opts){
             var view = this
                 , uploader = this.$(".file-picker-upload")
-                , fieldName = opts.fieldName
                 , picture_template = _.template(this.$(".picture-template").html());
 
            filepicker.makeDropPane(uploader[0], {
@@ -29,8 +28,7 @@
             });
         }
     })
-    , init = function(opts, onLoaded){
-        opts.onLoaded = onLoaded;
+    , init = function(opts){
         return new View(opts);
     };
     return {init: init, View: View};

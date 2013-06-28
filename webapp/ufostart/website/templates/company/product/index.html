@@ -2,12 +2,6 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../../widgets.html" name="widgets"/>
 
-<%def name="header_buttons()">
-    <div class="pull-right">
-        Company: <a href="${url('website_company', **vctxt.urlArgs)}">${vctxt.company.name}</a>
-    </div>
-</%def>
-
 <%def name="content()">
     <div class="container">
         <div class="row">
@@ -243,7 +237,9 @@
             vimeo_id = product.getVimeoVideoId()
         %>
         %if youtube_id:
-            <div class="you-tube-container" data-video-id="${youtube_id}"></div>
+            <div class="vimeo-container">
+                <iframe class="youtube-player" type="text/html" width="640" height="385" src="http://www.youtube.com/embed/${youtube_id}" allowfullscreen frameborder="0"></iframe>
+            </div>
         %elif vimeo_id:
             <div class="vimeo-container">
             <iframe src="http://player.vimeo.com/video/${vimeo_id}" width="847" height="400" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
@@ -264,9 +260,6 @@
 
 <%def name="post_scripts()">
     <script>
-        require(["tools/youtube"], function(yt){
-            yt.onLoad({root: $(".company-customer-dashboard")})
-        })
         require(["form"], function(View){
             $("form.form-validated").each(function(idx, elem){
                 new View({el: $(elem)});

@@ -38,7 +38,8 @@
         ${form.fieldMap['pictures'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         ${form.fieldMap['video'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         ${form.fieldMap['slideshare'].render(form.id, request, values, errors, view, grid = form.grid)|n}
-       <button type="submit" class="btn btn-primary">Submit</button>
+       <button type="submit" class="btn btn-primary">Start Project</button>
+       <a href="${request.resource_url(resource.__parent__)}" class="btn btn-default">Cancel</a>
     </form>
 </%def>
 
