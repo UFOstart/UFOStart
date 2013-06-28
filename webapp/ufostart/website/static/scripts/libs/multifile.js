@@ -1,13 +1,9 @@
 ﻿define(["tools/ajax"], function(ajax){
-
     var View = Backbone.View.extend({
         initialize:function(opts){
-            var view = this
-                , uploader = this.$(".file-picker-upload")
-                , fieldName = opts.fieldName
-                , picture_template = _.template(this.$(".picture-template").html());
-
-           filepicker.makeDropPane(uploader[0], {
+            this.uploader = this.$(".file-picker-upload");
+            var view = this, uploader = this.uploader, picture_template = _.template(this.$(".picture-template").html());
+            filepicker.makeDropPane(uploader[0], {
                 dragEnter: function() {
                     uploader.addClass("drop-target");
                 },
@@ -17,8 +13,7 @@
                 onSuccess: function(fpfiles) {
                     uploader.html('<div class="info">Done!</div>').removeClass("empty");
                     var file = fpfiles[0];
-                    uploader.html(picture_template({pic: file}));
-                    view.$el.closest(".form-validated").validate().element(view.$el.find('input[type=hidden]').val(file.url));
+                    uploader.html(picture_template({field_name: view.uploader.data("fieldName"), pic: fpfiles[0]}));
                 },
                 onError: function(type, message) {
                     uploader.after().text('('+type+') '+ message);
@@ -28,10 +23,12 @@
                 }
             });
         }
+        , render: function(){
+
+        }
     })
-    , init = function(opts, onLoaded){
-        opts.onLoaded = onLoaded;
-        return new View(opts);
+    , init = function(opts){
+        return null
     };
     return {init: init, View: View};
 });

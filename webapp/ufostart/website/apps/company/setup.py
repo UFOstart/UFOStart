@@ -5,7 +5,7 @@ from pyramid.decorator import reify
 from ufostart.website.apps.auth.social import require_login_cls
 from ufostart.website.apps.company.imp import SESSION_SAVE_TOKEN
 from ufostart.website.apps.models.procs import GetAllCompanyTemplatesProc, GetTemplateDetailsProc, CreateCompanyProc
-from ufostart.website.apps.forms.controls import FileUploadField
+from ufostart.website.apps.forms.controls import FileUploadField, PictureGalleryUploadField
 
 
 def basics(context, request):
@@ -19,10 +19,15 @@ class CompanyCreateForm(BaseForm):
     id="CompanyCreate"
     label = ""
     fields=[
-        StringField('name', 'Project Name', REQUIRED)
+        FileUploadField('logo', 'Project Logo', REQUIRED)
+        , StringField('name', 'Project Name', REQUIRED)
+        , TextareaField('pitch', 'Elevator Pitch', REQUIRED, max = 90)
         , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
-        , FileUploadField('logo', 'Project Logo')
+        , PictureGalleryUploadField('pictures', 'Drag multiple images into your gallery')
+        , StringField("video", "Paste a Vimeo or Youtube Url")
+        , StringField("slideshare", "Paste a Slideshare Url")
     ]
+
     @classmethod
     def on_success(cls, request, values):
         templateKey = request.context.__name__

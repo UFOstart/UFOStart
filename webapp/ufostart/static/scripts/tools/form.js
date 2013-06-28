@@ -12,7 +12,7 @@ define([], function(){
                 }
                 , unhighlight: function (element, errorClass, validClass) {
                     var name = $(element).attr("name");
-                    if(name && $(element).closest(".controls").find('[for='+name.replace(/\./g,"\\.")+']').filter("[generated]").remove().length)
+                    if(name && $(element).closest(".controls").find('[for='+name.replace(/\./g,"\\.")+']').remove().length)
                         $(element).closest(".control-group").removeClass("has-error").addClass(validClass);
                 }
                 , errorPlacement: function(error, element) {

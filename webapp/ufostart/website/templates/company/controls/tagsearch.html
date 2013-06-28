@@ -2,7 +2,7 @@
 <%namespace name="lib" file="hnc:forms/templates/lib.html"/>
 
 <%block name="controls">
-    <div class="tagsearch-container" data-api-url="${widget.api_url}" data-api="${widget.api_allow_new}" data-api-result="${widget.api_result}" data-prefix="${widget.getName(prefix)}" ${widget.getQueryExtra()|n}>
+    <div class="tagsearch-container js-form-widget" data-api-url="${widget.api_url}" data-api="${widget.api_allow_new}" data-api-result="${widget.api_result}" data-prefix="${widget.getName(prefix)}" ${widget.getQueryExtra()|n} data-module="libs/tagsearch">
         <script type="template/text" class="tag-template">
             ${self.tagTempl(widget, '{{ pos }}', '{{ model.getSearchLabel() }}', '{{ model.id }}')}
         </script>

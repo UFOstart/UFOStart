@@ -11,6 +11,11 @@
   margin-top:6px;
 }
 
+.pseudo-input(){
+  background-color: @input-bg;
+  .box-shadow(inset -1px 1px 3px rgba(0,0,0,.15));
+}
+
 .form-horizontal .row + .row.form-actions {margin-top:30px;}
 .forgot-password-link {margin-bottom:0;}
 
@@ -41,7 +46,6 @@ textarea.x-high {height: 8 * @line-height-computed;}
 
 .btn + .actions-link {margin-left:15px;}
 
-
 ul.styled {
   list-style-type: square;
   > li {color:@corp-color;
@@ -50,13 +54,12 @@ ul.styled {
 }
 
 .file-upload-control {
-  .upload-picture-display {
+  .file-picker-upload {
     height:120px;
     width: 120px;
     padding-bottom: 0;
     position: relative;
-    background-color: @input-bg;
-    .box-shadow(inset -1px 1px 3px rgba(0,0,0,.15));
+    .pseudo-input();
 
     &.empty:before {
       font-family: 'Glyphicons Halflings';
@@ -77,6 +80,33 @@ ul.styled {
     }
   }
   .info {font-size: @font-size-small;}
+}
+
+.multi-file-upload-control {
+  >.controls {
+    height:5*@line-height-computed;
+    width:100%;
+    position: relative;
+    .pseudo-input();
+    &:before {
+      font-family: 'Glyphicons Halflings';
+      font-style: normal;
+      font-weight: normal;
+      font-size: 3em;
+      -webkit-font-smoothing: antialiased;
+      content: "\e060 \e060 \e060";
+      letter-spacing: 10px;
+      color:@wtf-color;
+      position: absolute;
+      right:0;
+      bottom:10px;
+      line-height: 1em;
+    }
+    &.drop-target:before {
+      content: "\e025";
+    }
+
+  }
 }
 
 .tagsearch-container {
