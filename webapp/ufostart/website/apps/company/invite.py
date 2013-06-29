@@ -1,11 +1,12 @@
 from hnc.apiclient import TextField
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, StringField, EmailField, REQUIRED, HiddenField, ChoiceField
+from hnc.forms.formfields import BaseForm, StringField, EmailField, REQUIRED, HiddenField, ChoiceField, TextareaField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage, GenericErrorMessage
 from ufostart.models.tasks import NamedModel, RoleModel
 from ufostart.website.apps.auth.social import require_login
-from ufostart.website.apps.models.procs import InviteToCompanyProc, GetInviteDetailsProc, AcceptInviteProc, RefreshProfileProc
+from ufostart.website.apps.forms.controls import SanitizedHtmlField
+from ufostart.website.apps.models.procs import InviteToCompanyProc, GetInviteDetailsProc, AcceptInviteProc, RefreshProfileProc, AddUpdateCompanyProc
 
 
 class BaseInviteForm(BaseForm):
@@ -41,6 +42,8 @@ def InviteMentorForm(role_):
 
 ROLES = [RoleModel(key = "FOUNDER", label = "Founder"), RoleModel(key = "TEAM_MEMBER", label = "Team Member")]
 
+
+
 class InviteTeamForm(BaseInviteForm):
     success_route = "website_company_company"
     fields = [
@@ -48,14 +51,23 @@ class InviteTeamForm(BaseInviteForm):
         , EmailField("email", "email address", REQUIRED)
         , ChoiceField("role", "Invitee is", lambda x: ROLES)
     ]
+class PostUpdateForm(BaseForm):
+    id = "PostUpdate"
+    fields = [SanitizedHtmlField("text", None, REQUIRED)]
+    @classmethod
+    def on_success(cls, request, values):
+        AddUpdateCompanyProc(request, {'token': request.context.company.token, 'update': {'userToken': request.root.user.token, 'text': values['text']}})
+        return {'success': True, 'redirect': request.resource_url(request.context)}
 
-class InviteCompanyHandler(FormHandler):
-    form = InviteTeamForm
+class CompanyIndexHandler(FormHandler):
+    forms = [InviteTeamForm, PostUpdateForm]
 
     def pre_fill_values(self, request, result):
         company = request.context.company
         result['company'] = company
-        return super(InviteCompanyHandler, self).pre_fill_values(request, result)
+        return super(CompanyIndexHandler, self).pre_fill_values(request, result)
+
+
 
 class AddMentorHandler(FormHandler):
     form = InviteMentorForm('MENTOR')

@@ -1,13 +1,26 @@
+import re
 from urlparse import urlparse, parse_qsl
 from babel import dates
 from hnc.tools.tools import word_truncate_by_letters
 from httplib2 import Http
+import markdown
 import simplejson
+import smartypants
 
 __author__ = 'Martin'
 
 def html(text):
-    return text.replace('\n', '<br/>')
+    # catch any mis-typed en dashes
+    converted_txt = text.replace(" - ", " -- ")
+    converted_txt = smartypants.educateQuotes(converted_txt)
+    converted_txt = smartypants.educateEllipses(converted_txt)
+    converted_txt = smartypants.educateDashesOldSchool(converted_txt)
+    # normalise line endings and insert blank line between paragraphs for Markdown
+    converted_txt = re.sub("\r\n", "\n", converted_txt)
+    converted_txt = re.sub("\n\n+", "\n", converted_txt)
+    converted_txt = re.sub("\n", "\n\n", converted_txt)
+    html = markdown.markdown(converted_txt)
+    return html
 
 def trunc(length):
     def f(text):
@@ -24,6 +37,9 @@ def coalesce(t1, t2):
 
 def format_date(date, format="short"):
     return dates.format_date(date, format, locale='en')
+
+def format_datetime(date, format="full"):
+    return dates.format_datetime(date, format, locale='en')
 
 def getYoutubeVideoId(url):
     if not url: return None

@@ -4,13 +4,18 @@
 <%block name="controls">
     <div class="js-form-widget"  data-field-name="${widget.getName(prefix)}" data-module="libs/multifile">
         <script type="text/template" class="picture-template">
-            <div class="picture"><img src="{{ pic.url }}"/><input type="hidden" name="{{ field_name }}" value="{{ pic.url }}"/><span class="remove">×</span></div>
+            ${self.templ('{{ field_name }}', '{{ pic.url }}')}
         </script>
         <div class="file-picker-upload ${'' if value else 'empty'}">
-            %if value:
-                <img src="${value}"/><input type="hidden" name="${widget.getName(prefix)}" value="${value}"/>
-            %endif
+            %for v in value:
+                ${self.templ(widget.getName(prefix), v['url'])}
+            %endfor
         </div>
         <div class="info">Drag & Drop Files here</div>
     </div>
 </%block>
+
+
+<%def name="templ(name, value)">
+    <div class="picture"><img src="${value|n}"/><input type="hidden" name="${name|n}" value="${value|n}"/><span class="remove">×</span></div>
+</%def>

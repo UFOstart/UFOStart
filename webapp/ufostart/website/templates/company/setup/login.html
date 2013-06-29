@@ -9,12 +9,6 @@
     <h1 class="site-slogan">Sign Up now</h1>
 
     <p class="btn-social-wrapper">
-        <a href="${url("website_template_create_login", traverse = ['linkedin'], **request.matchdict)}" class="btn btn-primary btn-linkedin">Sign Up with Linkedin</a>
-    </p><small><strong class="text-muted">If you don't have a Linkedin account yet, please <a href="http://www.linkedin.com" class="text-muted">create one</a>.</strong></small><p class="btn-social-wrapper">
-        <a href="${url("website_template_create_login", traverse = ['facebook'], **request.matchdict)}" class="btn btn-primary btn-facebook">Sign Up with Facebook</a>
-    </p><p class="btn-social-wrapper">
-        <a href="${url("website_template_create_login", traverse = ['xing'], **request.matchdict)}" class="btn btn-primary btn-xing">Sign Up with Xing</a>
-    </p><p class="btn-social-wrapper">
-        <a href="${url("website_template_create_login", traverse = ['twitter'], **request.matchdict)}" class="btn btn-primary btn-xing">Sign Up with Twitter</a>
-    </p>
+        <a href="${root.auth_url('linkedin')}" class="btn btn-primary btn-linkedin">Sign Up with Linkedin</a>
+    </p><small><strong class="text-muted">If you don't have a Linkedin account yet, please <a href="http://www.linkedin.com" class="text-muted">create one</a>.</strong></small>
 </%def>

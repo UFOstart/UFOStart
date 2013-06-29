@@ -64,6 +64,9 @@ GetNewProductsProc = ClientTokenProc("/web/product/newest", root_key="Companies"
 
 CreateCompanyProc = LoggingInProc("/web/company/create")
 GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)
+EditCompanyProc = ClientTokenProc("/web/company/edit", root_key="Company", result_cls=CompanyModel)
+AddUpdateCompanyProc = ClientTokenProc("/web/company/update", root_key="Company", result_cls=CompanyModel)
+
 
 CreateRoundProc = ClientTokenProc("/web/round/create", root_key="Round", result_cls=RoundModel)
 GetRoundProc = ClientTokenProc("/web/round", root_key="Round", result_cls=RoundModel)

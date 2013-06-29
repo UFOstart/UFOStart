@@ -56,10 +56,11 @@ ul.styled {
 
 .file-upload-control {
   .file-picker-upload {
-    height:120px;
+    min-height:120px;
     width: 120px;
     padding-bottom: 0;
     position: relative;
+    overflow:hidden;
     .pseudo-input();
 
     &.empty:before {
@@ -89,6 +90,7 @@ ul.styled {
     padding: 7px;
     width:100%;
     position: relative;
+    overflow:hidden;
     .pseudo-input();
     &:before {
       font-family: 'Glyphicons Halflings';

@@ -1,5 +1,7 @@
+from BeautifulSoup import BeautifulSoup
 import formencode
 from hnc.forms import formfields
+from hnc.forms.formfields import StringField, TextareaField
 from ufostart.models.tasks import TASK_CATEGORIES
 
 
@@ -29,3 +31,38 @@ class PictureGalleryUploadField(formfields.StringField):
 
 class TagSearchField(formfields.TagSearchField):
     template = "ufostart:website/templates/company/controls/tagsearch.html"
+
+
+class HTMLString(formencode.validators.String):
+  messages = {"invalid_format":'There was some error in your HTML!'}
+  valid_tags = ['a','strong', 'em', 'p', 'ul', 'ol', 'li', 'br', 'b', 'i', 'u', 's', 'strike', 'font', 'pre', 'blockquote', 'div', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+  valid_attrs = ['size', 'color', 'face', 'title', 'align', "style"]
+
+  def sanitize_html(self, html):
+      soup = BeautifulSoup(html)
+      for tag in soup.findAll(True):
+          if tag.name.lower() not in self.valid_tags:
+              tag.extract()
+          elif tag.name.lower() != "a":
+              tag.attrs = [attr for attr in tag.attrs if attr[0].lower() in self.valid_attrs]
+          else:
+              attrs = dict(tag.attrs)
+              tag.attrs = self.linkAttrs(attrs)
+      val = soup.renderContents()
+      return val.decode("utf-8")
+
+class RemoveHtmlString(formencode.validators.String):
+  def sanitize_html(self, html):
+      soup = BeautifulSoup(html)
+      result = ''
+      for tag in soup.findAll(True):
+          if tag.name.lower() not in self.valid_tags:
+              result+=tag.extract()
+      return result
+
+
+class SanitizedHtmlField(TextareaField):
+    _validator = HTMLString
+
+class CleanHtmlField(StringField):
+    _validator = RemoveHtmlString

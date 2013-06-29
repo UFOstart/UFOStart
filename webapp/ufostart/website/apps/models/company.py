@@ -5,7 +5,7 @@ from operator import attrgetter
 from random import random, sample
 from babel.dates import format_date
 from babel.numbers import get_currency_symbol
-from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField, IntegerField
+from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField, IntegerField, DateField
 from hnc.tools.tools import word_truncate_by_letters
 from httplib2 import Http
 from pyramid.decorator import reify
@@ -127,6 +127,16 @@ class PictureModel(Mapping):
     def __repr__(self):
         return self.url
 
+class UpdateModel(Mapping):
+    text = TextField()
+    created = DateTimeField()
+    userName = TextField()
+    userToken = TextField()
+    userHeadline = TextField()
+    userPicture = TextField()
+    def __repr__(self):
+        return self.text
+
 class BaseCompanyModel(Mapping):
     token = TextField()
     slug = TextField()
@@ -138,8 +148,12 @@ class BaseCompanyModel(Mapping):
     description = TextField()
     logo = TextField()
     Pictures = ListField(DictField(PictureModel))
+    Updates = ListField(DictField(UpdateModel))
     video = TextField()
     slideShare = TextField()
+
+    def getUpdates(self):
+        return sorted(self.Updates, key = attrgetter('created'), reverse = True)
 
     @property
     def display_name(self):

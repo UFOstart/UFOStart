@@ -9,11 +9,15 @@ def canEdit(self): return has_permission('edit', self, self.request)
 def canApprove(self): return has_permission('approve', self, self.request)
 
 
-
-class TemplateContext(object):
+class BaseProjectContext(object):
     __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'create')]
     __auth_template__ = "ufostart:website/templates/auth/login.html"
+    canEdit = reify(canEdit)
+    canApprove = reify(canApprove)
 
+
+
+class TemplateContext(BaseProjectContext):
     def __init__(self, parent, name, template):
         self.__name__ = name
         self.__parent__ = parent
@@ -21,7 +25,7 @@ class TemplateContext(object):
         self.template = template
 
 
-class TemplatesRootContext(object):
+class TemplatesRootContext(BaseProjectContext):
     def __init__(self, parent, name):
         self.__name__ = name
         self.__parent__ = parent
@@ -39,9 +43,7 @@ class TemplatesRootContext(object):
         return GetAllCompanyTemplatesProc(self.request)
 
 
-class ApplicationContext(object):
-    canEdit = reify(canEdit)
-    canApprove = reify(canApprove)
+class ApplicationContext(BaseProjectContext):
 
     def __init__(self, parent, name, acl, application):
         self.__parent__ = parent
@@ -61,9 +63,7 @@ class ApplicationContext(object):
         return self.__parent__.need
 
 
-class NeedContext(object):
-    canEdit = reify(canEdit)
-    canApprove = reify(canApprove)
+class NeedContext(BaseProjectContext):
 
     def __init__(self, parent, name, acl, need):
         self.__parent__ = parent
@@ -81,9 +81,7 @@ class NeedContext(object):
     def round(self):
         return self.__parent__.round
 
-class ProductContext(object):
-    canEdit = reify(canEdit)
-    canApprove = reify(canApprove)
+class ProductContext(BaseProjectContext):
 
     def __init__(self, parent, name, acl):
         self.__parent__ = parent
@@ -99,9 +97,7 @@ class ProductContext(object):
 
 
 
-class RoundContext(object):
-    canEdit = reify(canEdit)
-    canApprove = reify(canApprove)
+class RoundContext(BaseProjectContext):
 
     def __init__(self, parent, name, acl, round):
         self.__parent__ = parent
@@ -119,14 +115,12 @@ class RoundContext(object):
         return self.__parent__.company
 
 
-class CompanyContext(object):
+class CompanyContext(BaseProjectContext):
     @reify
     def __acl__(self):
         mentors = [(Allow, 'u:%s' % u.token, 'approve') for u in self.company.Users if u.role == 'MENTOR']
         founders = [(Allow, 'u:%s' % u.token, 'edit') for u in self.company.Users if u.role == 'FOUNDER']
         return [(Allow, Authenticated, 'view')] + mentors + founders
-    canEdit = reify(canEdit)
-    canApprove = reify(canApprove)
 
     def __init__(self, parent, name, company):
         self.__name__ = name
@@ -138,10 +132,10 @@ class CompanyContext(object):
         try:
             return RoundContext(self, int(item), self.__acl__, self.company.currentRound)
         except ValueError:
-            pass
+            raise KeyError()
 
 
-class ProtoCompanyContext(object):
+class ProtoCompanyContext(BaseProjectContext):
     def __init__(self, parent, name):
         self.__name__ = name
         self.__parent__ = parent
@@ -159,8 +153,9 @@ def includeme(config):
     config.add_view(setup.CreateProjectHandler  , context = TemplateContext,name = 'startcompany', renderer = "ufostart:website/templates/company/setup/create.html", permission = 'create')
 
 
-    config.add_view(invite.InviteCompanyHandler , context = CompanyContext                       , renderer = "ufostart:website/templates/company/company.html")
+    config.add_view(invite.CompanyIndexHandler , context = CompanyContext                       , renderer = "ufostart:website/templates/company/company.html")
     config.add_view(invite.AddMentorHandler     , context = CompanyContext    , name='mentor'    , renderer = "ufostart:website/templates/company/addmentor.html")
+    config.add_view(setup.EditProjectHandler    , context = CompanyContext    , name='edit'      , renderer = "ufostart:website/templates/company/edit.html", permission = 'edit')
 
     config.add_view(general.index               , context = RoundContext                         , renderer = "ufostart:website/templates/company/round.html")
     config.add_view(general.publish_round       , context = RoundContext      , name='publish'   , permission='approve')

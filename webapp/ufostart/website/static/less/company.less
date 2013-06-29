@@ -114,26 +114,35 @@
 .pitch {
   font-size: @font-size-small;
 }
+
+.box-card.single-update {
+  margin-top: 20px;
+  padding: 12px;
+}
+
 .box-card {
   .clearfix;
   padding: 12px 0 24px;
   > .picture {
     float: left;
-    width: 25%;
-    max-width: 75px;
-    margin-right: 12px;
+    width: 75px;
   }
+  > .right-box { margin-left:90px; }
   .position {line-height:1em;padding-bottom: .2em;}
   .description {
     font-size: @font-size-small;
     min-height:34px;
   }
-  > .right-box { margin-left:30%; }
   &.box-dark {
     a {color:#d4f3f5;}
     > h2, h6{color:white;}
   }
-
+  &.shaded {
+    background-color: #f4f4f4;
+    .background-image("../img/mediashadow.png");
+    background-position: left bottom;
+    background-repeat: no-repeat;
+  }
 }
 .box-header-muted {
   background-color: @light-muted;

@@ -11,12 +11,6 @@
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col col-lg-12">
                 <h1 class="section-title">
                     %if resource.canEdit:
                         <span class="btn-wrapper"><a title="Edit" href="${request.resource_url(resource, 'edit')}"><span class="glyphicon glyphicon-pencil"></span></a></span>
@@ -33,8 +27,11 @@
             </div>
             <div class="col col-lg-6">
                 ${widgets.main_media("Company Introduction", company.video, company.slideShare)}
-                <div class="main-description">
+                <div class="main-description mar-top-2">
                     ${company.description | html.html,n}
+                </div>
+                <div class="updates mar-top-2">
+                    ${self.updates(company, view.schemas['PostUpdate'], values, errors)}
                 </div>
             </div>
 
@@ -62,7 +59,7 @@
     </div>
 
     %if resource.canEdit:
-        ${self.build_forms(view.form, values, errors)}
+        ${self.build_forms(view.schemas['InviteCompany'], values, errors)}
     %endif
 
     <div class="mar-top-2">
@@ -91,6 +88,39 @@
             </div>
         </div>
     </div>
+    %endfor
+</%def>
+
+
+<%def name="updates(company, form, values, errors)">
+    <div class="box-title">
+        Updates
+    </div>
+    %if resource.canEdit:
+        <div class="box-dark">
+            <div class="box-content">
+                <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+                    ${baseform.prelims(form)}
+                    %for field in form.fields:
+                        ${field.render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                    %endfor
+                    <button type="submit" class="btn btn-primary">Post Update</button>
+                </form>
+            </div>
+        </div>
+    %endif
+    %for update in company.getUpdates():
+        <div class="box-card shaded single-update">
+            <div class="picture">
+                <img src="${update.userPicture}"/>
+            </div>
+            <div class="right-box">
+                <div class="pull-right"><small>${html.format_datetime(update.created, 'medium')}</small></div>
+                <a class="entity-link" href="${root.profile_url(update.userToken)}">${update.userName}</a>
+                <div class="description">${update.userHeadline}</div>
+                <div class="long-description">${html.html(update.text)|n}</div>
+            </div>
+        </div>
     %endfor
 </%def>
 <%def name="team_members(members)">
