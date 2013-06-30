@@ -14,6 +14,17 @@ log = logging.getLogger(__name__)
 
 
 
+class SocialContext(object):
+    def __init__(self, parent, name):
+        self.__parent__ = parent
+        self.__name__ = name
+    def __getitem__(self, item):
+        if item in self.__parent__.settings.networks:
+            settings = self.__parent__.settings.networks[item]
+            return settings.module(self, item, settings)
+        else:
+            raise KeyError()
+
 class WebsiteRootContext(RootContext):
     __name__ = None
     __parent__ = None
@@ -69,8 +80,10 @@ class WebsiteRootContext(RootContext):
             return TemplatesRootContext(self, 'template')
         elif item == 'home':
             return UserHomeContext(self, 'user', self.user.token)
-        if item in self.settings.networks:
-            return self.settings.networks[item]
+        elif item in ['login']:
+            return SocialContext(self, 'login')
+        else:
+            raise KeyError()
 
 
 

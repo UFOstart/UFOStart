@@ -71,37 +71,52 @@
 
 <%def name="offerSection(company, product)">
     <h2>Offers</h2>
-    %for i, offer in enumerate(product.offers):
-        ${self.displayOffer(i, offer)}
-    %endfor
+    <% form = view.schemas['ProductPledge'] %>
+    ${self.displayOffer(product.offers, form)}
     %if resource.canEdit:
         <% form = view.schemas['ProductOffer'] %>
         ${self.createOfferForm(product, form, values.get(form.id), errors.get(form.id))}
     %endif
 </%def>
 
-<%def name="displayOffer(idx, offer)">
-    <div class="single-product-offer progress-step progress-${idx+1}">
-        %if resource.canEdit:
-            <a href="${url(resource, 'delete', query=[('offer', offer.name)])}" class="remove">×</a>
-        %endif
-        <p><strong class="dark">${offer.name}</strong></p>
-        <p class="text-small">${offer.description}</p>
-        <div class="row">
-            <div class="col col-lg-6">
-                <strong><small class="dark">Price</small></strong>
-                <div class="text-large text-light">${offer.price}</div>
+<%def name="displayOffer(offers, form)">
+    <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+    ${baseform.prelims(form)}
+    %for idx, offer in enumerate(offers):
+        <div class="single-product-offer progress-step progress-${idx+1}">
+            %if resource.canEdit:
+                <a href="${url(resource, 'delete', query=[('offer', offer.name)])}" class="remove">×</a>
+            %endif
+            <p><strong class="dark">${offer.name}</strong></p>
+            <p class="text-small">${offer.description}</p>
+            <div class="row">
+                <div class="col col-lg-6">
+                    <strong><small class="dark">Price</small></strong>
+                    <div class="text-large text-light">${offer.price}</div>
+                </div>
+                <div class="col col-lg-6">
+                    <strong><small class="dark">Stock</small></strong>
+                    <div class="text-large text-light">${offer.stock}</div>
+                </div>
             </div>
-            <div class="col col-lg-6">
-                <strong><small class="dark">Stock</small></strong>
-                <div class="text-large text-light">${offer.stock}</div>
+            <div class="mar-top-1">
+                %if root.user.isAnon():
+                    <a href="${root.auth_url('linkedin')}" class="btn btn-primary btn-block">Login to Pledge</a>
+                %else:
+                    <div class="control-group show-expanded">
+                        <label class="control-label">Message</label>
+                        <div class="controls">
+                            <textarea class="x-high" name="ProductPledge.${html.hash(offer.name)}"></textarea>
+                        </div>
+                    </div>
+                    <a class="btn btn-primary show-contracted" data-toggle-target=".single-product-offer" data-toggle-class="expanded">Pledge</a>
+                    <button class="btn btn-primary show-expanded inline" name="ProductPledge.offer" value="${offer.name}">Pledge Now</button>
+                    <a class="btn btn-default show-expanded inline" data-toggle-target=".single-product-offer" data-toggle-class="expanded">Cancel</a>
+                %endif
             </div>
         </div>
-        <div class="row mar-top-1">
-            <a href="#" class="btn btn-primary col col-lg-10 col-offset-1">Pledge</a>
-        </div>
-
-    </div>
+    %endfor
+    </form>
 </%def>
 
 <%def name="createOfferForm(product, form, values, errors)">

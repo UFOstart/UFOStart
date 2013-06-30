@@ -1,3 +1,4 @@
+import hashlib
 import logging
 import re
 from urlparse import urlparse, parse_qsl
@@ -12,6 +13,12 @@ import smartypants
 log = logging.getLogger(__name__)
 
 __author__ = 'Martin'
+
+
+def hash(txt):
+    return hashlib.md5(txt).hexdigest()
+
+
 
 def html(text):
     # catch any mis-typed en dashes

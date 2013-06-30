@@ -5,6 +5,7 @@ from hnc.forms.formfields import BaseForm, MultipleFormField, REQUIRED, StringFi
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.httpexceptions import HTTPForbidden, HTTPFound
+from ufostart.lib import html
 from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.company.imp import SESSION_SAVE_TOKEN
 from ufostart.website.apps.models.procs import SetProductOffersProc, PledgeCompanyProc, CreateProductProc
@@ -77,18 +78,6 @@ class ProductEditHandler(FormHandler):
         return super(ProductEditHandler, self).pre_fill_values(request, result)
 
 
-
-
-
-
-class OfferChoiceField(RadioChoice):
-    pass
-
-
-def offer_choices(request):
-    return request.root.company.Round.Product.Offers
-
-
 class ProductOfferForm(BaseForm):
     id="ProductOffer"
     label = ""
@@ -132,16 +121,18 @@ class ProductPledgeForm(BaseForm):
     grid = HORIZONTAL_GRID
     label = ""
     fields=[
-        OfferChoiceField('offer', 'Your Offer', offer_choices, REQUIRED, input_classes='radio')
-        , TextareaField('comment', 'Comment')
+        TextareaField('comment', 'Message')
     ]
     @classmethod
     def on_success(cls, request, values):
-        round = request.root.company.Round
+        round = request.context.round
         user = request.root.user
 
-        values.update({'name': user.name, 'network':'ufo', 'networkId': user.token, 'picture':user.getPicture()})
-        data = {'token': round.token, 'Pledge' : values}
+        offer_name = values['offer']
+        comment = values[html.hash(offer_name)]
+
+        pledge = {'name': user.name, 'network':'ufo', 'networkId': user.token, 'picture':user.getPicture(), 'comment': comment, 'offer': offer_name}
+        data = {'token': round.token, 'Pledge' : pledge}
         try:
             PledgeCompanyProc(request, data)
         except DBNotification, e:
@@ -150,7 +141,7 @@ class ProductPledgeForm(BaseForm):
             else:
                 raise e
 
-        return {'success':True, 'redirect': request.rld_url()}
+        return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class ProductOfferHandler(FormHandler):
     forms = [ProductOfferForm, ProductPledgeForm]
