@@ -57,9 +57,9 @@ class ProductEditForm(ProductCreateForm):
     id="ProductEdit"
     @classmethod
     def on_success(cls, request, values):
-        product = request.root.company.Round.Product
+        product = request.context.product
         values['token'] = product.token
-        data = {'token': request.context.company.Round.token, 'Product': values}
+        data = {'token': request.context.round.token, 'Product': values}
         result = CreateProductProc(request, data)
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
@@ -73,7 +73,7 @@ class ProductEditHandler(FormHandler):
         super(ProductEditHandler, self).__init__(context, request)
 
     def pre_fill_values(self, request, result):
-        product = request.root.company.Round.Product
+        product = request.context.product
         result['values'][self.form.id] = product.unwrap()
         return super(ProductEditHandler, self).pre_fill_values(request, result)
 

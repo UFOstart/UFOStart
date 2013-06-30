@@ -55,11 +55,13 @@
 <%def name="customerFacepile(customers)">
     <div class="mar-top-half">
     %if len(customers):
+        <div class="face-pile-mini">
         %for pledge in customers:
-            <div class="picture medium">
+            <div class="picture mini">
                 <img src="${pledge.picture}"/>
             </div>
         %endfor
+        </div>
     %else:
         <div class="empty">
             No Customers yet
@@ -141,84 +143,19 @@
     </div>
 </%def>
 
-<%def name="pledgeOfferForm(form, values, errors)">
-    <div class="expander">
-    <div class="mar-top-2">
-        %if root.user.isAnon():
-            <a href="${url(resource, 'pledge')}" class="btn btn-primary">Login to Pledge</a>
-        %elif not resource.canEdit:
-            <a class="btn btn-primary show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Pledge Now</a>
-            <a class="btn btn-default show-expanded" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
-        %endif
-    </div>
-    %if not resource.canEdit and not root.user.isAnon():
-        <div class="show-expanded box-shaded box-framed">
-            <div class="box-content">
-                <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
-                    ${baseform.prelims(form)}
-                    <div class="row mar-top-1">
-                        <div class="col col-lg-4">
-                            <div class="row">
-                                <div class="col col-sm-4">
-                                    <div class="picture">
-                                        <img src="${root.user.picture}"/>
-                                    </div>
-                                </div>
-                                <div class="col col-sm-8">
-                                    <div class="name">${root.user.name}</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col col-lg-12">
-                                    <button type="submit" class="btn btn-primary ">Submit Pledge</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col col-lg-8 control-group">
-                            %for field in form.fields:
-                                ${field.render(form.id, request, values, errors, view)|n}
-                            %endfor
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    %endif
-    </div>
-</%def>
 
 <%def name="pledgeList(pledges)">
 %if len(pledges):
     %for pledge in pledges:
-        <div class="row mar-top-1">
-            <div class="col col-lg-4">
-                <div class="row">
-                    <div class="col col-sm-4">
-                        <div class="picture">
-                        %if pledge.is_native:
-                            <a href="${request.root.profile_url(pledge.networkId)}">
-                                <img src="${pledge.picture}"/>
-                            </a>
-                        %else:
-                            <img src="${pledge.picture}"/>
-                        %endif
-                        </div>
-                    </div>
-                    <div class="col col-sm-8">
-                        %if pledge.is_native:
-                            <p class="name"><a href="${request.root.profile_url(pledge.networkId)}"><strong>${pledge.name}</strong></a></p>
-                        %else:
-                            <p class="name"><strong>${pledge.name}</strong></p>
-                        %endif
-                        <div class="text-small text-muted">Offer Option</div>
-                        <ul class="styled">
-                            <li><span class="text-small">${pledge.offer}</span></li>
-                        </ul>
-                    </div>
-                </div>
+        <div class="box-card shaded compact single-update">
+            <div class="picture">
+                <img src="${pledge.picture}"/>
             </div>
-            <div class="col col-lg-8 control-group">
-                ${html.nn(pledge.comment)}
+            <div class="right-box">
+                <div class="pull-right"><small>${html.format_datetime(pledge.created, 'medium')}</small></div>
+                <a class="entity-link" href="${root.profile_url(pledge.networkId)}">${pledge.name}</a>
+                <div class="description">Bought into <strong>${pledge.offer}</strong></div>
+                <div class="long-description">${html.nn(pledge.comment)}</div>
             </div>
         </div>
     %endfor

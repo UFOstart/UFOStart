@@ -305,6 +305,9 @@ class PledgeModel(Mapping):
     def is_native(self):
         return self.network.lower() == 'uf'
 
+    # TODO: implement
+    created = datetime(2013,1,1)
+
 class EventModel(Mapping):
     name = TextField()
     picture = TextField()
@@ -361,6 +364,10 @@ class RoundModel(Mapping):
     Product = DictField(ProductModel)
     Template = DictField(TemplateModel)
     Workflow = DictField(WorkflowModel)
+
+    def getPledges(self):
+        return sorted(self.Pledges, key = attrgetter('created'), reverse = True)
+
     @reify
     def expiry(self):
         return self.start+timedelta(90)
