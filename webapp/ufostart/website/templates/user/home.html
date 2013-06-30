@@ -69,7 +69,7 @@
                     ${widgets.company_logo(company)}
                 </div>
                 <div class="col col-sm-10">
-                    <div class="overflow"><a href="${url("website_company", slug = company.slug)}"><strong>${company.name}</strong></a></div>
+                    <div class="overflow"><a href="${request.root.company_url(company.slug)}"><strong>${company.name}</strong></a></div>
                     %if company.currentRound.published:
                         <div><strong>${company.currentRound.getExpiryDays()}</strong></div>
                     %elif company.currentRound.pendingApproval:

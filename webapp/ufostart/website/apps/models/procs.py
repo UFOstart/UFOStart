@@ -74,7 +74,7 @@ GetRoundProc = ClientTokenProc("/web/round", root_key="Round", result_cls=RoundM
 SetRoundTasksProc = ClientTokenProc("/web/round/needs")
 
 CreateProductProc = ClientTokenProc("/web/product/create")
-AddProductOfferProc = ClientTokenProc("/web/product/offer")
+SetProductOffersProc = ClientTokenProc("/web/product/offer")
 
 SetCompanyTemplateProc = ClientTokenProc("/web/company/template")
 GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)

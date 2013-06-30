@@ -1,13 +1,14 @@
+from operator import methodcaller
+from hnc.apiclient import IntegerField
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, MultipleFormField, REQUIRED, StringField, RadioChoice, NullConfigModel, TextareaField, HORIZONTAL_GRID
+from hnc.forms.formfields import BaseForm, MultipleFormField, REQUIRED, StringField, RadioChoice, NullConfigModel, TextareaField, HORIZONTAL_GRID, DecimalField, IntField
 from hnc.forms.handlers import FormHandler
-from pyramid.httpexceptions import HTTPForbidden
+from hnc.forms.messages import GenericErrorMessage
+from pyramid.httpexceptions import HTTPForbidden, HTTPFound
 from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.company.imp import SESSION_SAVE_TOKEN
-from ufostart.website.apps.models.procs import AddProductOfferProc, PledgeCompanyProc, CreateProductProc
-from ufostart.website.apps.forms.controls import FileUploadField
-
-
+from ufostart.website.apps.models.procs import SetProductOffersProc, PledgeCompanyProc, CreateProductProc
+from ufostart.website.apps.forms.controls import FileUploadField, PictureGalleryUploadField, SanitizedHtmlField, CleanHtmlField
 
 
 class ProductCreateForm(BaseForm):
@@ -15,21 +16,24 @@ class ProductCreateForm(BaseForm):
     label = ""
     fields=[
         StringField('name', "Name", REQUIRED)
-        , TextareaField('description', "Description", REQUIRED, input_classes="x-high")
-        , FileUploadField("picture", "Product Picture")
+        , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
+        , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')
         , StringField("video", "Vimeo/YouTube")
     ]
     @classmethod
     def on_success(cls, request, values):
-        data = {'token': request.context.company.Round.token, 'Product': values}
+        if isinstance(values.get('pictures'), basestring):values['Pictures'] = [values['Pictures']]
+        values['Pictures'] = [{'url':url} for url in values['Pictures']]
+
+        data = {'token': request.context.round.token, 'Product': values}
         result = CreateProductProc(request, data)
-        return {'success':True, 'redirect': request.fwd_url("website_company_product", **request.root.urlArgs)}
+        return {'success':True, 'redirect': request.resource_url(request.context, 'product')}
 
 class ProductCreateHandler(FormHandler):
     form = ProductCreateForm
 
     def __init__(self, context=None, request=None):
-        if not context.canEditCompany:
+        if not context.canEdit:
             raise HTTPForbidden()
         super(ProductCreateHandler, self).__init__(context, request)
 
@@ -56,14 +60,14 @@ class ProductEditForm(ProductCreateForm):
         values['token'] = product.token
         data = {'token': request.context.company.Round.token, 'Product': values}
         result = CreateProductProc(request, data)
-        return {'success':True, 'redirect': request.fwd_url("website_company_product", **request.root.urlArgs)}
+        return {'success':True, 'redirect': request.resource_url(request.context)}
 
 
 class ProductEditHandler(FormHandler):
     form = ProductEditForm
 
     def __init__(self, context=None, request=None):
-        if not context.canEditCompany:
+        if not context.canEdit:
             raise HTTPForbidden()
         super(ProductEditHandler, self).__init__(context, request)
 
@@ -71,8 +75,6 @@ class ProductEditHandler(FormHandler):
         product = request.root.company.Round.Product
         result['values'][self.form.id] = product.unwrap()
         return super(ProductEditHandler, self).pre_fill_values(request, result)
-
-
 
 
 
@@ -87,28 +89,42 @@ def offer_choices(request):
     return request.root.company.Round.Product.Offers
 
 
-
-class OffersField(MultipleFormField):
-    template = 'ufostart:website/templates/company/controls/offer.html'
-    add_more_link_label = 'Add Offer'
-    fields = [
-        StringField('name', "Offer", REQUIRED)
-    ]
-
-
 class ProductOfferForm(BaseForm):
     id="ProductOffer"
     label = ""
-    grid = HORIZONTAL_GRID
     fields=[
-        OffersField("Offers")
+        CleanHtmlField("name", "Title", REQUIRED)
+        , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
+        , DecimalField("price", "Price", REQUIRED)
+        , IntField("stock", "Stock")
     ]
     @classmethod
     def on_success(cls, request, values):
-        round = request.root.company.Round
-        values['token'] = round.Product.token
-        AddProductOfferProc(request, {'Product': values})
-        return {'success':True, 'redirect': request.rld_url()}
+        product = request.context.product
+        offers = map(methodcaller("unwrap", sparse = True), product.Offers)
+        offers.append(values)
+        try:
+            SetProductOffersProc(request, {'Product': {'token': product.token, 'Offers':offers}})
+        except DBNotification, e:
+            return {'errors': {'name': e.message}, 'success':False}
+        return {'success':True, 'redirect': request.resource_url(request.context)}
+
+
+
+def remove_offer(context, request):
+    product = request.context.product
+    offer_name = request.params.get("offer")
+    if offer_name:
+        offers = [o.unwrap(sparse = True) for o in product.Offers if o.name != offer_name]
+        try:
+            SetProductOffersProc(request, {'Product': {'token': product.token, 'Offers':offers}})
+        except DBNotification, e:
+            request.session.flash(GenericErrorMessage(e.message), "generic_messages")
+            return {'success':False, 'redirect': request.resource_url(request.context)}
+    raise HTTPFound(request.resource_url(request.context))
+
+
+
 
 
 class ProductPledgeForm(BaseForm):
@@ -140,18 +156,13 @@ class ProductOfferHandler(FormHandler):
     forms = [ProductOfferForm, ProductPledgeForm]
     def __init__(self, context=None, request=None):
         if not context.company.product_is_setup:
-            if context.canEditCompany:
-                request.fwd("website_company_product_create", **context.urlArgs)
-            else:
-                request.fwd("website_company", **context.urlArgs)
+            raise HTTPFound(request.resource_url(context.__parent__))
         super(ProductOfferHandler, self).__init__(context, request)
 
     def pre_fill_values(self, request, result):
-        company = request.root.company
+        company = request.context.company
         result['company'] = company
         result['product'] = company.Round.Product
-        if company.Round and company.Round.Product:
-            result['values']['ProductOffer'] = company.Round.Product.unwrap()
         return result
 
 

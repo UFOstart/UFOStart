@@ -83,11 +83,13 @@ class NeedContext(BaseProjectContext):
 
 class ProductContext(BaseProjectContext):
 
-    def __init__(self, parent, name, acl):
+    def __init__(self, parent, name, acl, product):
         self.__parent__ = parent
         self.__name__ = name
         self.__acl__ = acl
         self.request = parent.request
+        self.product = product
+
     @reify
     def company(self):
         return self.__parent__.company
@@ -107,7 +109,8 @@ class RoundContext(BaseProjectContext):
         self.round = round
     def __getitem__(self, item):
         if item in ['publish', 'askforapproval']: return None
-        if item == 'product': return ProductContext(self, 'product', self.__acl__)
+        if item == 'productsetup': raise KeyError()
+        if item == 'product': return ProductContext(self, 'product', self.__acl__, self.round.Product)
         return NeedContext(self, item, self.__acl__, self.round.needMap[item])
 
     @reify
@@ -150,20 +153,21 @@ class ProtoCompanyContext(BaseProjectContext):
 def includeme(config):
     config.add_view(setup.basics                , context = TemplatesRootContext                 , renderer = "ufostart:website/templates/company/setup/basic.html")
     config.add_view(setup.details               , context = TemplateContext                      , renderer = "ufostart:website/templates/company/setup/details.html")
-    config.add_view(setup.CreateProjectHandler  , context = TemplateContext,name = 'startcompany', renderer = "ufostart:website/templates/company/setup/create.html", permission = 'create')
+    config.add_view(setup.CreateProjectHandler  , context = TemplateContext   ,name = 'startcompany', renderer = "ufostart:website/templates/company/setup/create.html", permission = 'create')
 
 
-    config.add_view(invite.CompanyIndexHandler , context = CompanyContext                       , renderer = "ufostart:website/templates/company/company.html")
+    config.add_view(invite.CompanyIndexHandler  , context = CompanyContext                       , renderer = "ufostart:website/templates/company/company.html")
     config.add_view(invite.AddMentorHandler     , context = CompanyContext    , name='mentor'    , renderer = "ufostart:website/templates/company/addmentor.html")
     config.add_view(setup.EditProjectHandler    , context = CompanyContext    , name='edit'      , renderer = "ufostart:website/templates/company/edit.html", permission = 'edit')
 
     config.add_view(general.index               , context = RoundContext                         , renderer = "ufostart:website/templates/company/round.html")
     config.add_view(general.publish_round       , context = RoundContext      , name='publish'   , permission='approve')
-    config.add_view(general.ask_for_approval    , context = RoundContext      , name='askforapproval', permission='edit')
+    config.add_view(general.ask_for_approval    , context = RoundContext      , name='askforapproval'  , permission='edit')
 
+    config.add_view(product.ProductCreateHandler, context = RoundContext      , name = 'productsetup'  , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
     config.add_view(product.ProductOfferHandler , context = ProductContext                       , renderer = "ufostart:website/templates/company/product/index.html")
-    config.add_view(product.ProductCreateHandler, context = ProductContext    , name = 'create'  , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
     config.add_view(product.ProductEditHandler  , context = ProductContext    , name = 'edit'    , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
+    config.add_view(product.remove_offer        , context = ProductContext    , name = 'delete'  , renderer = "json", permission="edit")
 
     config.add_view(need.NeedCreateHandler      , context = RoundContext      , name='addneed'   , renderer = "ufostart:website/templates/company/need/create.html", permission='edit')
     config.add_view(need.index                  , context = NeedContext                          , renderer = "ufostart:website/templates/company/need/index.html")

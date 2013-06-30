@@ -7,6 +7,12 @@
   }
 }
 
+.form-compacted {
+  > .control-group {margin-bottom: 5px;
+    > .control-label {margin:0;}
+  }
+}
+
 .pseudo-controls {
   font-size:24px;
   margin-top:6px;
@@ -117,7 +123,10 @@ ul.styled {
     overflow: hidden;
     background: gray;
     margin: 10px;
-    > .remove {
+  }
+}
+
+.remove {
         display: block;
         cursor:pointer;
         background: @text-muted;
@@ -133,8 +142,6 @@ ul.styled {
         right: 0;
         font-size: 20px;
         text-indent: -1px;
-    }
-  }
 }
 
 .tagsearch-container {

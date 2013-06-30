@@ -10,7 +10,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col col-lg-12">
-                        <a class="navbar-brand col col-lg-4" href="${url("website_index")}"><img src="${ROOT_STATIC_URL}img/logo.png?${VERSION_TOKEN}" alt="${g.project_name}"/></a>
+                        <a class="navbar-brand col col-lg-4" href="${request.root.home_url}"><img src="${ROOT_STATIC_URL}img/logo.png?${VERSION_TOKEN}" alt="${g.project_name}"/></a>
                     </div>
                 </div>
            </div>
@@ -82,7 +82,7 @@
             <div class="row">
                 <div class="col col-sm 12">
                     <ul class="page-header-bar-menu">
-                        <li><a href="${url("website_login", _query=[('furl', request.furl)])}">Log in</a></li>
+                        <li><a href="${request.root.login_url(query=[('furl', request.furl)])}">Log in</a></li>
                     </ul>
                 </div>
             </div>
@@ -105,14 +105,14 @@
                                  <ul class="dropdown-menu">
                                     %for company in user.Companies:
                                         <li>
-                                            <a href="${request.resource_url(root, 'c', company.slug)}">${company.name}</a></li>
+                                            <a href="${url(root, 'c', company.slug)}">${company.name}</a></li>
                                     %endfor
                                  </ul>
                              </li>
                         %elif len(user.Companies) == 1:
-                            <li><a href="${request.resource_url(root, 'c', user.getDefaultCompanySlug())}">${user.getDefaultCompanyName()}</a></li>
+                            <li><a href="${url(root, 'c', user.getDefaultCompanySlug())}">${user.getDefaultCompanyName()}</a></li>
                         %endif
-                        <li><a href="${url("website_logout")}">Log out</a></li>
+                        <li><a href="${request.root.logout_url()}">Log out</a></li>
                     </ul>
                 </div>
             </div>

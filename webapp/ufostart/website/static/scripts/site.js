@@ -109,7 +109,6 @@ require(["tools/ajax", "misc"], function(ajax, misc){
         if(!options.user.token && form.length){
             ajax.ifyForm({root:form});
         }
-
         root.hnc = hnc;
     }
     return root.hnc;

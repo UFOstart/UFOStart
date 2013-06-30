@@ -12,13 +12,7 @@ log = logging.getLogger(__name__)
 class SocialResult(Exception):
     def get_redirection(self, request):
         redirections = request.session.pop_flash('redirections')
-        if redirections:
-            route = redirections[-1]
-        else:
-            route = request.matched_route.name.rsplit('_', 1)[0]
-            params = request.matchdict.copy()
-            params.pop('traverse')
-            route = request.fwd_url(route, **params)
+        route = redirections[-1] if redirections else request.root.home_url
         return route
 
 

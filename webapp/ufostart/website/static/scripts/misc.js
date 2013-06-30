@@ -41,5 +41,14 @@ define([], function(){
         $('input[placeholder], textarea[placeholder]').placeholder();
     }
 
+    $(document).on({
+        click: function(e){
+            var data = $(e.target).data();
+            require([data.module], function(v){
+                v.init(data, $(e.target));
+            });
+        }
+    },  ".js-link");
+
     return {NATIVE_PLACEHOLDER:NATIVE_PLACEHOLDER}
 });

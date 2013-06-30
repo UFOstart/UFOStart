@@ -74,7 +74,14 @@ class WebsiteRootContext(RootContext):
 
 
 
+    def login_url(self, **kwargs):
+        return self.request.resource_url(self, 'login', **kwargs)
+    def logout_url(self, **kwargs):
+        return self.request.resource_url(self, 'logout', **kwargs)
 
+    @property
+    def home_url(self):
+        return self.request.resource_url(self)
     @property
     def template_select_url(self):
         return self.request.resource_url(self, 'template')

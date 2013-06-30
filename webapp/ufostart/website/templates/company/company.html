@@ -3,9 +3,8 @@
 <%namespace file="../widgets.html" name="widgets"/>
 
 <%def name="breadcrumbs()">
-    <a class="crumb" href="${request.resource_url(resource)}"><span class="title">Company</span><br/>${resource.company.name}</a>
+    <a class="crumb" href="${url(resource)}"><span class="title">Company</span><br/>${resource.company.name}</a>
 </%def>
-
 
 <%def name="content()">
     <div class="container">
@@ -13,7 +12,7 @@
             <div class="col col-lg-12">
                 <h1 class="section-title">
                     %if resource.canEdit:
-                        <span class="btn-wrapper"><a title="Edit" href="${request.resource_url(resource, 'edit')}"><span class="glyphicon glyphicon-pencil"></span></a></span>
+                        <span class="btn-wrapper"><a title="Edit" href="${url(resource, 'edit')}"><span class="glyphicon glyphicon-pencil"></span></a></span>
                     %endif
                     <span class="brand-primary">
                         <span class="sub-title">Company Profile</span> ${company.name}
@@ -26,7 +25,7 @@
                 ${self.companyMainInfo(company)}
             </div>
             <div class="col col-lg-6">
-                ${widgets.main_media("Company Introduction", company.video, company.slideShare)}
+                ${widgets.mainMedia("Company Introduction", company.video, company.slideShare)}
                 <div class="main-description mar-top-2">
                     ${company.description | html.html,n}
                 </div>
@@ -36,9 +35,22 @@
             </div>
 
             <div class="col col-lg-3">
-
-                ${widgets.gallery("Picture Gallery", "Play Slideshow", company.Pictures)}
-
+                <div class="picture-gallery-preview progress-step progress-1">
+                    ${widgets.gallery("Picture Gallery", "Play Slideshow", company.Pictures)}
+                </div>
+                <% meta = html.getSlideshareMeta(request, company.slideShare) %>
+                %if meta:
+                    <div class="slideshare progress-step progress-2">
+                        <div class="box-title major">Slideshare</div>
+                        <div class="box-card">
+                            <div class="picture"><img src="${meta.thumbnail}"/></div>
+                            <div class="right-box">
+                                <a class="entity-link" href="${company.slideShare}"><strong>${ meta.title }</strong></a>
+                                <small class="headline">${meta.author_name}</small>
+                            </div>
+                        </div>
+                    </div>
+                %endif
             </div>
         </div>
     </div>
@@ -46,7 +58,7 @@
 
 <%def name="companyMainInfo(company)">
     ${widgets.company_logo(company)}
-    <a class="entity-link  mar-top-1" href="${request.resource_url(resource)}">${resource.company.name}</a>
+    <a class="entity-link  mar-top-1" href="${url(resource)}">${resource.company.name}</a>
     <div class="pitch">${html.nn(company.pitch)}</div>
     <div class="number-widget mar-top-1">
         <h6>Startup Value</h6>
@@ -72,7 +84,7 @@
         Rounds
     </div>
     %for i, round in enumerate(rounds):
-    <div class="box-card">
+    <div class="box-card compact">
         ${widgets.round_logo(company, round)}
         <div class="right-box">
             <a href="${root.round_url(company.slug, company.round_no(round))}" class="overflow"><strong>${round.display_name}</strong></a>

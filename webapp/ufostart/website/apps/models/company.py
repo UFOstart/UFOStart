@@ -5,7 +5,7 @@ from operator import attrgetter
 from random import random, sample
 from babel.dates import format_date
 from babel.numbers import get_currency_symbol
-from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField, IntegerField, DateField
+from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField, IntegerField, DateField, DecimalField
 from hnc.tools.tools import word_truncate_by_letters
 from httplib2 import Http
 from pyramid.decorator import reify
@@ -311,13 +311,22 @@ class EventModel(Mapping):
     text = TextField()
     recency =TextField()
 
+
+class OfferModel(Mapping):
+    name = TextField()
+    description = "a long and beautiful description for this great offer"
+    stock = '233'
+    price = '$12,000'
+
+
 class ProductModel(Mapping):
     token = TextField()
     name = TextField()
     picture = TextField()
     video = TextField()
     description = TextField()
-    Offers = ListField(DictField(NamedModel))
+    Offers = ListField(DictField(OfferModel))
+    Pictures = ListField(DictField(PictureModel))
 
     @property
     def is_setup(self):
@@ -326,6 +335,10 @@ class ProductModel(Mapping):
     @property
     def offers(self):
         return self.Offers
+
+    @reify
+    def offerMap(self):
+        return {o.name:o for o in self.Offers}
 
     def getYoutubeVideoId(self):
         if self.video and 'youtube' in self.video:

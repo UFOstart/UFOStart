@@ -10,7 +10,7 @@
                 <h1 class="section-title">
                     %if resource.canEdit:
                         <span class="btn-wrapper">
-                            <a href="${request.resource_url(resource)}" class="btn btn-primary">Cancel</a>
+                            <a href="${url(resource)}" class="btn btn-primary">Cancel</a>
                         </span>
                     %endif
                     <span class="brand-primary">${resource.need.name}</span>

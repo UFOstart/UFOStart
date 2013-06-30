@@ -25,7 +25,7 @@ def add_renderer_variables(event):
         event.update({"g"       : app_globals
             , 'root'           : request.root
             , 'resource'        : request.context
-            , 'url'             : request.fwd_url
+            , 'url'             : request.resource_url
             , 'ROOT_STATIC_URL' : request.root.root_statics
             , 'STATIC_URL'      : request.root.static_prefix
             , 'VERSION_TOKEN'   : app_globals.VERSION_TOKEN

@@ -2,26 +2,23 @@
 <%namespace file="../widgets.html" name="widgets"/>
 
 <%def name="breadcrumbs()">
-<div class="row">
-    <div class="col col-lg-12">
-        <a href="${request.resource_url(resource.__parent__)}">${resource.company.name}</a> &raquo;
-        <a href="${request.resource_url(resource)}">Round 1</a>
-    </div>
-</div>
+    <a class="crumb" href="${url(resource.__parent__)}"><span class="title">Company</span><br/>${resource.company.name}</a>
+    <a class="crumb" href="${url(resource)}"><span class="title">Round</span><br/>${resource.round.Template.name}</a>
 </%def>
+
 
 <%def name="content()">
     <div class="container" id="project-round-need-dashboard">
         <div class="row">
             <div class="col col-lg-12">
                 <h1 class="section-title">
-                    <span class="brand-primary">${company.display_name} <span class="sub-title">Company Dashboard</span> </span>
+                    <span class="brand-primary">${resource.round.Template.name} <span class="sub-title">Round Dashboard</span> </span>
                 </h1>
             </div>
         </div>
         <div class="row mar-top-1">
             <div class="col col-lg-3 pull-right">
-                ${self.sideBar(resource.round, canEdit)}
+                ${self.sideBar(resource.round, resource.canEdit)}
             </div>
             <div class="col col-lg-9">
                 ${self.upperContent(resource.round.published)}
@@ -32,55 +29,34 @@
 </%def>
 
 <%def name="upperContent(isPublished)">
-    %if isPublished:
-        <div class="row">
-            <div class="col col-lg-6">
-                <div class="box-title">Company</div>
-                ${self.companyBox(company)}
-
-                <div class="mar-top-1">
-                    <div class="box-title">Product</div>
-                    ${self.productBox(company)}
-                </div>
-            </div>
-            <div class="col col-lg-6">
-                <div class="box-title">
-                    Recent Activity
-                </div>
-            </div>
-        </div>
-    %else:
-        <div class="row">
-            <div class="col col-lg-6">
-                <div class="box-title highlight-target">
-                    <div id="target-invite-team" class="highlight-anchor"></div>
-                    Company
-                </div>
-                ${self.companyBox(company)}
-            </div>
-            <div class="col col-lg-6">
-                <div class="box-title highlight-target">
-                    <div id="target-create-product" class="highlight-anchor"></div>
-                    Product
-                </div>
+    <div class="row">
+        <div class="col col-lg-4">
+            <div class="box-title">Company</div>
+            ${self.companyBox(company)}
+            <div class="mar-top-1">
+                <div class="box-title">Product</div>
                 ${self.productBox(company)}
             </div>
         </div>
-    %endif
-</%def>
-
-<%def name="companyBox(company)">
-    <div class="box-header box-header-muted box-card">
-        ${widgets.company_logo(company)}
-        <div class="right-box">
-            <a href="${request.resource_url(resource.__parent__)}" class="overflow"><strong>${company.display_name}</strong></a>
-            <div class="description">${html.nn(company.description) | html.trunc(50)}</div>
-            <div class="number-widget">
-                <h6>Startup Value</h6>
-                <div class="value">${company.displayStartupValue}</div>
+        <div class="col col-lg-8">
+            <div class="box-title">
+                Recent Activity
             </div>
         </div>
     </div>
+</%def>
+
+<%def name="companyBox(company)">
+    <div class="box-card shaded">
+        ${widgets.company_logo(company)}
+        <a class="entity-link  mar-top-1" href="${url(resource)}">${resource.company.name}</a>
+        <div class="pitch">${html.nn(company.pitch)}</div>
+    </div>
+    <div class="number-widget mar-top-1">
+        <h6>Startup Value</h6>
+        <div class="value">${company.displayStartupValue}</div>
+    </div>
+    <hr/>
     <div class="mar-top-half">
         <h6>Team members</h6>
         <div class="picture-pile">
@@ -88,7 +64,7 @@
             ${widgets.userPic(user, classes='mini')|n}
         %endfor
         %if resource.canEdit:
-            <a href="${request.resource_url(resource.__parent__)}"><small>Invite team<br/>members</small></a>
+            <a href="${url(resource.__parent__)}"><small>Invite team<br/>members</small></a>
         %endif
         </div>
     </div>
@@ -101,7 +77,7 @@
             %endfor
             <span class="highlight-target" style="display:inline-block;">
                 <span id="target-add-mentor" class="highlight-anchor"></span>
-                <a href="${request.resource_url(resource.__parent__, 'mentor')}" class="btn btn-primary">Add Mentor</a>
+                <a href="${url(resource.__parent__, 'mentor')}" class="btn btn-primary">Add Mentor</a>
             </span>
         </div>
     </div>
@@ -111,29 +87,27 @@
 
 <%def name="productBox(company)">
     %if not company.product_is_setup:
-        <div class="box-header box-header-muted box-header-square"></div>
+        <div class="box-card shaded"><div class="empty">Product not set up</div></div>
         <div class="mar-top-1">
-        %if vctxt.canEditCompany:
-            <a href="${request.resource_url(resource, 'product', 'create')}" class="btn btn-primary">Setup Your Product</a>
+        %if resource.canEdit:
+            <a href="${url(resource, 'productsetup')}" class="btn btn-primary">Setup Your Product</a>
         %else:
             <h3>Not Setup yet</h3>
         %endif
         </div>
     %else:
-        <div class="picture-header">
-            <img src="${company.product_picture}"/>
-        </div>
+        <div class="box-card shaded"><img src="${company.product_picture}"/></div>
         <div class="mar-top-half">
-            <a href="${request.resource_url(resource, 'product')}" class="overflow"><strong>${company.product_name}</strong></a>
+            <a href="${url(resource, 'product')}" class="overflow"><strong>${company.product_name}</strong></a>
             <div class="description">${html.nn(company.product_description) | html.trunc(50)}</div>
         </div>
-    %endif
-    <hr/>
-    <div class="number-widget">
-        <div class="thirds">
+        <hr/>
+        <div class="number-widget">
             <h6>Pledges</h6>
-            <div class="value">${company.no_pledges}</div>
-        </div><div class="two thirds">
+            <div class="value light">${company.no_pledges}</div>
+        </div>
+        <hr/>
+        %if len(company.pledgees):
             <h6>Customers</h6>
             <div class="picture-pile">
                 %for pledge in company.pledgees[:4]:
@@ -142,9 +116,9 @@
                     </div>
                 %endfor
             </div>
-        </div>
-    </div>
-    <hr/>
+        <hr/>
+        %endif
+    %endif
 </%def>
 
 
@@ -167,7 +141,7 @@
                 %endfor
                 </div>
                 %if not i and resource.canEdit and not resource.round.published:
-                    <a href="${request.resource_url(resource, 'need', 'create')}" class="need-card-inner add-card">
+                    <a href="${url(resource, 'need', 'create')}" class="need-card-inner add-card">
                         <img src="${STATIC_URL}img/addneed.png"/>
                         <h4>Create a new Need</h4>
                     </a>
@@ -184,21 +158,21 @@
             <a class="customize success" href="#"><span class="glyphicon glyphicon-ok-sign"></span> Need Fulfilled</a>
         %elif not published  and resource.canEdit:
             %if need.customized:
-                <a class="customize success" href="${request.resource_url(resource, need.slug)}"><span class="glyphicon glyphicon-ok-sign"></span> Customized</a>
+                <a class="customize success" href="${url(resource, need.slug)}"><span class="glyphicon glyphicon-ok-sign"></span> Customized</a>
             %else:
-                <a class="customize danger" href="${request.resource_url(resource, need.slug, 'edit')}"><span class="glyphicon glyphicon-exclamation-sign"></span> Customize Need</a>
+                <a class="customize danger" href="${url(resource, need.slug, 'edit')}"><span class="glyphicon glyphicon-exclamation-sign"></span> Customize Need</a>
             %endif
         %endif
         <div class="need-card-inner">
             <div class="box-header box-header-muted box-card">
-                %if not published and vctxt.canEditCompany:
+                %if not published and resource.canEdit:
                     <a class="remove" data-target=".need-card">×</a>
                 %endif
                 <h5>
                     %if not need.customized and resource.canEdit:
-                        <a href="${request.resource_url(resource, need.slug, 'edit')}">${need.name}</a>
+                        <a href="${url(resource, need.slug, 'edit')}">${need.name}</a>
                     %else:
-                        <a href="${request.resource_url(resource, need.slug)}">${need.name}</a>
+                        <a href="${url(resource, need.slug)}">${need.name}</a>
                     %endif
                 </h5>
 
@@ -320,11 +294,11 @@
         <div id="target-sent-for-mentor-aprroval" class="highlight-anchor"></div>
         %if resource.canEdit:
             %if wf.canAskForApproval():
-                <a href="${request.resource_url(resource, 'askforapproval')}" class="btn btn-primary btn-block btn-large">Get Approval</a>
+                <a href="${url(resource, 'askforapproval')}" class="btn btn-primary btn-block btn-large">Get Approval</a>
             %endif
         %elif resource.canApprove:
             %if wf.canPublish():
-                <a href="${request.resource_url(resource, 'publish')}" class="btn btn-primary btn-block btn-large">Publish</a>
+                <a href="${url(resource, 'publish')}" class="btn btn-primary btn-block btn-large">Publish</a>
             %else:
                 <a class="btn btn-primary btn-block btn-large disabled">Publish</a>
             %endif

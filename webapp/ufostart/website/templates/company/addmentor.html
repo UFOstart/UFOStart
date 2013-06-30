@@ -7,8 +7,8 @@
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
-                <a href="${request.resource_url(resource.__parent__)}">${resource.company.name}</a> &raquo;
-                <a href="${request.resource_url(resource, 'mentor')}">Add Mentor</a>
+                <a href="${url(resource.__parent__)}">${resource.company.name}</a> &raquo;
+                <a href="${url(resource, 'mentor')}">Add Mentor</a>
             </div>
         </div>
         <div class="row">

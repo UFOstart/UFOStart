@@ -7,9 +7,9 @@
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
-                <a href="${request.resource_url(resource.__parent__.__parent__)}">${resource.company.name}</a> &raquo;
-                <a href="${request.resource_url(resource.__parent__)}">Round 1</a> &raquo;
-                <a href="${request.resource_url(resource)}">${resource.need.name}</a>
+                <a href="${url(resource.__parent__.__parent__)}">${resource.company.name}</a> &raquo;
+                <a href="${url(resource.__parent__)}">Round 1</a> &raquo;
+                <a href="${url(resource)}">${resource.need.name}</a>
             </div>
         </div>
         <div class="row">
@@ -17,7 +17,7 @@
                 <h1 class="section-title">
                     %if not resource.need.fulfilled and resource.canEdit:
                         <span class="btn-wrapper">
-                            <a href="${request.resource_url(resource, 'edit')}" class="btn btn-primary">Edit</a>
+                            <a href="${url(resource, 'edit')}" class="btn btn-primary">Edit</a>
                         </span>
                     %endif
                     <span class="brand-primary">${resource.need.name}</span>
@@ -36,7 +36,7 @@
                 ${widgets.companyInfo(resource.company)}
                 %if not resource.need.fulfilled:
                     <div class="mar-top-1">
-                        <a href="${request.resource_url(resource, 'apply')}#application-form" class="btn btn-primary btn-block">${'Login to Apply' if root.user.isAnon() else 'Apply'}</a>
+                        <a href="${url(resource, 'apply')}#application-form" class="btn btn-primary btn-block">${'Login to Apply' if root.user.isAnon() else 'Apply'}</a>
                     </div>
                 %endif
             </div>
@@ -280,18 +280,18 @@
                     <div class="row">
                         <div class="col col-sm-3">
                             <div class="picture">
-                                <a href="${url("website_user", slug = application.User.token)}"><img src="${application.User.picture}"/></a>
+                                <a href="${request.root.profile_url(application.User.token)}"><img src="${application.User.picture}"/></a>
                             </div>
                         </div>
                         <div class="col col-sm-9">
-                            <a href="${url("website_user", slug = application.User.token)}" class="name"><strong>${application.User.name}</strong></a>
+                            <a href="${request.root.profile_url(application.User.token)}" class="name"><strong>${application.User.name}</strong></a>
                             <p class="text-small">${html.nn(application.User.position)}</p>
                             <p class="text-small">${application.display_date}</p>
                             %if need.fulfilled:
 
                             %else:
                                 %if resource.canEdit:
-                                    <a href="${request.resource_url(resource, application.token, 'accept')}" class="btn btn-primary">Accept</a>
+                                    <a href="${url(resource, application.token, 'accept')}" class="btn btn-primary">Accept</a>
                                 %endif
                             %endif
                         </div>

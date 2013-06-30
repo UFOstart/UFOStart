@@ -1,11 +1,15 @@
+import logging
 import re
 from urlparse import urlparse, parse_qsl
 from babel import dates
+from hnc.apiclient import Mapping, TextField, IntegerField
 from hnc.tools.tools import word_truncate_by_letters
 from httplib2 import Http
 import markdown
 import simplejson
 import smartypants
+
+log = logging.getLogger(__name__)
 
 __author__ = 'Martin'
 
@@ -56,7 +60,14 @@ def getVimeoVideoId(url):
         except: pass
     return None
 
-def getSlideShareId(url):
+
+class SlideShareMeta(Mapping):
+    id = IntegerField()
+    thumbnail = TextField()
+    title = TextField()
+    author_name = TextField()
+
+def getSlideShareId(request, url):
     #http://www.slideshare.net/slideshow/embed_code/23145
     #http://www.slideshare.net/api/oembed/2?url=http://www.slideshare.net/mrcoryjim/presentation-roi-is-it-worth-it-yanceyu&format=jso
     if not url: return None
@@ -67,8 +78,23 @@ def getSlideShareId(url):
         except: pass
     elif 'slideshare' in netloc:
         try:
+            result = getSlideshareMeta(request, url)
+            return result.slideshow_id
+        except:
+            return None
+
+
+def getSlideshareMeta(request, url):
+    if not url: return None
+    meta = request.globals.cache.get("SLIDESHARE_{}".format(url))
+    if not meta:
+        try:
+            log.info("Slideshare Cache miss for {}".format(url))
             h = Http()
             resp, content = h.request("http://www.slideshare.net/api/oembed/2?url={}&format=json".format(url))
-            result = simplejson.loads(content)
-            return int(result['slideshow_id'])
-        except: pass
+            meta = SlideShareMeta.wrap(simplejson.loads(content))
+            request.globals.cache.set("SLIDESHARE_{}".format(url), meta)
+            return meta
+        except: return None
+    else:
+        return meta

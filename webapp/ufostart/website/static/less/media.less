@@ -9,6 +9,7 @@
     width:100%;
     .box-shadow(0 2px 5px rgba(0,0,0,.3));
     z-index:2;
+    background-color: #808080;
   }
   &:after {
     content:".";
@@ -40,10 +41,9 @@
 }
 
 
-.picture-gallery-preview {
+.picture-gallery-preview.progress-step {
   position: relative;
-  padding-bottom:120px;
-  background-color: #808080;
+  padding:0 0 120px;
   .clearfix;
   > .picture {height:75px;width:75px;float:left; margin: 6px;overflow:hidden;}
   > .play {

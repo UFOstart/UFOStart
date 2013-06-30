@@ -13,38 +13,6 @@ def index(context, request):
         request.fwd("website_index")
     return {'company': company, 'currentRound':company.currentRound}
 
-def create_round(context, request):
-    company = context.company
-    if not company.currentRound:
-        round = CreateRoundProc(request, {'slug': company.slug})
-    request.fwd("website_company", **context.urlArgs)
-
-
-class SetupCompanyForm(BaseForm):
-    id="SetupCompany"
-    grid = HORIZONTAL_GRID
-    label = ""
-    fields=[
-        StringField("name", "Name", REQUIRED)
-        , TextareaField("description", "Description", input_classes="x-high")
-    ]
-    @classmethod
-    def on_success(cls, request, values):
-        data = {"token": request.root.user.token, "Company": values}
-        try:
-            user = CreateCompanyProc(request,  data)
-            company = user.Company
-        except DBNotification, e:
-            if e.message == 'Company_Already_Exists':
-                return {'success':False, 'errors': {'name': "Already used, please choose another name!"}}
-            else:
-                raise e
-
-        return {'success':True, 'redirect': request.fwd_url("website_company_invite", slug = company.slug)}
-
-class SetupCompanyHandler(FormHandler):
-    form = SetupCompanyForm
-
 
 @require_login('ufostart:website/templates/auth/login.html')
 def publish_round(context, request):

@@ -7,149 +7,136 @@
         <div class="row">
             <div class="col col-lg-12">
                 <h1 class="section-title">
+                    %if resource.canEdit:
+                        <span class="btn-wrapper"><a title="Edit" href="${url(resource, 'edit')}"><span class="glyphicon glyphicon-pencil"></span></a></span>
+                    %endif
                     <span class="brand-primary">${product.name}</span>
                 </h1>
             </div>
         </div>
+
+        <div class="row mar-top-1">
+            <div class="col col-lg-9">
+                ${widgets.mainMedia("Product Presentation", product.video)}
+            </div>
+            <div class="col col-lg-3">
+                %if product.Pictures:
+                    <div class="picture-gallery-preview progress-step progress-1">
+                        ${widgets.gallery("Picture Gallery", "Play Slideshow", product.Pictures)}
+                    </div>
+                %endif
+            </div>
+        </div>
+
         <div class="row mar-top-1">
             <div class="col col-lg-3">
-                <div class="box-title">Customers</div>
-                ${self.customers(company.Round.Pledges)}
+                ${widgets.companyInfo(resource.company)}
+                <div class="mar-top-2">
+                    <div class="box-title">Customers</div>
+                    ${self.customerFacepile(company.Round.Pledges)}
+                </div>
             </div>
             <div class="col col-lg-6">
-                <div class="box-title">
-                    %if vctxt.canEditCompany:
-                        <a href="${url("website_company_product_edit", **vctxt.urlArgs)}" class="btn btn-primary">Edit</a>
-                    %endif
-                    Product Details
+                <div class="main-description">
+                    ${product.description | html.html,n}
                 </div>
-                ${self.details(company, product)}
+                <div class="mar-top-2">
+                    <div class="box-title">Orders</div>
+                    ${self.pledgeList(company.Round.Pledges)}
+                </div>
             </div>
             <div class="col col-lg-3">
-                ${widgets.companyInfo(vctxt.company)}
+                ${self.offerSection(company, company.Round.Product)}
             </div>
         </div>
-        <h1 class="section-title">
-            <span class="brand-primary">${pluralize("{num} Customer", "{num} Customers", company.no_pledges)}</span>
-        </h1>
-        ${self.pledgeList(company.Round.Pledges)}
     </div>
 </%def>
 
-<%def name="customers(customers)">
-    <div class="row mar-top-half">
-        %if len(customers):
-            %for pledge in customers:
-            <div class="col col-sm-3">
-                <div class="picture medium">
-                    <img src="${pledge.picture}"/>
-                </div>
+<%def name="customerFacepile(customers)">
+    <div class="mar-top-half">
+    %if len(customers):
+        %for pledge in customers:
+            <div class="picture medium">
+                <img src="${pledge.picture}"/>
             </div>
-            %endfor
-        %else:
-            <div class="empty">
-                No Customers yet
-            </div>
-        %endif
-    </div>
-</%def>
-
-
-<%def name="details(company, product)">
-    <div class="company-customer-dashboard">
-        <div class="picture-header">${self.product_media(product)}</div>
-
-        <div class="mar-top-1">
-            ${html.nn(product.description)}
-        </div>
-
-        %if vctxt.canEditCompany:
-            <% form = view.schemas['ProductOffer'] %>
-            ${self.create_offer_form(product, form, values.get(form.id), errors.get(form.id))}
-        %else:
-            %if len(product.offers):
-            <div class="mar-top-2"></div>
-            <div class="box-title">
-                Offers
-            </div>
-                <div class="mar-top-1">
-                    <p>This product can be acquired in the following options:</p>
-                    <ul class="styled">
-                        %for offer in product.offers:
-                            <li><span>${offer.name}</span></li>
-                        %endfor
-                    </ul>
-                </div>
-            %endif
-        %endif
-        %if product.Offers:
-            <% form = view.schemas['ProductPledge'] %>
-            ${self.pledge_offer_form(form, values.get(form.id), errors.get(form.id))}
-        %endif
-    </div>
-</%def>
-
-
-
-<%def name="create_offer_form(product, form, values, errors)">
-    <div class="expander">
-        <div class="mar-top-2"></div>
-        <div class="box-title">
-            %if product.Offers:
-                <a class="btn btn-primary show-contracted" data-toggle-target=".expander" data-toggle-class="expanded">Edit</a>
-                <a class="btn btn-default show-expanded" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
-            %endif
-            Offers
-        </div>
-
-        %if product.Offers:
-            <div class="show-contracted">
-            <div class="mar-top-1">
-                <p>This product can be acquired in the following options:</p>
-                <ul class="styled">
-                    %for offer in product.offers:
-                        <li><span>${offer.name}</span></li>
-                    %endfor
-                </ul>
-            </div>
-            </div>
-            <div class="show-expanded row"><div class="col-lg-12 col">
-        %endif
-
-        <div class="box-framed box-dark">
-            <div class="box-content mar-top-1 clearfix">
-                <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
-                    ${baseform.prelims(form)}
-                    %for field in form.fields:
-                        ${field.render(form.id, request, values, errors, view, grid = form.grid)|n}
-                    %endfor
-                    <div class="row">
-                        <div class="col col-offset-3 col-lg-9">
-                            <button type="submit" class="btn btn-primary">Save Offers</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-    %if product.Offers:
-        </div>
+        %endfor
+    %else:
+        <div class="empty">
+            No Customers yet
         </div>
     %endif
     </div>
 </%def>
 
-<%def name="pledge_offer_form(form, values, errors)">
+
+<%def name="offerSection(company, product)">
+    <h2>Offers</h2>
+    %for i, offer in enumerate(product.offers):
+        ${self.displayOffer(i, offer)}
+    %endfor
+    %if resource.canEdit:
+        <% form = view.schemas['ProductOffer'] %>
+        ${self.createOfferForm(product, form, values.get(form.id), errors.get(form.id))}
+    %endif
+</%def>
+
+<%def name="displayOffer(idx, offer)">
+    <div class="single-product-offer progress-step progress-${idx+1}">
+        %if resource.canEdit:
+            <a href="${url(resource, 'delete', query=[('offer', offer.name)])}" class="remove">×</a>
+        %endif
+        <p><strong class="dark">${offer.name}</strong></p>
+        <p class="text-small">${offer.description}</p>
+        <div class="row">
+            <div class="col col-lg-6">
+                <strong><small class="dark">Price</small></strong>
+                <div class="text-large text-light">${offer.price}</div>
+            </div>
+            <div class="col col-lg-6">
+                <strong><small class="dark">Stock</small></strong>
+                <div class="text-large text-light">${offer.stock}</div>
+            </div>
+        </div>
+        <div class="row mar-top-1">
+            <a href="#" class="btn btn-primary col col-lg-10 col-offset-1">Pledge</a>
+        </div>
+
+    </div>
+</%def>
+
+<%def name="createOfferForm(product, form, values, errors)">
+    <h6 class="mar-top-1">Add a new Offer</h6>
+    <div class="box-dark">
+        <div class="box-content clearfix">
+            <form class="${form.grid.form_classes} form-compacted" id="${form.id}" method="POST">
+                ${baseform.prelims(form)}
+                ${form.fieldMap['name'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                ${form.fieldMap['description'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                <div class="row">
+                    <div class="col col-lg-6">
+                        ${form.fieldMap['price'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                    </div>
+                    <div class="col col-lg-6">
+                        ${form.fieldMap['stock'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Offer</button>
+            </form>
+        </div>
+    </div>
+</%def>
+
+<%def name="pledgeOfferForm(form, values, errors)">
     <div class="expander">
     <div class="mar-top-2">
-        %if vctxt.user.isAnon():
-            <a href="${url("website_company_product_pledge", **vctxt.urlArgs)}" class="btn btn-primary">Login to Pledge</a>
-        %elif not vctxt.canEditCompany:
+        %if root.user.isAnon():
+            <a href="${url(resource, 'pledge')}" class="btn btn-primary">Login to Pledge</a>
+        %elif not resource.canEdit:
             <a class="btn btn-primary show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Pledge Now</a>
             <a class="btn btn-default show-expanded" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
         %endif
     </div>
-    %if not vctxt.canEditCompany and not vctxt.user.isAnon():
+    %if not resource.canEdit and not root.user.isAnon():
         <div class="show-expanded box-shaded box-framed">
             <div class="box-content">
                 <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
@@ -159,11 +146,11 @@
                             <div class="row">
                                 <div class="col col-sm-4">
                                     <div class="picture">
-                                        <img src="${vctxt.user.picture}"/>
+                                        <img src="${root.user.picture}"/>
                                     </div>
                                 </div>
                                 <div class="col col-sm-8">
-                                    <div class="name">${vctxt.user.name}</div>
+                                    <div class="name">${root.user.name}</div>
                                 </div>
                             </div>
                             <div class="row">
@@ -194,7 +181,7 @@
                     <div class="col col-sm-4">
                         <div class="picture">
                         %if pledge.is_native:
-                            <a href="${url("website_user", slug = pledge.networkId)}">
+                            <a href="${request.root.profile_url(pledge.networkId)}">
                                 <img src="${pledge.picture}"/>
                             </a>
                         %else:
@@ -204,7 +191,7 @@
                     </div>
                     <div class="col col-sm-8">
                         %if pledge.is_native:
-                            <p class="name"><a href="${url("website_user", slug = pledge.networkId)}"><strong>${pledge.name}</strong></a></p>
+                            <p class="name"><a href="${request.root.profile_url(pledge.networkId)}"><strong>${pledge.name}</strong></a></p>
                         %else:
                             <p class="name"><strong>${pledge.name}</strong></p>
                         %endif
@@ -227,36 +214,6 @@
 %endif
 </%def>
 
-
-
-
-<%def name="product_media(product)" filter="trim">
-    %if product:
-        <%
-            youtube_id = product.getYoutubeVideoId()
-            vimeo_id = product.getVimeoVideoId()
-        %>
-        %if youtube_id:
-            <div class="vimeo-container">
-                <iframe class="youtube-player" type="text/html" width="640" height="385" src="http://www.youtube.com/embed/${youtube_id}" allowfullscreen frameborder="0"></iframe>
-            </div>
-        %elif vimeo_id:
-            <div class="vimeo-container">
-            <iframe src="http://player.vimeo.com/video/${vimeo_id}" width="847" height="400" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-            </div>
-        %elif product.video:
-            <a href="${product.video}">${product.video}</a>
-        %elif product.picture:
-            <div class="product-screenshots">
-                <img src="${product.picture}"/>
-            </div>
-        %endif
-    %else:
-        <div class="empty">
-            No Video
-        </div>
-    %endif
-</%def>
 
 <%def name="post_scripts()">
     <script>
