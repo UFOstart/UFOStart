@@ -7,6 +7,12 @@ from ufostart.website.apps.models.procs import RefreshProfileProc, GetProfilePro
 class UserHomeContext(object):
     __acl__ = [(Allow, Authenticated, 'view'), (Deny, Everyone, 'view')]
     __auth_template__ = "ufostart:website/templates/auth/login.html"
+
+    displayType = 'User Profile'
+    @reify
+    def displayName(self):
+        return self.user.name
+
     def __init__(self, parent, name, token):
         self.__parent__ = parent
         self.__name__ = name
@@ -15,11 +21,18 @@ class UserHomeContext(object):
     def user(self):
         return RefreshProfileProc(self.__parent__.request, {'token': self.user_token})
 
+
 class UserProfileContext(object):
+    displayType = 'User Profile'
+    @reify
+    def displayName(self):
+        return self.user.name
+
     def __init__(self, parent, name, profile):
         self.__parent__ = parent
         self.__name__ = name
         self.profile = profile
+
 
 class UserProtoContext(object):
     def __init__(self, parent, name):

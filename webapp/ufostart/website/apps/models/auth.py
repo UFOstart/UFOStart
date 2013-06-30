@@ -1,7 +1,9 @@
+from datetime import datetime
 from operator import attrgetter
-from hnc.apiclient import Mapping, TextField, IntegerField, ListField, DictField
+from hnc.apiclient import Mapping, TextField, IntegerField, ListField, DictField, DateTimeField
 from pyramid.decorator import reify
 import simplejson
+from ufostart.lib.html import format_date
 from ufostart.lib.tools import format_currency
 from ufostart.models.tasks import NamedModel
 from ufostart.website.apps.models.company import CompanyModel, ApplicationModel
@@ -40,6 +42,27 @@ class UserApplicationModel(ApplicationModel):
     need = TextField()
     needToken = TextField()
     needSlug = TextField()
+    created = DateTimeField()
+
+    @property
+    def display_date(self):
+        return format_date(self.created, format='medium')
+
+class UserEndorsementsModel(Mapping):
+    created = datetime(2013,01,02)
+    endorserPicture = "http://m.c.lnkd.licdn.com/mpr/mprx/0_LPiHRo-jCXDcryuSbK-BReK-CCEsrJySbAcBReC7gbYEfgwDWv1XvH9Tu2o5POgTXK39qfrLdKZo"
+    endorserName = "Tilda Swanson"
+    endorserToken = "02B0FC19-07AB-4914-BB40-6ED3CAFA4A4A"
+    endorserHeadline = "IT Expert"
+
+    needName = "SEO Expert"
+    needSlug = 'needSlug'
+    companyName = "Kickstarter"
+    companySlug = 'companySlug'
+
+    @property
+    def display_date(self):
+        return format_date(self.created, format='medium')
 
 class UserModel(Mapping):
     token = TextField()
@@ -54,6 +77,7 @@ class UserModel(Mapping):
     Company = DictField(CompanyModel)
     Companies = ListField(DictField(CompanyModel))
     Applications = ListField(DictField(UserApplicationModel))
+    Endorsements = ListField(DictField(UserEndorsementsModel))
 
     def isAnon(self):
         return self.token is None
@@ -68,6 +92,12 @@ class UserModel(Mapping):
         result = {n.inferredNetwork():n.unwrap(sparse = True) for n in self.Profile if n.id}
         return simplejson.dumps(result) if stringify else result
 
+    def getEndorsements(self):
+        return [UserEndorsementsModel()]
+
+    @property
+    def displayStartupValue(self):
+        return format_currency(self.startupValue)
     def getPicture(self):
         if self.picture:
             return self.picture

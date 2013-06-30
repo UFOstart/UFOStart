@@ -31,11 +31,12 @@ cite    { font-style: normal; }
 .text-small          { font-size: @font-size-small; }
 .text-large          { font-size: @font-size-xlarge; }
 .text-light          { font-weight: 300; }
-.text-muted          { color: @gray; }
+.text-muted          { color: @text-muted; }
+.text-strong         { font-weight: @font-weight-bold; }
 
-a.text-muted          { color: darken(@gray, 10%); }
+a.text-muted          { color: darken(@text-muted, 10%); }
 a.text-muted:hover,
-a.text-muted:focus   { color: darken(@gray, 15%); }
+a.text-muted:focus   { color: darken(@text-muted, 15%); }
 
 .text-warning        { color: @state-warning-text; }
 a.text-warning:hover,

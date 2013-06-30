@@ -159,7 +159,7 @@ class CompanyContext(BaseProjectContext):
 
     @reify
     def company(self):
-        company = GetCompanyProc(self.request, {'slug': self.name})
+        company = GetCompanyProc(self.request, {'slug': self.__name__})
         if not company: raise HTTPNotFound()
         else: return company
 

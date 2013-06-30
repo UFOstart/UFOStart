@@ -30,10 +30,6 @@ class WebsiteRootContext(RootContext):
     __parent__ = None
     __acl__ = [(Allow, Everyone, 'view')]
 
-    displayName = None
-    displayType = None
-
-
     static_prefix = "/web/static/"
     app_label = 'website'
 
