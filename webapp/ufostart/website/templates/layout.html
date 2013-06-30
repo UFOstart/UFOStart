@@ -17,18 +17,17 @@
        </div>
     </%block>
 
-    %if hasattr(next, 'breadcrumbs'):
-        <div class="container breadcrumbs">
-            <div class="row">
-                <div class="col col-lg-12 crumbs-inner">
-                    ${next.breadcrumbs()}
-                </div>
+    ${self.header_messages(request.session.pop_flash("generic_messages"))}
+
+    <div class="container breadcrumbs">
+        <div class="row">
+            <div class="col col-lg-12 crumbs-inner">
+                ${self.bc(resource)}
             </div>
         </div>
-    %endif
+    </div>
 
     <%block name="contentwrapper">
-        ${self.header_messages()}
         <div class="page-wrapper">
             ${self.content()}
         </div>
@@ -119,4 +118,26 @@
         </div>
         </div>
     %endif
+</%def>
+
+
+<%def name="bc(res)">
+    %if hasattr(res, 'displayType'):
+        ${self.bc(res.__parent__)}
+        <a class="crumb" href="${url(res)}"><span class="title">${res.displayType}</span><br/>${res.displayName}</a>
+    %endif
+</%def>
+
+<%def name="header_messages(msgs)">
+    <div id="message-container" class="container message-container ${'show' if len(msgs) > 0 else ''}">
+        %for msg in msgs:
+            <div class="alert alert-${msg.type}">
+                <a class="close" data-dismiss="alert">×</a>
+                %if msg.heading:
+                    <h4 class="alert-heading">${msg.heading|n}</h4>
+                %endif
+            ${msg.body|n}
+            </div>
+        %endfor
+    </div>
 </%def>

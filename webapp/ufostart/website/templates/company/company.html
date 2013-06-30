@@ -2,24 +2,13 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../widgets.html" name="widgets"/>
 
-<%def name="breadcrumbs()">
-    <a class="crumb" href="${url(resource)}"><span class="title">Company</span><br/>${resource.company.name}</a>
-</%def>
-
 <%def name="content()">
     <div class="container">
-        <div class="row">
-            <div class="col col-lg-12">
-                <h1 class="section-title">
-                    %if resource.canEdit:
-                        <span class="btn-wrapper"><a title="Edit" href="${url(resource, 'edit')}"><span class="glyphicon glyphicon-pencil"></span></a></span>
-                    %endif
-                    <span class="brand-primary">
-                        <span class="sub-title">Company Profile</span> ${company.name}
-                    </span>
-                </h1>
-            </div>
-        </div>
+
+        <%widgets:pageHeader canEdit="${resource.canEdit}">
+            <span class="sub-title">Company Profile</span> ${company.name}
+        </%widgets:pageHeader>
+
         <div class="row mar-top-2">
             <div class="col col-lg-3">
                 ${self.companyMainInfo(company)}
@@ -139,30 +128,28 @@
     <div class="box-title">
         Team Members
     </div>
-    <div class="member-pile">
-        %for member in members:
-            <div class="single-team-member box-card">
-                ${widgets.userPic(member)}
-                <div class="right-box">
-                    <div class="position">${html.nn(member.position)}</div>
-                    %if member.token:
-                        <a class="entity-link" href="${root.profile_url(member.token)}"><strong>${ member.name }</strong></a>
-                    %else:
-                        <strong>${ member.name }</strong>
-                    %endif
-                    <small class="headline">${html.nn(member.headline)}</small>
-                    <small>
-                        <strong class="text-muted">Startup Value</strong> <span class="brand-primary">${member.displayStartupValue}</span>
-                    </small>
-                </div>
+    %for member in members:
+        <div class="single-team-member box-card compact">
+            ${widgets.userPic(member)}
+            <div class="right-box">
+                <div class="position">${html.nn(member.position)}</div>
+                %if member.token:
+                    <a class="entity-link" href="${root.profile_url(member.token)}"><strong>${ member.name }</strong></a>
+                %else:
+                    <p><strong>${ member.name }</strong></p>
+                %endif
+                <small class="headline">${html.nn(member.headline)}</small>
+                <small>
+                    <strong class="text-muted">Startup Value</strong> <span class="brand-primary">${member.displayStartupValue}</span>
+                </small>
             </div>
-        %endfor
-    </div>
+        </div>
+    %endfor
 </%def>
 
 <%def name="build_forms(form, values, errors)">
     <div class="expander">
-        <a class="btn btn-primary btn-small show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Invite Team Members</a>
+        <a class="btn btn-primary show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Invite Team Members</a>
         <div class="show-expanded">
             <div class="box-dark">
                 <div class="box-content">

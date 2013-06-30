@@ -1,7 +1,26 @@
+.cut-corner {
+  position: relative;
+  &:after {
+    content:".";
+    position: absolute;
+    height:22px;
+    width:100%;
+    bottom:-1px;
+    left:0;
+    .background-image("../img/mediashadow.png");
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    overflow:hidden;
+    text-indent: -999em;
+    display: block;
+  }
+}
+
 .media-container {
   position: relative;
   padding-top:50px;
   overflow:hidden;
+  .cut-corner;
   >.box-title.major {
     position: absolute;
     top:0;
@@ -10,20 +29,6 @@
     .box-shadow(0 2px 5px rgba(0,0,0,.3));
     z-index:2;
     background-color: #808080;
-  }
-  &:after {
-    content:".";
-    position: absolute;
-    height:22px;
-    width:100%;
-    bottom:0;
-    left:0;
-    .background-image("../img/mediashadow.png");
-    background-position: 0 0;
-    background-repeat: no-repeat;
-    overflow:hidden;
-    text-indent: -999em;
-    display: block;
   }
 }
 

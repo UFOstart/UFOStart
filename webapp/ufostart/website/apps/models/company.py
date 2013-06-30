@@ -10,7 +10,7 @@ from hnc.tools.tools import word_truncate_by_letters
 from httplib2 import Http
 from pyramid.decorator import reify
 import simplejson
-from ufostart.lib.html import getYoutubeVideoId, getVimeoVideoId
+from ufostart.lib.html import getYoutubeVideoId, getVimeoVideoId, getVimeoMeta
 from ufostart.lib.tools import format_currency
 from ufostart.models.tasks import NamedModel
 from ufostart.website.apps.models.workflow import WorkflowModel
@@ -477,8 +477,8 @@ class CompanyModel(BaseCompanyModel):
     def product_name(self):
         return self.Round.Product.name if self.product_is_setup else ''
 
-    @reify
-    def product_picture(self):
+
+    def product_picture(self, request):
         product = self.Round.Product
         if not product: return None
         media = product.video or product.picture
@@ -487,14 +487,8 @@ class CompanyModel(BaseCompanyModel):
             youtubeId  = getYoutubeVideoId(media)
             return 'http://img.youtube.com/vi/{}/0.jpg'.format(youtubeId)
         elif 'vimeo' in media:
-            try:
-                vimeoId =  getVimeoVideoId(media)
-                h = Http()
-                resp, data = h.request("http://vimeo.com/api/v2/video/{}.json".format(vimeoId))
-                json = simplejson.loads(data)
-                return json[0]['thumbnail_small']
-            except:
-                return None
+            meta = getVimeoMeta(request, media)
+            return meta.thumbnail_large if meta else None
         else:
             return media
 

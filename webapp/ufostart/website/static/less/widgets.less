@@ -92,7 +92,7 @@
 .picture.micro {width:25px;min-height:25px; >img {width:100%;}}
 .picture.mini {width:34px;min-height:34px; >img {width:100%;}}
 .picture.small {width:50px;min-height:50px; >img {width:100%;}}
-.picture.medium {width:60px;min-height:60px; >img {width:100%;}}
+.picture.medium {width:75px;min-height:75px; >img {width:100%;}}
 .picture.maxi {
   height:0;padding-bottom:50%;overflow:hidden;
    >img {width:100%;}
@@ -141,7 +141,7 @@
 }
 .box-card {
   .clearfix;
-  padding: 12px 12px 24px;
+  padding: 12px 0 24px;
   .description {
     font-size: @font-size-small;
     min-height:34px;
@@ -151,6 +151,8 @@
     > h2, h6{color:white;}
   }
   &.shaded {
+    padding-left: 12px;
+    padding-right: 12px;
     background-color: #f4f4f4;
     .background-image("../img/mediashadow.png");
     background-position: left bottom;

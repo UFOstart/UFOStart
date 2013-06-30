@@ -5,25 +5,11 @@
 
 <%def name="content()">
     <div class="container">
-        <div class="row">
-            <div class="col col-lg-12">
-                <a href="${url(resource.__parent__.__parent__)}">${resource.company.name}</a> &raquo;
-                <a href="${url(resource.__parent__)}">Round 1</a> &raquo;
-                <a href="${url(resource)}">${resource.need.name}</a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col col-lg-12">
-                <h1 class="section-title">
-                    %if not resource.need.fulfilled and resource.canEdit:
-                        <span class="btn-wrapper">
-                            <a href="${url(resource, 'edit')}" class="btn btn-primary">Edit</a>
-                        </span>
-                    %endif
-                    <span class="brand-primary">${resource.need.name}</span>
-                </h1>
-            </div>
-        </div>
+
+        <%widgets:pageHeader canEdit="${resource.canEdit}">
+            ${need.name}
+        </%widgets:pageHeader>
+
 
         <div class="row mar-top-1">
             <div class="col col-lg-3">

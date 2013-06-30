@@ -75,18 +75,3 @@
     ${self.layout_scripts()}
     ${self.post_scripts()}
 </%def>
-
-
-<%def name="header_messages()">
-    <div id="message-container" class="container message-container ${'show' if len(request.session.peek_flash("generic_messages")) > 0 else ''}">
-        %for msg in request.session.pop_flash("generic_messages"):
-            <div class="alert alert-${msg.type}">
-                <a class="close" data-dismiss="alert">×</a>
-                %if msg.heading:
-                    <h4 class="alert-heading">${msg.heading|n}</h4>
-                %endif
-            ${msg.body|n}
-            </div>
-        %endfor
-    </div>
-</%def>

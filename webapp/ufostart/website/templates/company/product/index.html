@@ -2,18 +2,13 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../../widgets.html" name="widgets"/>
 
+
 <%def name="content()">
     <div class="container">
-        <div class="row">
-            <div class="col col-lg-12">
-                <h1 class="section-title">
-                    %if resource.canEdit:
-                        <span class="btn-wrapper"><a title="Edit" href="${url(resource, 'edit')}"><span class="glyphicon glyphicon-pencil"></span></a></span>
-                    %endif
-                    <span class="brand-primary">${product.name}</span>
-                </h1>
-            </div>
-        </div>
+
+        <%widgets:pageHeader canEdit="${resource.canEdit}">
+            ${product.name}
+        </%widgets:pageHeader>
 
         <div class="row mar-top-1">
             <div class="col col-lg-9">

@@ -4,7 +4,7 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
 </%def>
 <%def name="company_logo(company, classes = '')">${self.logo(company.logo_url, company.name, link = url(request.root, company.slug), classes = classes)}</%def>
 <%def name="app_company_logo(application, classes = '')">${self.logo(application.comapnyLogo, application.companyName, link = url(request.root, application.companySlug), classes = classes)}</%def>
-<%def name="product_logo(company, classes = '')">${self.logo(company.product_picture, company.product_name, link = url(request.root, company.slug), classes = classes)}</%def>
+<%def name="product_logo(company, classes = '')">${self.logo(company.product_picture(request), company.product_name, link = url(request.root, company.slug), classes = classes)}</%def>
 
 <%def name="logo(url, alt='', classes='', link = '')">
 %if url and link:
@@ -16,6 +16,19 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
 %endif
 </%def>
 
+
+<%def name="pageHeader(canEdit = False)">
+<div class="row">
+    <div class="col col-lg-12">
+        <h1 class="section-title">
+            %if canEdit:
+                <span class="btn-wrapper"><a title="Edit" href="${url(resource, 'edit')}"><span class="glyphicon glyphicon-pencil"></span></a></span>
+            %endif
+            <span class="brand-primary">${caller.body()}</span>
+        </h1>
+    </div>
+</div>
+</%def>
 
 
 <%def name="gallery(title, play_btn_text, pictures)">
@@ -158,7 +171,7 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
     <div class="need-card home product">
     <div class="need-card-inner">
         <div class="picture-header">
-            <img src="${company.product_picture}"/>
+            <img src="${company.product_picture(request)}"/>
         </div>
         <div class="need-body medium">
             <h5><a href="${product_url}" class="overflow">${company.product_name}</a></h5>

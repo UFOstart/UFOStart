@@ -9,7 +9,7 @@ from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, App
 
 
 def index(context, request):
-    return {}
+    return {'need': context.need}
 
 
 def accept_application(context, request):
@@ -82,7 +82,7 @@ class NeedEditForm(BaseForm):
 
     @classmethod
     def on_success(cls, request, values):
-        values['token'] = request.matchdict['need']
+        values['token'] = request.context.need.token
 
         try:
             round = EditNeedProc(request, {'Needs':[values]})

@@ -1,21 +1,13 @@
 <%inherit file="../layout.html"/>
 <%namespace file="../widgets.html" name="widgets"/>
 
-<%def name="breadcrumbs()">
-    <a class="crumb" href="${url(resource.__parent__)}"><span class="title">Company</span><br/>${resource.company.name}</a>
-    <a class="crumb" href="${url(resource)}"><span class="title">Round</span><br/>${resource.round.Template.name}</a>
-</%def>
-
-
 <%def name="content()">
     <div class="container" id="project-round-need-dashboard">
-        <div class="row">
-            <div class="col col-lg-12">
-                <h1 class="section-title">
-                    <span class="brand-primary">${resource.round.Template.name} <span class="sub-title">Round Dashboard</span> </span>
-                </h1>
-            </div>
-        </div>
+
+        <%widgets:pageHeader>
+            ${resource.round.Template.name} <span class="sub-title">Round Dashboard</span>
+        </%widgets:pageHeader>
+
         <div class="row mar-top-1">
             <div class="col col-lg-3 pull-right">
                 ${self.sideBar(resource.round, resource.canEdit)}
@@ -54,7 +46,7 @@
     </div>
     <div class="number-widget mar-top-1">
         <h6>Startup Value</h6>
-        <div class="value">${company.displayStartupValue}</div>
+        <div class="value light">${company.displayStartupValue}</div>
     </div>
     <hr/>
     <div class="mar-top-half">
@@ -77,7 +69,7 @@
             %endfor
             <span class="highlight-target" style="display:inline-block;">
                 <span id="target-add-mentor" class="highlight-anchor"></span>
-                <a href="${url(resource.__parent__, 'mentor')}" class="btn btn-primary">Add Mentor</a>
+                <a href="${url(resource, 'mentor')}" class="btn btn-primary">Add Mentor</a>
             </span>
         </div>
     </div>
@@ -96,10 +88,10 @@
         %endif
         </div>
     %else:
-        <div class="box-card shaded"><img src="${company.product_picture}"/></div>
+        <div class="clearfix"><div class="cut-corner pull-left"><img src="${company.product_picture(request)}"/></div></div>
         <div class="mar-top-half">
             <a href="${url(resource, 'product')}" class="overflow"><strong>${company.product_name}</strong></a>
-            <div class="description">${html.nn(company.product_description) | html.trunc(50)}</div>
+            <small>${html.nn(company.product_description) | html.trunc(90)}</small>
         </div>
         <hr/>
         <div class="number-widget">

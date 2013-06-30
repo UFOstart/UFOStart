@@ -68,6 +68,38 @@ def getVimeoVideoId(url):
     return None
 
 
+class VimeoMeta(Mapping):
+    id = IntegerField()
+    user_id = IntegerField()
+    thumbnail_small = TextField()
+    thumbnail_medium = TextField()
+    thumbnail_large = TextField()
+    description = TextField()
+    duration = TextField()
+    mobile_url = TextField()
+    title = TextField()
+    user_name = TextField()
+
+
+def getVimeoMeta(request, url):
+    vimeoId =  getVimeoVideoId(url)
+    if not vimeoId: return None
+    meta = request.globals.cache.get("VIMEO_{}".format(vimeoId))
+    if not meta:
+        try:
+            log.info("VIMEO Cache miss for {}".format(url))
+            h = Http()
+            resp, data = h.request("http://vimeo.com/api/v2/video/{}.json".format(vimeoId))
+            meta = VimeoMeta.wrap(simplejson.loads(data)[0])
+            request.globals.cache.set("VIMEO_{}".format(vimeoId), meta)
+            return meta
+        except: return None
+    else:
+        return meta
+
+
+
+
 class SlideShareMeta(Mapping):
     id = IntegerField()
     thumbnail = TextField()

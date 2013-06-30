@@ -44,6 +44,8 @@ class TemplatesRootContext(BaseProjectContext):
 
 
 class ApplicationContext(BaseProjectContext):
+    displayType = "Application"
+    displayName = ""
 
     def __init__(self, parent, name, acl, application):
         self.__parent__ = parent
@@ -64,6 +66,11 @@ class ApplicationContext(BaseProjectContext):
 
 
 class NeedContext(BaseProjectContext):
+    displayType = "Need"
+    @property
+    def displayName(self):
+        return self.need.name
+
 
     def __init__(self, parent, name, acl, need):
         self.__parent__ = parent
@@ -82,6 +89,10 @@ class NeedContext(BaseProjectContext):
         return self.__parent__.round
 
 class ProductContext(BaseProjectContext):
+    displayType = "Product"
+    @property
+    def displayName(self):
+        return self.product.name
 
     def __init__(self, parent, name, acl, product):
         self.__parent__ = parent
@@ -100,6 +111,10 @@ class ProductContext(BaseProjectContext):
 
 
 class RoundContext(BaseProjectContext):
+    displayType = "Round"
+    @property
+    def displayName(self):
+        return self.round.Template.name
 
     def __init__(self, parent, name, acl, round):
         self.__parent__ = parent
@@ -119,6 +134,11 @@ class RoundContext(BaseProjectContext):
 
 
 class CompanyContext(BaseProjectContext):
+    displayType = "Company"
+    @property
+    def displayName(self):
+        return self.company.name
+
     @reify
     def __acl__(self):
         mentors = [(Allow, 'u:%s' % u.token, 'approve') for u in self.company.Users if u.role == 'MENTOR']
@@ -157,9 +177,9 @@ def includeme(config):
 
 
     config.add_view(invite.CompanyIndexHandler  , context = CompanyContext                       , renderer = "ufostart:website/templates/company/company.html")
-    config.add_view(invite.AddMentorHandler     , context = CompanyContext    , name='mentor'    , renderer = "ufostart:website/templates/company/addmentor.html")
     config.add_view(setup.EditProjectHandler    , context = CompanyContext    , name='edit'      , renderer = "ufostart:website/templates/company/edit.html", permission = 'edit')
 
+    config.add_view(invite.AddMentorHandler     , context = RoundContext      , name='mentor'    , renderer = "ufostart:website/templates/company/addmentor.html")
     config.add_view(general.index               , context = RoundContext                         , renderer = "ufostart:website/templates/company/round.html")
     config.add_view(general.publish_round       , context = RoundContext      , name='publish'   , permission='approve')
     config.add_view(general.ask_for_approval    , context = RoundContext      , name='askforapproval'  , permission='edit')

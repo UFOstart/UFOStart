@@ -7,12 +7,6 @@
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
-                <a href="${url(resource.__parent__)}">${resource.company.name}</a> &raquo;
-                <a href="${url(resource, 'mentor')}">Add Mentor</a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col col-lg-12">
                 <h1 class="section-title">
                     <span class="brand-primary">Add a Mentor</span>
                 </h1>
@@ -47,7 +41,10 @@
                 ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
                 ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
                 ${form.fieldMap['role'].render(form.id, request, dict(role = form.role), errors, view)|n}
-                <button type="submit" class="btn btn-primary btn-block mar-top-1">Invite Mentor</button>
+                <div class="mar-top-1">
+                    <button type="submit" class="btn btn-primary">Invite Mentor</button>
+                    <a href="${url(resource)}" class="btn btn-default">Cancel</a>
+                </div>
             </form>
         </div>
     </div>
