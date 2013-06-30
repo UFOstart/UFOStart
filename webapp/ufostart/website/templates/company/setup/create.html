@@ -16,7 +16,7 @@
         </div>
         <div class="col col-lg-4">
             <h4>Or import your Data from Angellist</h4>
-            <a href="${url("website_company_import_start", _query=[('furl', request.furl)])}" class="btn btn-primary btn-form-field">Angellist Import</a>
+            <a href="${request.root.angellist_url}" class="btn btn-primary btn-form-field">Angellist Import</a>
         </div>
     </div>
 </%def>
@@ -35,9 +35,9 @@
             </div>
         </div>
         ${form.fieldMap['description'].render(form.id, request, values, errors, view, grid = form.grid)|n}
-        ${form.fieldMap['pictures'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+        ${form.fieldMap['Pictures'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         ${form.fieldMap['video'].render(form.id, request, values, errors, view, grid = form.grid)|n}
-        ${form.fieldMap['slideshare'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+        ${form.fieldMap['slideShare'].render(form.id, request, values, errors, view, grid = form.grid)|n}
        <button type="submit" class="btn btn-primary">Start Project</button>
        <a href="${url(resource.__parent__)}" class="btn btn-default">Cancel</a>
     </form>

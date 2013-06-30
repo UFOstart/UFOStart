@@ -1,12 +1,12 @@
 import logging
 from operator import attrgetter
 import urllib
-from urlparse import urlparse, parse_qsl
 from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField, ListField
 from httplib2 import Http
 import simplejson
 from ufostart.lib.html import getYoutubeVideoId, getVimeoVideoId
-from ufostart.website.apps.social import AbstractSocialResource, SocialNetworkException, UserRejectedNotice, SocialNetworkProfileModel
+from ufostart.website.apps.social import AbstractSocialResource, SocialNetworkException, UserRejectedNotice
+from ufostart.website.apps.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 
@@ -23,6 +23,8 @@ class ScreenShotModel(Mapping):
     thumb = TextField()
     original = TextField()
 
+    def __repr__(self):
+        return self.original
 
 class CompanyRolePerson(Mapping):
     name = TextField()
@@ -109,7 +111,7 @@ class SocialResource(AbstractSocialResource):
     def loginStart(self, request):
         self.start_process(request)
         params = {'response_type':"code"
-                    , 'client_id':self.appid
+                    , 'client_id':self.settings.appid
                     , 'scope':'email'
                  }
         request.fwd_raw("{}?{}".format(self.getCodeEndpoint, urllib.urlencode(params)))
@@ -120,45 +122,19 @@ class SocialResource(AbstractSocialResource):
             return False
 
         params = {'grant_type':'authorization_code', 'code':code
-                    , 'client_id':self.appid, 'client_secret':self.appsecret
+                    , 'client_id':self.settings.appid, 'client_secret':self.settings.appsecret
                  }
 
-        h = Http(**self.http_options)
+        h = Http(**self.settings.http_options)
         return h.request( "{}?{}".format(self.codeEndpoint, urllib.urlencode(params)), method="POST", body = {} )
 
     def getTokenProfile(self, content):
-        h = Http(**self.http_options)
+        h = Http(**self.settings.http_options)
         result = simplejson.loads(content)
         access_token = result['access_token']
         return access_token, h.request('{}?{}'.format(self.profileEndpoint, urllib.urlencode({'access_token':access_token})), method="GET")
 
     def getProfileFromData(self, token, data, context, request):
-        """
-        {
-            "name" : "Martin Peschke",
-            "id" : 314708,
-            "bio" : "Founder SeriousCorp OFW",
-            "follower_count" : 0,
-            "angellist_url" : "https://angel.co/martin-peschke",
-            "image" : "https://s3.amazonaws.com/photos.angel.co/users/314708-medium_jpg?1370246967",
-            "email" : "martin@hackandcraft.com",
-            "blog_url" : null,
-            "online_bio_url" : null,
-            "twitter_url" : null,
-            "facebook_url" : null,
-            "linkedin_url" : "http://www.linkedin.com/in/martinpeschke",
-            "aboutme_url" : null,
-            "github_url" : null,
-            "dribbble_url" : null,
-            "behance_url" : null,
-            "what_ive_built" : null,
-            "locations" : [],
-            "roles" : [],
-            "skills" : [],
-            "investor" : false,
-            "scopes" : ["email", "message", "dealflow"]
-        }
-        """
         profile = simplejson.loads(data)
         return SocialNetworkProfileModel(
                 network = 'angellist'
@@ -201,7 +177,7 @@ class SocialResource(AbstractSocialResource):
         return filter(None, map(wrap, result['startup_roles']))
 
     def getCompaniesData(self, user_id, token):
-        h = Http(**self.http_options)
+        h = Http(**self.settings.http_options)
         resp, data = h.request('{}?{}'.format(self.companiesEndpoint, urllib.urlencode({'access_token':token, 'v':'1', 'user_id':user_id})), method="GET")
         if resp.status == 500:
             raise SocialNetworkException()
@@ -211,7 +187,7 @@ class SocialResource(AbstractSocialResource):
             return self.unwrapCompanies(data)
 
     def getCompanyData(self, company_id, token):
-        h = Http(**self.http_options)
+        h = Http(**self.settings.http_options)
         resp, data = h.request(self.companyEndpoint.format(company_id = company_id), method="GET")
         if resp.status == 500:
             raise SocialNetworkException()
@@ -222,7 +198,7 @@ class SocialResource(AbstractSocialResource):
 
 
     def getCompanyRoles(self, company_id, token):
-        h = Http(**self.http_options)
+        h = Http(**self.settings.http_options)
         resp, data = h.request(self.companyRolesEndpoint.format(company_id = company_id), method="GET")
         if resp.status == 500:
             raise SocialNetworkException()

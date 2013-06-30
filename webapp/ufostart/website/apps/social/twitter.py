@@ -9,7 +9,8 @@ from pyramid.decorator import reify
 from pyramid.renderers import render_to_response
 from pyramid.view import view_config, view_defaults
 import simplejson
-from ufostart.website.apps.social import AbstractSocialResource, SocialNetworkException, assemble_profile_procs, SocialNetworkProfileModel, SocialLoginSuccessful
+from ufostart.website.apps.social import AbstractSocialResource, SocialNetworkException, assemble_profile_procs, SocialLoginSuccessful
+from ufostart.website.apps.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 

@@ -1,11 +1,10 @@
 import logging
 import urllib
 from urlparse import parse_qsl
-from hnc.tools.oauth import Consumer, Client, Token
-from pyramid.decorator import reify
-from pyramid.view import view_config
+from hnc.tools.oauth import Client, Token
 import simplejson
-from ufostart.website.apps.social import AbstractSocialResource, SocialNetworkException, SocialNetworkProfileModel, assemble_profile_procs, SocialLoginSuccessful
+from ufostart.website.apps.social import AbstractSocialResource, SocialNetworkException, assemble_profile_procs, SocialLoginSuccessful
+from ufostart.website.apps.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 

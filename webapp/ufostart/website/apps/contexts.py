@@ -77,15 +77,18 @@ class WebsiteRootContext(RootContext):
 
     def __getitem__(self, item):
         if item == 'c':
-            return ProtoCompanyContext(self, 'c')
+            return ProtoCompanyContext(self, item)
         elif item == 'u':
-            return UserProtoContext(self, 'user')
+            return UserProtoContext(self, item)
         elif item == 'template':
-            return TemplatesRootContext(self, 'template')
+            return TemplatesRootContext(self, item)
         elif item == 'home':
-            return UserHomeContext(self, 'user', self.user.token)
+            return UserHomeContext(self, item, self.user.token)
         elif item in ['login']:
-            return SocialContext(self, 'login')
+            return SocialContext(self, item)
+        elif item in self.settings.networks:
+            settings = self.settings.networks[item]
+            return settings.module(self, item, settings)
         else:
             raise KeyError()
 
@@ -116,6 +119,9 @@ class WebsiteRootContext(RootContext):
         return self.request.resource_url(self, 'c', slug, 1, 'product')
     def auth_url(self, network):
         return self.request.resource_url(self, 'login', network, query = [('furl', self.request.url)])
+    @property
+    def angellist_url(self):
+        return self.request.resource_url(self, 'angellist', query = [('furl', self.request.url)])
 
     def profile_url(self, token):
         request = self.request

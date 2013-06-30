@@ -1,9 +1,9 @@
 import logging
 import urllib
 from httplib2 import Http
-from pyramid.view import view_config
 import simplejson
-from ufostart.website.apps.social import AbstractSocialResource, SocialLoginSuccessful, assemble_profile_procs, SocialNetworkProfileModel
+from ufostart.website.apps.models.auth import SocialNetworkProfileModel
+from ufostart.website.apps.social import AbstractSocialResource, SocialLoginSuccessful, assemble_profile_procs
 
 log = logging.getLogger(__name__)
 

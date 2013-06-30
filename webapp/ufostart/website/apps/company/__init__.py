@@ -1,8 +1,8 @@
 from pyramid.decorator import reify
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.security import Allow, Everyone, Authenticated, has_permission
-from .tasks import *
 import product, general, invite, need, imp, setup
-from ufostart.website.apps.models.procs import GetCompanyProc, GetTemplateDetailsProc
+from ufostart.website.apps.models.procs import GetCompanyProc, GetTemplateDetailsProc, GetAllCompanyTemplatesProc
 
 
 def canEdit(self): return has_permission('edit', self, self.request)
@@ -145,18 +145,23 @@ class CompanyContext(BaseProjectContext):
         founders = [(Allow, 'u:%s' % u.token, 'edit') for u in self.company.Users if u.role == 'FOUNDER']
         return [(Allow, Authenticated, 'view')] + mentors + founders
 
-    def __init__(self, parent, name, company):
+    def __init__(self, parent, name):
         self.__name__ = name
         self.__parent__ = parent
-        self.company = company
         self.request = parent.request
         self.user = self.request.root.user
+
     def __getitem__(self, item):
         try:
             return RoundContext(self, int(item), self.__acl__, self.company.currentRound)
         except ValueError:
             raise KeyError()
 
+    @reify
+    def company(self):
+        company = GetCompanyProc(self.request, {'slug': self.name})
+        if not company: raise HTTPNotFound()
+        else: return company
 
 class ProtoCompanyContext(BaseProjectContext):
     def __init__(self, parent, name):
@@ -165,10 +170,11 @@ class ProtoCompanyContext(BaseProjectContext):
         self.request = parent.request
 
     def __getitem__(self, item):
-        company = GetCompanyProc(self.request, {'slug': item})
-        if not company: raise KeyError()
-        else:
-            return CompanyContext(self, item, company)
+        return CompanyContext(self, item)
+
+
+
+
 
 def includeme(config):
     config.add_view(setup.basics                , context = TemplatesRootContext                 , renderer = "ufostart:website/templates/company/setup/basic.html")

@@ -1,11 +1,9 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, REQUIRED, StringField, TextareaField
+from hnc.forms.formfields import BaseForm, REQUIRED, StringField
 from hnc.forms.handlers import FormHandler
-from pyramid.decorator import reify
-from ufostart.website.apps.auth.social import require_login_cls
 from ufostart.website.apps.company.imp import SESSION_SAVE_TOKEN
-from ufostart.website.apps.models.procs import GetAllCompanyTemplatesProc, GetTemplateDetailsProc, CreateCompanyProc, EditCompanyProc
-from ufostart.website.apps.forms.controls import FileUploadField, PictureGalleryUploadField, HTMLString, CleanHtmlField, SanitizedHtmlField
+from ufostart.website.apps.models.procs import CreateCompanyProc, EditCompanyProc
+from ufostart.website.apps.forms.controls import FileUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField
 
 
 def basics(context, request):
@@ -57,7 +55,14 @@ class CreateProjectHandler(FormHandler):
     def pre_fill_values(self, request, result):
         al_company = request.session.get(SESSION_SAVE_TOKEN)
         if al_company:
-            result['values'][self.form.id] = {'name': al_company.name, 'description': al_company.high_concept, 'logo': al_company.thumb_url}
+            result['values'][self.form.id] = {
+                        'name': al_company.name
+                        , 'pitch': al_company.high_concept
+                        , 'description': al_company.product_desc
+                        , 'logo': al_company.logo_url
+                        , 'video': al_company.video_url
+                        , 'Pictures': map(unicode, al_company.screenshots)
+                    }
         return super(CreateProjectHandler, self).pre_fill_values(request, result)
 
 

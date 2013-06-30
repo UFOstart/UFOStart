@@ -121,10 +121,14 @@
 </%def>
 
 
-<%def name="bc(res)">
+<%def name="bc(res, link = False)">
     %if hasattr(res, 'displayType'):
-        ${self.bc(res.__parent__)}
-        <a class="crumb" href="${url(res)}"><span class="title">${res.displayType}</span><br/>${res.displayName}</a>
+        ${self.bc(res.__parent__, True)}
+        %if link:
+            <a class="crumb" href="${url(res)}"><span class="title">${res.displayType}</span><br/>${res.displayName}</a>
+        %else:
+            <span class="crumb"><span class="title">${res.displayType}</span><br/>${res.displayName}</span>
+        %endif
     %endif
 </%def>
 

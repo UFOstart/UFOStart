@@ -1,12 +1,23 @@
 from operator import attrgetter
 from hnc.apiclient import Mapping, TextField, IntegerField, ListField, DictField
-from hnc.tools.tools import word_truncate_by_letters
 from pyramid.decorator import reify
 import simplejson
 from ufostart.lib.tools import format_currency
 from ufostart.models.tasks import NamedModel
 from ufostart.website.apps.models.company import CompanyModel, ApplicationModel
-from ufostart.website.apps.social import SocialNetworkProfileModel
+
+
+
+class SocialNetworkProfileModel(Mapping):
+    id = TextField()
+    network = TextField()
+    picture = TextField()
+    name = TextField()
+    email = TextField()
+    accessToken = TextField()
+    secret = TextField()
+    original = DictField()
+
 
 
 SOCIAL_NETWORK_TYPES = {'LI':'linkedin', 'FB':'facebook', 'AL':'angellist', 'XI':'xing', 'TW':'twitter'}

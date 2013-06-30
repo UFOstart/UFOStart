@@ -10,7 +10,8 @@ from pyramid.view import view_config
 from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES, SOCIAL_NETWORK_TYPES_REVERSE
 
 from ufostart.website.apps.models.procs import SocialConnectProc
-from ufostart.website.apps.social import SocialNetworkProfileModel, SocialLoginSuccessful, SocialLoginFailed
+from ufostart.website.apps.social import SocialLoginSuccessful, SocialLoginFailed
+from ufostart.website.apps.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 
