@@ -4,7 +4,7 @@ from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
 from ufostart.models.tasks import RoleModel
 from ufostart.website.apps.forms.controls import SanitizedHtmlField
-from ufostart.website.apps.models.procs import InviteToCompanyProc, AcceptInviteProc, RefreshProfileProc, AddUpdateCompanyProc
+from ufostart.website.apps.models.procs import InviteToCompanyProc, AcceptInviteProc, RefreshProfileProc, AddUpdateCompanyProc, GetTopMentorsProc
 
 
 class BaseInviteForm(BaseForm):
@@ -58,6 +58,10 @@ class CompanyIndexHandler(FormHandler):
 
 class AddMentorHandler(FormHandler):
     form = InviteMentorForm('MENTOR')
+
+    def pre_fill_values(self, request, result):
+        result['mentors'] = GetTopMentorsProc(request).User
+        return super(AddMentorHandler, self).pre_fill_values(request, result)
 
 
 def showInfo(context, request):

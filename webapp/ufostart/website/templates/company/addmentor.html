@@ -13,10 +13,11 @@
             </div>
         </div>
         <div class="row mar-top-1">
-            <div class="col col-lg-6">
+            <div class="col col-lg-7">
+                ${self.topMentors(mentors)}
                 ${self.build_form(view.form, values, errors)}
             </div>
-            <div class="col col-lg-3 col-offset-3">
+            <div class="col col-lg-3 col-offset-2">
                 <div class="wtf-box">
                     <h2 class="wtf-title">
                         Why do I need to add a Mentor?
@@ -30,7 +31,46 @@
     </div>
 </%def>
 
+<%def name="topMentors(mentors)">
+    <div class="box-dark">
+        <div class="box-content">
 
+            <div class="mentor-list">
+                %for mentor in mentors:
+                    <div class="single-mentor">
+                        <div class="box-card extra-compact">
+
+                            ${widgets.profile_pic(mentor.picture, mentor.token)}
+                            <div class="right-box">
+                                <div class="row">
+                                    <div class="col col-lg-6">
+                                        <a href="${root.profile_url(mentor.token)}" class="entity-link">${mentor.name}</a>
+                                        <p class="text-small">${mentor.headline}</p>
+                                        <a class="btn btn-primary btn-small">Invite as Mentor</a>
+                                    </div>
+                                    <div class="col col-lg-6">
+                                        %if mentor.Companies:
+                                        <h6>Mentor for these Startups</h6>
+                                        <div class="face-pile-mini">
+                                            %for company in mentor.Companies:
+                                                <div class="picture micro">
+                                                    <a href="${root.company_url(company.slug)}"><img src="${company.logo}"/></a>
+                                                </div>
+                                            %endfor
+                                        </div>
+                                        %endif
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                %endfor
+            </div>
+
+        </div>
+    </div>
+</%def>
 
 
 <%def name="build_form(form, values, errors)">

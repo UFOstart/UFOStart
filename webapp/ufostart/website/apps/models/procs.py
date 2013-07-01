@@ -1,3 +1,4 @@
+from hnc.apiclient import Mapping, ListField, DictField
 from hnc.apiclient.backend import ClientTokenProc, DBNotification
 from ufostart.website.apps.models.auth import UserModel
 from ufostart.website.apps.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel, InviteModel
@@ -67,6 +68,9 @@ GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=
 EditCompanyProc = ClientTokenProc("/web/company/edit", root_key="Company", result_cls=CompanyModel)
 AddUpdateCompanyProc = ClientTokenProc("/web/company/update", root_key="Company", result_cls=CompanyModel)
 
+
+class MentorTempModel(Mapping): User = ListField(DictField(UserModel))
+GetTopMentorsProc = ClientTokenProc("/web/mentor/top", root_key="Mentors", result_cls=MentorTempModel)
 
 CreateRoundProc = ClientTokenProc("/web/round/create", root_key="Round", result_cls=RoundModel)
 GetRoundProc = ClientTokenProc("/web/round", root_key="Round", result_cls=RoundModel)
