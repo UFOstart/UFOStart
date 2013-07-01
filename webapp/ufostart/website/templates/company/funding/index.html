@@ -1,0 +1,120 @@
+<%inherit file="../../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="../../widgets.html" name="widgets"/>
+
+
+<%def name="content()">
+    <div class="container">
+
+        <%widgets:pageHeader canEdit="${ctxt.canEdit}">
+            Funding
+        </%widgets:pageHeader>
+
+        <div class="row">
+            <div class="col col-lg-3">
+                ${self.infoSideBar(ctxt.funding)}
+            </div>
+            <div class="col col-lg-6">
+                ${self.mainBody(ctxt.funding)}
+            </div>
+        </div>
+    </div>
+</%def>
+
+
+<%def name="infoSideBar(funding)">
+    <div class="box-card">
+        ${widgets.company_logo(ctxt.company)}
+    </div>
+    <a class="entity-link  mar-top-half" href="${root.company_url(ctxt.company.slug)}">${ctxt.company.name}</a>
+    <div class="pitch">${html.nn(ctxt.company.pitch)}</div>
+    <div class="row mar-top-1">
+        <div class="col col-lg-6 number-widget">
+            <strong class="text-muted text-small">Target</strong>
+            <div class="small-value">${funding.display_amount}</div>
+        </div>
+        <div class="col col-lg-6 number-widget">
+            <strong class="text-muted text-small">Total Equity</strong>
+            <div class="small-value">${funding.display_equity}</div>
+        </div>
+    </div>
+    <div class="number-widget mar-top-1">
+        <h6>Invested</h6>
+        <div class="value light">
+            ${funding.display_invested_amount}
+        </div>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress">
+            <div class="progress-bar" style="width: ${100.0 * funding.invested_amount/ funding.amount}%"></div>
+        </div>
+        <h2 class="offset dark">
+            ${funding.investment_progress}
+        </h2>
+    </div>
+
+    <div class="mar-top-2">
+        <div class="box-title">Investors</div>
+        %if len(funding.Investments):
+            <div class="face-pile-mini">
+            %for investor in funding.Investments:
+                ${widgets.profile_pic(investor.User.picture, investor.User.token, classes='mini')}
+            %endfor
+            </div>
+        %else:
+            <div class="empty">
+                No Investments yet
+            </div>
+        %endif
+    </div>
+</%def>
+
+
+<%def name="mainBody(funding)">
+    ${funding.description | html.html,n}
+    ${self.investForm(funding, view.form, values, errors)}
+</%def>
+
+<%def name="investForm(funding, form, values, errors)">
+    %if root.user.isAnon():
+
+        ${root.auth_url('linkedin')}
+
+    %else:
+
+        <h2>Would you like to invest?</h2>
+        <div class="box-dark">
+            <div class="box-content">
+                <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+                    ${baseform.prelims(form)}
+                    %for field in form.fields:
+                        ${field.render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                    %endfor
+                    <button type="submit" class="btn btn-primary">Submit Investment Offer</button>
+                </form>
+            </div>
+        </div>
+
+    %endif
+
+    <div class="mar-top-2">
+        <div class="box-title">
+            Investments
+        </div>
+        %for investment in funding.Investments:
+            <div class="box-card shaded single-update extra-compact">
+                ${widgets.profile_pic(investment.User.picture, investment.User.token)}
+                <div class="right-box">
+                    <div class="pull-right"><small>${html.format_datetime(investment.created, 'medium')}</small></div>
+                    <a class="entity-link" href="${root.profile_url(investment.User.token)}">${investment.User.name}</a>
+                    <div class="text-muted text-small">${investment.User.headline}</div>
+                    <div class="number-widget mar-top-half">
+                        <h6>Invested</h6>
+                        <div class="value light">${investment.display_amount}</div>
+                    </div>
+                </div>
+            </div>
+        %endfor
+    </div>
+</%def>

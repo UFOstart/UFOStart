@@ -22,6 +22,7 @@ def hash(txt):
 
 
 def html(text):
+    if not text: return ''
     # catch any mis-typed en dashes
     converted_txt = text.replace(" - ", " -- ")
     converted_txt = smartypants.educateQuotes(converted_txt)

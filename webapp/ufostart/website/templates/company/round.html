@@ -7,6 +7,7 @@
 
         %if ctxt.round.pendingApproval:
             %if ctxt.canApprove:
+
                 <div class="row">
                     <div class="col col-lg-12">
                         <div class="notice notice-wtf">
@@ -29,18 +30,20 @@
                 </div>
 
             %elif ctxt.canEdit:
-            <div class="row">
-                <div class="col col-lg-12">
-                    <div class="notice notice-info">
-                        <div class="sidecrumb"></div>
-                        <div class="sidecrumb"></div>
-                        <div class="sidecrumb"></div>
-                        <div class="content">
-                            Round is pending waiting for approval by a Mentor.
+
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="notice notice-info">
+                            <div class="sidecrumb"></div>
+                            <div class="sidecrumb"></div>
+                            <div class="sidecrumb"></div>
+                            <div class="content">
+                                Round is pending waiting for approval by a Mentor.
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+
             %endif
         %endif
 
@@ -65,10 +68,17 @@
         <div class="col col-lg-4">
             <div class="box-title">Company</div>
             ${self.companyBox(company)}
-            <div class="mar-top-1">
+
+            <div class="mar-top-2">
                 <div class="box-title">Product</div>
                 ${self.productBox(company)}
             </div>
+
+            <div class="mar-top-2">
+                <div class="box-title">Investments</div>
+                ${self.investmentBox(ctxt.round.Funding)}
+            </div>
+
         </div>
         <div class="col col-lg-8">
             <div class="box-title">
@@ -81,7 +91,7 @@
 <%def name="companyBox(company)">
     <div class="box-card shaded">
         ${widgets.company_logo(company)}
-        <a class="entity-link  mar-top-1" href="${url(ctxt)}">${ctxt.company.name}</a>
+        <a class="entity-link  mar-top-1" href="${url(ctxt.__parent__)}">${ctxt.company.name}</a>
         <div class="pitch">${html.nn(company.pitch)}</div>
     </div>
     <div class="number-widget mar-top-1">
@@ -117,6 +127,53 @@
 </%def>
 
 
+
+<%def name="investmentBox(funding)">
+    %if not funding:
+        <div class="empty">No Investment set up yet</div>
+        <a class="btn btn-primary" href="${url(ctxt, 'fundingsetup')}">Set up funding</a>
+    %else:
+        <div class="row">
+            <div class="col col-lg-6">
+                <div class="number-widget mar-top-half">
+                    <h6>Target</h6>
+                    <div class="small-value">${funding.display_amount}</div>
+                </div>
+            </div>
+            <div class="col col-lg-6">
+                <div class="number-widget mar-top-half">
+                    <h6>Invested</h6>
+                    <div class="small-value">${funding.display_invested_amount}</div>
+                </div>
+            </div>
+        </div>
+        <div class="progress-container mar-top-half">
+            <div class="progress">
+                <div class="progress-bar" style="width: ${100.0 * funding.invested_amount/ funding.amount}%"></div>
+            </div>
+            <h2 class="offset dark  no-margin">
+                ${funding.investment_progress}
+            </h2>
+        </div>
+        <hr/>
+        %if len(funding.Investments):
+            <h6>Investors</h6>
+            <h2 class="no-margin">${len(funding.Investments)}</h2>
+            <div class="picture-pile mar-top-half">
+                %for invest in funding.Investments:
+                    <div class="picture mini">
+                        <img src="${invest.User.picture}"/>
+                    </div>
+                %endfor
+            </div>
+            <hr/>
+        %endif
+        <div class="text-center">
+            <a href="${url(ctxt, 'funding')}" class="btn btn-primary btn-small">Invest</a>
+        </div>
+    %endif
+
+</%def>
 <%def name="productBox(company)">
     %if not company.product_is_setup:
         <div class="box-card shaded"><div class="empty">Product not set up</div></div>

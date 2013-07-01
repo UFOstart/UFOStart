@@ -3,7 +3,7 @@ from hnc.forms.messages import GenericErrorMessage
 from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound
 from pyramid.security import Allow, Everyone, Authenticated, has_permission
-import product, general, invite, need, setup
+import product, general, invite, need, setup, funding
 from ufostart.website.apps.models.procs import GetCompanyProc, GetTemplateDetailsProc, GetAllCompanyTemplatesProc, GetInviteDetailsProc
 
 
@@ -111,6 +111,22 @@ class ProductContext(BaseProjectContext):
         return self.__parent__.round
 
 
+class FundingContext(BaseProjectContext):
+    displayType = 'Funding'
+    displayName = 'Invest'
+    def __init__(self, parent, name, acl, funding):
+        self.__parent__ = parent
+        self.__name__ = name
+        self.__acl__ = acl
+        self.request = parent.request
+        self.funding = funding
+
+    @reify
+    def company(self):
+        return self.__parent__.company
+    @reify
+    def round(self):
+        return self.__parent__.round
 
 class RoundContext(BaseProjectContext):
     displayType = "Round"
@@ -127,6 +143,7 @@ class RoundContext(BaseProjectContext):
     def __getitem__(self, item):
         if item in ['productsetup', 'approve', 'reject', 'askforapproval']: raise KeyError()
         if item == 'product': return ProductContext(self, 'product', self.__acl__, self.round.Product)
+        if item == 'funding': return FundingContext(self, 'funding', self.__acl__, self.round.Funding)
         return NeedContext(self, item, self.__acl__, self.round.needMap[item])
 
     @reify
@@ -228,35 +245,44 @@ class ProtoInviteContext(BaseProjectContext):
         return InviteContext(self, item)
 
 
+
+
 def includeme(config):
-    config.add_view(setup.basics                , context = TemplatesRootContext                 , renderer = "ufostart:website/templates/company/setup/basic.html")
-    config.add_view(setup.details               , context = TemplateContext                      , renderer = "ufostart:website/templates/company/setup/details.html")
-    config.add_view(setup.CreateProjectHandler  , context = TemplateContext   ,name = 'startcompany', renderer = "ufostart:website/templates/company/setup/create.html", permission = 'create')
+    config.add_view(setup.basics                , context = TemplatesRootContext                        , renderer = "ufostart:website/templates/company/setup/basic.html")
+    config.add_view(setup.details               , context = TemplateContext                             , renderer = "ufostart:website/templates/company/setup/details.html")
+    config.add_view(setup.CreateProjectHandler  , context = TemplateContext   ,name = 'startcompany'    , renderer = "ufostart:website/templates/company/setup/create.html", permission = 'create')
 
 
-    config.add_view(invite.CompanyIndexHandler  , context = CompanyContext                       , renderer = "ufostart:website/templates/company/company.html")
-    config.add_view(setup.EditProjectHandler    , context = CompanyContext    , name='edit'      , renderer = "ufostart:website/templates/company/edit.html", permission = 'edit')
+    config.add_view(invite.CompanyIndexHandler  , context = CompanyContext                              , renderer = "ufostart:website/templates/company/company.html")
+    config.add_view(setup.EditProjectHandler    , context = CompanyContext    , name='edit'             , renderer = "ufostart:website/templates/company/edit.html", permission = 'edit')
 
-    config.add_view(invite.AddMentorHandler     , context = RoundContext      , name='mentor'    , renderer = "ufostart:website/templates/company/addmentor.html")
-    config.add_view(general.index               , context = RoundContext                         , renderer = "ufostart:website/templates/company/round.html")
-    config.add_view(general.publish_round       , context = RoundContext      , name='approve'   , permission='approve')
-    config.add_view(general.publish_round       , context = RoundContext      , name='reject'   , permission='approve')
-    config.add_view(general.ask_for_approval    , context = RoundContext      , name='askforapproval'  , permission='edit')
+    config.add_view(invite.AddMentorHandler     , context = RoundContext      , name='mentor'           , renderer = "ufostart:website/templates/company/addmentor.html")
+    config.add_view(general.index               , context = RoundContext                                , renderer = "ufostart:website/templates/company/round.html")
+    config.add_view(general.publish_round       , context = RoundContext      , name='approve'          , permission='approve')
+    config.add_view(general.publish_round       , context = RoundContext      , name='reject'           , permission='approve')
+    config.add_view(general.ask_for_approval    , context = RoundContext      , name='askforapproval'   , permission='edit')
 
-    config.add_view(product.ProductCreateHandler, context = RoundContext      , name='productsetup'  , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
-    config.add_view(product.ProductOfferHandler , context = ProductContext                       , renderer = "ufostart:website/templates/company/product/index.html")
-    config.add_view(product.ProductEditHandler  , context = ProductContext    , name='edit'      , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
-    config.add_view(product.remove_offer        , context = ProductContext    , name='delete'    , renderer = "json", permission="edit")
 
-    config.add_view(need.NeedCreateHandler      , context = RoundContext      , name='addneed'   , renderer = "ufostart:website/templates/company/need/create.html", permission='edit')
-    config.add_view(need.index                  , context = NeedContext                          , renderer = "ufostart:website/templates/company/need/index.html")
-    config.add_view(need.ApplicationHandler     , context = NeedContext       , name = 'apply'   , renderer = "ufostart:website/templates/company/need/apply.html", permission='apply')
+    config.add_view(product.ProductCreateHandler, context = RoundContext      , name='productsetup'     , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
+    config.add_view(product.ProductOfferHandler , context = ProductContext                              , renderer = "ufostart:website/templates/company/product/index.html")
+    config.add_view(product.ProductEditHandler  , context = ProductContext    , name='edit'             , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
+    config.add_view(product.remove_offer        , context = ProductContext    , name='delete'           , renderer = "json", permission="edit")
+
+
+    config.add_view(funding.FundingCreateHandler, context = RoundContext      , name='fundingsetup'     , renderer = "ufostart:website/templates/company/funding/create.html", permission="edit")
+    config.add_view(funding.InvestmentHandler   , context = FundingContext                              , renderer = "ufostart:website/templates/company/funding/index.html")
+    config.add_view(funding.FundingEditHandler  , context = FundingContext    , name='edit'             , renderer = "ufostart:website/templates/company/funding/edit.html", permission='edit')
+
+
+    config.add_view(need.NeedCreateHandler      , context = RoundContext      , name='addneed'          , renderer = "ufostart:website/templates/company/need/create.html", permission='edit')
+    config.add_view(need.index                  , context = NeedContext                                 , renderer = "ufostart:website/templates/company/need/index.html")
+    config.add_view(need.ApplicationHandler     , context = NeedContext       , name = 'apply'          , renderer = "ufostart:website/templates/company/need/apply.html", permission='apply')
     config.add_view(need.accept_application     , context = ApplicationContext, name = 'accept')
-    config.add_view(need.NeedEditHandler        , context = NeedContext       , name = 'edit'    , renderer = "ufostart:website/templates/company/need/edit.html", permission='edit')
+    config.add_view(need.NeedEditHandler        , context = NeedContext       , name = 'edit'           , renderer = "ufostart:website/templates/company/need/edit.html", permission='edit')
 
 
-    config.add_view(invite.showInfo             , context = InviteContext                          , renderer = "ufostart:website/templates/company/invite_confirm.html", permission='join')
-    config.add_view(invite.confirm              , context = InviteContext     , name = 'confirm'   , permission='join')
-    config.add_view(invite.reject               , context = InviteContext     , name = 'reject'   , permission='join')
+    config.add_view(invite.showInfo             , context = InviteContext                               , renderer = "ufostart:website/templates/company/invite_confirm.html", permission='join')
+    config.add_view(invite.confirm              , context = InviteContext     , name = 'confirm'        , permission='join')
+    config.add_view(invite.reject               , context = InviteContext     , name = 'reject'         , permission='join')
 
 

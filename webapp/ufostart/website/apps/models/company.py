@@ -332,6 +332,38 @@ class OfferModel(Mapping):
         return format_currency(self.price, 'USD')
 
 
+class InvestmentModel(Mapping):
+    created = DateTimeField()
+    amount = IntegerField()
+    User = DictField(CompanyUserModel)
+
+    @property
+    def display_amount(self):
+        return format_currency(self.amount, 'USD')
+
+
+class FundingModel(Mapping):
+    amount = IntegerField()
+    valuation = IntegerField()
+    description = TextField()
+    Investments = ListField(DictField(InvestmentModel))
+
+    @property
+    def display_equity(self):
+        return '{}%'.format(self.amount / self.valuation)
+    @reify
+    def invested_amount(self):
+        return sum(map(attrgetter('amount'), self.Investments))
+    @property
+    def display_invested_amount(self):
+        return format_currency(self.invested_amount, 'USD')
+    @property
+    def display_amount(self):
+        return format_currency(self.amount, 'USD')
+    @property
+    def investment_progress(self):
+        return "{}%".format(int(100.0 * self.invested_amount / self.amount))
+
 class ProductModel(Mapping):
     token = TextField()
     name = TextField()
@@ -340,7 +372,6 @@ class ProductModel(Mapping):
     description = TextField()
     Offers = ListField(DictField(OfferModel))
     Pictures = ListField(DictField(PictureModel))
-
     @property
     def is_setup(self):
         return self.name and self.token
@@ -374,6 +405,7 @@ class RoundModel(Mapping):
     Product = DictField(ProductModel)
     Template = DictField(TemplateModel)
     Workflow = DictField(WorkflowModel)
+    Funding = DictField(FundingModel)
 
     def getPledges(self):
         return sorted(self.Pledges, key = attrgetter('created'), reverse = True)
