@@ -299,7 +299,8 @@ class PledgeModel(Mapping):
     network = TextField()
     networkId = TextField()
     picture = TextField()
-    offer = TextField()
+    offerToken = TextField()
+    offerName = TextField()
     comment = TextField()
 
     def is_native(self):
@@ -318,9 +319,12 @@ class EventModel(Mapping):
 class OfferModel(Mapping):
     token = TextField()
     name = TextField()
-    description = "a long and beautiful description for this great offer"
-    stock = '233'
-    price = '$12,000'
+    description = TextField()
+    stock = IntegerField()
+    price = IntegerField()
+    @reify
+    def display_price(self):
+        return format_currency(self.price, 'USD')
 
 
 class ProductModel(Mapping):

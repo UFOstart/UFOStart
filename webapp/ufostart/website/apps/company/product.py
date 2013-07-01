@@ -113,9 +113,6 @@ def remove_offer(context, request):
     raise HTTPFound(request.resource_url(request.context))
 
 
-
-
-
 class ProductPledgeForm(BaseForm):
     id="ProductPledge"
     grid = HORIZONTAL_GRID
@@ -128,10 +125,10 @@ class ProductPledgeForm(BaseForm):
         round = request.context.round
         user = request.root.user
 
-        offer_name = values['offer']
-        comment = values[html.hash(offer_name)]
+        offer_token = values['offer']
+        comment = values[offer_token]
 
-        pledge = {'name': user.name, 'network':'ufo', 'networkId': user.token, 'picture':user.getPicture(), 'comment': comment, 'offer': offer_name}
+        pledge = {'name': user.name, 'network':'ufo', 'networkId': user.token, 'picture':user.getPicture(), 'comment': comment, 'offerToken': offer_token}
         data = {'token': round.token, 'Pledge' : pledge}
         try:
             PledgeCompanyProc(request, data)
@@ -155,11 +152,3 @@ class ProductOfferHandler(FormHandler):
         result['company'] = company
         result['product'] = company.Round.Product
         return result
-
-
-
-@require_login('ufostart:website/templates/auth/login.html')
-def login(context, request):
-    request.fwd("website_company_product", **context.urlArgs)
-
-

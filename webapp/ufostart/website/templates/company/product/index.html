@@ -4,7 +4,7 @@
 
 
 <%def name="content()">
-    <div class="container">
+    <div class="container" id="product-page">
 
         <%widgets:pageHeader canEdit="${ctxt.canEdit}">
             ${product.name}
@@ -77,10 +77,10 @@
 </%def>
 
 <%def name="displayOffer(offers, form)">
-    <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+    <form class="${form.grid.form_classes} js-product-offer-form" id="${form.id}" method="POST">
     ${baseform.prelims(form)}
     %for idx, offer in enumerate(offers):
-        <div class="single-product-offer progress-step progress-${idx+1}">
+        <div class="single-product-offer progress-step progress-${idx+1}" data-entity-id="${offer.token}">
             %if ctxt.canEdit:
                 <a href="${url(ctxt, 'delete', query=[('offer', offer.token)])}" class="remove">×</a>
             %endif
@@ -149,7 +149,7 @@
             <div class="right-box">
                 <div class="pull-right"><small>${html.format_datetime(pledge.created, 'medium')}</small></div>
                 <a class="entity-link" href="${root.profile_url(pledge.networkId)}">${pledge.name}</a>
-                <div class="description">Bought into <strong>${pledge.offer}</strong></div>
+                <div class="description">Bought into <strong>${pledge.offerName}</strong></div>
                 <div class="long-description">${html.nn(pledge.comment)}</div>
             </div>
         </div>
@@ -168,6 +168,7 @@
             $("form.form-validated").each(function(idx, elem){
                 new View({el: $(elem)});
             });
+            //TODO: , "views/product" / , PView / new PView({el: $("#product-page")})
         });
     </script>
 </%def>
