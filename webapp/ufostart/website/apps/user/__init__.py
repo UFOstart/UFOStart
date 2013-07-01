@@ -26,7 +26,7 @@ class UserProfileContext(object):
     displayType = 'User Profile'
     @reify
     def displayName(self):
-        return self.user.name
+        return self.profile.name
 
     def __init__(self, parent, name, profile):
         self.__parent__ = parent
