@@ -3,6 +3,7 @@ from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm, StringField, EmailField, REQUIRED, HiddenField, ChoiceField, TextareaField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage, GenericErrorMessage
+from pyramid.httpexceptions import HTTPFound
 from ufostart.models.tasks import NamedModel, RoleModel
 from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.forms.controls import SanitizedHtmlField
@@ -73,30 +74,13 @@ class AddMentorHandler(FormHandler):
 
 
 
-def answer(context, request):
-    token = request.matchdict['token']
-    invite = None
-    try:
-        invite = GetInviteDetailsProc(request, {'inviteToken': token})
-    except DBNotification, e:
-        pass
-    if not invite:
-        request.session.flash(GenericErrorMessage("Invalid Token, please check your email and link!"), "generic_messages")
-        request.fwd("website_index")
-    return {'invite': invite}
 
-@require_login('ufostart:website/templates/auth/login.html')
+
+def showInfo(context, request):
+    return {'invite': context.invite}
+
 def confirm(context, request):
-    token = request.matchdict['token']
-
-    invite = GetInviteDetailsProc(request, {'inviteToken': token})
-    AcceptInviteProc(request, {'inviteToken':token, 'userToken': context.user.token})
-    RefreshProfileProc(request, {'token': context.user.token})
-    request.fwd("website_company_company", slug = invite.companySlug)
-
-
-
-def login(context, request, profile):
-    request.fwd("website_invite_answer", token = request.matchdict['token'])
-
+    AcceptInviteProc(request, {'inviteToken':context.__name__, 'userToken': request.root.user.token})
+    RefreshProfileProc(request, {'token': request.root.user.token})
+    raise HTTPFound(request.root.company_url(context.invite.companySlug))
 

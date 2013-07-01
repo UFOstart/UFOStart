@@ -8,39 +8,48 @@
         <%widgets:pageHeader canEdit="${ctxt.canEdit}">
             <span class="sub-title">Company Profile</span> ${company.name}
         </%widgets:pageHeader>
+        ${self.bodyContent(company)}
 
-        <div class="row mar-top-2">
-            <div class="col col-lg-3">
-                ${self.companyMainInfo(company)}
-            </div>
-            <div class="col col-lg-6">
-                ${widgets.mainMedia("Company Introduction", company.video, company.slideShare)}
-                <div class="main-description mar-top-2">
-                    ${company.description | html.html,n}
-                </div>
-                <div class="updates mar-top-2">
-                    ${self.updates(company, view.schemas['PostUpdate'], values, errors)}
-                </div>
-            </div>
+    </div>
+</%def>
 
-            <div class="col col-lg-3">
-                <div class="picture-gallery-preview progress-step progress-1">
-                    ${widgets.gallery("Picture Gallery", "Play Slideshow", company.Pictures)}
-                </div>
-                <% meta = html.getSlideshareMeta(request, company.slideShare) %>
-                %if meta:
-                    <div class="slideshare progress-step progress-2">
-                        <div class="box-title major">Slideshare</div>
-                        <div class="box-card">
-                            <div class="picture"><img src="${meta.thumbnail}"/></div>
-                            <div class="right-box">
-                                <a class="entity-link" href="${company.slideShare}"><strong>${ meta.title }</strong></a>
-                                <small class="headline">${meta.author_name}</small>
-                            </div>
-                        </div>
-                    </div>
+
+<%def name="bodyContent(company)">
+    <div class="row mar-top-2">
+        <div class="col col-lg-3">
+            ${self.companyMainInfo(company)}
+        </div>
+        <div class="col col-lg-6">
+            ${widgets.mainMedia("Company Introduction", company.video, company.slideShare)}
+            <div class="main-description mar-top-2">
+                ${company.description | html.html,n}
+            </div>
+            <div class="updates mar-top-2">
+                %if hasattr(view, schemas):
+                    ${self.updates(company, view.schemas.get('PostUpdate'), values, errors)}
+                %else:
+                    ${self.updates(company, None, values, errors)}
                 %endif
             </div>
+        </div>
+
+        <div class="col col-lg-3">
+            <div class="picture-gallery-preview progress-step progress-1">
+                ${widgets.gallery("Picture Gallery", "Play Slideshow", company.Pictures)}
+            </div>
+            <% meta = html.getSlideshareMeta(request, company.slideShare) %>
+            %if meta:
+                <div class="slideshare progress-step progress-2">
+                    <div class="box-title major">Slideshare</div>
+                    <div class="box-card">
+                        <div class="picture"><img src="${meta.thumbnail}"/></div>
+                        <div class="right-box">
+                            <a class="entity-link" href="${company.slideShare}"><strong>${ meta.title }</strong></a>
+                            <small class="headline">${meta.author_name}</small>
+                        </div>
+                    </div>
+                </div>
+            %endif
         </div>
     </div>
 </%def>
@@ -59,8 +68,8 @@
         ${self.team_members(company.Users)}
     </div>
 
-    %if ctxt.canEdit:
-        ${self.build_forms(view.schemas['InviteCompany'], values, errors)}
+    %if ctxt.canEdit and hasattr(view, schemas):
+        ${self.build_forms(view.schemas.get('InviteCompany'), values, errors)}
     %endif
 
     <div class="mar-top-2">
@@ -97,7 +106,7 @@
     <div class="box-title">
         Updates
     </div>
-    %if ctxt.canEdit:
+    %if ctxt.canEdit and form:
         <div class="box-dark">
             <div class="box-content">
                 <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
@@ -148,23 +157,25 @@
 </%def>
 
 <%def name="build_forms(form, values, errors)">
-    <div class="expander">
-        <a class="btn btn-primary show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Invite Team Members</a>
-        <div class="show-expanded">
-            <div class="box-dark">
-                <div class="box-content">
-                    <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
-                        ${baseform.prelims(form)}
-                        ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                        ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                        ${form.fieldMap['role'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                        <button type="submit" class="btn btn-primary">Invite member</button>
-                        <a class="btn btn-default" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
-                    </form>
+    %if form:
+        <div class="expander">
+            <a class="btn btn-primary show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Invite Team Members</a>
+            <div class="show-expanded">
+                <div class="box-dark">
+                    <div class="box-content">
+                        <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+                            ${baseform.prelims(form)}
+                            ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                            ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                            ${form.fieldMap['role'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                            <button type="submit" class="btn btn-primary">Invite member</button>
+                            <a class="btn btn-default" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    %endif
 </%def>
 
 

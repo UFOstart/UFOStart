@@ -316,6 +316,7 @@ class EventModel(Mapping):
 
 
 class OfferModel(Mapping):
+    token = TextField()
     name = TextField()
     description = "a long and beautiful description for this great offer"
     stock = '233'

@@ -4,6 +4,36 @@
 <%def name="content()">
     <div class="container" id="project-round-need-dashboard">
 
+        %if ctxt.round.pendingApproval:
+            %if ctxt.canApprove:
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="notice notice-wtf">
+                            <div class="sidecrumb"></div>
+                            <div class="sidecrumb"></div>
+                            <div class="sidecrumb"></div>
+                            <div class="content">
+                                <h1>Hello ${root.user.name}</h1>
+                                <h3>${ctxt.__parent__.displayName}'s Round ${ctxt.displayName} is waiting for approval.</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            %elif ctxt.canEdit:
+            <div class="row">
+                <div class="col col-lg-12">
+                    <div class="notice notice-info">
+                        <div class="sidecrumb"></div>
+                        <div class="sidecrumb"></div>
+                        <div class="sidecrumb"></div>
+                        <div class="content">
+                            Round is pending waiting for approval by a Mentor.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            %endif
+        %endif
 
         <%widgets:pageHeader>
             ${ctxt.round.Template.name} <span class="sub-title">Round Dashboard</span>

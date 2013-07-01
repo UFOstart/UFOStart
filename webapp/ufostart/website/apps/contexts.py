@@ -4,7 +4,7 @@ from pyramid.decorator import reify
 from pyramid.security import Allow, Everyone
 import simplejson
 from ufostart.lib.baseviews import RootContext
-from ufostart.website.apps.company import ProtoCompanyContext, TemplatesRootContext
+from ufostart.website.apps.company import ProtoCompanyContext, TemplatesRootContext, ProtoInviteContext
 from ufostart.website.apps.models.auth import AnonUser
 from ufostart.website.apps.user import UserHomeContext, UserProtoContext
 
@@ -82,6 +82,8 @@ class WebsiteRootContext(RootContext):
             return UserHomeContext(self, item, self.user.token)
         elif item in ['login']:
             return SocialContext(self, item)
+        elif item == 'invite':
+            return ProtoInviteContext(self, 'invite')
         elif item in self.settings.networks:
             settings = self.settings.networks[item]
             return settings.module(self, item, settings)
@@ -95,6 +97,7 @@ class WebsiteRootContext(RootContext):
     def logout_url(self, **kwargs):
         return self.request.resource_url(self, 'logout', **kwargs)
 
+
     @property
     def home_url(self):
         return self.request.resource_url(self)
@@ -107,10 +110,8 @@ class WebsiteRootContext(RootContext):
         return self.request.resource_url(self, 'c', slug)
     def round_url(self, slug, round_no):
         return self.request.resource_url(self, 'c', slug, round_no)
-
     def need_url(self, company_slug, need_slug):
         return self.request.resource_url(self, 'c', company_slug, 1, need_slug)
-
     def product_url(self, slug):
         return self.request.resource_url(self, 'c', slug, 1, 'product')
     def auth_url(self, network):
@@ -118,7 +119,6 @@ class WebsiteRootContext(RootContext):
     @property
     def angellist_url(self):
         return self.request.resource_url(self, 'angellist', query = [('furl', self.request.url)])
-
     def profile_url(self, token):
         request = self.request
         if token == self.user.token:

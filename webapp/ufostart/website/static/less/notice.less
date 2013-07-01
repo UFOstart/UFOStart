@@ -1,0 +1,53 @@
+// Small grid columns
+.generate-crumb-colors(@base-color, @lines) {
+  .crumb-X (@index) when (@index > 0) {
+    .crumb-@{index} { .crumb-(@index); }
+    .crumb-X((@index - 1));
+  }
+  .crumb-X (0) {}
+  // Generate columns
+  .crumb-X(@lines);
+  // Apply the styles
+  .crumb-(@num) {
+    @bg : desaturate(lighten(@base-color, 10% * (@lines - @num)), 10% * (@lines - @num));
+    background-color: @bg;
+    color: contrast(@bg, darken(@base-color, 15%), lighten(@base-color, 50%));
+  }
+  @bg : desaturate(lighten(@base-color, 10% * @lines), 10% * @lines);
+  background-color: @bg;
+}
+
+.notice{
+  overflow:hidden;
+  position: relative;
+  > .content {
+    padding: 12px;
+    margin-right: 11%;
+  }
+  .sidecrumb {
+    width: 89%;
+    height:100%;
+    position: absolute;
+    top:0;
+    left:0;
+    z-index:1;
+    .box-shadow(3px 0 3px rgba(0,0,0,.2));
+    + .sidecrumb {
+      width: 78%;
+      z-index:2;
+      + .sidecrumb {
+        width: 67%;
+        z-index:3;
+      }
+    }
+  }
+}
+
+.notice-info {
+  background-color:rgba(73, 156, 1, .1);
+  z-index:4;
+  > .sidecrumb {
+    background-color:rgba(73, 156, 1, .1);
+  }
+}
+

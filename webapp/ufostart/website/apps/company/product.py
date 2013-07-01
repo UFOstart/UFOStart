@@ -102,9 +102,9 @@ class ProductOfferForm(BaseForm):
 
 def remove_offer(context, request):
     product = request.context.product
-    offer_name = request.params.get("offer")
-    if offer_name:
-        offers = [o.unwrap(sparse = True) for o in product.Offers if o.name != offer_name]
+    offer_token = request.params.get("offer")
+    if offer_token:
+        offers = [o.unwrap(sparse = True) for o in product.Offers if o.token != offer_token]
         try:
             SetProductOffersProc(request, {'Product': {'token': product.token, 'Offers':offers}})
         except DBNotification, e:

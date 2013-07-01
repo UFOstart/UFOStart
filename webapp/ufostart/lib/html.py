@@ -16,6 +16,7 @@ __author__ = 'Martin'
 
 
 def hash(txt):
+    if not txt: return None
     return hashlib.md5(txt).hexdigest()
 
 

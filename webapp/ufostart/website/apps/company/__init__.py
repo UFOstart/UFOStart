@@ -1,8 +1,10 @@
+from hnc.apiclient.backend import DBNotification
+from hnc.forms.messages import GenericErrorMessage
 from pyramid.decorator import reify
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound, HTTPFound
 from pyramid.security import Allow, Everyone, Authenticated, has_permission
 import product, general, invite, need, imp, setup
-from ufostart.website.apps.models.procs import GetCompanyProc, GetTemplateDetailsProc, GetAllCompanyTemplatesProc
+from ufostart.website.apps.models.procs import GetCompanyProc, GetTemplateDetailsProc, GetAllCompanyTemplatesProc, GetInviteDetailsProc
 
 
 def canEdit(self): return has_permission('edit', self, self.request)
@@ -175,6 +177,53 @@ class ProtoCompanyContext(BaseProjectContext):
 
 
 
+class InviteContext(BaseProjectContext):
+    __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'join')]
+    __auth_template__ = "ufostart:website/templates/company/invite_confirm.html"
+
+    canEdit = False
+    canApprove = False
+
+    def __init__(self, parent, name):
+        self.__name__ = name
+        self.__parent__ = parent
+        self.request = parent.request
+
+    @reify
+    def invite(self):
+        invite = None
+        try:
+            invite = GetInviteDetailsProc(self.request, {'inviteToken': self.__name__})
+        except DBNotification, e:
+            pass
+        if not invite:
+            self.request.session.flash(GenericErrorMessage("Invalid Token, please check your email and link!"), "generic_messages")
+            raise HTTPFound(self.request.home_url)
+        return invite
+
+
+    @reify
+    def company(self):
+        company = GetCompanyProc(self.request, {'slug': self.invite.companySlug})
+        if not company: raise HTTPNotFound()
+        else: return company
+
+    @reify
+    def round(self):
+        return self.company.round
+
+
+class ProtoInviteContext(BaseProjectContext):
+    __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'join')]
+    __auth_template__ = "ufostart:website/templates/company/invite_confirm.html"
+    def __init__(self, parent, name):
+        self.__name__ = name
+        self.__parent__ = parent
+        self.request = parent.request
+    def __getitem__(self, item):
+        return InviteContext(self, item)
+
+
 def includeme(config):
     config.add_view(setup.basics                , context = TemplatesRootContext                 , renderer = "ufostart:website/templates/company/setup/basic.html")
     config.add_view(setup.details               , context = TemplateContext                      , renderer = "ufostart:website/templates/company/setup/details.html")
@@ -199,3 +248,9 @@ def includeme(config):
     config.add_view(need.ApplicationHandler     , context = NeedContext       , name = 'apply'   , renderer = "ufostart:website/templates/company/need/apply.html")
     config.add_view(need.accept_application     , context = ApplicationContext, name = 'accept')
     config.add_view(need.NeedEditHandler        , context = NeedContext       , name = 'edit'    , renderer = "ufostart:website/templates/company/need/edit.html", permission='edit')
+
+
+    config.add_view(invite.showInfo             , context = InviteContext                          , renderer = "ufostart:website/templates/company/invite_confirm.html", permission='join')
+    config.add_view(invite.confirm              , context = InviteContext     , name = 'confirm'   , permission='join')
+
+
