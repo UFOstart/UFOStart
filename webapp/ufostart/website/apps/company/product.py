@@ -1,15 +1,12 @@
 from operator import methodcaller
-from hnc.apiclient import IntegerField
 from hnc.apiclient.backend import DBNotification, DBException
-from hnc.forms.formfields import BaseForm, MultipleFormField, REQUIRED, StringField, RadioChoice, NullConfigModel, TextareaField, HORIZONTAL_GRID, DecimalField, IntField
+from hnc.forms.formfields import BaseForm, REQUIRED, StringField, TextareaField, HORIZONTAL_GRID, DecimalField, IntField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.httpexceptions import HTTPForbidden, HTTPFound
-from ufostart.lib import html
-from ufostart.website.apps.auth.social import require_login
-from ufostart.website.apps.company.imp import SESSION_SAVE_TOKEN
+from ufostart.website.apps.auth.imp import SESSION_SAVE_TOKEN
 from ufostart.website.apps.models.procs import SetProductOffersProc, PledgeCompanyProc, CreateProductProc, RemoveProductOfferProc
-from ufostart.website.apps.forms.controls import FileUploadField, PictureGalleryUploadField, SanitizedHtmlField, CleanHtmlField
+from ufostart.website.apps.forms.controls import PictureGalleryUploadField, SanitizedHtmlField, CleanHtmlField
 
 
 class ProductCreateForm(BaseForm):

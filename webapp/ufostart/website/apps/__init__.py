@@ -67,4 +67,5 @@ def includeme(config):
 
     config.include("ufostart.website.apps.company")
     config.include("ufostart.website.apps.user")
+    config.include("ufostart.website.apps.auth")
     config.include("ufostart.website.apps.social")

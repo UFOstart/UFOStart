@@ -45,3 +45,5 @@ class UserProtoContext(object):
 def includeme(config):
     config.add_view(index.home      , context = UserHomeContext, renderer = "ufostart:website/templates/user/home.html",permission='view')
     config.add_view(index.user      , context = UserProfileContext, renderer = "ufostart:website/templates/user/home.html")
+
+

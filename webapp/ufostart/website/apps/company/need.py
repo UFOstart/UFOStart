@@ -3,7 +3,6 @@ from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField,
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
-from ufostart.website.apps.auth.social import require_login_cls
 from ufostart.website.apps.forms.controls import FileUploadField, TagSearchField
 from ufostart.website.apps.models.company import NeedModel
 from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc
@@ -30,7 +29,6 @@ class ApplicationForm(BaseForm):
         request.session.flash(GenericSuccessMessage("You have applied for this need successfully. One of the team members will contact you shortly."), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
-@require_login_cls("ufostart:website/templates/auth/login.html")
 class ApplicationHandler(FormHandler):
     form = ApplicationForm
 

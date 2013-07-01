@@ -3,7 +3,7 @@ from hnc.forms.messages import GenericErrorMessage
 from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound
 from pyramid.security import Allow, Everyone, Authenticated, has_permission
-import product, general, invite, need, imp, setup
+import product, general, invite, need, setup
 from ufostart.website.apps.models.procs import GetCompanyProc, GetTemplateDetailsProc, GetAllCompanyTemplatesProc, GetInviteDetailsProc
 
 

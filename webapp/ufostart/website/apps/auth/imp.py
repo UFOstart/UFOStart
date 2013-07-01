@@ -1,7 +1,6 @@
 # coding=utf-8
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.httpexceptions import HTTPFound
-from ufostart.website.apps.models.procs import SetCompanyAngelListPitchProc, CreateCompanyProc, CreateProductProc
 from ufostart.website.apps.social import UserRejectedNotice, SocialNetworkException
 
 

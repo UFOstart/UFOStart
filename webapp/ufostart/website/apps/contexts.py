@@ -4,6 +4,7 @@ from pyramid.decorator import reify
 from pyramid.security import Allow, Everyone
 import simplejson
 from ufostart.lib.baseviews import RootContext
+from ufostart.website.apps.auth import SocialContext
 from ufostart.website.apps.company import ProtoCompanyContext, TemplatesRootContext, ProtoInviteContext
 from ufostart.website.apps.models.auth import AnonUser
 from ufostart.website.apps.user import UserHomeContext, UserProtoContext
@@ -14,16 +15,6 @@ log = logging.getLogger(__name__)
 
 
 
-class SocialContext(object):
-    def __init__(self, parent, name):
-        self.__parent__ = parent
-        self.__name__ = name
-    def __getitem__(self, item):
-        if item in self.__parent__.settings.networks:
-            settings = self.__parent__.settings.networks[item]
-            return settings.module(self, item, settings)
-        else:
-            raise KeyError()
 
 class WebsiteRootContext(RootContext):
     __name__ = None
@@ -45,16 +36,6 @@ class WebsiteRootContext(RootContext):
         if USER_SESSION_KEY in self.request.session:
             del self.request.session[USER_SESSION_KEY]
         self.user = AnonUser()
-
-    def getPostLoginUrlParams(self):
-        user = self.user
-        route, args, kwargs = "website_index", [], {}
-        if user.Company and user.Company.slug:
-            return "website_company", [], {'slug':user.Company.slug}
-        if route != self.request.matched_route.name:
-            return route, args, kwargs
-        else:
-            return None, None, None
 
     @reify
     def location(self):

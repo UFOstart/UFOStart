@@ -1,0 +1,11 @@
+<%namespace file="../widgets.html" name="widgets"/>
+
+<%def name="applicationCard(application)">
+    ${widgets.member_pic(application.User, classes='mini')}
+    <div class="right-box">
+        <a href="${root.profile_url(application.User.token)}"><strong>${ application.User.name }</strong></a>
+        <div class="text-small text-muted">
+            ${ application.User.headline }
+        </div>
+    </div>
+</%def>

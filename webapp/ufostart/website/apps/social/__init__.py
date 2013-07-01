@@ -1,5 +1,4 @@
 import logging, simplejson
-from hnc.apiclient import Mapping, TextField, DictField
 from pyramid.security import Everyone, Allow, Authenticated
 
 __all__ = ['AbstractSocialResource', 'SocialNetworkProfileModel', 'angellist', 'facebook', 'linkedin', 'twitter', 'xing'
@@ -77,7 +76,6 @@ def assemble_profile_procs(token_func, profile_func, parse_profile_func):
 
 
 from . import linkedin, facebook, xing, angellist
-from ..company import imp
 
 def includeme(config):
     config.add_view(linkedin.redirect_view  , context = linkedin.SocialResource)
@@ -88,8 +86,3 @@ def includeme(config):
 
     config.add_view(xing.redirect_view      , context = xing.SocialResource)
     config.add_view(xing.callback_view      , context = xing.SocialResource, name = 'cb')
-
-    config.add_view(imp.company_import_start    , context = angellist.SocialResource, permission='import')
-    config.add_view(imp.company_import          , context = angellist.SocialResource, name = 'import'   , permission='import')
-    config.add_view(imp.company_import_list     , context = angellist.SocialResource, name = 'list'     , renderer = "ufostart:website/templates/company/import/list.html", permission='import')
-    config.add_view(imp.company_import_confirm  , context = angellist.SocialResource, name = 'confirm'  , permission='import')

@@ -1,7 +1,7 @@
 from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm, REQUIRED, StringField
 from hnc.forms.handlers import FormHandler
-from ufostart.website.apps.company.imp import SESSION_SAVE_TOKEN
+from ufostart.website.apps.auth.imp import SESSION_SAVE_TOKEN
 from ufostart.website.apps.models.procs import CreateCompanyProc, EditCompanyProc
 from ufostart.website.apps.forms.controls import FileUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField
 

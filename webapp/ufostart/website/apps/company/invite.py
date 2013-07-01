@@ -1,13 +1,10 @@
-from hnc.apiclient import TextField
-from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, StringField, EmailField, REQUIRED, HiddenField, ChoiceField, TextareaField
+from hnc.forms.formfields import BaseForm, StringField, EmailField, REQUIRED, HiddenField, ChoiceField
 from hnc.forms.handlers import FormHandler
-from hnc.forms.messages import GenericSuccessMessage, GenericErrorMessage
+from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
-from ufostart.models.tasks import NamedModel, RoleModel
-from ufostart.website.apps.auth.social import require_login
+from ufostart.models.tasks import RoleModel
 from ufostart.website.apps.forms.controls import SanitizedHtmlField
-from ufostart.website.apps.models.procs import InviteToCompanyProc, GetInviteDetailsProc, AcceptInviteProc, RefreshProfileProc, AddUpdateCompanyProc
+from ufostart.website.apps.models.procs import InviteToCompanyProc, AcceptInviteProc, RefreshProfileProc, AddUpdateCompanyProc
 
 
 class BaseInviteForm(BaseForm):

@@ -1,5 +1,6 @@
 <%inherit file="../layout.html"/>
 <%namespace file="../widgets.html" name="widgets"/>
+<%namespace file="widgets.html" name="companyWidgets"/>
 
 <%def name="content()">
     <div class="container" id="project-round-need-dashboard">
@@ -233,40 +234,52 @@
                </div>
                <hr class="boxed"/>
             %endif
-            <div class="box-content">
-                %for tag in need.tags:
-                    <span class="label label-info spaced text-small">${tag}</span>
-                %endfor
-            </div>
-            %if need.experts:
-                <hr class="boxed"/>
+
+            %if need.fulfilled:
                 <div class="box-content">
-                    <div class="experts">
-                        <h6>Recomended Experts</h6>
+                <div class="box-card compact">
+                    ${companyWidgets.applicationCard(need.acceptedApplication)}
+                </div>
+                </div>
+            %elif published:
+
+                published
+            %else:
+                <div class="box-content">
+                    %for tag in need.tags:
+                        <span class="label label-info spaced text-small">${tag}</span>
+                    %endfor
+                </div>
+                %if need.experts:
+                    <hr class="boxed"/>
+                    <div class="box-content">
+                        <div class="experts">
+                            <h6>Recomended Experts</h6>
+                            <div class="picture-pile">
+                            %for expert in need.experts[:4]:
+                                <div class="picture small">
+                                    <img src="${expert.picture}" alt="${expert.name}"/>
+                                </div>
+                            %endfor
+                            </div>
+                        </div>
+                    </div>
+                %endif
+                %if need.services:
+                    <hr class="boxed"/>
+                    <div class="box-content">
+                    <div class="services">
+                        <h6>Recomended Cloud Services</h6>
                         <div class="picture-pile">
-                        %for expert in need.experts[:4]:
+                        %for service in need.services[:4]:
                             <div class="picture small">
-                                <img src="${expert.picture}" alt="${expert.name}"/>
+                                <img src="${service.logo_url}" name="${service.name}"/>
                             </div>
                         %endfor
                         </div>
                     </div>
-                </div>
-            %endif
-            %if need.services:
-                <hr class="boxed"/>
-                <div class="box-content">
-                <div class="services">
-                    <h6>Recomended Cloud Services</h6>
-                    <div class="picture-pile">
-                    %for service in need.services[:4]:
-                        <div class="picture small">
-                            <img src="${service.logo_url}" name="${service.name}"/>
-                        </div>
-                    %endfor
                     </div>
-                </div>
-                </div>
+                %endif
             %endif
         </div>
     </div>

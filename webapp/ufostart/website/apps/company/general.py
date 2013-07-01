@@ -1,10 +1,5 @@
-from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, HORIZONTAL_GRID
-from hnc.forms.handlers import FormHandler
-from pyramid.httpexceptions import HTTPNotFound, HTTPFound
-from pyramid.renderers import render_to_response
-from ufostart.website.apps.auth.social import require_login
-from ufostart.website.apps.models.procs import CreateCompanyProc, CreateRoundProc, PublishRoundProc, AskForApprovalProc
+from pyramid.httpexceptions import HTTPFound
+from ufostart.website.apps.models.procs import PublishRoundProc, AskForApprovalProc
 
 
 def index(context, request):
