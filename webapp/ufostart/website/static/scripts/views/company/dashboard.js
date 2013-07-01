@@ -10,6 +10,16 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
         , initialize:function(opts){
             var lengths = [], max, min;
             if(opts.tacho) this.tacho = new Tachymeter(opts.tacho);
+
+
+            this.$activity = this.$(".activity-stream");
+            ajax.submitPrefixed({
+                url: "/web/round/activity"
+                , data:{token: this.$activity.data('entityId')}
+                , success: function(resp, status, xhr){
+
+                }
+            })
         }
 
         , highlightTarget: function(e){

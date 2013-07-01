@@ -343,8 +343,8 @@ class InvestmentModel(Mapping):
 
 
 class FundingModel(Mapping):
-    amount = IntegerField()
-    valuation = IntegerField()
+    amount = IntegerField(default = 0)
+    valuation = IntegerField(default = 0)
     description = TextField()
     Investments = ListField(DictField(InvestmentModel))
 
