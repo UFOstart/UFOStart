@@ -13,12 +13,20 @@
                             <div class="sidecrumb"></div>
                             <div class="sidecrumb"></div>
                             <div class="content">
-                                <h1>Hello ${root.user.name}</h1>
-                                <h3>${ctxt.__parent__.displayName}'s Round ${ctxt.displayName} is waiting for approval.</h3>
+                                <h2>Hello ${root.user.name}</h2>
+                                <h4>
+                                    <a href="${root.company_url(ctxt.company.slug)}">${ctxt.company.display_name}'s</a>
+                                    <a href="${root.round_url(ctxt.company.slug, 1)}">${ctxt.round.display_name} Round</a> is waiting for approval.
+                                </h4>
+                                <div class="mar-top-2">
+                                    <a href="${url(ctxt, 'approve')}" class="btn btn-primary">Approve</a>
+                                    <a href="${url(ctxt, 'reject')}" class="btn btn-default">Reject</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             %elif ctxt.canEdit:
             <div class="row">
                 <div class="col col-lg-12">
@@ -330,9 +338,9 @@
             %endif
         %elif ctxt.canApprove:
             %if wf.canPublish():
-                <a href="${url(ctxt, 'publish')}" class="btn btn-primary btn-block btn-large">Publish</a>
+                <a href="${url(ctxt, 'approve')}" class="btn btn-primary btn-block btn-large">Approve Round</a>
             %else:
-                <a class="btn btn-primary btn-block btn-large disabled">Publish</a>
+                <a class="btn btn-primary btn-block btn-large disabled">Approve Round</a>
             %endif
         %endif
     </div>

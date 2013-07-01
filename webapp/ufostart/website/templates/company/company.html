@@ -83,7 +83,7 @@
         Rounds
     </div>
     %for i, round in enumerate(rounds):
-    <div class="box-card compact">
+    <div class="box-card compact mar-top-half">
         ${widgets.round_logo(company, round)}
         <div class="right-box">
             <a href="${root.round_url(company.slug, company.round_no(round))}" class="overflow"><strong>${round.display_name}</strong></a>

@@ -125,7 +125,7 @@ class RoundContext(BaseProjectContext):
         self.request = parent.request
         self.round = round
     def __getitem__(self, item):
-        if item in ['productsetup', 'publish', 'askforapproval']: raise KeyError()
+        if item in ['productsetup', 'approve', 'reject', 'askforapproval']: raise KeyError()
         if item == 'product': return ProductContext(self, 'product', self.__acl__, self.round.Product)
         return NeedContext(self, item, self.__acl__, self.round.needMap[item])
 
@@ -240,7 +240,8 @@ def includeme(config):
 
     config.add_view(invite.AddMentorHandler     , context = RoundContext      , name='mentor'    , renderer = "ufostart:website/templates/company/addmentor.html")
     config.add_view(general.index               , context = RoundContext                         , renderer = "ufostart:website/templates/company/round.html")
-    config.add_view(general.publish_round       , context = RoundContext      , name='publish'   , permission='approve')
+    config.add_view(general.publish_round       , context = RoundContext      , name='approve'   , permission='approve')
+    config.add_view(general.publish_round       , context = RoundContext      , name='reject'   , permission='approve')
     config.add_view(general.ask_for_approval    , context = RoundContext      , name='askforapproval'  , permission='edit')
 
     config.add_view(product.ProductCreateHandler, context = RoundContext      , name='productsetup'  , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")

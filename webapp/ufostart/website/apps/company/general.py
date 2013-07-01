@@ -14,24 +14,14 @@ def index(context, request):
     return {'company': company, 'currentRound':company.currentRound}
 
 
-@require_login('ufostart:website/templates/auth/login.html')
 def publish_round(context, request):
-    round = context.company.currentRound
-    if not round:
-        raise HTTPNotFound()
-    wf = round.Workflow
-    if not wf or not wf.canPublish():
-        request.fwd("website_company", **context.urlArgs)
-    else:
-        PublishRoundProc(request, {'token': round.token})
-        request.fwd("website_company", **context.urlArgs)
+    wf = context.round.Workflow
+    if wf and wf.canPublish():
+        PublishRoundProc(request, {'token': context.round.token})
+    raise HTTPFound(request.resource_url(context))
 
-@require_login('ufostart:website/templates/auth/login.html')
 def ask_for_approval(context, request):
-    round = context.company.currentRound
-    if not round:
-        raise HTTPNotFound()
-    wf = round.Workflow
+    wf = context.round.Workflow
     if wf and wf.canAskForApproval():
-        AskForApprovalProc(request, {'token': round.token})
+        AskForApprovalProc(request, {'token': context.round.token})
     raise HTTPFound(request.resource_url(context))
