@@ -1,4 +1,4 @@
-define([], function(){
+define(["tools/ajax"], function(ajax){
 
     // Bootstrap Touch Devices DropDown Fix START
     $('body')
@@ -50,5 +50,27 @@ define([], function(){
         }
     },  ".js-link");
 
+    var tLoaded = $.Deferred();
+    $(".hover-container").one({
+        mouseover : function(e){
+            var data = $(e.currentTarget).data();
+            if(tLoaded.state() != 'resolved')require(["text!templates/profile.html"], function(templ){tLoaded.resolve(_.template(templ))});
+            ajax.submitPrefixed({
+                url:"/web/user/mini"
+                , data: {token: data.entityId}
+                , success: function(resp, status, xhr){
+                    var user = resp.User;
+                    tLoaded.done(function(templ){
+                        $(e.currentTarget).append(
+                            templ({
+                                link: '/u/'+ user.token
+                                , user: user
+                            })
+                        )
+                    });
+                }
+            });
+        }
+    }).find("a").removeProp('href');
     return {NATIVE_PLACEHOLDER:NATIVE_PLACEHOLDER}
 });
