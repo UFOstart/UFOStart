@@ -178,6 +178,11 @@ class ProtoCompanyContext(BaseProjectContext):
 
 
 class InviteContext(BaseProjectContext):
+    displayType = "Company"
+    @property
+    def displayName(self):
+        return self.company.name
+
     __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'join')]
     __auth_template__ = "ufostart:website/templates/company/invite_confirm.html"
 
@@ -210,7 +215,7 @@ class InviteContext(BaseProjectContext):
 
     @reify
     def round(self):
-        return self.company.round
+        return self.company.Round
 
 
 class ProtoInviteContext(BaseProjectContext):
@@ -252,5 +257,6 @@ def includeme(config):
 
     config.add_view(invite.showInfo             , context = InviteContext                          , renderer = "ufostart:website/templates/company/invite_confirm.html", permission='join')
     config.add_view(invite.confirm              , context = InviteContext     , name = 'confirm'   , permission='join')
+    config.add_view(invite.reject               , context = InviteContext     , name = 'reject'   , permission='join')
 
 

@@ -8,6 +8,7 @@
         <%widgets:pageHeader canEdit="${ctxt.canEdit}">
             <span class="sub-title">Company Profile</span> ${company.name}
         </%widgets:pageHeader>
+
         ${self.bodyContent(company)}
 
     </div>
@@ -25,7 +26,7 @@
                 ${company.description | html.html,n}
             </div>
             <div class="updates mar-top-2">
-                %if hasattr(view, schemas):
+                %if hasattr(view, 'schemas'):
                     ${self.updates(company, view.schemas.get('PostUpdate'), values, errors)}
                 %else:
                     ${self.updates(company, None, values, errors)}
@@ -68,7 +69,7 @@
         ${self.team_members(company.Users)}
     </div>
 
-    %if ctxt.canEdit and hasattr(view, schemas):
+    %if ctxt.canEdit and hasattr(view, 'schemas'):
         ${self.build_forms(view.schemas.get('InviteCompany'), values, errors)}
     %endif
 

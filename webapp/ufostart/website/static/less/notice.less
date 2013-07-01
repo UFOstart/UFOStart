@@ -21,8 +21,12 @@
   overflow:hidden;
   position: relative;
   > .content {
-    padding: 12px;
+    padding: 24px 12px;
+    z-index:4;
+    position: relative;
     margin-right: 11%;
+    > h2, > h4 {color:white;font-weight: 300;margin:6px 0;}
+
   }
   .sidecrumb {
     width: 89%;
@@ -44,10 +48,16 @@
 }
 
 .notice-info {
-  background-color:rgba(73, 156, 1, .1);
-  z-index:4;
+  background-color:fadeout(@brand-info-muted, 90%);
   > .sidecrumb {
-    background-color:rgba(73, 156, 1, .1);
+    background-color:fadeout(@brand-info-muted, 90%);
+  }
+}
+
+.notice-wtf{
+  background-color:fadeout(@wtf-color, 60%);
+  > .sidecrumb {
+    background-color:fadeout(@wtf-color, 60%);
   }
 }
 

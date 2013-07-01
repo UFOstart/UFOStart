@@ -84,3 +84,6 @@ def confirm(context, request):
     RefreshProfileProc(request, {'token': request.root.user.token})
     raise HTTPFound(request.root.company_url(context.invite.companySlug))
 
+def reject(context, request):
+    raise HTTPFound(request.root.company_url(context.invite.companySlug))
+
