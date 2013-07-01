@@ -1,5 +1,22 @@
 define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging, ajax, Tachymeter){
-    var View = Backbone.View.extend({
+    var
+
+    Activity = ajax.Model.extend({
+
+    })
+    , ActivityStream = ajax.Collection.extend({
+        model : Activity
+    })
+
+
+    , ActivityView = Backbone.View.extend({
+        template: _.template("<div>Event: {{ model.get('type') }}</div>")
+        , initialize: function(opts){
+            this.$el.html(this.template({model: this.model}));
+        }
+    })
+
+    , View = Backbone.View.extend({
         events: {
             'click .remove': "removeNeed"
             , 'keyup .remove': "removeNeed"
@@ -8,18 +25,25 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
             , 'keyup .workflow-link': "highlightTarget"
         }
         , initialize:function(opts){
-            var lengths = [], max, min;
+            var lengths = [], max, min, view = this;
             if(opts.tacho) this.tacho = new Tachymeter(opts.tacho);
 
 
             this.$activity = this.$(".activity-stream");
+            this.model = new ActivityStream();
+            this.listenTo(this.model, "add", this.addOne, this);
             ajax.submitPrefixed({
                 url: "/web/round/activity"
                 , data:{token: this.$activity.data('entityId')}
                 , success: function(resp, status, xhr){
-
+                    view.$activity.html('');
+                    view.model.addOrUpdate(resp.Activity.Item);
                 }
             })
+        }
+
+        , addOne: function(model){
+            this.$activity.prepend(new ActivityView({model:model}).$el).removeClass("empty");
         }
 
         , highlightTarget: function(e){

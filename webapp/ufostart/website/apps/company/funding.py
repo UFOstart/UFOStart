@@ -27,8 +27,8 @@ class FundingCreateForm(BaseForm):
     label = ""
     fields=[
      SanitizedHtmlField("description", "Funding Message", REQUIRED, input_classes='x-high')
-     , IntField('amount', "Amount")
-     , IntField('valuation', "Valuation")
+     , IntField('amount', "Amount", min = 1)
+     , IntField('valuation', "Valuation", min = 1)
     ]
     @classmethod
     def on_success(cls, request, values):

@@ -350,7 +350,7 @@ class FundingModel(Mapping):
 
     @property
     def display_equity(self):
-        return '{}%'.format(self.amount / self.valuation)
+        return '{}%'.format(self.amount / self.valuation)  if self.valuation else '---'
     @reify
     def invested_amount(self):
         return sum(map(attrgetter('amount'), self.Investments))
@@ -359,10 +359,10 @@ class FundingModel(Mapping):
         return format_currency(self.invested_amount, 'USD')
     @property
     def display_amount(self):
-        return format_currency(self.amount, 'USD')
+        return format_currency(self.amount, 'USD') if self.amount else '---'
     @property
     def investment_progress(self):
-        return "{}%".format(int(100.0 * self.invested_amount / self.amount))
+        return "{}%".format(int(100.0 * self.invested_amount / self.amount)) if self.amount else '---'
 
 class ProductModel(Mapping):
     token = TextField()
