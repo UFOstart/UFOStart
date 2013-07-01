@@ -6,10 +6,10 @@
     <div class="container">
 
         <%widgets:pageHeader canEdit="${ctxt.canEdit}">
-            <span class="sub-title">Company Profile</span> ${company.name}
+            <span class="sub-title">Company Profile</span> ${ctxt.company.name}
         </%widgets:pageHeader>
 
-        ${self.bodyContent(company)}
+        ${self.bodyContent(ctxt.company)}
 
     </div>
 </%def>
@@ -74,12 +74,8 @@
         </div>
     </div>
     <div class="mar-top-2">
-        ${self.team_members(company.Users)}
+        ${self. (company.mentors, company.members)}
     </div>
-
-    %if ctxt.canEdit and hasattr(view, 'schemas'):
-        ${self.build_forms(view.schemas.get('InviteCompany'), values, errors)}
-    %endif
 
     <div class="mar-top-2">
         ${self.rounds(company, company.rounds)}
@@ -141,7 +137,7 @@
     %endfor
 </%def>
 
-<%def name="team_members(members)">
+<%def name="teamMembers(members)">
     <div class="box-title">
         Team Members
     </div>
@@ -164,6 +160,16 @@
             </div>
         </div>
     %endfor
+
+    %if ctxt.canEdit and hasattr(view, 'schemas'):
+        ${self.build_forms(view.schemas.get('InviteCompany'), values, errors)}
+    %endif
+
+    <div class="mar-top-2">
+        <div class="box-title">Mentors</div>
+
+    </div>
+
 </%def>
 
 <%def name="build_forms(form, values, errors)">
