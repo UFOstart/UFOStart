@@ -166,7 +166,13 @@
         </%self:renderNeedColumns>
     </div>
     <%self:renderNeedColumns needs="${company.groupedNeeds(3, True)}">
-        <div class="col col-lg-12 mar-top-2"><div class="box-title">Customized Needs</div></div>
+        <div class="col col-lg-12 mar-top-2"><div class="box-title">
+            %if ctxt.round.published:
+                Needs
+            %else:
+                Customized Needs
+            %endif
+        </div></div>
     </%self:renderNeedColumns>
 </%def>
 

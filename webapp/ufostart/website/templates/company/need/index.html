@@ -14,16 +14,6 @@
         <div class="row mar-top-1">
             <div class="col col-lg-3">
                 ${self.needOverview(ctxt.need)}
-                <hr/>
-                <div class="box-card compact">
-                    ${widgets.companyInfo(ctxt.company, False)}
-                </div>
-                <hr/>
-                %if not ctxt.need.fulfilled:
-                    <div class="mar-top-1">
-                        <a href="${url(ctxt, 'apply')}#application-form" class="btn btn-primary btn-block">${'Login to Apply' if root.user.isAnon() else 'Apply'}</a>
-                    </div>
-                %endif
             </div>
             <div class="col col-lg-6">
                 ${self.needDetails(ctxt.canEdit, ctxt.company, ctxt.need)}
@@ -52,7 +42,7 @@
 
 <%def name="needOverview(need)">
     %if need.fulfilled:
-        <div class="box-title success"><span class="glyphicon glyphicon-ok-sign"></span> Need Fulfilled</div>
+        <div class="box-title">Need Details - Closed</div>
     %else:
         <div class="box-title">Need Details</div>
     %endif
@@ -64,32 +54,41 @@
     %endif
 
     <div class="mar-top-1">
-        ${widgets.valuation(need)}
+        %if need.fulfilled:
+            ${widgets.valuation_sml(need)}
+        %else:
+            ${widgets.valuation(need)}
+        %endif
     </div>
 
+    <hr/>
+    <div class="box-card compact">
+        ${widgets.companyInfo(ctxt.company, False)}
+    </div>
+    <hr/>
+
     %if need.fulfilled:
-        <hr/>
-        <h6>Accepted Application</h6>
-        <div class="box-card">
-            ${widgets.userPic(need.acceptedApplication.User)}
-            <div class="right-box">
-                %if need.acceptedApplication.User.token:
-                    <a href="${root.profile_url(need.acceptedApplication.User.token)}"><strong>${ need.acceptedApplication.User.name }</strong></a>
-                %else:
-                    <strong>${ need.acceptedApplication.User.name }</strong>
-                %endif
-                <div class="description">
-                    ${need.acceptedApplication.message | html.trunc(50)}
+        <div class="mar-top-1">
+            <div class="box-title">Need Fulfilled by</div>
+            <div class="box-card compact mar-top-half">
+                ${widgets.userPic(need.acceptedApplication.User)}
+                <div class="right-box">
+                    %if need.acceptedApplication.User.token:
+                        <a href="${root.profile_url(need.acceptedApplication.User.token)}"><strong>${ need.acceptedApplication.User.name }</strong></a>
+                    %else:
+                        <strong>${ need.acceptedApplication.User.name }</strong>
+                    %endif
+                    <div class="text-small text-muted">
+                        ${ need.acceptedApplication.User.headline }
+                    </div>
                 </div>
             </div>
         </div>
+    %else:
+        <div class="mar-top-1">
+            <a href="${url(ctxt, 'apply')}#application-form" class="btn btn-primary btn-block">${'Login to Apply' if root.user.isAnon() else 'Apply'}</a>
+        </div>
     %endif
-
-
-    <hr/>
-    %for tag in need.tags:
-        <span class="label label-info spaced text-small">${tag}</span>
-    %endfor
 </%def>
 
 
@@ -163,6 +162,13 @@
     ${html.nn(need.customText)}
 
     <div class="mar-top-2">
+        %for tag in need.tags:
+            <span class="label label-info spaced text-small">${tag}</span>
+        %endfor
+    </div>
+
+
+    <div class="mar-top-2">
         <div class="box-title">Endorsed Experts</div>
         ${self.endorsedExperts(company, need)}
     </div>
@@ -200,7 +206,7 @@
                 </div>
                 <div class="col col-sm-10">
                     <strong>{{ model.getName() }}</strong>
-                    <p class="text-small">{{ model.getPosition() }}</p>
+                    <p class="text-small text-muted">{{ model.getPosition() }}</p>
                 </div>
             </div>
         </script>
@@ -214,7 +220,7 @@
                     </div>
                     <div class="col col-sm-10">
                         <strong>${ model.getName() }</strong>
-                        <p class="text-small">${ model.getPosition() }</p>
+                        <p class="text-small text-muted">${ model.getPosition() }</p>
                     </div>
                 </div>
             %endfor
@@ -241,7 +247,7 @@
                         <div class="col col-sm-10">
                             <a class="pull-right btn btn-small btn-primary">Endorse</a>
                             <strong>{{ model.getName() }}</strong>
-                            <p class="text-small">{{ model.getPosition() }}</p>
+                            <p class="text-small text-muted">{{ model.getPosition() }}</p>
                         </div>
                     </div>
                 </script>
@@ -275,8 +281,8 @@
                         </div>
                         <div class="col col-sm-9">
                             <a href="${request.root.profile_url(application.User.token)}" class="name"><strong>${application.User.name}</strong></a>
-                            <p class="text-small">${html.nn(application.User.position)}</p>
-                            <p class="text-small">${application.display_date}</p>
+                            <p class="text-small text-muted">${html.nn(application.User.position)}</p>
+                            <p class="text-small text-strong">Applied on ${application.display_date}</p>
                             %if need.fulfilled:
 
                             %else:

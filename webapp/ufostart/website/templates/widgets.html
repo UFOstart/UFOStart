@@ -146,13 +146,13 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
                 <div class="description">${need.Company.description | html.trunc(50)}</div>
             </div>
         </div>
-        <div class="need-body medium">
+        <div class="box-content">
             <h5><a href="${need_url}">${need.name}</a></h5>
             <div class="long-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
         </div>
-
-        ${self.valuation_sml(need)}
-
+        <div class="box-content">
+            ${self.valuation_sml(need)}
+        </div>
         <div class="label-list">
             %for tag in need.tags:
                 <span class="label label-info spaced text-small">${tag}</span>
@@ -173,15 +173,16 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
         <div class="picture-header">
             <img src="${company.product_picture(request)}"/>
         </div>
-        <div class="need-body medium">
+        <div class="box-content">
             <h5><a href="${product_url}" class="overflow">${company.product_name}</a></h5>
             <div class="long-description">${company.product_description | html.trunc(descr_len)}</div>
         </div>
-
-        <div class="valuation small">
-            <div class="number total">
-                <strong>PLEDGES</strong>
-                <h3 class="no-margin brand-primary">${company.no_pledges or '0'}</h3>
+        <div class="box-content">
+            <div class="valuation small">
+                <div class="number total">
+                    <strong>PLEDGES</strong>
+                    <h3 class="no-margin brand-primary">${company.no_pledges or '0'}</h3>
+                </div>
             </div>
         </div>
     </div>

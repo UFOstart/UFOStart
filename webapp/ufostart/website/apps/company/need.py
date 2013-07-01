@@ -26,7 +26,7 @@ class ApplicationForm(BaseForm):
     fields=[StringField('message', 'Message', REQUIRED)]
     @classmethod
     def on_success(cls, request, values):
-        ApplyForNeedProc(request, {'token':request.root.need.token, 'Application': {'User':{'token':request.root.user.token}, 'message':values['message']}})
+        ApplyForNeedProc(request, {'token':request.context.need.token, 'Application': {'User':{'token':request.root.user.token}, 'message':values['message']}})
         request.session.flash(GenericSuccessMessage("You have applied for this need successfully. One of the team members will contact you shortly."), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
