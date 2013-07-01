@@ -55,22 +55,9 @@ class PostUpdateForm(BaseForm):
 class CompanyIndexHandler(FormHandler):
     forms = [InviteTeamForm, PostUpdateForm]
 
-    def pre_fill_values(self, request, result):
-        company = request.context.company
-        result['company'] = company
-        return super(CompanyIndexHandler, self).pre_fill_values(request, result)
-
-
 
 class AddMentorHandler(FormHandler):
     form = InviteMentorForm('MENTOR')
-    def pre_fill_values(self, request, result):
-        company = self.context.company
-        result['company'] = company
-        return super(AddMentorHandler, self).pre_fill_values(request, result)
-
-
-
 
 
 def showInfo(context, request):

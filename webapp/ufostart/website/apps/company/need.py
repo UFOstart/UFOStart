@@ -45,7 +45,7 @@ class NeedCreateForm(BaseForm):
         , DecimalField('cash', None)
         , DecimalField('equity', None)
         , TextareaField("customText", "Description", REQUIRED, input_classes='x-high')
-        , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3))
+        , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
     ]
     @classmethod
     def on_success(cls, request, values):
@@ -79,7 +79,7 @@ class NeedEditForm(BaseForm):
         , DecimalField('cash', None)
         , DecimalField('equity', None)
         , TextareaField("customText", "Description", REQUIRED, input_classes='x-high')
-        , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3))
+        , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
     ]
 
     @classmethod

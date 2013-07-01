@@ -156,9 +156,11 @@
                     <p><strong>${ member.name }</strong></p>
                 %endif
                 <small class="headline">${html.nn(member.headline)}</small>
-                <small>
+                %if member.confirmed:
+                <div class="text-small">
                     <strong class="text-muted">Startup Value</strong> <span class="brand-primary">${member.displayStartupValue}</span>
-                </small>
+                </div>
+                %endif
             </div>
         </div>
     %endfor
@@ -166,7 +168,8 @@
 
 <%def name="build_forms(form, values, errors)">
     %if form:
-        <div class="expander">
+        <div id="invite-team-members" class="highlight-anchor"></div>
+        <div class="expander ${'expanded' if request.params.get('invite') else ''}">
             <a class="btn btn-primary show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Invite Team Members</a>
             <div class="show-expanded">
                 <div class="box-dark">

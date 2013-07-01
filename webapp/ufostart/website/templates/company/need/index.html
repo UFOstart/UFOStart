@@ -7,7 +7,7 @@
 <%def name="content()">
     <div class="container">
 
-        <%widgets:pageHeader canEdit="${ctxt.canEdit}">
+        <%widgets:pageHeader canEdit="${ctxt.canEdit and not ctxt.need.fulfilled}">
             ${ctxt.need.name}
         </%widgets:pageHeader>
 
@@ -20,7 +20,16 @@
                 ${self.needDetails(ctxt.canEdit, ctxt.company, ctxt.need)}
             </div>
             <div class="col col-lg-3">
-
+                %if ctxt.need.summary:
+                    <div class="wtf-box active">
+                        <h2 class="wtf-title">
+                            Before you go on
+                        </h2>
+                        <div class="wtf-content mar-top-1">
+                            ${ctxt.need.summary}
+                        </div>
+                    </div>
+                %endif
             </div>
         </div>
 
@@ -75,7 +84,7 @@
                 ${companyWidgets.applicationCard(need.acceptedApplication)}
             </div>
         </div>
-    %else:
+    %elif ctxt.round.published:
         <div class="mar-top-1">
             <a href="${url(ctxt, 'apply')}#application-form" class="btn btn-primary btn-block">${'Login to Apply' if root.user.isAnon() else 'Apply'}</a>
         </div>
@@ -217,16 +226,17 @@
             %endfor
         </div>
     </div>
+
     %if not need.fulfilled and withSearch:
         %if root.user.isAnon():
-            <div class="box-title">Login to endorse</div>
+            <h2>Login to endorse</h2>
             <div class="text-center">
                 <div class="mar-top-1">
                     ${widgets.login_btn('linkedin')}
                 </div>
             </div>
         %else:
-            <div class="box-title">Endorse your contacts for this need</div>
+            <h2>Endorse a contact for this need</h2>
             <div class="linkedin-widget" data-widget="ContactSearch">
                 <script type="text/template" class="contact-template">
                     <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">
@@ -242,6 +252,7 @@
                         </div>
                     </div>
                 </script>
+                <label for="">Name</label>
                 <div class="search-field">
                     <input type="text" class="query" placeholder="Find a contact by name">
                 </div>

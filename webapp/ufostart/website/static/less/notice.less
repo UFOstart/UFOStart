@@ -17,7 +17,7 @@
   background-color: @bg;
 }
 
-.notice{
+.notice {
   overflow:hidden;
   position: relative;
   > .content {
@@ -26,7 +26,6 @@
     position: relative;
     margin-right: 11%;
     > h2, > h4 {color:white;font-weight: 300;margin:6px 0;}
-
   }
   .sidecrumb {
     width: 89%;
@@ -35,7 +34,7 @@
     top:0;
     left:0;
     z-index:1;
-    .box-shadow(3px 0 3px rgba(0,0,0,.2));
+    .box-shadow(2px 0 2px rgba(0,0,0,.2));
     + .sidecrumb {
       width: 78%;
       z-index:2;
@@ -55,9 +54,9 @@
 }
 
 .notice-wtf{
-  background-color:fadeout(@wtf-color, 60%);
+  background-color:fadeout(@wtf-color, 40%);
   > .sidecrumb {
-    background-color:fadeout(@wtf-color, 60%);
+    background-color:fadeout(@wtf-color, 40%);
   }
 }
 

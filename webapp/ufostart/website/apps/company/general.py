@@ -3,10 +3,7 @@ from ufostart.website.apps.models.procs import PublishRoundProc, AskForApprovalP
 
 
 def index(context, request):
-    company = context.company
-    if not company:
-        request.fwd("website_index")
-    return {'company': company, 'currentRound':company.currentRound}
+    return {}
 
 
 def publish_round(context, request):
