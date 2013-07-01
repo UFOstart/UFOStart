@@ -1,7 +1,7 @@
 import logging
 import urllib
 from pyramid.decorator import reify
-from pyramid.security import Allow, Everyone
+from pyramid.security import Allow, Everyone, Authenticated
 import simplejson
 from ufostart.lib.baseviews import RootContext
 from ufostart.website.apps.auth import SocialContext
@@ -19,7 +19,7 @@ log = logging.getLogger(__name__)
 class WebsiteRootContext(RootContext):
     __name__ = None
     __parent__ = None
-    __acl__ = [(Allow, Everyone, 'view')]
+    __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'apply'), (Allow, Authenticated, 'join')]
 
     static_prefix = "/web/static/"
     app_label = 'website'

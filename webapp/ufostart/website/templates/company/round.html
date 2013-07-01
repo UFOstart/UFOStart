@@ -237,13 +237,41 @@
 
             %if need.fulfilled:
                 <div class="box-content">
-                <div class="box-card compact">
+                <div class="box-card extra-compact">
                     ${companyWidgets.applicationCard(need.acceptedApplication)}
                 </div>
                 </div>
             %elif published:
+                %if len(need.Endorsements):
+                    <div class="box-content">
+                        <h6>Endorsed Experts</h6>
+                        <div class="picture-pile">
+                        %for endorse in need.Endorsements[:4]:
+                            <div class="picture small">
+                                <img src="${endorse.endorseePicture}" alt="${endorse.endorseeName}"/>
+                            </div>
+                        %endfor
+                        </div>
+                    </div>
+                %else:
+                    <div class="empty">No Endorsements yet</div>
+                %endif
 
-                published
+                <hr class="boxed"/>
+
+                %if len(need.Applications):
+                    <div class="box-content">
+                        <h6>Recent Applications</h6>
+                        %for application in need.getRecentApplications(4):
+                            <div class="box-card extra-compact box-card-separated">
+                                ${companyWidgets.applicationCard(application)}
+                            </div>
+                        %endfor
+                    </div>
+                %else:
+                    <div class="empty">No Applications yet</div>
+                %endif
+
             %else:
                 <div class="box-content">
                     %for tag in need.tags:
@@ -297,31 +325,42 @@
 </%def>
 
 <%def name="timerBox(currentRound, canEdit)">
-    <div class="company-dashboard">
-        <ul class="list-unstyled">
-            <li class="progress-step progress-1">
-                <h2 class="no-margin">You've got</h2>
-                <div class="tachymeter" id="tachymeter">
-                    <h1>${currentRound.getExpiryDays(singular = "{}<small>Day Left</small>", plural="{}<small>Days Left</small>")|n}</h1>
-                </div>
-                <h2>to fulfill your needs.</h2>
-            </li>
-            <li class="progress-step progress-2">
-                <h2 class="no-margin">You successfully fulfilled</h2>
-                <div class="progress-container">
-                    <div class="progress">
-                        <div class="progress-bar" style="width: ${100.0 * currentRound.noFulfilledNeeds / currentRound.noTotalNeeds}%"></div>
+    <div class="company-dashboard progress-wrapper">
+
+        <div class="progress-step">
+            <div class="progress-step">
+                <div class="progress-step">
+                    <div class="box-content">
+                        <h2 class="no-margin">
+                        ${"You've" if ctxt.canEdit else u"{} has".format(ctxt.company.display_name)}
+                         got</h2>
+                        <div class="tachymeter" id="tachymeter">
+                            <h1>${currentRound.getExpiryDays(singular = "{}<small>Day Left</small>", plural="{}<small>Days Left</small>")|n}</h1>
+                        </div>
+                        <h2>to fulfill
+                            ${u"your" if ctxt.canEdit else "their"}
+                         needs.</h2>
                     </div>
-                    <h2 class="offset">
-                        ${currentRound.noFulfilledNeeds}<small>${pluralize("need", "needs", currentRound.noFulfilledNeeds)}</small>
-                    </h2>
                 </div>
-            </li>
-            <li class="progress-step progress-3">
+                <div class="box-content">
+                    <h2 class="no-margin">
+                    ${"You" if ctxt.canEdit else ctxt.company.display_name}
+                    successfully fulfilled</h2>
+                    <div class="progress-container">
+                        <div class="progress">
+                            <div class="progress-bar" style="width: ${100.0 * currentRound.noFulfilledNeeds / currentRound.noTotalNeeds}%"></div>
+                        </div>
+                        <h2 class="offset">
+                            ${currentRound.noFulfilledNeeds}<small>${pluralize("need", "needs", currentRound.noFulfilledNeeds)}</small>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="box-content">
                 <h2>Spread the word</h2>
                 <a href="#" class="btn btn-primary offset">Spread the word</a>
-            </li>
-        </ul>
+            </div>
+        </div>
     </div>
 </%def>
 

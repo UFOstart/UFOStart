@@ -219,7 +219,8 @@ class NeedModel(Mapping):
             return [a for a in self.Applications if a.approved][0]
         except IndexError, e:
             return None
-
+    def getRecentApplications(self, n):
+        return sorted(self.Applications, key = attrgetter('created'), reverse = True)[:n]
 
     @property
     def customized(self):

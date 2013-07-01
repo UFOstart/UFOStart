@@ -125,14 +125,18 @@
     }
   }
 }
+
+.progress-wrapper {
+  overflow: hidden;
+}
 .progress-step {
-  padding: 12px;
-  .dark {color:black;}
-  > h2 {color:white;margin:0;}
-  > .offset {margin-top:50px;display: top;}
-  +.progress-step {
-    .box-shadow(0 4px 6px rgba(0,0,0,.4) inset);
+  background-color: fadeout(#080808, 80%);
+  .box-shadow(0 4px 6px rgba(0,0,0,.4));
+  > .box-content {
+    > h2 {color:white;margin:0;}
+    > .offset {margin-top:50px;display: block;}
   }
+  .dark {color:black;}
 }
 
 

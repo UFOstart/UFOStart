@@ -183,7 +183,6 @@ class InviteContext(BaseProjectContext):
     def displayName(self):
         return self.company.name
 
-    __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'join')]
     __auth_template__ = "ufostart:website/templates/company/invite_confirm.html"
 
     canEdit = False
@@ -251,7 +250,7 @@ def includeme(config):
 
     config.add_view(need.NeedCreateHandler      , context = RoundContext      , name='addneed'   , renderer = "ufostart:website/templates/company/need/create.html", permission='edit')
     config.add_view(need.index                  , context = NeedContext                          , renderer = "ufostart:website/templates/company/need/index.html")
-    config.add_view(need.ApplicationHandler     , context = NeedContext       , name = 'apply'   , renderer = "ufostart:website/templates/company/need/apply.html")
+    config.add_view(need.ApplicationHandler     , context = NeedContext       , name = 'apply'   , renderer = "ufostart:website/templates/company/need/apply.html", permission='apply')
     config.add_view(need.accept_application     , context = ApplicationContext, name = 'accept')
     config.add_view(need.NeedEditHandler        , context = NeedContext       , name = 'edit'    , renderer = "ufostart:website/templates/company/need/edit.html", permission='edit')
 
