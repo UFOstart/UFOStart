@@ -71,7 +71,7 @@
         <div class="mar-top-1">
             <div class="box-title">Need Fulfilled by</div>
             <div class="box-card compact mar-top-half">
-                ${widgets.userPic(need.acceptedApplication.User)}
+                ${widgets.member_pic(need.acceptedApplication.User, classes='mini')}
                 <div class="right-box">
                     %if need.acceptedApplication.User.token:
                         <a href="${root.profile_url(need.acceptedApplication.User.token)}"><strong>${ need.acceptedApplication.User.name }</strong></a>

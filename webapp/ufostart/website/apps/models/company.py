@@ -38,6 +38,10 @@ class CompanyUserModel(Mapping):
     startupValue = IntegerField()
 
     @property
+    def confirmed(self):
+        return not self.unconfirmed
+
+    @property
     def picture_url(self):
         return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
 

@@ -122,9 +122,7 @@
     %endif
     %for update in company.getUpdates():
         <div class="box-card shaded single-update compact">
-            <div class="picture">
-                <img src="${update.userPicture}"/>
-            </div>
+            ${widgets.profile_pic(update.userPicture, update.userToken)}
             <div class="right-box">
                 <div class="pull-right"><small>${html.format_datetime(update.created, 'medium')}</small></div>
                 <a class="entity-link" href="${root.profile_url(update.userToken)}">${update.userName}</a>
@@ -140,7 +138,7 @@
     </div>
     %for member in members:
         <div class="single-team-member box-card compact">
-            ${widgets.userPic(member)}
+            ${widgets.member_pic(member)}
             <div class="right-box">
                 <div class="position">${html.nn(member.position)}</div>
                 %if member.token:

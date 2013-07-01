@@ -52,9 +52,7 @@
     %if len(customers):
         <div class="face-pile-mini">
         %for pledge in customers:
-            <div class="picture mini">
-                <img src="${pledge.picture}"/>
-            </div>
+            ${widgets.profile_pic(pledge.picture, pledge.networkId, classes='mini')}
         %endfor
         </div>
     %else:
@@ -143,9 +141,7 @@
 %if len(pledges):
     %for pledge in pledges:
         <div class="box-card shaded compact single-update">
-            <div class="picture">
-                <img src="${pledge.picture}"/>
-            </div>
+            ${widgets.profile_pic(pledge.picture, pledge.networkId)}
             <div class="right-box">
                 <div class="pull-right"><small>${html.format_datetime(pledge.created, 'medium')}</small></div>
                 <a class="entity-link" href="${root.profile_url(pledge.networkId)}">${pledge.name}</a>
