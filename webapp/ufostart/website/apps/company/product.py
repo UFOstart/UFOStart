@@ -57,6 +57,9 @@ class ProductEditForm(ProductCreateForm):
     id="ProductEdit"
     @classmethod
     def on_success(cls, request, values):
+        if isinstance(values.get('pictures'), basestring):values['Pictures'] = [values['Pictures']]
+        values['Pictures'] = [{'url':url} for url in values['Pictures']]
+
         product = request.context.product
         values['token'] = product.token
         data = {'token': request.context.round.token, 'Product': values}
