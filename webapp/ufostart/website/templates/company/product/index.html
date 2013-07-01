@@ -82,7 +82,7 @@
     %for idx, offer in enumerate(offers):
         <div class="single-product-offer progress-step progress-${idx+1}" data-entity-id="${offer.token}">
             %if ctxt.canEdit:
-                <a href="${url(ctxt, 'delete', query=[('offer', offer.token)])}" class="remove">×</a>
+                <a href="${url(ctxt, 'delete', query=[('offer', offer.token)])}" data-target=".single-product-offer" class="remove">×</a>
             %endif
             <p><strong class="dark">${offer.name}</strong></p>
             <p class="text-small">${offer.description}</p>
@@ -164,11 +164,11 @@
 
 <%def name="post_scripts()">
     <script>
-        require(["form"], function(View){
+        require(["form", "views/company/product"], function(View, PView){
             $("form.form-validated").each(function(idx, elem){
                 new View({el: $(elem)});
             });
-            //TODO: , "views/product" / , PView / new PView({el: $("#product-page")})
+            new PView({el: $("#product-page")})
         });
     </script>
 </%def>

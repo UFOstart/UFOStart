@@ -1,6 +1,6 @@
 from operator import methodcaller
 from hnc.apiclient import IntegerField
-from hnc.apiclient.backend import DBNotification
+from hnc.apiclient.backend import DBNotification, DBException
 from hnc.forms.formfields import BaseForm, MultipleFormField, REQUIRED, StringField, RadioChoice, NullConfigModel, TextareaField, HORIZONTAL_GRID, DecimalField, IntField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
@@ -8,7 +8,7 @@ from pyramid.httpexceptions import HTTPForbidden, HTTPFound
 from ufostart.lib import html
 from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.company.imp import SESSION_SAVE_TOKEN
-from ufostart.website.apps.models.procs import SetProductOffersProc, PledgeCompanyProc, CreateProductProc
+from ufostart.website.apps.models.procs import SetProductOffersProc, PledgeCompanyProc, CreateProductProc, RemoveProductOfferProc
 from ufostart.website.apps.forms.controls import FileUploadField, PictureGalleryUploadField, SanitizedHtmlField, CleanHtmlField
 
 
@@ -104,16 +104,21 @@ class ProductOfferForm(BaseForm):
 
 
 def remove_offer(context, request):
-    product = request.context.product
     offer_token = request.params.get("offer")
     if offer_token:
-        offers = [o.unwrap(sparse = True) for o in product.Offers if o.token != offer_token]
         try:
-            SetProductOffersProc(request, {'Product': {'token': product.token, 'Offers':offers}})
-        except DBNotification, e:
-            request.session.flash(GenericErrorMessage(e.message), "generic_messages")
-            return {'success':False, 'redirect': request.resource_url(request.context)}
-    raise HTTPFound(request.resource_url(request.context))
+            RemoveProductOfferProc(request, {'token': offer_token})
+        except (DBNotification, DBException), e:
+
+            if request.is_xhr:
+                return {'success':False, 'message': e.message}
+            else:
+                request.session.flash(GenericErrorMessage(e.message), "generic_messages")
+                raise HTTPFound(request.resource_url(request.context))
+        if request.is_xhr:
+            return {'success':True, 'redirect': request.resource_url(request.context)}
+        else:
+            raise HTTPFound(request.resource_url(request.context))
 
 
 class ProductPledgeForm(BaseForm):
