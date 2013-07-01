@@ -5,7 +5,7 @@
 <%def name="content()">
     <div class="container">
 
-        <%widgets:pageHeader canEdit="${resource.canEdit}">
+        <%widgets:pageHeader canEdit="${ctxt.canEdit}">
             <span class="sub-title">Company Profile</span> ${company.name}
         </%widgets:pageHeader>
 
@@ -47,7 +47,7 @@
 
 <%def name="companyMainInfo(company)">
     ${widgets.company_logo(company)}
-    <a class="entity-link  mar-top-1" href="${url(resource)}">${resource.company.name}</a>
+    <a class="entity-link  mar-top-1" href="${url(ctxt)}">${ctxt.company.name}</a>
     <div class="pitch">${html.nn(company.pitch)}</div>
     <div class="number-widget mar-top-1">
         <h6>Startup Value</h6>
@@ -59,7 +59,7 @@
         ${self.team_members(company.Users)}
     </div>
 
-    %if resource.canEdit:
+    %if ctxt.canEdit:
         ${self.build_forms(view.schemas['InviteCompany'], values, errors)}
     %endif
 
@@ -97,7 +97,7 @@
     <div class="box-title">
         Updates
     </div>
-    %if resource.canEdit:
+    %if ctxt.canEdit:
         <div class="box-dark">
             <div class="box-content">
                 <form class="${form.grid.form_classes}" id="${form.id}" method="POST">

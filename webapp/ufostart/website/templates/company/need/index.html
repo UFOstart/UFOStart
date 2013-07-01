@@ -6,39 +6,43 @@
 <%def name="content()">
     <div class="container">
 
-        <%widgets:pageHeader canEdit="${resource.canEdit}">
-            ${need.name}
+        <%widgets:pageHeader canEdit="${ctxt.canEdit}">
+            ${ctxt.need.name}
         </%widgets:pageHeader>
 
 
         <div class="row mar-top-1">
             <div class="col col-lg-3">
-                ${self.needOverview(resource.need)}
-            </div>
-            <div class="col col-lg-6">
-                ${self.needDetails(resource.canEdit, resource.company, resource.need)}
-            </div>
-            <div class="col col-lg-3">
-                ${widgets.companyInfo(resource.company)}
-                %if not resource.need.fulfilled:
+                ${self.needOverview(ctxt.need)}
+                <hr/>
+                <div class="box-card compact">
+                    ${widgets.companyInfo(ctxt.company, False)}
+                </div>
+                <hr/>
+                %if not ctxt.need.fulfilled:
                     <div class="mar-top-1">
-                        <a href="${url(resource, 'apply')}#application-form" class="btn btn-primary btn-block">${'Login to Apply' if root.user.isAnon() else 'Apply'}</a>
+                        <a href="${url(ctxt, 'apply')}#application-form" class="btn btn-primary btn-block">${'Login to Apply' if root.user.isAnon() else 'Apply'}</a>
                     </div>
                 %endif
+            </div>
+            <div class="col col-lg-6">
+                ${self.needDetails(ctxt.canEdit, ctxt.company, ctxt.need)}
+            </div>
+            <div class="col col-lg-3">
+
             </div>
         </div>
 
         <div class="row mar-top-2">
             <div class="col col-lg 12">
                 <h1 class="section-title">
-                    %if resource.need.fulfilled:
+                    %if ctxt.need.fulfilled:
                         <span class="brand-primary">Accepted Application</span>
                     %else:
                         <span class="brand-primary">Applications</span>
                     %endif
-
                 </h1>
-                ${self.applications(resource.need, resource.need.Applications)}
+                ${self.applications(ctxt.need, ctxt.need.Applications)}
             </div>
         </div>
     </div>
@@ -276,8 +280,8 @@
                             %if need.fulfilled:
 
                             %else:
-                                %if resource.canEdit:
-                                    <a href="${url(resource, application.token, 'accept')}" class="btn btn-primary">Accept</a>
+                                %if ctxt.canEdit:
+                                    <a href="${url(ctxt, application.token, 'accept')}" class="btn btn-primary">Accept</a>
                                 %endif
                             %endif
                         </div>

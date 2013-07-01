@@ -8,29 +8,24 @@
         <div class="row">
             <div class="col col-lg-12">
                 <h1 class="section-title">
-                    %if resource.canEdit:
-                        <span class="btn-wrapper">
-                            <a href="${url(resource)}" class="btn btn-primary">Cancel</a>
-                        </span>
-                    %endif
-                    <span class="brand-primary">${resource.need.name}</span>
+                    <span class="brand-primary">${ctxt.need.name}</span>
                 </h1>
             </div>
         </div>
         <div class="row mar-top-2">
             <div class="col col-lg-9">
                 <div class="box-content box-dark">
-                    ${self.build_form(resource.need, view.form, values.get(view.form.id), errors.get(view.form.id))}
+                    ${self.build_form(ctxt.need, "Save Changes", view.form, values.get(view.form.id), errors.get(view.form.id))}
                 </div>
             </div>
             <div class="col col-lg-3">
-                %if resource.need.summary:
+                %if ctxt.need.summary:
                     <div class="wtf-box active">
                         <h2 class="wtf-title">
                             Before you go on
                         </h2>
                         <div class="wtf-content mar-top-1">
-                            ${resource.need.summary}
+                            ${ctxt.need.summary}
                         </div>
                     </div>
                 %endif
@@ -40,13 +35,13 @@
 
         <div class="row mar-top-2">
             <div class="col col-lg-3">
-                ${self.needOverview(resource.need)}
+                ${self.needOverview(ctxt.need)}
             </div>
             <div class="col col-lg-6">
-                ${self.needDetails(resource.canEdit, resource.company, resource.need)}
+                ${self.needDetails(ctxt.canEdit, ctxt.company, ctxt.need)}
             </div>
             <div class="col col-lg-3">
-                ${widgets.companyInfo(resource.company)}
+                ${widgets.companyInfo(ctxt.company)}
             </div>
         </div>
 
@@ -55,7 +50,7 @@
                 <h1 class="section-title">
                     <span class="brand-primary">Applications</span>
                 </h1>
-                ${self.applications(resource.need, resource.need.Applications)}
+                ${self.applications(ctxt.need, ctxt.need.Applications)}
             </div>
         </div>
     </div>
@@ -65,7 +60,7 @@
 
 
 
-<%def name="build_form(need, form, values, errors)">
+<%def name="build_form(need, btn_label, form, values, errors)">
     <form class="${form.grid.form_classes} labels-capitalized" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
 
@@ -106,7 +101,8 @@
             ${form.fieldMap['Tags'].render(form.id, request, values, errors, view)|n}
         </div>
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary btn-block">Save</button>
+            <button type="submit" class="btn btn-primary">${btn_label}</button>
+            <a href="${url(ctxt)}" class="btn btn-default">Cancel</a>
         </div>
     </form>
 </%def>

@@ -4,16 +4,17 @@
 <%def name="content()">
     <div class="container" id="project-round-need-dashboard">
 
+
         <%widgets:pageHeader>
-            ${resource.round.Template.name} <span class="sub-title">Round Dashboard</span>
+            ${ctxt.round.Template.name} <span class="sub-title">Round Dashboard</span>
         </%widgets:pageHeader>
 
         <div class="row mar-top-1">
             <div class="col col-lg-3 pull-right">
-                ${self.sideBar(resource.round, resource.canEdit)}
+                ${self.sideBar(ctxt.round, ctxt.canEdit)}
             </div>
             <div class="col col-lg-9">
-                ${self.upperContent(resource.round.published)}
+                ${self.upperContent(ctxt.round.published)}
                 ${self.lowerContent()}
             </div>
         </div>
@@ -41,7 +42,7 @@
 <%def name="companyBox(company)">
     <div class="box-card shaded">
         ${widgets.company_logo(company)}
-        <a class="entity-link  mar-top-1" href="${url(resource)}">${resource.company.name}</a>
+        <a class="entity-link  mar-top-1" href="${url(ctxt)}">${ctxt.company.name}</a>
         <div class="pitch">${html.nn(company.pitch)}</div>
     </div>
     <div class="number-widget mar-top-1">
@@ -55,8 +56,8 @@
         %for user in company.Users[:8]:
             ${widgets.userPic(user, classes='mini')|n}
         %endfor
-        %if resource.canEdit:
-            <a href="${url(resource.__parent__)}"><small>Invite team<br/>members</small></a>
+        %if ctxt.canEdit:
+            <a href="${url(ctxt.__parent__)}"><small>Invite team<br/>members</small></a>
         %endif
         </div>
     </div>
@@ -69,7 +70,7 @@
             %endfor
             <span class="highlight-target" style="display:inline-block;">
                 <span id="target-add-mentor" class="highlight-anchor"></span>
-                <a href="${url(resource, 'mentor')}" class="btn btn-primary">Add Mentor</a>
+                <a href="${url(ctxt, 'mentor')}" class="btn btn-primary">Add Mentor</a>
             </span>
         </div>
     </div>
@@ -81,8 +82,8 @@
     %if not company.product_is_setup:
         <div class="box-card shaded"><div class="empty">Product not set up</div></div>
         <div class="mar-top-1">
-        %if resource.canEdit:
-            <a href="${url(resource, 'productsetup')}" class="btn btn-primary">Setup Your Product</a>
+        %if ctxt.canEdit:
+            <a href="${url(ctxt, 'productsetup')}" class="btn btn-primary">Setup Your Product</a>
         %else:
             <h3>Not Setup yet</h3>
         %endif
@@ -90,7 +91,7 @@
     %else:
         <div class="clearfix"><div class="cut-corner pull-left"><img src="${company.product_picture(request)}"/></div></div>
         <div class="mar-top-half">
-            <a href="${url(resource, 'product')}" class="overflow"><strong>${company.product_name}</strong></a>
+            <a href="${url(ctxt, 'product')}" class="overflow"><strong>${company.product_name}</strong></a>
             <small>${html.nn(company.product_description) | html.trunc(90)}</small>
         </div>
         <hr/>
@@ -116,55 +117,64 @@
 
 
 <%def name="lowerContent()">
-    <div class="row mar-top-2">
-        <div class="col col-lg-12">
-            <div class="box-title highlight-target">
-                <div id="target-customise-needs" class="highlight-anchor"></div>
-                Needs
+    <div class="row mar-top-2" id="project-round-need-dashboard" data-entity-id=${ctxt.round.token}>
+        <%self:renderNeedColumns needs="${company.groupedNeeds(3, False)}">
+            <div class="col col-lg-12">
+                <div class="box-title highlight-target">
+                    <div id="target-customise-needs" class="highlight-anchor"></div>
+                    Pending Needs
+                </div>
             </div>
-        </div>
+        </%self:renderNeedColumns>
     </div>
-    <div class="row" id="project-round-need-dashboard" data-entity-id=${resource.round.token}>
-        %for i, col in enumerate(company.groupedNeeds(3)):
+    <%self:renderNeedColumns needs="${company.groupedNeeds(3, True)}">
+        <div class="col col-lg-12 mar-top-2"><div class="box-title">Customized Needs</div></div>
+    </%self:renderNeedColumns>
+</%def>
+
+
+<%def name="renderNeedColumns(needs)">
+    %if needs:
+        ${caller.body()}
+        %for i, col in enumerate(needs):
             <div class="col col-lg-4 need-card-list">
                 <div class="js-need-card-list">
                 %for need in col:
-                    ${self.buildNeed(need, resource.round.published)}
+                    ${self.buildNeed(need, ctxt.round.published)}
                 %endfor
                 </div>
-                %if not i and resource.canEdit and not resource.round.published:
-                    <a href="${url(resource, 'need', 'create')}" class="need-card-inner add-card">
+                %if not i and ctxt.canEdit and not ctxt.round.published:
+                    <a href="${url(ctxt, 'addneed')}" class="need-card-inner add-card">
                         <img src="${STATIC_URL}img/addneed.png"/>
                         <h4>Create a new Need</h4>
                     </a>
                 %endif
             </div>
         %endfor
-    </div>
+    %endif
 </%def>
-
 
 <%def name="buildNeed(need, published)">
     <div class="need-card ${need.status}" data-entity-id="${need.token}">
         %if need.fulfilled:
             <a class="customize success" href="#"><span class="glyphicon glyphicon-ok-sign"></span> Need Fulfilled</a>
-        %elif not published  and resource.canEdit:
+        %elif not published  and ctxt.canEdit:
             %if need.customized:
-                <a class="customize success" href="${url(resource, need.slug)}"><span class="glyphicon glyphicon-ok-sign"></span> Customized</a>
+                <a class="customize success" href="${url(ctxt, need.slug)}"><span class="glyphicon glyphicon-ok-sign"></span> Customized</a>
             %else:
-                <a class="customize danger" href="${url(resource, need.slug, 'edit')}"><span class="glyphicon glyphicon-exclamation-sign"></span> Customize Need</a>
+                <a class="customize danger" href="${url(ctxt, need.slug, 'edit')}"><span class="glyphicon glyphicon-pencil"></span> Customize Need</a>
             %endif
         %endif
         <div class="need-card-inner">
             <div class="box-header box-header-muted box-card">
-                %if not published and resource.canEdit:
+                %if not published and ctxt.canEdit:
                     <a class="remove" data-target=".need-card">×</a>
                 %endif
                 <h5>
-                    %if not need.customized and resource.canEdit:
-                        <a href="${url(resource, need.slug, 'edit')}">${need.name}</a>
+                    %if not need.customized and ctxt.canEdit:
+                        <a href="${url(ctxt, need.slug, 'edit')}">${need.name}</a>
                     %else:
-                        <a href="${url(resource, need.slug)}">${need.name}</a>
+                        <a href="${url(ctxt, need.slug)}">${need.name}</a>
                     %endif
                 </h5>
 
@@ -174,19 +184,19 @@
             </div>
 
             %if need.customized:
-                <div class="need-body">
-                    ${widgets.valuation(need)}
+                <div class="box-content">
+                    ${widgets.valuation_sml(need)}
                </div>
                <hr class="boxed"/>
             %endif
-            <div class="need-body">
+            <div class="box-content">
                 %for tag in need.tags:
                     <span class="label label-info spaced text-small">${tag}</span>
                 %endfor
             </div>
             %if need.experts:
                 <hr class="boxed"/>
-                <div class="need-body">
+                <div class="box-content">
                     <div class="experts">
                         <h6>Recomended Experts</h6>
                         <div class="picture-pile">
@@ -201,7 +211,7 @@
             %endif
             %if need.services:
                 <hr class="boxed"/>
-                <div class="need-body">
+                <div class="box-content">
                 <div class="services">
                     <h6>Recomended Cloud Services</h6>
                     <div class="picture-pile">
@@ -284,13 +294,13 @@
     <div class="mar-top-2 highlight-target">
         <div id="target-publish" class="highlight-anchor"></div>
         <div id="target-sent-for-mentor-aprroval" class="highlight-anchor"></div>
-        %if resource.canEdit:
+        %if ctxt.canEdit:
             %if wf.canAskForApproval():
-                <a href="${url(resource, 'askforapproval')}" class="btn btn-primary btn-block btn-large">Get Approval</a>
+                <a href="${url(ctxt, 'askforapproval')}" class="btn btn-primary btn-block btn-large">Get Approval</a>
             %endif
-        %elif resource.canApprove:
+        %elif ctxt.canApprove:
             %if wf.canPublish():
-                <a href="${url(resource, 'publish')}" class="btn btn-primary btn-block btn-large">Publish</a>
+                <a href="${url(ctxt, 'publish')}" class="btn btn-primary btn-block btn-large">Publish</a>
             %else:
                 <a class="btn btn-primary btn-block btn-large disabled">Publish</a>
             %endif
@@ -300,7 +310,7 @@
 
 
 <%def name="extra_head()">
-    %if resource.round.published:
+    %if ctxt.round.published:
         <script type="text/javascript" src="${ROOT_STATIC_URL}scripts/dist/raphael-min.js"></script>
     %endif
 </%def>
@@ -310,8 +320,8 @@
         var view =new View({
             el: $("#project-round-need-dashboard")
         });
-        %if resource.round.published:
-            new Tacho({el: document.getElementById('tachymeter'), fillRatio: ${resource.round.getExpiryPercentage()}});
+        %if ctxt.round.published:
+            new Tacho({el: document.getElementById('tachymeter'), fillRatio: ${ctxt.round.getExpiryPercentage()}});
         %endif
     });
 </script>

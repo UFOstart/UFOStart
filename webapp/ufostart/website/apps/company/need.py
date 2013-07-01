@@ -5,6 +5,7 @@ from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
 from ufostart.website.apps.auth.social import require_login_cls
 from ufostart.website.apps.forms.controls import FileUploadField, TagSearchField
+from ufostart.website.apps.models.company import NeedModel
 from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc
 
 
@@ -51,7 +52,7 @@ class NeedCreateForm(BaseForm):
     @classmethod
     def on_success(cls, request, values):
         try:
-            round = CreateNeedProc(request, {'Needs':[values], 'token': request.root.company.Round.token})
+            need = CreateNeedProc(request, {'Needs':[values], 'token': request.context.round.token})
         except DBNotification, e:
             if e.message == 'Need_Already_Exists':
                 return {'success':False, 'errors': {'name': "This need already exists, if you intend to create this need, please change its name to something less ambiguous!"}}
@@ -59,11 +60,14 @@ class NeedCreateForm(BaseForm):
                 raise e
 
         request.session.flash(GenericSuccessMessage("Need created successfully!"), "generic_messages")
-        return {'success':True, 'redirect': request.resource_url(request.context)}
+        return {'success':True, 'redirect': request.resource_url(request.context, need.slug)}
 
 class NeedCreateHandler(FormHandler):
     form = NeedCreateForm
 
+    def pre_fill_values(self, request, result):
+        result['need'] = NeedModel()
+        return super(NeedCreateHandler, self).pre_fill_values(request, result)
 
 
 class NeedEditForm(BaseForm):

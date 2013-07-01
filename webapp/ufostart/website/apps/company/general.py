@@ -1,7 +1,7 @@
 from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, HORIZONTAL_GRID
 from hnc.forms.handlers import FormHandler
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound, HTTPFound
 from pyramid.renderers import render_to_response
 from ufostart.website.apps.auth.social import require_login
 from ufostart.website.apps.models.procs import CreateCompanyProc, CreateRoundProc, PublishRoundProc, AskForApprovalProc
@@ -32,8 +32,6 @@ def ask_for_approval(context, request):
     if not round:
         raise HTTPNotFound()
     wf = round.Workflow
-    if not wf or not wf.canAskForApproval():
-        request.fwd("website_company", **context.urlArgs)
-    else:
+    if wf and wf.canAskForApproval():
         AskForApprovalProc(request, {'token': round.token})
-        request.fwd("website_company", **context.urlArgs)
+    raise HTTPFound(request.resource_url(context))

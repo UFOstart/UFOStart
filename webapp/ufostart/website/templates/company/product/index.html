@@ -6,7 +6,7 @@
 <%def name="content()">
     <div class="container">
 
-        <%widgets:pageHeader canEdit="${resource.canEdit}">
+        <%widgets:pageHeader canEdit="${ctxt.canEdit}">
             ${product.name}
         </%widgets:pageHeader>
 
@@ -25,7 +25,7 @@
 
         <div class="row mar-top-1">
             <div class="col col-lg-3">
-                ${widgets.companyInfo(resource.company)}
+                ${widgets.companyInfo(ctxt.company)}
                 <div class="mar-top-2">
                     <div class="box-title">Customers</div>
                     ${self.customerFacepile(company.Round.Pledges)}
@@ -70,7 +70,7 @@
     <h2>Offers</h2>
     <% form = view.schemas['ProductPledge'] %>
     ${self.displayOffer(product.offers, form)}
-    %if resource.canEdit:
+    %if ctxt.canEdit:
         <% form = view.schemas['ProductOffer'] %>
         ${self.createOfferForm(product, form, values.get(form.id), errors.get(form.id))}
     %endif
@@ -81,8 +81,8 @@
     ${baseform.prelims(form)}
     %for idx, offer in enumerate(offers):
         <div class="single-product-offer progress-step progress-${idx+1}">
-            %if resource.canEdit:
-                <a href="${url(resource, 'delete', query=[('offer', offer.name)])}" class="remove">×</a>
+            %if ctxt.canEdit:
+                <a href="${url(ctxt, 'delete', query=[('offer', offer.name)])}" class="remove">×</a>
             %endif
             <p><strong class="dark">${offer.name}</strong></p>
             <p class="text-small">${offer.description}</p>

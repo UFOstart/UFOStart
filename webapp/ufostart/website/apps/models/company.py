@@ -506,10 +506,11 @@ class CompanyModel(BaseCompanyModel):
     def pledgees(self):
         return self.Round and self.Round.Pledges or []
 
-    def groupedNeeds(self, n = 4):
+    def groupedNeeds(self, n = 4, customized = False):
         if not self.Round: return []
-        needs = self.Round.Needs
+        needs = [need for need in self.Round.Needs if need.customized == customized]
         length = len(needs)
+        if not length: return []
         result = OrderedDict()
         for i, need in enumerate(needs):
             l = result.setdefault(i % n, [])

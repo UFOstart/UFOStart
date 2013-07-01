@@ -123,8 +123,7 @@ class RoundContext(BaseProjectContext):
         self.request = parent.request
         self.round = round
     def __getitem__(self, item):
-        if item in ['publish', 'askforapproval']: return None
-        if item == 'productsetup': raise KeyError()
+        if item in ['productsetup', 'publish', 'askforapproval']: raise KeyError()
         if item == 'product': return ProductContext(self, 'product', self.__acl__, self.round.Product)
         return NeedContext(self, item, self.__acl__, self.round.needMap[item])
 
@@ -190,10 +189,10 @@ def includeme(config):
     config.add_view(general.publish_round       , context = RoundContext      , name='publish'   , permission='approve')
     config.add_view(general.ask_for_approval    , context = RoundContext      , name='askforapproval'  , permission='edit')
 
-    config.add_view(product.ProductCreateHandler, context = RoundContext      , name = 'productsetup'  , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
+    config.add_view(product.ProductCreateHandler, context = RoundContext      , name='productsetup'  , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
     config.add_view(product.ProductOfferHandler , context = ProductContext                       , renderer = "ufostart:website/templates/company/product/index.html")
-    config.add_view(product.ProductEditHandler  , context = ProductContext    , name = 'edit'    , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
-    config.add_view(product.remove_offer        , context = ProductContext    , name = 'delete'  , renderer = "json", permission="edit")
+    config.add_view(product.ProductEditHandler  , context = ProductContext    , name='edit'      , renderer = "ufostart:website/templates/company/product/create.html", permission="edit")
+    config.add_view(product.remove_offer        , context = ProductContext    , name='delete'    , renderer = "json", permission="edit")
 
     config.add_view(need.NeedCreateHandler      , context = RoundContext      , name='addneed'   , renderer = "ufostart:website/templates/company/need/create.html", permission='edit')
     config.add_view(need.index                  , context = NeedContext                          , renderer = "ufostart:website/templates/company/need/index.html")

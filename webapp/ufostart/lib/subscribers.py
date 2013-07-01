@@ -23,8 +23,8 @@ def add_renderer_variables(event):
         request = event['request']
         app_globals = request.globals
         event.update({"g"       : app_globals
-            , 'root'           : request.root
-            , 'resource'        : request.context
+            , 'root'            : request.root
+            , 'ctxt'            : request.context
             , 'url'             : request.resource_url
             , 'ROOT_STATIC_URL' : request.root.root_statics
             , 'STATIC_URL'      : request.root.static_prefix

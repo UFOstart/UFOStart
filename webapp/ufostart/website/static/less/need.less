@@ -14,9 +14,6 @@
   }
 }
 .valuation.small {
-  border-top:1px solid #b2b2b2;
-  margin: 0 12px;
-  padding:5px 0 12px;
   >.thirds {
     display: inline-block;
     width:33%;
@@ -39,6 +36,7 @@
     &.danger {
       background-color: @label-danger-bg;
       color: white;
+      >.glyphicon {float:right;}
     }
     &.success {
       background-color: fadeout(@label-success-bg, 70%);
@@ -75,12 +73,6 @@
 
 .need-card-inner {
   position: relative;
-  > .need-body{
-      overflow:hidden;
-      padding: 12px;
-      &.mini {height:80px;}
-      &.medium {height:230px;}
-  }
   > .label-list{margin: 12px;border-top: 1px solid #b2b2b2;padding-top: 12px;height:58px;overflow: hidden;}
 
   &.add-card {

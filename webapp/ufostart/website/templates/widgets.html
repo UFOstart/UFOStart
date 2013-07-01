@@ -22,7 +22,7 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
     <div class="col col-lg-12">
         <h1 class="section-title">
             %if canEdit:
-                <span class="btn-wrapper"><a title="Edit" href="${url(resource, 'edit')}"><span class="glyphicon glyphicon-pencil"></span></a></span>
+                <span class="btn-wrapper"><a title="Edit" href="${url(ctxt, 'edit')}"><span class="glyphicon glyphicon-pencil"></span></a></span>
             %endif
             <span class="brand-primary">${caller.body()}</span>
         </h1>
@@ -99,16 +99,16 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
 <%def name="valuation(need)">
     <div class="valuation">
         <div class="number total">
-            <strong class="text-muted">VALUE</strong>
-            <h2><strong>${need.display_total}</strong></h2>
+            <strong class="text-small text-muted">VALUE</strong>
+            <h2>${need.display_total}</h2>
         </div>
         <div class="secondary">
             <div class="number equity">
-                <div class="text-muted">Equity</div>
+                <div class="text-small text-muted">Equity</div>
                 <h2>${need.display_mix}</h2>
             </div>
             <div class="number cash">
-                <div class="text-muted">Cash</div>
+                <div class="text-small text-muted">Cash</div>
                 <h2>${need.display_cash}</h2>
             </div>
         </div>
@@ -118,13 +118,13 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
 <%def name="valuation_sml(need)">
     <div class="valuation small">
         <div class="thirds">
-            <strong>VALUE</strong>
-            <div class="brand-primary"><strong>${need.display_total}</strong></div>
+            <strong class="text-small">VALUE</strong>
+            <div class="brand-primary text-strong">${need.display_total}</div>
         </div><div class="thirds">
-            <div>Equity</div>
+            <small>Equity</small>
             <div class="brand-primary">${need.display_mix}</div>
         </div><div class="thirds">
-            <div>Cash</div>
+            <small>Cash</small>
             <div class="brand-primary">${need.display_cash}</div>
         </div>
     </div>
@@ -189,15 +189,17 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
 </%def>
 
 
-<%def name="companyInfo(company)">
+<%def name="companyInfo(company, withValue = True)">
     ${self.company_logo(company)}
     <div class="right-box">
         <a href="${root.company_url(company.slug)}" class="overflow"><strong>${company.display_name}</strong></a>
         <small class="description">${html.nn(company.pitch)}</small>
+        %if withValue:
         <div class="number-widget mar-top-1">
             <h6>Startup Value</h6>
             <div class="small-value">${company.displayStartupValue}</div>
         </div>
+        %endif
     </div>
 </%def>
 

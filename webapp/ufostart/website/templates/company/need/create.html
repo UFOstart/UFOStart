@@ -1,76 +1,21 @@
 <%inherit file="edit.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
-<%def name="bodyContent(need)">
-    <div class="box-content box-dark">
-        ${self.build_form(need, view.form, values.get(view.form.id), errors.get(view.form.id))}
-    </div>
-</%def>
-
-
-
 <%def name="content()">
     <div class="container">
         <div class="row">
             <div class="col col-lg-12">
-                <h1 class="site-slogan">
-                    Create a new need
+                <h1 class="section-title">
+                    <span class="brand-primary">Add a new need</span>
                 </h1>
             </div>
         </div>
-    </div>
-    <div class="container">
-        <div class="row mar-top-1">
-            <div class="col col-lg-8">
-                ${self.bodyContent(vctxt.need)}
-            </div>
-        </div>
-    </div>
-</%def>
-
-
-<%def name="build_form(need, form, values, errors)">
-    <form class="${form.grid.form_classes} labels-capitalized" id="${form.id}" method="POST">
-        ${baseform.prelims(form)}
-
-        ${form.fieldMap['name'].render(form.id, request, values, errors, view)|n}
-        <div class="row">
-            <div class="col col-lg-3">
-                ${form.fieldMap['picture'].render(form.id, request, values, errors, view)|n}
-            </div>
-            <div class="col col-lg-4 col-offset-1">
-                ${form.fieldMap['total'].render(form.id, request, values, errors, view)|n}
-                <div class="control-group">
-                    <div class="control-label">
-                        Cash Value
-                    </div>
-                    <div class="pseudo-controls data-target cash" data-currency-symbol="$">
-                        $---
-                    </div>
-                    <input type="hidden" name="${form.id}.cash" value="${values.get('cash', '')}"/>
-                </div>
-            </div>
-            <div class="col col-lg-4">
-                ${form.fieldMap['ratio'].render(form.id, request, values, errors, view)|n}
-
-                <div class="control-group">
-                    <div class="control-label">
-                        Equity Value
-                    </div>
-                    <div class="pseudo-controls data-target equity" data-currency-symbol="$">
-                        $---
-                    </div>
-                    <input type="hidden" name="${form.id}.equity" value="${values.get('equity', '')}"/>
+        <div class="row mar-top-2">
+            <div class="col col-lg-12">
+                <div class="box-content box-dark">
+                    ${self.build_form(need, "Create Need", view.form, values.get(view.form.id), errors.get(view.form.id))}
                 </div>
             </div>
         </div>
-
-        ${form.fieldMap['customText'].render(form.id, request, values, errors, view)|n}
-        <div class="label-list">
-            ${form.fieldMap['Tags'].render(form.id, request, values, errors, view)|n}
-        </div>
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary btn-block">Save</button>
-        </div>
-    </form>
+    </div>
 </%def>

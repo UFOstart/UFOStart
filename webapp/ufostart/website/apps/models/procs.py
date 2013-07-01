@@ -87,7 +87,7 @@ GetAllNeedsProc = ClientTokenProc("/web/need/list", result_cls=NeedModel, root_k
 
 
 SetCompanyAngelListPitchProc = ClientTokenProc("/web/company/angellist")
-CreateNeedProc = ClientTokenProc("/web/round/needcreate")
+CreateNeedProc = ClientTokenProc("/web/round/needcreate", result_cls=NeedModel, root_key="Need")
 EditNeedProc = ClientTokenProc("/web/round/need", result_cls=RoundModel, root_key="Round")
 ApplyForNeedProc = ClientTokenProc("/web/need/application")
 ApproveApplicationProc = ClientTokenProc("/web/need/approveapplication")
