@@ -480,5 +480,24 @@
         %endif
     });
 </script>
+
+${self.templates()}
+
 </%def>
 
+<%def name="templates()">
+<script type="text/template" id="template-activity">
+    <div class="box-card extra-compact">
+        <div class="picture">
+            <a href="{{ activity.getLink() }}">
+                <img src="{{ activity.getPicture() }}" alt="{{ activity.getName() }}"/>
+            </a>
+        </div>
+        <div class="right-box">
+            <div class="pull-right text-small text-muted">{{ model.getDate() }}</div>
+            <a class="entity-link" href="{{ activity.getLink() }}">{{ activity.getName() }}</a>
+            <p class="activity-line">{{ activity.getSubTitle() }}</p>
+        </div>
+    </div>
+</script>
+</%def>

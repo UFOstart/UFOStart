@@ -30,22 +30,6 @@ class ProductCreateForm(BaseForm):
 class ProductCreateHandler(FormHandler):
     form = ProductCreateForm
 
-    def __init__(self, context=None, request=None):
-        if not context.canEdit:
-            raise HTTPForbidden()
-        super(ProductCreateHandler, self).__init__(context, request)
-
-    def pre_fill_values(self, request, result):
-        al_company = request.session.get(SESSION_SAVE_TOKEN)
-        if al_company:
-            result['values'][self.form.id] = {
-                'name': al_company.name
-                , 'description': al_company.product_desc
-                , 'picture': al_company.getFirstScreenShot()
-                , 'video' : al_company.video_url
-            }
-        return super(ProductCreateHandler, self).pre_fill_values(request, result)
-
 
 
 

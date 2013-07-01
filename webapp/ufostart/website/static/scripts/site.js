@@ -87,6 +87,10 @@ require(["tools/ajax", "misc"], function(ajax, misc){
             format.replace(/(yyyy|dd|mm|HH|MM|SS)/g, function(part) { fmt[part] = i++; });
             return new Date(parts[fmt.yyyy], parts[fmt.mm]-1, parts[fmt.dd], parts[fmt.HH]||0, parts[fmt.MM]||0, parts[fmt.SS]||0);
         }
+        , months: ['January', 'February', "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        , formatDate: function(d){
+            return this.months[d.getUTCMonth()] +' '+ d.getUTCDay()+ ', '+d.getUTCFullYear()
+        }
     });
 
     if(_.isEmpty(root.hnc)){
