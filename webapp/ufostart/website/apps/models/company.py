@@ -38,13 +38,21 @@ class CompanyUserModel(Mapping):
     startupValue = IntegerField()
 
     @property
+    def isMentor(self):
+        return self.role == "MENTOR"
+    @property
+    def isFounder(self):
+        return self.role == "FOUNDER"
+    @property
+    def isTeamMember(self):
+        return self.role in ["FOUNDER", "TEAM_MEMBER"]
+
+    @property
     def confirmed(self):
         return not self.unconfirmed
-
     @property
     def picture_url(self):
         return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
-
     @property
     def position(self):
         return getRoleName(self.role) if self.role else self.headline
@@ -471,17 +479,19 @@ class CompanyModel(BaseCompanyModel):
     def memberMap(self):
         return {u.token:u for u in self.Users}
 
+
+
     def isMember(self, userToken):
         if not userToken: return False
         return bool(self.memberMap.get(userToken))
     def isFounder(self, userToken):
         if not userToken: return False
         user = self.memberMap.get(userToken)
-        return user.role == 'FOUNDER' if user else False
+        return user.isFounder
     def isMentor(self, userToken):
         if not userToken: return False
         user = self.memberMap.get(userToken)
-        return user.role == 'MENTOR' if user else False
+        return user.isMentor
 
     @property
     def no_users(self):
@@ -489,7 +499,10 @@ class CompanyModel(BaseCompanyModel):
 
     @reify
     def mentors(self):
-        return [u for u in self.Users if u.role == 'MENTOR']
+        return [u for u in self.Users if u.isMentor]
+    @reify
+    def members(self):
+        return sorted([u for u in self.Users if u.isTeamMember], key = attrgetter('role'))
 
     @property
     def rounds(self):

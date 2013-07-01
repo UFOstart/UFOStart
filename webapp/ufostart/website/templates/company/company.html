@@ -74,7 +74,7 @@
         </div>
     </div>
     <div class="mar-top-2">
-        ${self. (company.mentors, company.members)}
+        ${self.teamMembers(company.mentors, company.members)}
     </div>
 
     <div class="mar-top-2">
@@ -137,11 +137,8 @@
     %endfor
 </%def>
 
-<%def name="teamMembers(members)">
-    <div class="box-title">
-        Team Members
-    </div>
-    %for member in members:
+<%def name="teamMembers(mentors, members)">
+    <%def name="buildMember(member)">
         <div class="single-team-member box-card extra-compact">
             ${widgets.member_pic(member)}
             <div class="right-box">
@@ -159,17 +156,27 @@
                 %endif
             </div>
         </div>
-    %endfor
+    </%def>
 
+    <div class="box-title">
+        Team Members
+    </div>
+    %for member in members:
+        ${buildMember(member)}
+    %endfor
     %if ctxt.canEdit and hasattr(view, 'schemas'):
         ${self.build_forms(view.schemas.get('InviteCompany'), values, errors)}
     %endif
 
     <div class="mar-top-2">
         <div class="box-title">Mentors</div>
-
+        %for member in mentors:
+            ${buildMember(member)}
+        %endfor
+        %if ctxt.canEdit and hasattr(view, 'schemas'):
+            <a href="${url(ctxt, '1', 'mentor')}" class="btn btn-primary">Invite Mentor</a>
+        %endif
     </div>
-
 </%def>
 
 <%def name="build_forms(form, values, errors)">
