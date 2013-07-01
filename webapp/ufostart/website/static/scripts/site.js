@@ -91,6 +91,9 @@ require(["tools/ajax", "misc"], function(ajax, misc){
         , formatDate: function(d){
             return this.months[d.getUTCMonth()] +' '+ d.getUTCDay()+ ', '+d.getUTCFullYear()
         }
+        , formatNum: function(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
     });
 
     if(_.isEmpty(root.hnc)){

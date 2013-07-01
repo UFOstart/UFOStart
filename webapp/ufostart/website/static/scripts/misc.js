@@ -64,6 +64,7 @@ define(["tools/ajax"], function(ajax){
                         $(e.currentTarget).append(
                             templ({
                                 link: '/u/'+ user.token
+                                , startupValue: '$' + hnc.formatNum(user.startupValue)
                                 , user: user
                             })
                         )
