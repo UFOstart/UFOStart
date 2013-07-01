@@ -1,13 +1,26 @@
 define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging, ajax, Tachymeter){
     var
 
-    Activity = ajax.Model.extend({
 
-    })
-    , ActivityStream = ajax.Collection.extend({
-        model : Activity
+
+    PledgeModel = ajax.Model.extend({
+        key : "Pledge"
+        , getObject: function(){
+
+        }
     })
 
+    , TYPE_MAP = {
+        'PLEDGE': PledgeModel
+    }
+
+    , Activity = ajax.Model.extend({
+        getObject: function(){
+            var cls = TYPE_MAP[this.get('type')];
+            return new cls(this.get(cls.key))
+        }
+    })
+    , ActivityStream = ajax.Collection.extend({model : Activity})
 
     , ActivityView = Backbone.View.extend({
         template: _.template("<div>Event: {{ model.get('type') }}</div>")
