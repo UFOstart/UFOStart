@@ -2,9 +2,9 @@
 <%def name="round_logo(company, round, classes = '')"><% t = round.Template %>
 ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name, link = root.round_url(company.slug, company.round_no(round))), classes = classes)}
 </%def>
-<%def name="company_logo(company, classes = '')">${self.logo(company.logo_url, company.name, link = url(request.root, company.slug), classes = classes)}</%def>
-<%def name="app_company_logo(application, classes = '')">${self.logo(application.comapnyLogo, application.companyName, link = url(request.root, application.companySlug), classes = classes)}</%def>
-<%def name="product_logo(company, classes = '')">${self.logo(company.product_picture(request), company.product_name, link = url(request.root, company.slug), classes = classes)}</%def>
+<%def name="company_logo(company, classes = '')">${self.logo(company.logo_url, company.name, link = root.company_url(company.slug), classes = classes)}</%def>
+<%def name="app_company_logo(application, url, classes = '')">${self.logo(application.comapnyLogo, application.companyName, link = url, classes = classes)}</%def>
+<%def name="product_logo(company, classes = '')">${self.logo(company.product_picture(request), company.product_name, link = root.product_url(company.slug), classes = classes)}</%def>
 
 <%def name="logo(url, alt='', classes='', link = '')">
 %if url and link:

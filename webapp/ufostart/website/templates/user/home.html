@@ -127,7 +127,7 @@
     %if len(applications):
         %for application in applications:
             <div class="box-card compact single-company">
-                ${widgets.app_company_logo(application)}
+                ${widgets.app_company_logo(application, root.need_url(application.companySlug, application.needSlug))}
                 <div class="right-box">
                     <div class="date-ear-mark">${application.display_date}</div>
                     <!-- TODO: check application.needToken -->
@@ -146,10 +146,10 @@
 
 
 <%def name="displayEndorsements(endorsements)">
-    <div class="box-title">Enorsements</div>
+    <div class="box-title">Endorsements</div>
     %if len(endorsements):
         %for endorsement in endorsements:
-            <div class="box-card compact single-company">
+            <div class="box-card extra-compact single-company">
                 ${widgets.logo(endorsement.endorserPicture)}
                 <div class="right-box">
                     <div class="date-ear-mark">${endorsement.display_date}</div>
