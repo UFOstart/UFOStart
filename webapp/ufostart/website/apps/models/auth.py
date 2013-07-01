@@ -49,16 +49,16 @@ class UserApplicationModel(ApplicationModel):
         return format_date(self.created, format='medium')
 
 class UserEndorsementsModel(Mapping):
-    created = datetime(2013,01,02)
-    endorserPicture = "http://m.c.lnkd.licdn.com/mpr/mprx/0_LPiHRo-jCXDcryuSbK-BReK-CCEsrJySbAcBReC7gbYEfgwDWv1XvH9Tu2o5POgTXK39qfrLdKZo"
-    endorserName = "Tilda Swanson"
-    endorserToken = "02B0FC19-07AB-4914-BB40-6ED3CAFA4A4A"
-    endorserHeadline = "IT Expert"
+    created = DateTimeField()
+    endorserPicture = TextField()
+    endorserName = TextField()
+    endorserToken = TextField()
+    endorserHeadline = TextField()
 
-    needName = "SEO Expert"
-    needSlug = 'needSlug'
-    companyName = "Kickstarter"
-    companySlug = 'companySlug'
+    needName = TextField()
+    needSlug = TextField()
+    companyName = TextField()
+    companySlug = TextField()
 
     @property
     def display_date(self):
@@ -93,7 +93,7 @@ class UserModel(Mapping):
         return simplejson.dumps(result) if stringify else result
 
     def getEndorsements(self):
-        return [UserEndorsementsModel()]
+        return self.Endorsements
 
     @property
     def displayStartupValue(self):

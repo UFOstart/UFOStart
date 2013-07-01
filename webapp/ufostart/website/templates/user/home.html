@@ -33,7 +33,7 @@
                     </div>
                     <div class="col col-lg-6 number-widget">
                         <strong class="text-muted text-small">Endorsements</strong>
-                        <div class="small-value">----</div>
+                        <div class="small-value">${len(profile.getEndorsements())}</div>
                     </div>
                 </div>
 
@@ -153,12 +153,11 @@
                 ${widgets.logo(endorsement.endorserPicture)}
                 <div class="right-box">
                     <div class="date-ear-mark">${endorsement.display_date}</div>
-                    <!-- TODO: check endorsement.needToken -->
                     <div class="overflow"><a href="${root.profile_url(endorsement.endorserToken)}"><strong>${endorsement.endorserName}</strong></a></div>
                     <p class="overflow text-small text-muted">${endorsement.endorserHeadline}</p>
                     <small>Endorsed ${profile.name} for
-                        <a class="brand-teal text-strong" href="${root.need_url(endorsement.companySlug, endorsement.needSlug)}}">${endorsement.needName}</a> at
-                        <a class="brand-teal text-strong" href="${root.company_url(endorsement.companySlug)}}">${endorsement.companyName}</a> at
+                        <a class="brand-teal text-strong" href="${root.need_url(endorsement.companySlug, endorsement.needSlug)}">${endorsement.needName}</a> at
+                        <a class="brand-teal text-strong" href="${root.company_url(endorsement.companySlug)}">${endorsement.companyName}</a> at
                     </small>
                 </div>
             </div>
