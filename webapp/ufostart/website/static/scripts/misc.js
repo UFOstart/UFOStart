@@ -72,6 +72,6 @@ define(["tools/ajax"], function(ajax){
                 }
             });
         }
-    }).find("a").removeProp('href');
+    }).find("a").prop('href', null);
     return {NATIVE_PLACEHOLDER:NATIVE_PLACEHOLDER}
 });
