@@ -1,0 +1,58 @@
+// Tablets & small desktops only
+@media (min-width: @screen-tablet) and (max-width: @screen-tablet-max) {
+
+}
+
+// For desktops
+@media (min-width: @screen-large) {
+  ul.breadcrumbs {
+    @height: 50px;
+    > .crumb {
+      display: inline-block;
+      line-height:@height;
+      padding: 0 0 0 20px;
+      width:33%;
+      &.before{
+        padding-left: 40px;
+        &:before {
+          content:".";
+          color:transparent;
+          display: block;
+          position:absolute;
+          left:0;
+          top:0;
+          height:0;
+          width:0;
+          border-top: @height/2 solid transparent;
+          border-left: @height/2 solid white;
+          border-bottom: @height/2 solid transparent;
+        }
+      }
+      &.after:after {
+        content:".";
+        color:transparent;
+        display: block;
+        position:absolute;
+        right:0;
+        top:0;
+        height:0;
+        width:0;
+        border-top: @height/2 solid white;
+        border-left: @height/2 solid transparent;
+        border-bottom: @height/2 solid white;
+      }
+    &.active {
+        margin-top:-16px;
+        &.before{
+          padding-left:@height;
+          &:before {
+            border-width: 41px;
+          }
+        }
+        &.after:after {
+          border-width: 41px;
+        }
+      }
+    }
+  }
+}

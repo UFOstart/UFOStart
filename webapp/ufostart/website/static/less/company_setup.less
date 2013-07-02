@@ -29,61 +29,18 @@
 }
 
 ul.breadcrumbs {
-  @height: 50px;
   > .crumb {
     font-size:@font-size-small;
-    line-height: @height;
     font-weight: 600;
-    display: inline-block;
-    width:33%;
+    padding: 6px 12px;
+    display: block;
     position: relative;
     vertical-align: top;
-    padding-left: 20px;
-    &.before{
-      padding-left: 40px;
-      &:before {
-        content:".";
-        color:transparent;
-        display: block;
-        position:absolute;
-        left:0;
-        top:0;
-        height:0;
-        width:0;
-        border-top: @height/2 solid transparent;
-        border-left: @height/2 solid white;
-        border-bottom: @height/2 solid transparent;
-      }
-    }
-    &.after:after {
-      content:".";
-      color:transparent;
-      display: block;
-      position:absolute;
-      right:0;
-      top:0;
-      height:0;
-      width:0;
-      border-top: @height/2 solid white;
-      border-left: @height/2 solid transparent;
-      border-bottom: @height/2 solid white;
-    }
-
     &.active {
       color: white;
       font-size:@font-size-xlarge;
       font-weight: 300;
       padding: 16px;
-      margin-top:-16px;
-      &.before{
-        padding-left:@height;
-        &:before {
-          border-width: 41px;
-        }
-      }
-      &.after:after {
-        border-width: 41px;
-      }
     }
   }
 }
