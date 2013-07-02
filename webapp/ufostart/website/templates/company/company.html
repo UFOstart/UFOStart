@@ -2,9 +2,28 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../widgets.html" name="widgets"/>
 
+
+<%def name="bcrumbs()">
+    <div class="container breadcrumbs">
+        <div class="row">
+            <div class="col col-lg-12 crumbs-inner">
+                <div class="current-round-container pull-right">
+                    <div class="box-card extra-compact">
+                        ${widgets.round_logo(ctxt.company, ctxt.company.Round)}
+                        <div class="right-box">
+                            <div class="text-small text-muted text-strong">Current Round</div>
+                            <a href="${url(ctxt, 1)}">${ctxt.company.Round.display_name}</a>
+                        </div>
+                    </div>
+                </div>
+                ${self.bc(ctxt)}
+            </div>
+        </div>
+    </div>
+</%def>
+
 <%def name="content()">
     <div class="container">
-
         <%widgets:pageHeader canEdit="${ctxt.canEdit}">
             <span class="sub-title">Company Profile</span> ${ctxt.company.name}
         </%widgets:pageHeader>

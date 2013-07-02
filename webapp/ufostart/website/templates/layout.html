@@ -18,14 +18,7 @@
     </%block>
 
     ${self.header_messages(request.session.pop_flash("generic_messages"))}
-
-    <div class="container breadcrumbs">
-        <div class="row">
-            <div class="col col-lg-12 crumbs-inner">
-                ${self.bc(ctxt)}
-            </div>
-        </div>
-    </div>
+    ${self.bcrumbs()}
 
     <%block name="contentwrapper">
         <div class="page-wrapper">
@@ -142,5 +135,16 @@
             ${msg.body|n}
             </div>
         %endfor
+    </div>
+</%def>
+
+
+<%def name="bcrumbs()">
+    <div class="container breadcrumbs">
+        <div class="row">
+            <div class="col col-lg-12 crumbs-inner">
+                ${self.bc(ctxt)}
+            </div>
+        </div>
     </div>
 </%def>
