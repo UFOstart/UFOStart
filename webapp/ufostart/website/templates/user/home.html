@@ -4,62 +4,62 @@
 
 <%def name="content()">
     <div class="container">
-
         <%widgets:pageHeader>
             User Profile
         </%widgets:pageHeader>
+        ${self.bodyContent(ctxt.profile)}
+    </div>
+</%def>
 
+<%def name="bodyContent(profile)">
+    <div class="row">
+        <div class="col col-lg-2">
+            <div class="clearfix"><div class="cut-corner pull-left">
+            ${widgets.logo(profile.picture, alt=profile.name)}
+            </div></div>
+            <div class="mar-top-1"><strong class="brand-teal">${profile.name}</strong></div>
+            <p class="text-small">${html.nn(profile.headline)}</p>
+            <div class="number-widget mar-top-2">
+                <h6>Startup Value</h6>
+                <div class="value light">${profile.displayStartupValue}</div>
+            </div>
 
-        <div class="row">
-            <div class="col col-lg-2">
-                <div class="clearfix"><div class="cut-corner pull-left">
-                ${widgets.logo(profile.picture, alt=profile.name)}
-                </div></div>
-                <div class="mar-top-1"><strong class="brand-teal">${profile.name}</strong></div>
-                <p class="text-small">${html.nn(profile.headline)}</p>
-                <div class="number-widget mar-top-2">
-                    <h6>Startup Value</h6>
-                    <div class="value light">${profile.displayStartupValue}</div>
+            <div class="number-widget mar-top-1">
+                <h6>Companies</h6>
+                <div class="small-value">${len(profile.Companies)}</div>
+            </div>
+            <div class="row mar-top-1">
+                <div class="col col-lg-6 number-widget">
+                    <strong class="text-muted text-small">Mentoring</strong>
+                    <div class="small-value">${len(profile.mentoredStartups)}</div>
                 </div>
-
-                <div class="number-widget mar-top-1">
-                    <h6>Companies</h6>
-                    <div class="small-value">${len(profile.Companies)}</div>
+                <div class="col col-lg-6 number-widget">
+                    <strong class="text-muted text-small">Endorsements</strong>
+                    <div class="small-value">${len(profile.getEndorsements())}</div>
                 </div>
-                <div class="row mar-top-1">
-                    <div class="col col-lg-6 number-widget">
-                        <strong class="text-muted text-small">Mentoring</strong>
-                        <div class="small-value">${len(profile.mentoredStartups)}</div>
-                    </div>
-                    <div class="col col-lg-6 number-widget">
-                        <strong class="text-muted text-small">Endorsements</strong>
-                        <div class="small-value">${len(profile.getEndorsements())}</div>
-                    </div>
-                </div>
+            </div>
 
-            </div>
-            <div class="col col-lg-5">
-                ${self.mentoredCompanies(profile.mentoredStartups)}
-                ${self.companies(profile.Companies)}
-            </div>
-            <div class="col col-lg-5">
-                ${self.applications(profile.Applications)}
-                ${self.displayEndorsements(profile.getEndorsements())}
-            </div>
         </div>
-
-        <div class="row mar-top-2">
-            <div class="col col-lg-12">
-                ${self.bestMatchNeeds(isMyProfile, best_match)}
-            </div>
+        <div class="col col-lg-5">
+            ${self.mentoredCompanies(profile.mentoredStartups)}
+            ${self.companies(profile.Companies)}
         </div>
-
-        <div class="row mar-top-2">
-            <div class="col col-lg-12">
-                ${self.bestMatchNeeds(isMyProfile, location_needs)}
-            </div>
+        <div class="col col-lg-5">
+            ${self.applications(profile.Applications)}
+            ${self.displayEndorsements(profile.getEndorsements())}
         </div>
+    </div>
 
+    <div class="row mar-top-2">
+        <div class="col col-lg-12">
+            ${self.bestMatchNeeds(isMyProfile, best_match)}
+        </div>
+    </div>
+
+    <div class="row mar-top-2">
+        <div class="col col-lg-12">
+            ${self.bestMatchNeeds(isMyProfile, location_needs)}
+        </div>
     </div>
 </%def>
 
@@ -155,7 +155,7 @@
                     <div class="date-ear-mark">${endorsement.display_date}</div>
                     <div class="overflow"><a href="${root.profile_url(endorsement.endorserToken)}"><strong>${endorsement.endorserName}</strong></a></div>
                     <p class="overflow text-small text-muted">${endorsement.endorserHeadline}</p>
-                    <small>Endorsed ${profile.name} for
+                    <small>Endorsed ${ctxt.profile.name} for
                         <a class="brand-teal text-strong" href="${root.need_url(endorsement.companySlug, endorsement.needSlug)}">${endorsement.needName}</a> at
                         <a class="brand-teal text-strong" href="${root.company_url(endorsement.companySlug)}">${endorsement.companyName}</a>.
                     </small>
@@ -172,7 +172,7 @@
 
 
 <%def name="bestMatchNeeds(isMyProfile, needs)">
-    <div class="box-title">Needs that best match ${'your' if isMyProfile else u"{}'s".format(profile.name)} skills</div>
+    <div class="box-title">Needs that best match ${'your' if isMyProfile else u"{}'s".format(ctxt.profile.name)} skills</div>
     %if len(needs):
         <div class="row">
             %for need in needs:
@@ -182,7 +182,7 @@
             %endfor
         </div>
     %else:
-        <div class="empty">No Needs matching ${'your' if isMyProfile else u"{}'s".format(profile.name)} skill set found</div>
+        <div class="empty">No Needs matching ${'your' if isMyProfile else u"{}'s".format(ctxt.profile.name)} skill set found</div>
     %endif
 </%def>
 
@@ -197,7 +197,7 @@
             %endfor
         </div>
     %else:
-        <div class="empty">No Needs matching ${'your' if isMyProfile else u"{}'s".format(profile.name)} skill set found</div>
+        <div class="empty">No Needs matching ${'your' if isMyProfile else u"{}'s".format(ctxt.profile.name)} skill set found</div>
     %endif
 
 </%def>

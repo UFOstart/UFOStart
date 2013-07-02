@@ -16,7 +16,9 @@ class BaseProjectContext(object):
     __auth_template__ = "ufostart:website/templates/auth/login.html"
     canEdit = reify(canEdit)
     canApprove = reify(canApprove)
-
+    @property
+    def site_title(self):
+        return [self.displayName, self.company.display_name, self.request.globals.project_name]
 
 
 class TemplateContext(BaseProjectContext):
@@ -114,6 +116,7 @@ class ProductContext(BaseProjectContext):
 class FundingContext(BaseProjectContext):
     displayType = 'Funding'
     displayName = 'Invest'
+
     def __init__(self, parent, name, acl, funding):
         self.__parent__ = parent
         self.__name__ = name
@@ -156,6 +159,10 @@ class CompanyContext(BaseProjectContext):
     @property
     def displayName(self):
         return self.company.name
+    @property
+    def site_title(self):
+        return [self.company.display_name, self.request.globals.project_name]
+
 
     @reify
     def __acl__(self):
@@ -199,6 +206,10 @@ class InviteContext(BaseProjectContext):
     @property
     def displayName(self):
         return self.company.name
+    @property
+    def site_title(self):
+        return [self.company.display_name, self.request.globals.project_name]
+
 
     __auth_template__ = "ufostart:website/templates/company/invite_confirm.html"
 

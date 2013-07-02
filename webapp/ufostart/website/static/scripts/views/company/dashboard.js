@@ -33,7 +33,9 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
             return this.get("companyName")
         }
         , getSubTitle :function(){
-            return 'Someone applied for <a href="'+this.getLink()+'">'+this.get("need") + companyLink(this.get("companySlug"), this.get("companyName")) + '.';
+            var user = this.get("User")
+                , link = user?userLink(user.token, user.name):'<span>Someone</span>';
+            return link + ' applied for <a href="'+this.getLink()+'">'+this.get("need")+"</a> at " + companyLink(this.get("companySlug"), this.get("companyName")) + '.';
         }
     })
     , EndorsementModel = ajax.Model.extend({
@@ -48,7 +50,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
             return this.get("endorserName");
         }
         , getSubTitle :function(){
-            return userLink(this.get("endorserToken"), this.get("endorserName")) + " endorsed <span>"+this.get("endorseeName") + '</span> for ' + needLink(this.get("companySlug"), this.get("needSlug"), this.get("needName"))+'.';
+            return userLink(this.get("endorserToken"), this.get("endorserName")) + " endorsed <strong>"+this.get("endorseeName") + '</strong> for ' + needLink(this.get("companySlug"), this.get("needSlug"), this.get("needName"))+'.';
         }
     })
     , CompanySetupModel = ajax.Model.extend({
@@ -77,7 +79,26 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
             return '<a href="'+this.getLink()+'">'+this.get("name") + '</a> got approved by ' + userLink(this.get("mentorToken"), this.get("mentorName"))+'.';
         }
     })
-
+    , MentorInviteModel = ajax.Model.extend({
+        key : "User"
+        , getPicture :function(){
+            return this.get("invitorPicture");
+        }
+        , getLink :function(){
+            return "/u/"+this.get("invitorToken");
+        }
+        , getName :function(){
+            return this.get("invitorName");
+        }
+        , getSubTitle :function(){
+            return userLink(this.get("invitorToken"), this.get("invitorName")) + ' invited <strong>' + this.get("name") + '</strong> as a mentor.';
+        }
+    })
+    , MemberInviteModel = MentorInviteModel.extend({
+        getSubTitle :function(){
+            return userLink(this.get("invitorToken"), this.get("invitorName")) + ' invited <strong>' + this.get("name") + '</strong> as a team member.';
+        }
+    })
     , TYPE_MAP = {
         'PLEDGE': PledgeModel
         ,'APPLICATION': ApplicationModel
@@ -85,7 +106,8 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
         , 'WAITING_FOR_APROVAL': PendingModel
         , 'PUBLISHED': PublishedModel
         , 'COMPANY_SETUP': CompanySetupModel
-        , 'TEAM_MEMBER': false
+        , 'MENTOR_INVITE': MentorInviteModel
+        , 'TEAM_MEMBER_INVITE': MemberInviteModel
     }
 
     , Activity = ajax.Model.extend({
@@ -96,7 +118,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
             return obj;
         }
         , getDate: function(){
-            return hnc.formatDate(hnc.parseDate(this.get("created")))
+            return this.get("created")?hnc.formatDate(hnc.parseDate(this.get("created"))):'';
         }
     })
     , ActivityStream = ajax.Collection.extend({model : Activity})
@@ -136,7 +158,6 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
                 }
             })
         }
-
         , addOne: function(model){
             this.$activity.append(new ActivityView({template: this.template, model:model}).$el).removeClass("empty text-center");
         }

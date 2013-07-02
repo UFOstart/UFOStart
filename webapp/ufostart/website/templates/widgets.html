@@ -82,9 +82,13 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
         </div>
     %elif slideshare_url:
         <% meta = html.getSlideshareMeta(request, slideshare_url) %>
-        <div class="iframe-container">
-            <iframe src="//www.slideshare.net/slideshow/embed_code/${meta.slideshow_id}" width="847" height="400" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameborder="0"></iframe>
-        </div>
+        %if meta:
+            <div class="iframe-container">
+                <iframe src="//www.slideshare.net/slideshow/embed_code/${meta.slideshow_id}" width="847" height="400" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameborder="0"></iframe>
+            </div>
+        %else:
+            <div class="empty">Invalid slideshare URL: ${slideshare_url}</div>
+        %endif
     %elif video_url:
         <a href="${video_url}">${video_url}</a>
     %elif picture_url:

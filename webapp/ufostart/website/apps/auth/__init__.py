@@ -10,6 +10,10 @@ class SocialContext(object):
     __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'proceed')]
     __auth_template__ = "ufostart:website/templates/auth/login.html"
 
+    @property
+    def site_title(self):
+        return [self.__name__.title(), self.request.globals.project_name]
+
     def __init__(self, parent, name):
         self.__parent__ = parent
         self.__name__ = name

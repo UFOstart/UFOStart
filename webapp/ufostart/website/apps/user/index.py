@@ -4,12 +4,11 @@ from ufostart.website.apps.models.procs import RefreshProfileProc, FindPublicNee
 
 
 def home(context, request):
-    profile = context.user
+    profile = context.profile
     best_match = FindPublicNeeds(request, {'Search': {'tags': profile.display_skills}})
     location = FindPublicNeedsByLocation(request)
     return {
-        'profile': profile
-        , 'best_match':best_match
+        'best_match':best_match
         , 'isMyProfile': True
         , 'location_needs':location
     }
@@ -19,8 +18,5 @@ def home(context, request):
 def user(context, request):
     profile = context.profile
     location = FindPublicNeedsByLocation(request)
-    if not profile:
-        raise HTTPNotFound()
-    else:
-        best_match = FindPublicNeeds(request, {'Search': {'tags': profile.display_skills}})
-        return {'profile': profile, 'best_match':best_match, 'isMyProfile': False, 'location_needs':location}
+    best_match = FindPublicNeeds(request, {'Search': {'tags': profile.display_skills}})
+    return {'best_match':best_match, 'isMyProfile': False, 'location_needs':location}

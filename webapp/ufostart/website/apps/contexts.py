@@ -7,7 +7,7 @@ from ufostart.lib.baseviews import RootContext
 from ufostart.website.apps.auth import SocialContext
 from ufostart.website.apps.company import ProtoCompanyContext, TemplatesRootContext, ProtoInviteContext
 from ufostart.website.apps.models.auth import AnonUser
-from ufostart.website.apps.user import UserHomeContext, UserProtoContext
+from ufostart.website.apps.user import UserHomeContext, UserStubContext
 
 USER_SESSION_KEY = 'WEBSITE_USER'
 
@@ -20,6 +20,9 @@ class WebsiteRootContext(RootContext):
     __name__ = None
     __parent__ = None
     __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'apply'), (Allow, Authenticated, 'join')]
+    @property
+    def site_title(self):
+        return [self.request.globals.project_name]
 
     static_prefix = "/web/static/"
     app_label = 'website'
@@ -56,7 +59,7 @@ class WebsiteRootContext(RootContext):
         if item == 'c':
             return ProtoCompanyContext(self, item)
         elif item == 'u':
-            return UserProtoContext(self, item)
+            return UserStubContext(self, item)
         elif item == 'template':
             return TemplatesRootContext(self, item)
         elif item == 'home':
