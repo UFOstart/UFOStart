@@ -69,10 +69,7 @@
             <div class="box-title">Company</div>
             ${self.companyBox(company)}
 
-            <div class="mar-top-2">
-                <div class="box-title">Product</div>
-                ${self.productBox(company)}
-            </div>
+            ${self.productBox(company)}
 
             <div class="mar-top-2">
                 <div class="box-title">Investments</div>
@@ -182,37 +179,41 @@
 
 </%def>
 <%def name="productBox(company)">
-    %if not company.product_is_setup:
-        <div class="box-card shaded"><div class="empty">Product not set up</div></div>
-        <div class="mar-top-1">
-        %if ctxt.canEdit:
-            <a href="${url(ctxt, 'productsetup')}" class="btn btn-primary">Setup Your Product</a>
-        %endif
-        </div>
-    %else:
-        <div class="clearfix"><div class="cut-corner pull-left"><img src="${company.product_picture(request)}"/></div></div>
-        <div class="mar-top-half">
-            <a href="${url(ctxt, 'product')}" class="overflow"><strong>${company.product_name}</strong></a>
-            <small>${html.nn(company.product_description) | html.trunc(90)}</small>
-        </div>
-        <hr/>
-        <div class="number-widget">
-            <h6>Pledges</h6>
-            <div class="value light">${company.no_pledges}</div>
-        </div>
-        <hr/>
-        %if len(company.pledgees):
-            <h6>Customers</h6>
-            <div class="picture-pile">
-                %for pledge in company.pledgees[:4]:
-                    <div class="picture mini">
-                        <img src="${pledge.picture}"/>
-                    </div>
-                %endfor
+    <div class="mar-top-2 highlight-target">
+        <div id="target-create-product" class="highlight-anchor"></div>
+        <div class="box-title">Product</div>
+        %if not company.product_is_setup:
+            <div class="box-card shaded"><div class="empty">Product not set up</div></div>
+            <div class="mar-top-1">
+            %if ctxt.canEdit:
+                <a href="${url(ctxt, 'productsetup')}" class="btn btn-primary">Setup Your Product</a>
+            %endif
             </div>
-        <hr/>
+        %else:
+            <div class="clearfix"><div class="cut-corner pull-left"><img src="${company.product_picture(request)}"/></div></div>
+            <div class="mar-top-half">
+                <a href="${url(ctxt, 'product')}" class="overflow"><strong>${company.product_name}</strong></a>
+                <small>${html.nn(company.product_description) | html.trunc(90)}</small>
+            </div>
+            <hr/>
+            <div class="number-widget">
+                <h6>Pledges</h6>
+                <div class="value light">${company.no_pledges}</div>
+            </div>
+            <hr/>
+            %if len(company.pledgees):
+                <h6>Customers</h6>
+                <div class="picture-pile">
+                    %for pledge in company.pledgees[:4]:
+                        <div class="picture mini">
+                            <img src="${pledge.picture}"/>
+                        </div>
+                    %endfor
+                </div>
+            <hr/>
+            %endif
         %endif
-    %endif
+    </div>
 </%def>
 
 
@@ -442,7 +443,7 @@
     <ul class="list-unstyled">
         %for i, stage in enumerate(wf.sortedStages):
             <li>
-                <a class="workflow-link${' active' if active and active.name == stage.name else ''}${' done' if stage.completed else ''} wtf-${i+1}" href="${url(ctxt, stage.action) if stage.action else '#target-{}'.format(stage.slug)}">
+                <a class="workflow-link${' active' if active and active.name == stage.name else ''}${' done' if stage.completed else ''} wtf-${i+1}" href="#target-${stage.slug}">
                     <span class="position">${i+1}</span>${stage.display_name}
                 </a>
             </li>
