@@ -132,7 +132,7 @@
                             <p class="text-muted text-small">${intro.position}</p>
                         </div>
                         <div class="col col-lg-6">
-                            <a href="#" class="btn btn-primary btn-small btn-block ">Get Introduction</a>
+                            <a href="#" class="btn btn-primary btn-block ">Get Introduction</a>
                         </div>
                     </div>
                     %endfor
@@ -152,7 +152,7 @@
             </div>
             <a href="${service.url or '#'}" class="overflow"><strong>${service.name}</strong></a>
             <p class="text-muted text-small">${service.description | html.trunc(50)}</p>
-            <a href="${service.url or '#'}" target="_blank" class="btn btn-small btn-block btn-primary">See Details</a>
+            <a href="${service.url or '#'}" target="_blank" class="btn btn-block btn-primary">See Details</a>
         </div>
     %endfor
 </%def>
@@ -246,7 +246,7 @@
                             </div>
                         </div>
                         <div class="col col-sm-10">
-                            <a class="pull-right btn btn-small btn-primary">Endorse</a>
+                            <a class="pull-right btn btn-primary">Endorse</a>
                             <strong>{{ model.getName() }}</strong>
                             <p class="text-small text-muted">{{ model.getPosition() }}</p>
                         </div>
