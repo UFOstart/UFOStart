@@ -25,7 +25,7 @@
             <div class="main-description mar-top-2">
                 ${company.description | html.html,n}
             </div>
-            <div class="updates mar-top-2">
+            <div class="updates mar-top-4">
                 %if hasattr(view, 'schemas'):
                     ${self.updates(company, view.schemas.get('PostUpdate'), values, errors)}
                 %else:
@@ -38,17 +38,19 @@
             <div class="progress-wrapper">
 
                 <div class="progress-step">
+                <div class="progress-step">
+                <div class="progress-step">
                     <div class="progress-step">
                         <div class="box-content picture-gallery-preview">
                         ${widgets.gallery("Picture Gallery", "Play Slideshow", company.Pictures)}
                         </div>
                     </div>
-
+                </div>
                     <% meta = html.getSlideshareMeta(request, company.slideShare) %>
                     %if meta:
                         <div class="slideshare box-content">
                             <div class="box-title major">Slideshare</div>
-                            <div class="box-card">
+                            <div class="box-card extra-compact">
                                 <div class="picture"><img src="${meta.thumbnail}"/></div>
                                 <div class="right-box">
                                     <a class="entity-link" href="${company.slideShare}"><strong>${ meta.title }</strong></a>
@@ -57,6 +59,7 @@
                             </div>
                         </div>
                     %endif
+                </div>
                 </div>
             </div>
         </div>
@@ -73,11 +76,11 @@
             ${company.displayStartupValue}
         </div>
     </div>
-    <div class="mar-top-2">
+    <div class="mar-top-4">
         ${self.teamMembers(company.mentors, company.members)}
     </div>
 
-    <div class="mar-top-2">
+    <div class="mar-top-4">
         ${self.rounds(company, company.rounds)}
     </div>
 </%def>
@@ -87,12 +90,12 @@
         Rounds
     </div>
     %for i, round in enumerate(rounds):
-    <div class="box-card compact mar-top-half">
+    <div class="box-card compact mar-top-1">
         ${widgets.round_logo(company, round)}
         <div class="right-box">
             <a href="${root.round_url(company.slug, company.round_no(round))}" class="overflow"><strong>${round.display_name}</strong></a>
-            <div class="description">${html.format_date(round.start, 'short')}</div>
-            <div class="number-widget small">
+            <small class="text-muted">${html.format_date(round.start, 'short')}</small>
+            <div class="number-widget small mar-top-1">
                 <div class="halves">
                     <div class="heading">Time left</div>
                     <div class="small-value">${round.expiry_days} Days</div>
@@ -148,7 +151,9 @@
                 %else:
                     <p><strong>${ member.name }</strong></p>
                 %endif
-                <small class="headline">${html.nn(member.headline)}</small>
+                %if member.headline:
+                    <small class="headline">${html.nn(member.headline)}</small>
+                %endif
                 %if member.confirmed:
                 <div class="text-small">
                     <strong class="text-muted">Startup Value</strong> <span class="brand-primary">${member.displayStartupValue}</span>
@@ -168,13 +173,13 @@
         ${self.build_forms(view.schemas.get('InviteCompany'), values, errors)}
     %endif
 
-    <div class="mar-top-2">
+    <div class="mar-top-4">
         <div class="box-title">Mentors</div>
         %for member in mentors:
             ${buildMember(member)}
         %endfor
         %if ctxt.canEdit and hasattr(view, 'schemas'):
-            <a href="${url(ctxt, '1', 'mentor')}" class="btn btn-primary">Invite Mentor</a>
+            <a href="${url(ctxt, '1', 'mentor')}" class="btn btn-primary mar-top-1">Invite Mentor</a>
         %endif
     </div>
 </%def>

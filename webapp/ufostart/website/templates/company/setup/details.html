@@ -5,37 +5,37 @@
 <%def name="sectionTitle()">${template.name}</%def>
 
 <%def name="bodyContent()">
-        <div class="row mar-top-1">
+        <div class="row">
             <div class="col col-lg-4 template-details">
                 <div class="box-title">
                     Template Details
                 </div>
-                <div class="picture-header">
+                <div class="cut-corner">
                     <img src="${STATIC_URL}img/templates/${template.getStyleKey()}.png"/>
                 </div>
-                <div class="number-widget mar-top-2">
+                <div class="number-widget mar-top-1">
                     <div class="thirds">
                         <div class="heading">Needs</div>
-                        <div class="value">${len(template.Need)}</div>
+                        <div class="value light">${len(template.Need)}</div>
                     </div><div class="thirds">
                         <div class="heading">Time</div>
-                        <div class="value">90 <span class="sub-value">Days</span></div>
+                        <div class="value light">90 <strong class="text-small">Days</strong></div>
                     </div>
-                    <hr/>
+                    <hr class="mar-top-half"/>
                 </div>
             </div>
             <div class="col col-lg-8">
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
                 Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 
-                <div class="mar-top-1">
+                <div class="mar-top-4">
                     <a href="${root.template_select_url}" class="btn btn-default btn-large pull-right">Back to Template List</a>
                     <a href="${url(ctxt, 'startcompany')}" class="btn btn-primary btn-large">Use this Template</a>
                 </div>
 
             </div>
         </div>
-    <div class="row mar-top-2">
+    <div class="row mar-top-4">
         <div class="col col-lg-12">
             <div class="box-title">Needs</div>
         </div>
@@ -56,7 +56,7 @@
 <%def name="buildNeed(need)">
     <div class="need-card">
     <div class="need-card-inner">
-        <div class="box-header box-header-muted box-card">
+        <div class="cut-corner box-header-muted box-card">
             <h5>${need.name}</h5>
             <div class="description">
                 ${need.summary | html.trunc(200)}

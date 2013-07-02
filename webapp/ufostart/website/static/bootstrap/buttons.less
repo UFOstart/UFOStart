@@ -10,9 +10,9 @@
 .btn {
   display: inline-block;
   position: relative;
-  padding: (@padding-base-vertical - 2px) @padding-base-horizontal;
+  padding: 6px 20px;
   margin-bottom: 0; // For input.btn
-  font-size: @font-size-base;
+  font-size: @font-size-small;
   font-weight: 600;
   line-height: @line-height-base;
   text-align: center;
@@ -54,6 +54,8 @@
   background: none;
   -webkit-appearance: none;
 }
+
+.btn + .btn {margin-left: 12px;}
 
 // Alternate buttons
 // --------------------------------------------------
@@ -127,7 +129,7 @@ fieldset[disabled] .btn-link {
 // --------------------------------------------------
 
 .btn-large {
-  padding: @padding-large-vertical @padding-large-horizontal;
+  padding: (@padding-large-vertical - 2px) @padding-large-horizontal (@padding-large-vertical + 2px) @padding-large-horizontal;
   font-size: 22px;
   line-height:26px;
   font-weight:500;

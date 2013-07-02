@@ -12,6 +12,8 @@
 }
 
 
+
+@mar-base: 12px;
 // Small grid columns
 .generate-vertical-space(@lines) {
   .mar-top-X (@index) when (@index > 0) {
@@ -23,7 +25,7 @@
   .mar-top-X(@lines);
   // Apply the styles
   .mar-top-(@rows) {
-    margin-top: @line-height-computed * @rows;
+    margin-top: @mar-base * @rows;
   }
 }
 .generate-vertical-space(6);
@@ -31,7 +33,7 @@
 .min-height-5 {  min-height: 100px; }
 .min-height-7 {  min-height: 140px; }
 .min-height-15 {  min-height: 330px; }
-.mar-top-half {margin-top: ceil(@line-height-computed / 2);}
+.mar-top-half {margin-top: ceil(@mar-base / 2);}
 
 
 

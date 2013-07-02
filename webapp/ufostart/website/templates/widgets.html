@@ -87,10 +87,13 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
                 <iframe src="//www.slideshare.net/slideshow/embed_code/${meta.slideshow_id}" width="847" height="400" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameborder="0"></iframe>
             </div>
         %else:
-            <div class="empty">Invalid slideshare URL: ${slideshare_url}</div>
+            <div class="empty">Invalid slideshare URL: <a href="${slideshare_url}">${slideshare_url}</a>
+            </div>
         %endif
     %elif video_url:
-        <a href="${video_url}">${video_url}</a>
+        <div class="empty">
+            <a href="${video_url}">${video_url}</a>
+        </div>
     %elif picture_url:
         <div class="picture">
             <img src="${picture_url}"/>
@@ -146,7 +149,7 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
 %>
 <div class="need-card home">
     <div class="need-card-inner">
-        <div class="box-header box-header-muted box-card">
+        <div class="cut-corner box-header-muted box-card">
             <div class="picture">
                 <a href="${root.company_url(need.Company.slug)}"><img src="${need.Company.logo}"></a>
             </div>
@@ -189,8 +192,8 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
         <div class="box-content">
             <div class="valuation small">
                 <div class="number total">
-                    <strong>PLEDGES</strong>
-                    <h3 class="no-margin brand-primary">${company.no_pledges or '0'}</h3>
+                    <strong class="text-muted">PLEDGES</strong>
+                    <h2 class="no-margin">${company.no_pledges or '0'}</h2>
                 </div>
             </div>
         </div>

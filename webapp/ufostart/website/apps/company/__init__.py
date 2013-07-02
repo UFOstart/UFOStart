@@ -227,7 +227,7 @@ class InviteContext(BaseProjectContext):
             pass
         if not invite:
             self.request.session.flash(GenericErrorMessage("Invalid Token, please check your email and link!"), "generic_messages")
-            raise HTTPFound(self.request.home_url)
+            raise HTTPFound(self.request.root.home_url)
         return invite
 
 

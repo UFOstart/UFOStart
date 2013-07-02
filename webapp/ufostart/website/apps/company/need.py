@@ -14,6 +14,7 @@ def index(context, request):
 
 def accept_application(context, request):
     ApproveApplicationProc(request, {'token': context.application.token})
+    request.session.flash(GenericSuccessMessage("The application has been accepted!"), "generic_messages")
     raise HTTPFound(request.resource_url(context.__parent__))
 
 
