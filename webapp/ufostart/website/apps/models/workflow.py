@@ -25,10 +25,11 @@ STAGE_NAMES = {
     u'CREATE_COMPANY':'Setup Project'
     , u'ADD_MENTOR':'Add a Mentor'
     , u'INVITE_TEAM':'Invite Team Members'
-    , u'CREATE_PRODUCT':'Customize Product'
+    , u'CREATE_PRODUCT':'Add Product'
     , u'CUSTOMISE_NEEDS': 'Customize Needs'
     , u'SENT_FOR_MENTOR_APRROVAL':'Ask Mentor for Approval'
     , u'PUBLISH': 'Publish Round'
+    , u'FUNDING': 'Define Funding'
 }
 
 
