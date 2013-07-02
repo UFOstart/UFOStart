@@ -47,7 +47,7 @@ class CompanyCreateForm(BaseForm):
             else:
                 return {'success':False, 'message': 'Something went wrong: {}'.format(e.message)}
         else:
-            return {'success':True, 'redirect': request.root.company_url(request.root.user.getDefaultCompanySlug())}
+            return {'success':True, 'redirect': request.root.round_url(request.root.user.getDefaultCompanySlug(), '1')}
 
 
 class CreateProjectHandler(FormHandler):
