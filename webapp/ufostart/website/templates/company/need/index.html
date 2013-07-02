@@ -30,6 +30,20 @@
                         </div>
                     </div>
                 %endif
+
+                <script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+                <script type="IN/Share" data-counter="top"></script>
+                <div id="fb-root"></div>
+                <script>(function(d, s, id) {
+                  var js, fjs = d.getElementsByTagName(s)[0];
+                  if (d.getElementById(id)) return;
+                  js = d.createElement(s); js.id = id;
+                  js.src = "//connect.facebook.net/de_DE/all.js#xfbml=1";
+                  fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));</script>
+                <div class="fb-send" data-href="${request.url}"></div>
+                <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
             </div>
         </div>
 
@@ -94,52 +108,40 @@
 
 <%def name="recommendedExperts(company, need)">
     <div class="expert-list">
-    %for expert in need.experts[:8]:
-    <div class="expert-briefing">
-        <div class="row">
-            <div class="col col-sm-2">
-                <div class="picture medium">
-                    <img src="${expert.picture_url}" alt="${expert.name}"/>
-                </div>
-            </div>
-            <div class="col col-sm-8">
-                <strong>${expert.name}</strong>
-                <p class="text-muted text-small">${html.nn(expert.position)}</p>
-            </div>
-            <div class="col col-sm-2">
+    %for expert in need.experts:
+    <div class="single-team-member box-card extra-compact">
+        <div class="picture">
+            <img src="${expert.picture_url}" alt="${expert.name}"/>
+        </div>
+        <div class="right-box">
                 %if expert.introducers:
-                    <a class="expander btn btn-default btn-large btn-block" data-toggle-target=".expert-briefing" data-toggle-class="expanded" data-toggle-text="▼">◀</a>
+                    <a class="expander btn btn-default btn-large pull-right" data-toggle-target=".single-team-member" data-toggle-class="expanded" data-toggle-text="▼">◀</a>
                 %else:
-                    <div class="pull-right linkedin-widget" data-widget="SendMessage" data-entity-id="${expert.linkedinId}">
+                    <div class="pull-right linkedin-widget" data-widget="SendMessage" data-entity-id="MIpEeQQFUd">
                         <a class=" btn btn-primary">Send Message</a>
                     </div>
                 %endif
-            </div>
-        </div>
-        %if expert.introducers:
-            <div class="row expert-details show-expanded">
-                <div class="col col-lg-10 col-offset-2">
+            <strong>${expert.name}</strong>
+            <p class="text-muted text-small">${html.nn(expert.position)}</p>
+            %if expert.introducers:
+                <div class="expert-details show-expanded">
                     <h6 class="text-muted">Introducers</h6>
                     %for intro in expert.introducers:
-                    <div class="row mar-top-half">
-                        <div class="col col-sm-2">
-                            <div class="picture mini">
-                                <img src="${intro.picture}" alt="${intro.name}"/>
-                            </div>
+                    <div class="box-card box-card extra-compact mar-top-1">
+                        <div class="picture mini">
+                            <img src="${intro.picture}" alt="${intro.name}"/>
                         </div>
-                        <div class="col col-sm-4">
+                        <div class="right-box">
+                            <a href="#" class="btn btn-primary pull-right">Get Introduction</a>
                             <a class="overflow" href="#"><strong>${intro.name}</strong></a>
                             <p class="text-muted text-small">${intro.position}</p>
-                        </div>
-                        <div class="col col-lg-6">
-                            <a href="#" class="btn btn-primary btn-block ">Get Introduction</a>
                         </div>
                     </div>
                     %endfor
                 </div>
-            </div>
-        %endif
+            %endif
         </div>
+    </div>
     %endfor
     </div>
 </%def>

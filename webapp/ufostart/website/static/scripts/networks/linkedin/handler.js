@@ -24,9 +24,12 @@ define(["tools/hash"
             return this.options.accessToken
         }
         , api: function(path, cb, ctxt){
-            $.get(this.prefix + path+ '?oauth2_access_token='+this.options.accessToken, function(data, status, xhr){
+            $.get(this.getApiUrl(path), function(data, status, xhr){
                 cb.apply(ctxt, [data, status, xhr]);
             });
+        }
+        , getApiUrl: function(path){
+            return this.prefix + path+ '?oauth2_access_token='+this.options.accessToken
         }
         , getContacts: function(cb, ctxt){
             var view = this;

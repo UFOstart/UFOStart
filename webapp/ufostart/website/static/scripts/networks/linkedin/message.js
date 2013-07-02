@@ -10,10 +10,25 @@ define(["tools/ajax"], function(ajax){
             $el.on({"click": _.bind(this.onClick, this)});
         }
         , onClick: function(e){
-            var id = $(e.currentTarget).data("entityId");
-            this.options.auth.getContacts(function(collection){
-                console.log(collection.get(id));
-            })
+            var id = $(e.currentTarget).data("entityId")
+                , msg = {
+                      "recipients": {
+                         "values": [{
+                           "person": {
+                                "_path": "/people/"+id
+                             }
+                           }]
+                         },
+                       "subject": "JSON POST from JSAPI",
+                       "body": "Some long message!!!!"
+                     };
+              ajax.submit(
+                  {url:this.options.auth.getApiUrl("/people/~/mailbox")
+                    , data: msg
+                    , success: function(){
+                      console.log(arguments);
+                  }
+              })
         }
     })
     , instance = null;

@@ -22,7 +22,7 @@ def redirect_view(context, request):
     params = {'response_type':"code"
                 , 'client_id':settings.appid
                 , 'state': request.session.get_csrf_token()
-                , 'scope':'r_basicprofile r_emailaddress r_network r_fullprofile r_contactinfo'
+                , 'scope':'r_basicprofile r_emailaddress r_network r_fullprofile r_contactinfo w_messages'
                 , 'redirect_uri':request.resource_url(request.context, 'cb')
              }
     request.fwd_raw("{}?{}".format(context.getCodeEndpoint, urllib.urlencode(params)))
