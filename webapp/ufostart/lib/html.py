@@ -1,10 +1,8 @@
-import base64
 import hashlib
 import logging
 import re
 from urlparse import urlparse, parse_qsl
 from babel import dates
-from beaker.crypto import pycrypto
 from hnc.apiclient import Mapping, TextField, IntegerField
 from hnc.tools.tools import word_truncate_by_letters
 from httplib2 import Http
