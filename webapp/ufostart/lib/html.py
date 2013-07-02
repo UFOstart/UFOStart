@@ -63,6 +63,24 @@ def getYoutubeVideoId(url):
     params = dict(parse_qsl(query))
     return params.get('v')
 
+
+
+def getYoutubeMeta(request, url):
+    videoId =  getYoutubeVideoId(url)
+    if not videoId: return None
+    meta = request.globals.cache.get("YOUTUBE_{}".format(videoId))
+    if not meta:
+        try:
+            log.info("YOUTUBE Cache miss for {}".format(url))
+            h = Http()
+            resp, data = h.request("https://gdata.youtube.com/feeds/api/videos/{}?v=2&alt=json".format(videoId))
+            meta = simplejson.loads(data)
+            request.globals.cache.set("YOUTUBE_{}".format(videoId), meta)
+            return meta
+        except: return None
+    else:
+        return meta
+
 def getVimeoVideoId(url):
     if not url: return None
     scheme, netloc, path, params, query, fragment = urlparse(url)

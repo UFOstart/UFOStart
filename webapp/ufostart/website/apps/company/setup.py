@@ -1,9 +1,10 @@
 from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm, REQUIRED, StringField
 from hnc.forms.handlers import FormHandler
+from ufostart.lib.html import getSlideshareMeta
 from ufostart.website.apps.auth.imp import SESSION_SAVE_TOKEN
 from ufostart.website.apps.models.procs import CreateCompanyProc, EditCompanyProc
-from ufostart.website.apps.forms.controls import FileUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField
+from ufostart.website.apps.forms.controls import FileUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField, SlideshareField, VideoUrlField
 
 
 def basics(context, request):
@@ -76,8 +77,8 @@ class CompanyEditForm(BaseForm):
         , CleanHtmlField('pitch', 'Elevator Pitch', REQUIRED, max = 90)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
         , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')
-        , StringField("video", "Paste a Vimeo or Youtube Url")
-        , StringField("slideShare", "Paste a Slideshare Url")
+        , VideoUrlField("video", "Paste a Vimeo or Youtube Url")
+        , SlideshareField("slideShare", "Paste a Slideshare Url")
     ]
 
     @classmethod

@@ -4,9 +4,8 @@ from hnc.forms.formfields import BaseForm, REQUIRED, StringField, TextareaField,
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.httpexceptions import HTTPForbidden, HTTPFound
-from ufostart.website.apps.auth.imp import SESSION_SAVE_TOKEN
 from ufostart.website.apps.models.procs import SetProductOffersProc, PledgeCompanyProc, CreateProductProc, RemoveProductOfferProc
-from ufostart.website.apps.forms.controls import PictureGalleryUploadField, SanitizedHtmlField, CleanHtmlField
+from ufostart.website.apps.forms.controls import PictureGalleryUploadField, SanitizedHtmlField, CleanHtmlField, VideoUrlField
 
 
 class ProductCreateForm(BaseForm):
@@ -16,7 +15,7 @@ class ProductCreateForm(BaseForm):
         StringField('name', "Name", REQUIRED)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
         , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')
-        , StringField("video", "Vimeo/YouTube")
+        , VideoUrlField("video", "Vimeo/YouTube")
     ]
     @classmethod
     def on_success(cls, request, values):

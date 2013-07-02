@@ -2,9 +2,11 @@ from BeautifulSoup import BeautifulSoup
 import formencode
 from hnc.forms import formfields
 from hnc.forms.formfields import StringField, TextareaField
+from ufostart.lib.html import getSlideshareMeta, getYoutubeVideoId, getVimeoMeta, getYoutubeMeta
 from ufostart.models.tasks import TASK_CATEGORIES
 
 
+_ = lambda s:s
 def optionGetter(request):
     return [formfields.NullConfigModel()] + TASK_CATEGORIES
 
@@ -66,3 +68,43 @@ class SanitizedHtmlField(TextareaField):
 
 class CleanHtmlField(StringField):
     _validator = RemoveHtmlString
+
+
+
+
+
+class SlideShareUrl(formencode.validators.String):
+    messages = dict(
+        tooLong=_('Enter a value not more than %(max)i characters long'),
+        tooShort=_('Enter a value %(min)i characters long or more'),
+        notSlideshareUrl = _("Please add a valid slideshare url. You can find it in the sharing options of the presentation.")
+    )
+    def _to_python(self, value, state):
+        result = super(SlideShareUrl, self)._to_python(value, state)
+
+        if not getSlideshareMeta(state, value):
+            raise formencode.api.Invalid(
+                self.message('notSlideshareUrl', state, max=self.max), value, state)
+        else: return result
+
+class SlideshareField(StringField):
+    _validator = SlideShareUrl
+
+
+
+class VideoUrl(formencode.validators.String):
+    messages = dict(
+        tooLong=_('Enter a value not more than %(max)i characters long'),
+        tooShort=_('Enter a value %(min)i characters long or more'),
+        notVideoUrl = _("Please add a valid youtube or vimeo url. You can find it in the browser address bar when watching the video.")
+    )
+    def _to_python(self, value, state):
+        result = super(VideoUrl, self)._to_python(value, state)
+
+        if not getYoutubeMeta(state, value) or getVimeoMeta(state, value):
+            raise formencode.api.Invalid(
+                self.message('notVideoUrl', state, max=self.max), value, state)
+        else: return result
+
+class VideoUrlField(StringField):
+    _validator = VideoUrl
