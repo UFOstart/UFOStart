@@ -133,7 +133,7 @@
             <div class="right-box">
                 <div class="pull-right"><small>${html.format_datetime(update.created, 'medium')}</small></div>
                 <a class="entity-link" href="${root.profile_url(update.userToken)}">${update.userName}</a>
-                <small class="text-muted">${update.userHeadline}</small>
+                <small class="text-muted">${html.nn(update.userHeadline)}</small>
                 <div class="mar-top-2">${html.html(update.text)|n}</div>
             </div>
         </div>
