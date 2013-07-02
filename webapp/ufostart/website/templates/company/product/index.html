@@ -181,5 +181,6 @@
             new PView({el: $("#product-page")})
         });
         $('a.slide-show-starter').colorbox({rel:'picture', photo:true});
+        $('div.play').on("click", function(){ $('a.slide-show-starter').colorbox({open:true}) });
     </script>
 </%def>

@@ -35,33 +35,36 @@
         </div>
 
         <div class="col col-lg-3">
-            <div class="progress-wrapper">
-
-                <div class="progress-step">
-                <div class="progress-step">
-                <div class="progress-step">
+            %if company.Pictures or company.slideShare:
+                <div class="progress-wrapper">
                     <div class="progress-step">
-                        <div class="box-content picture-gallery-preview">
-                        ${widgets.gallery("Picture Gallery", "Play Slideshow", company.Pictures)}
-                        </div>
-                    </div>
-                </div>
-                    <% meta = html.getSlideshareMeta(request, company.slideShare) %>
-                    %if meta:
-                        <div class="slideshare box-content">
-                            <div class="box-title major">Slideshare</div>
-                            <div class="box-card extra-compact">
-                                <div class="picture"><img src="${meta.thumbnail}"/></div>
-                                <div class="right-box">
-                                    <a class="entity-link" href="${company.slideShare}"><strong>${ meta.title }</strong></a>
-                                    <small class="headline">${meta.author_name}</small>
+                    <div class="progress-step">
+                        %if company.Pictures:
+                        <div class="progress-step">
+                            <div class="progress-step">
+                                <div class="box-content picture-gallery-preview">
+                                ${widgets.gallery("Picture Gallery", "Play Slideshow", company.Pictures)}
                                 </div>
                             </div>
                         </div>
-                    %endif
+                        %endif
+                        <% meta = html.getSlideshareMeta(request, company.slideShare) %>
+                        %if meta:
+                            <div class="slideshare box-content">
+                                <div class="box-title major">Slideshare</div>
+                                <div class="box-card extra-compact">
+                                    <div class="picture"><img src="${meta.thumbnail}"/></div>
+                                    <div class="right-box">
+                                        <a class="entity-link" href="${company.slideShare}"><strong>${ meta.title }</strong></a>
+                                        <small class="headline">${meta.author_name}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        %endif
+                    </div>
+                    </div>
                 </div>
-                </div>
-            </div>
+            %endif
         </div>
     </div>
 </%def>
@@ -218,5 +221,6 @@
             });
         });
         $('a.slide-show-starter').colorbox({rel:'picture', photo:true});
+        $('div.play').on("click", function(){ $('a.slide-show-starter').colorbox({open:true}) });
     </script>
 </%def>
