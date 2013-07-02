@@ -81,9 +81,9 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
             <iframe src="//player.vimeo.com/video/${vimeo_id}" width="847" height="400" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameborder="0"></iframe>
         </div>
     %elif slideshare_url:
-        <% slideshare_id = html.getSlideShareId(request, slideshare_url) %>
+        <% meta = html.getSlideshareMeta(request, slideshare_url) %>
         <div class="iframe-container">
-            <iframe src="//www.slideshare.net/slideshow/embed_code/${slideshare_id}" width="847" height="400" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameborder="0"></iframe>
+            <iframe src="//www.slideshare.net/slideshow/embed_code/${meta.slideshow_id}" width="847" height="400" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameborder="0"></iframe>
         </div>
     %elif video_url:
         <a href="${video_url}">${video_url}</a>

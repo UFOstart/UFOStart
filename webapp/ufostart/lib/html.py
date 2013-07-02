@@ -123,6 +123,7 @@ def getVimeoMeta(request, url):
 
 class SlideShareMeta(Mapping):
     id = IntegerField()
+    slideshow_id = IntegerField()
     thumbnail = TextField()
     title = TextField()
     author_name = TextField()
