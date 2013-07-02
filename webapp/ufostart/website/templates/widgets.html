@@ -95,9 +95,17 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
             <a href="${video_url}">${video_url}</a>
         </div>
     %elif picture_url:
-        <div class="picture">
-            <img src="${picture_url}"/>
-        </div>
+        %if isinstance(picture_url, list):
+            %if len(picture_url):
+                <div class="picture">
+                    <img src="${picture_url[0]}"/>
+                </div>
+            %endif
+        %else:
+            <div class="picture">
+                <img src="${picture_url}"/>
+            </div>
+        %endif
     %endif
 </%def>
 

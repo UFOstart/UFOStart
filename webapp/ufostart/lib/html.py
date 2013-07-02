@@ -56,7 +56,7 @@ def format_datetime(date, format="full"):
     return dates.format_datetime(date, format, locale='en')
 
 def getYoutubeVideoId(url):
-    if not url: return None
+    if not url or 'youtube' not in url.lower(): return None
     scheme, netloc, path, params, query, fragment = urlparse(url)
     params = dict(parse_qsl(query))
     return params.get('v')
@@ -80,7 +80,7 @@ def getYoutubeMeta(request, url):
         return meta
 
 def getVimeoVideoId(url):
-    if not url: return None
+    if not url or 'vimeo' not in url.lower(): return None
     scheme, netloc, path, params, query, fragment = urlparse(url)
     for e in path.split("/"):
         try:

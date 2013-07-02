@@ -536,16 +536,20 @@ class CompanyModel(BaseCompanyModel):
     def product_picture(self, request):
         product = self.Round.Product
         if not product: return None
-        media = product.video or product.picture
-        if not media: return None
-        if 'youtube' in media:
-            youtubeId  = getYoutubeVideoId(media)
-            return 'http://img.youtube.com/vi/{}/0.jpg'.format(youtubeId)
-        elif 'vimeo' in media:
-            meta = getVimeoMeta(request, media)
-            return meta.thumbnail_large if meta else None
-        else:
-            return media
+        video = product.video
+        if video:
+            if 'youtube' in video:
+                youtubeId  = getYoutubeVideoId(video)
+                return 'http://img.youtube.com/vi/{}/0.jpg'.format(youtubeId)
+            elif 'vimeo' in video:
+                meta = getVimeoMeta(request, video)
+                return meta.thumbnail_large if meta else None
+            else: return video
+        elif product.picture:
+            return product.picture
+        elif product.Pictures:
+            return product.Pictures[0]
+        else: return ''
 
     @property
     def display_tags(self):

@@ -126,7 +126,10 @@ class UserModel(Mapping):
 
     @property
     def display_skills(self):
-        return map(attrgetter('name'), self.Skills)
+        if self and self.Skills:
+            return map(attrgetter('name'), self.Skills)
+        else:
+            return ''
     @property
     def displayStartupValue(self):
         return format_currency(self.startupValue)
