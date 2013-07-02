@@ -54,8 +54,8 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
         <div class="picture"></div>
         <div class="btn-label">${play_btn_text}</div>
     </div>
-    %for picture in pictures:
-        <a class="picture slide-show-starter js-link" data-module="views/company/gallery"><img src="${picture}"/></a>
+    %for i, picture in enumerate(pictures):
+        <a class="picture slide-show-starter" href="${picture}" title="Screenshot ${i+1}"><img src="${picture}"/></a>
     %endfor
 </%def>
 

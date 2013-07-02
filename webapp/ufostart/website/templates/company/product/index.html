@@ -16,8 +16,16 @@
             </div>
             <div class="col col-lg-3">
                 %if product.Pictures:
-                    <div class="picture-gallery-preview progress-step progress-1">
+                    <div class="progress-step">
+                    <div class="progress-step">
+                    <div class="progress-step">
+                    <div class="progress-step">
+                    <div class="picture-gallery-preview">
                         ${widgets.gallery("Picture Gallery", "Play Slideshow", product.Pictures)}
+                    </div>
+                    </div>
+                    </div>
+                    </div>
                     </div>
                 %endif
             </div>
@@ -160,7 +168,11 @@
 </%def>
 
 
+<%def name="extra_head()">
+    <link href='${STATIC_URL}scripts/colorbox/colorbox.css' rel='stylesheet' type='text/css'>
+</%def>
 <%def name="post_scripts()">
+    <script src="${STATIC_URL}scripts/colorbox/jquery.colorbox-min.js"></script>
     <script>
         require(["form", "views/company/product"], function(View, PView){
             $("form.form-validated").each(function(idx, elem){
@@ -168,5 +180,6 @@
             });
             new PView({el: $("#product-page")})
         });
+        $('a.slide-show-starter').colorbox({rel:'picture', photo:true});
     </script>
 </%def>

@@ -207,7 +207,9 @@
     %endif
 </%def>
 
-
+<%def name="extra_head()">
+    <link href='${STATIC_URL}scripts/colorbox/colorbox.css' rel='stylesheet' type='text/css'>
+</%def>
 <%def name="post_scripts()">
     <script>
         require(["tools/ajax"], function(ajax){
@@ -215,5 +217,6 @@
                 ajax.ifyForm({root: $(form)});
             });
         });
+        $('a.slide-show-starter').colorbox({rel:'picture', photo:true});
     </script>
 </%def>
