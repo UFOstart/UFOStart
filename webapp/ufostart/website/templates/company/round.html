@@ -172,9 +172,7 @@
             </div>
             <hr/>
         %endif
-        <div class="text-center">
-            <a href="${url(ctxt, 'funding')}" class="btn btn-primary">Invest</a>
-        </div>
+        <a href="${url(ctxt, 'funding')}" class="btn btn-primary">Invest</a>
     %endif
 
 </%def>
@@ -225,7 +223,7 @@
 
 
 <%def name="lowerContent(company)">
-    <div class="row mar-top-2" id="project-round-need-dashboard" data-entity-id=${ctxt.round.token}>
+    <div class="row mar-top-2" id="project-round-need-dashboard" data-entity-id="${ctxt.round.token}">
         <%self:renderNeedColumns needs="${company.groupedNeeds(3, False)}">
             <div class="col col-lg-12">
                 <div class="box-title highlight-target">
@@ -234,16 +232,17 @@
                 </div>
             </div>
         </%self:renderNeedColumns>
-    </div>
-    <%self:renderNeedColumns needs="${company.groupedNeeds(3, True)}">
-        <div class="col col-lg-12 mar-top-2"><div class="box-title">
-            %if ctxt.round.published:
-                Needs
-            %else:
-                Customized Needs
-            %endif
-        </div></div>
-    </%self:renderNeedColumns>
+
+        <%self:renderNeedColumns needs="${company.groupedNeeds(3, True)}">
+            <div class="col col-lg-12 mar-top-2"><div class="box-title">
+                %if ctxt.round.published:
+                    Needs
+                %else:
+                    Customized Needs
+                %endif
+            </div></div>
+        </%self:renderNeedColumns>
+        </div>
 </%def>
 
 
