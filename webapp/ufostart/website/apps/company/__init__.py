@@ -19,22 +19,27 @@ class BaseProjectContext(object):
     @property
     def site_title(self):
         return [self.displayName, self.company.display_name, self.request.globals.project_name]
-
+    @property
+    def request(self):
+        return self.__parent__.request
 
 class TemplateContext(BaseProjectContext):
+    @property
+    def site_title(self):
+        return [self.request.globals.project_name]
     def __init__(self, parent, name, template):
         self.__name__ = name
         self.__parent__ = parent
-        self.request = parent.request
         self.template = template
 
 
 class TemplatesRootContext(BaseProjectContext):
+    @property
+    def site_title(self):
+        return [self.request.globals.project_name]
     def __init__(self, parent, name):
         self.__name__ = name
         self.__parent__ = parent
-        self.request = parent.request
-
 
     def __getitem__(self, item):
         template = GetTemplateDetailsProc(self.request, {'key': item})
@@ -55,7 +60,6 @@ class ApplicationContext(BaseProjectContext):
         self.__parent__ = parent
         self.__name__ = name
         self.__acl__ = acl
-        self.request = parent.request
         self.application = application
 
     @reify
@@ -80,7 +84,6 @@ class NeedContext(BaseProjectContext):
         self.__parent__ = parent
         self.__name__ = name
         self.__acl__ = acl
-        self.request = parent.request
         self.need = need
     def __getitem__(self, item):
         return ApplicationContext(self, item, self.__acl__, self.need.applicationMap[item])
@@ -102,7 +105,6 @@ class ProductContext(BaseProjectContext):
         self.__parent__ = parent
         self.__name__ = name
         self.__acl__ = acl
-        self.request = parent.request
         self.product = product
 
     @reify
@@ -121,7 +123,6 @@ class FundingContext(BaseProjectContext):
         self.__parent__ = parent
         self.__name__ = name
         self.__acl__ = acl
-        self.request = parent.request
         self.funding = funding
 
     @reify
@@ -141,7 +142,6 @@ class RoundContext(BaseProjectContext):
         self.__parent__ = parent
         self.__name__ = name
         self.__acl__ = acl
-        self.request = parent.request
         self.round = round
     def __getitem__(self, item):
         if item in ['productsetup', 'approve', 'reject', 'askforapproval']: raise KeyError()
@@ -173,7 +173,6 @@ class CompanyContext(BaseProjectContext):
     def __init__(self, parent, name):
         self.__name__ = name
         self.__parent__ = parent
-        self.request = parent.request
         self.user = self.request.root.user
 
     def __getitem__(self, item):
@@ -192,7 +191,6 @@ class ProtoCompanyContext(BaseProjectContext):
     def __init__(self, parent, name):
         self.__name__ = name
         self.__parent__ = parent
-        self.request = parent.request
 
     def __getitem__(self, item):
         return CompanyContext(self, item)
@@ -219,7 +217,6 @@ class InviteContext(BaseProjectContext):
     def __init__(self, parent, name):
         self.__name__ = name
         self.__parent__ = parent
-        self.request = parent.request
 
     @reify
     def invite(self):
@@ -251,7 +248,7 @@ class ProtoInviteContext(BaseProjectContext):
     def __init__(self, parent, name):
         self.__name__ = name
         self.__parent__ = parent
-        self.request = parent.request
+
     def __getitem__(self, item):
         return InviteContext(self, item)
 
