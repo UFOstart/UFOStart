@@ -36,6 +36,10 @@ class SocialLoginSuccessful(SocialResult):
 
 class AbstractSocialResource(object):
     __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'import')]
+    @property
+    def request(self):
+        return self.__parent__.request
+
     def __init__(self, parent, name, settings):
         self.__parent__ = parent
         self.__name__ = name

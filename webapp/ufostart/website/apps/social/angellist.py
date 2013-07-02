@@ -50,10 +50,6 @@ class CompanyModel(Mapping):
     screenshots = ListField(DictField(ScreenShotModel))
     pledges = ListField(DictField(ScreenShotModel))
 
-
-
-
-
     @property
     def display_name(self):
         return self.name
@@ -101,6 +97,9 @@ class CompanyRoleModel(Mapping):
 
 
 class SocialResource(AbstractSocialResource):
+    @property
+    def site_title(self):
+        return ['Angellist Import', self.request.globals.project_name]
     getCodeEndpoint = "https://angel.co/api/oauth/authorize"
     codeEndpoint = "https://angel.co/api/oauth/token"
     profileEndpoint = "https://api.angel.co/1/me"
