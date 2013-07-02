@@ -134,7 +134,7 @@
 
 
 <%def name="investmentBox(funding)">
-    %if not funding:
+    %if not funding.amount:
         <div class="empty">No Investment set up yet</div>
         <a class="btn btn-primary" href="${url(ctxt, 'fundingsetup')}">Set up funding</a>
     %else:
