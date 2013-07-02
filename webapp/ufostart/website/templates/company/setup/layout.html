@@ -4,7 +4,7 @@
 <%def name="content()">
     <div class="container">
         <div class="row mar-top-1">
-            <div class="col col-lg-10">
+            <div class="col col-lg-9">
                 ${self.slogan()}
             </div>
         </div>
@@ -18,10 +18,10 @@
             </div>
         </div>
         <div class="row mar-top-1">
-            <div class="col col-lg-2 pull-right">
+            <div class="col col-lg-3 pull-right">
                 ${self.wtfBox()}
             </div>
-            <div class="col col-lg-10">
+            <div class="col col-lg-9">
                 ${self.bodyContent()}
             </div>
         </div>
@@ -32,8 +32,8 @@
 <%def name="crumbs(no)">
     <ul class="list-unstyled breadcrumbs">
         <li class="crumb wtf-1 after ${'active' if no == 1 else ''}">
-            Choose a Template</li><li class="crumb wtf-2 before after ${'active' if no == 2 else ''}">
-            Review Template</li><li class="crumb wtf-3 before ${'active' if no == 3 else ''}">
+            Choose a Template</li><li class="crumb wtf-3 before after ${'active' if no == 2 else ''}">
+            Review Template</li><li class="crumb wtf-5 before ${'active' if no == 3 else ''}">
             Setup Project
         </li>
     </ul>

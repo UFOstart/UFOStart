@@ -22,7 +22,7 @@ class BaseInviteForm(BaseForm):
 
             InviteToCompanyProc(request, {'Invite': [values]})
 
-            request.session.flash(GenericSuccessMessage("You successfully invited {name} to your company!".format(**values)), "generic_messages")
+            request.session.flash(GenericSuccessMessage(u"You successfully invited {name} to your company!".format(**values)), "generic_messages")
             return {'success':True, 'redirect': request.resource_url(request.context)}
 
 def InviteMentorForm(role_):
@@ -77,7 +77,7 @@ def add_top_mentor(context, request):
     values = {'invitorToken': user.token, 'invitorName': user.name, 'companySlug':  company.slug, 'userToken': mentorToken, 'role':'MENTOR', 'email':mentor.email, 'name':mentor.name}
     InviteToCompanyProc(request, {'Invite': [values]})
 
-    request.session.flash(GenericSuccessMessage("You successfully invited {name} to your company!".format(**values)), "generic_messages")
+    request.session.flash(GenericSuccessMessage(u"You successfully invited {name} to your company!".format(**values)), "generic_messages")
     raise HTTPFound(request.resource_url(request.context))
 
 def showInfo(context, request):

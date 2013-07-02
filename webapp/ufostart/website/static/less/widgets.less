@@ -26,9 +26,10 @@
   .wtf-X(@lines);
   // Apply the styles
   .wtf-(@num) {
-    @bg : desaturate(lighten(@base-color, 10% * (@num - 1)), 10% * (@num - 1));
+    @bg : mix(#fff, @base-color, 10% * (@num - 1));
     background-color: @bg;
-    color: contrast(@bg, darken(@base-color, 5%), lighten(@base-color, 50%));
+    color: contrast(@bg, mix(#fff, @bg, 40%), mix(#000, @bg, 40%), 80%);
+
     &[href]:hover{
       text-decoration: none;
       color: contrast(@bg, lighten(@base-color, 20%), lighten(@base-color, 70%));
