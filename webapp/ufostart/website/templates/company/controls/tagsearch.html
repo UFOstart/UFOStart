@@ -9,13 +9,11 @@
         <div class="search-field">
             <div class="${widget.tag_container_class}">
                 %for i, tag in enumerate(value):
-                    ${self.tagTempl(widget, str(i), tag['name'], tag['name'])}
+${self.tagTempl(widget, str(i), tag['name'], tag['name'])}\
                 %endfor
             </div><input type="text" class="query ${widget.getClasses()}" autocomplete="off" ${widget.attrs.getInputAttrs(request)|n}/>
         </div>
     </div>
 </%block>
 
-<%def name="tagTempl(widget, pos, label, id)">
-    <span class="${widget.tag_class}">${label|n}<span class="close">×</span><input type="hidden" name="${widget.getName(prefix)}-${pos|n}.name" value="${id|n}"/></span>
-</%def>
+<%def name="tagTempl(widget, pos, label, id)"><span class="${widget.tag_class}">${label|n}<span class="close">×</span><input type="hidden" name="${widget.getName(prefix)}-${pos|n}.name" value="${id|n}"/></span></%def>

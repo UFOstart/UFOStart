@@ -33,8 +33,10 @@
 
         <div class="row mar-top-1">
             <div class="col col-lg-3">
-                ${widgets.companyInfo(ctxt.company)}
-                <div class="mar-top-2">
+                <div class="box-card">
+                    ${widgets.companyInfo(ctxt.company)}
+                </div>
+                <div class="mar-top-4">
                     <div class="box-title">Customers</div>
                     ${self.customerFacepile(company.Round.Pledges)}
                 </div>
@@ -43,7 +45,7 @@
                 <div class="main-description">
                     ${product.description | html.html,n}
                 </div>
-                <div class="mar-top-2">
+                <div class="mar-top-4">
                     <div class="box-title">Pledges</div>
                     ${self.pledgeList(company.Round.Pledges)}
                 </div>
@@ -155,7 +157,7 @@
             <div class="right-box">
                 <div class="pull-right"><small>${html.format_datetime(pledge.created, 'medium')}</small></div>
                 <a class="entity-link" href="${root.profile_url(pledge.networkId)}">${pledge.name}</a>
-                <small class="text-muted">Pledged to buy <strong>${pledge.offerName}</strong></small>
+                <p class="text-small text-muted">Pledged to buy <strong>${pledge.offerName}</strong></p>
                 <div class="long-description">${html.nn(pledge.comment)}</div>
             </div>
         </div>

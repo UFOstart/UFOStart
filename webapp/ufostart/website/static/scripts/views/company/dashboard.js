@@ -6,116 +6,94 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
     , companyLink = function(slug, name){return '<a href="/c/'+slug+'">' + name + '</a>'}
     , productLink = function(slug, name){return '<a href="/c/'+slug+'/1/product">' + name + '</a>'}
     , needLink = function(cSlug, nSlug, name){return '<a href="/c/'+cSlug+'/1/'+nSlug+'">' + name + '</a>'}
-    , PledgeModel = ajax.Model.extend({
-        key : "Pledge"
-        , getPicture :function(){
-            return this.get("picture")
-        }
-        , getLink :function(){
-            return "#"
-        }
-        , getName :function(){
-            return this.get("name")
-        }
-        , getSubTitle :function(){
-            return this.get("name")+" pledged to buy " + productLink(this.get("companySlug"), this.get("offerName")) +'.';
-        }
-    })
-    , ApplicationModel = ajax.Model.extend({
-        key : "Application"
-        , getPicture :function(){
-            return this.get("comapnyLogo")
-        }
-        , getLink :function(){
-            return "/c/"+this.get("companySlug")+"/1/"+this.get("needSlug")
-        }
-        , getName :function(){
-            return this.get("companyName")
-        }
-        , getSubTitle :function(){
-            var user = this.get("User")
-                , link = user?userLink(user.token, user.name):'<span>Someone</span>';
-            return link + ' applied for <a href="'+this.getLink()+'">'+this.get("need")+"</a> at " + companyLink(this.get("companySlug"), this.get("companyName")) + '.';
-        }
-    })
-    , EndorsementModel = ajax.Model.extend({
-        key : "Endorsement"
-        , getPicture :function(){
-            return this.get("endorserPicture");
-        }
-        , getLink :function(){
-            return "/u/"+this.get("endorserToken");
-        }
-        , getName :function(){
-            return this.get("endorserName");
-        }
-        , getSubTitle :function(){
-            return userLink(this.get("endorserToken"), this.get("endorserName")) + " endorsed <strong>"+this.get("endorseeName") + '</strong> for ' + needLink(this.get("companySlug"), this.get("needSlug"), this.get("needName"))+'.';
-        }
-    })
-    , CompanySetupModel = ajax.Model.extend({
-        key : "Company"
-        , getPicture :function(){
-            return this.get("logo");
-        }
-        , getLink :function(){
-            return "/c/"+this.get("slug");
-        }
-        , getName :function(){
-            return this.get("name");
-        }
-        , getSubTitle :function(){
-            return '<a href="'+this.getLink()+'">'+this.get("name") + '</a> was setup by ' + userLink(this.get("creatorToken"), this.get("creatorName")) + '.';
-        }
-    })
-    , PendingModel = CompanySetupModel.extend({
-        getSubTitle :function(){
-            return '<a href="'+this.getLink()+'">'+this.get("name") + '</a> is waiting for approval.';
-        }
-    })
 
-    , PublishedModel = CompanySetupModel.extend({
-        getSubTitle :function(){
-            return '<a href="'+this.getLink()+'">'+this.get("name") + '</a> got approved by ' + userLink(this.get("mentorToken"), this.get("mentorName"))+'.';
+    , getPledgeModel = function(model){
+        var key = "Pledge", actor = model.get(key);
+        return {
+            picture: actor.picture
+            , link: "#"
+            , name: actor.name
+            , subTitle : actor.name+" pledged to buy " + productLink(actor.companySlug, actor.offerName) +'.'
         }
-    })
-    , MentorInviteModel = ajax.Model.extend({
-        key : "User"
-        , getPicture :function(){
-            return this.get("invitorPicture");
+    }
+    , getApplicationModel = function(model){
+        var key = "Application"
+            , actor = model.get(key)
+            , actorLink = "/c/"+actor.companySlug+"/1/"+actor.needSlug
+            , user = actor.User
+            , uLink = user?userLink(user.token, user.name):'<span>Someone</span>';
+        return {
+            picture: actor.comapnyLogo
+            , link: actorLink
+            , name: actor.companyName
+            , subTitle : uLink + ' applied for <a href="'+actorLink+'">'+actor.need+"</a> at " + companyLink(actor.companySlug, actor.companyName) + '.'
         }
-        , getLink :function(){
-            return "/u/"+this.get("invitorToken");
+    }
+    , getEndorsementModel = function(model){
+        var key = "Endorsement"
+            , actor = model.get(key)
+            , actorLink = "/u/"+actor.endorserToken;
+        return {
+            picture: actor.endorserPicture
+            , link: actorLink
+            , name: actor.endorserName
+            , subTitle : userLink(actor.endorserToken, actor.endorserName) + " endorsed <strong>"+actor.endorseeName + '</strong> for ' + needLink(actor.companySlug, actor.needSlug, actor.needName)+'.'
         }
-        , getName :function(){
-            return this.get("invitorName");
+    }
+    , getCompanySetupModel = function(model){
+        var key = "Company"
+            , actor = model.get(key)
+            , actorLink = "/c/"+actor.slug
+            , user = actor.User;
+        return {
+            picture: actor.logo
+            , link: actorLink
+            , name: actor.name
+            , subTitle : user?'<a href="'+actorLink+'">'+actor.name + '</a> was setup by ' + userLink(user.token, user.name) + '.':''
+            , actor: actor
         }
-        , getSubTitle :function(){
-            return userLink(this.get("invitorToken"), this.get("invitorName")) + ' invited <strong>' + this.get("name") + '</strong> as a mentor.';
+    }
+    , getPendingModel = function(model){
+        var result = getCompanySetupModel(model);
+        result.subTitle = '<a href="'+result.link+'">'+result.name + '</a> is waiting for approval.';
+        return result;
+    }
+    , getPublishedModel = function(model){
+        var result = getCompanySetupModel(model);
+        result.subTitle = '<a href="'+result.link+'">'+result.name + '</a> got approved by ' + userLink(result.actor.mentorToken, result.actor.mentorName)+'.';;
+        return result;
+    }
+    , getMentorInviteModel = function(model){
+        var actor = model.get("Invitor"), user = model.get("User"), uLink = user.token?userLink(user.token, user.name):'<strong>' + user.name + '</strong>';
+        return {
+            picture: actor.picture
+            , link: '/u/'+actor.token
+            , uLink: uLink
+            , name: actor.name
+            , subTitle: userLink(actor.token, actor.name) + ' invited '+uLink+' as a mentor.'
+            , actor : actor
+            , user : user
         }
-    })
-    , MemberInviteModel = MentorInviteModel.extend({
-        getSubTitle :function(){
-            return userLink(this.get("invitorToken"), this.get("invitorName")) + ' invited <strong>' + this.get("name") + '</strong> as a team member.';
-        }
-    })
+    }
+    , getMemberInviteModel = function(model){
+        var result = getMentorInviteModel(model);
+        result.subTitle = userLink(result.actor.token, result.actor.name) + ' invited '+result.uLink+' as a team member.';
+        return result;
+    }
     , TYPE_MAP = {
-        'PLEDGE': PledgeModel
-        ,'APPLICATION': ApplicationModel
-        ,'ENDORSEMENT': EndorsementModel
-        , 'WAITING_FOR_APROVAL': PendingModel
-        , 'PUBLISHED': PublishedModel
-        , 'COMPANY_SETUP': CompanySetupModel
-        , 'MENTOR_INVITE': MentorInviteModel
-        , 'TEAM_MEMBER_INVITE': MemberInviteModel
+        'PLEDGE': getPledgeModel
+        ,'APPLICATION': getApplicationModel
+        ,'ENDORSEMENT': getEndorsementModel
+        , 'COMPANY_SETUP': getCompanySetupModel
+        , 'WAITING_FOR_APROVAL': getPendingModel
+        , 'PUBLISHED': getPublishedModel
+        , 'MENTOR_INVITE': getMentorInviteModel
+        , 'TEAM_MEMBER_INVITE': getMemberInviteModel
     }
 
     , Activity = ajax.Model.extend({
         getActivity: function(){
-            var cls = TYPE_MAP[this.get('type')]
-                , obj = new cls();
-            obj.set(this.get(obj.key))
-            return obj;
+           return TYPE_MAP[this.get('type')](this);
         }
         , getDate: function(){
             return this.get("created")?hnc.formatDate(hnc.parseDate(this.get("created"))):'';
@@ -158,6 +136,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
                 }
             })
         }
+
         , addOne: function(model){
             this.$activity.append(new ActivityView({template: this.template, model:model}).$el).removeClass("empty text-center");
         }
@@ -171,6 +150,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
                 }, 1000);
             }
         }
+
         , removeNeed: function(e){
             if(!e.keyCode||e.keyCode == 13){
                 var $t = $(e.currentTarget)
