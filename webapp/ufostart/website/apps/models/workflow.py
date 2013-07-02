@@ -32,6 +32,9 @@ STAGE_NAMES = {
 }
 
 
+ACTIONS = {'CREATE_PRODUCT': 'productsetup'}
+
+
 class StageModel(Mapping):
     name = TextField()
     order = IntegerField()
@@ -44,6 +47,12 @@ class StageModel(Mapping):
     @property
     def display_name(self):
         return STAGE_NAMES[self.name]
+
+    @property
+    def action(self):
+        return ACTIONS.get(self.name)
+
+
     @property
     def slug(self):
         return self.name.replace("_", "-").lower()

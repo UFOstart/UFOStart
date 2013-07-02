@@ -102,7 +102,7 @@
   font-size:@font-size-small;
   position: relative;
   .box-shadow(0 4px 6px rgba(0,0,0,.4) inset);
-  > .position {
+  .position {
     display: block;
     position: absolute;
     bottom: 12px;
@@ -142,9 +142,10 @@
 
 
 .highlight-target {
-  .transition(box-shadow .1s ease-in-out);
+  .transition(~"box-shadow .1s ease-in-out, background-color .1s ease-in-out");
   &.highlighted {
     .box-shadow(0 0 15px navy);
+    background-color: fadeout(@wtf-color, 70%);
   }
 }
 .highlight-anchor {

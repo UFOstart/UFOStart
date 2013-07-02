@@ -103,7 +103,8 @@
         <div class="value light">${company.displayStartupValue}</div>
     </div>
     <hr/>
-    <div class="mar-top-half">
+    <div class="mar-top-half highlight-target">
+        <span id="target-invite-team" class="highlight-anchor"></span>
         <h6>Team members</h6>
         <div class="picture-pile">
         %for user in company.members[:8]:
@@ -115,17 +116,19 @@
         </div>
     </div>
     <hr/>
-    <h6>Mentors</h6>
-    <div class="picture-pile">
-        %for user in company.mentors[:8]:
-            ${widgets.member_pic(user, classes='mini')}
-        %endfor
-        <span class="highlight-target" style="display:inline-block;">
-            <span id="target-add-mentor" class="highlight-anchor"></span>
-            %if ctxt.canEdit:
-                <a href="${url(ctxt, 'mentor')}" class="btn btn-primary">Add Mentor</a>
-            %endif
-        </span>
+    <div class="highlight-target">
+        <h6>Mentors</h6>
+        <div class="picture-pile">
+            %for user in company.mentors[:8]:
+                ${widgets.member_pic(user, classes='mini')}
+            %endfor
+            <span style="display:inline-block;">
+                <span id="target-add-mentor" class="highlight-anchor"></span>
+                %if ctxt.canEdit:
+                    <a href="${url(ctxt, 'mentor')}" class="btn btn-primary">Add Mentor</a>
+                %endif
+            </span>
+        </div>
     </div>
     <hr/>
 </%def>
@@ -439,7 +442,7 @@
     <ul class="list-unstyled">
         %for i, stage in enumerate(wf.sortedStages):
             <li>
-                <a class="workflow-link${' active' if active and active.name == stage.name else ''}${' done' if stage.completed else ''} wtf-${i+1}" href="#target-${stage.slug}">
+                <a class="workflow-link${' active' if active and active.name == stage.name else ''}${' done' if stage.completed else ''} wtf-${i+1}" href="${url(ctxt, stage.action) if stage.action else '#target-{}'.format(stage.slug)}">
                     <span class="position">${i+1}</span>${stage.display_name}
                 </a>
             </li>
