@@ -1,10 +1,11 @@
 from hnc.forms.formfields import BaseForm, StringField, EmailField, REQUIRED, HiddenField, ChoiceField
 from hnc.forms.handlers import FormHandler
-from hnc.forms.messages import GenericSuccessMessage
+from hnc.forms.messages import GenericSuccessMessage, GenericErrorMessage
 from pyramid.httpexceptions import HTTPFound
+from ufostart.lib import html
 from ufostart.models.tasks import RoleModel
 from ufostart.website.apps.forms.controls import SanitizedHtmlField
-from ufostart.website.apps.models.procs import InviteToCompanyProc, AcceptInviteProc, RefreshProfileProc, AddUpdateCompanyProc, GetTopMentorsProc
+from ufostart.website.apps.models.procs import InviteToCompanyProc, AcceptInviteProc, RefreshProfileProc, AddUpdateCompanyProc, GetTopMentorsProc, GetProfileProc
 
 
 class BaseInviteForm(BaseForm):
@@ -63,6 +64,21 @@ class AddMentorHandler(FormHandler):
         result['mentors'] = GetTopMentorsProc(request).User
         return super(AddMentorHandler, self).pre_fill_values(request, result)
 
+def add_top_mentor(context, request):
+    mentorToken = request.params.get('m')
+    mentor  = GetProfileProc(request, {'token': mentorToken})
+    if not mentor:
+        request.session.flash(GenericErrorMessage("Not a valid mentor!"), "generic_messages")
+        raise HTTPFound(request.resource_url(request.context, 'mentor'))
+
+    user = request.root.user
+    company = request.context.company
+
+    values = {'invitorToken': user.token, 'invitorName': user.name, 'companySlug':  company.slug, 'userToken': mentorToken, 'role':'MENTOR', 'email':mentor.email, 'name':mentor.name}
+    InviteToCompanyProc(request, {'Invite': [values]})
+
+    request.session.flash(GenericSuccessMessage("You successfully invited {name} to your company!".format(**values)), "generic_messages")
+    raise HTTPFound(request.resource_url(request.context))
 
 def showInfo(context, request):
     return {'invite': context.invite}

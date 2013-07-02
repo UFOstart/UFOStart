@@ -1,14 +1,19 @@
+import base64
 import hashlib
 import logging
 import re
 from urlparse import urlparse, parse_qsl
 from babel import dates
+from beaker.crypto import pycrypto
 from hnc.apiclient import Mapping, TextField, IntegerField
 from hnc.tools.tools import word_truncate_by_letters
 from httplib2 import Http
 import markdown
 import simplejson
 import smartypants
+
+
+
 
 log = logging.getLogger(__name__)
 
@@ -18,8 +23,6 @@ __author__ = 'Martin'
 def hash(txt):
     if not txt: return None
     return hashlib.md5(txt).hexdigest()
-
-
 
 def html(text):
     if not text: return ''
