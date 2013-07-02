@@ -94,7 +94,7 @@
 
 <%def name="recommendedExperts(company, need)">
     <div class="expert-list">
-    %for expert in need.experts:
+    %for expert in need.experts[:8]:
     <div class="expert-briefing">
         <div class="row">
             <div class="col col-sm-2">
