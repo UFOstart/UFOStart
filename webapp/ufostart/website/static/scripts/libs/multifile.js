@@ -11,6 +11,11 @@
                 , uploader = this.$(".file-picker-upload")
                 , picture_template = _.template(this.$(".picture-template").html())
                 , backupText = uploader.siblings(".info").html();
+            this.$uploader = uploader;
+            this.$el.on("click", function(e){
+                if(!$(e.target).is(".file-picker-upload"))return;
+                view.$(".file-upload-btn").click();e.stopPropagation();e.preventDefault();return false;
+            });
 
             this.$(".file-upload-btn").on("change", function(e){
                 if(!e.target.files)return;
@@ -57,7 +62,7 @@
         , removePic: function(e){
             if(!e.keyCode || e.keyCode == 13){
                 $(e.target).closest(".picture").remove();
-                if(!uploader.children(".picture").length)uploader.addClass("empty");
+                if(!this.$uploader.children(".picture").length)uploader.addClass("empty");
             }
         }
     })

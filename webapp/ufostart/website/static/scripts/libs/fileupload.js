@@ -6,6 +6,11 @@
                 , uploader = this.$(".file-picker-upload")
                 , picture_template = _.template(this.$(".picture-template").html());
 
+            this.$el.on("click", function(e){
+                if($(e.target).is(".file-upload-btn"))return;
+                view.$(".file-upload-btn").click();e.stopPropagation();e.preventDefault();return false;
+            });
+
             this.$(".file-upload-btn").on("change", function(e){
                 if(!e.target.value)return;
                 filepicker.store(e.target, function onSuccess(file) {

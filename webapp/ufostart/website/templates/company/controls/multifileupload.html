@@ -3,6 +3,7 @@
 
 <%block name="controls">
     <div class="js-form-widget"  data-field-name="${widget.getName(prefix)}" data-module="libs/multifile">
+        <input type="file" class="file-upload-btn" accept="image/*" multiple>
         <script type="text/template" class="picture-template">
             ${self.templ('{{ field_name }}', '{{ pic.url }}')}
         </script>
@@ -10,7 +11,6 @@
             %for v in value:
                 ${self.templ(widget.getName(prefix), v['url'])}
             %endfor
-            <input type="file" class="file-upload-btn" accept="image/*" multiple>
         </div>
         <div class="info">Drag & Drop Files here</div>
     </div>
