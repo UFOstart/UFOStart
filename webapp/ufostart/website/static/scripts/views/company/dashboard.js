@@ -59,20 +59,44 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
         return result;
     }
     , getPublishedModel = function(model){
-        var result = getCompanySetupModel(model);
-        result.subTitle = '<a href="'+result.link+'">'+result.name + '</a> got approved by ' + userLink(result.actor.mentorToken, result.actor.mentorName)+'.';;
-        return result;
-    }
-    , getMentorInviteModel = function(model){
-        var actor = model.get("Invitor"), user = model.get("User"), uLink = user.token?userLink(user.token, user.name):'<strong>' + user.name + '</strong>';
+         var key = "Company"
+            , actor = model.get(key)
+            , actorLink = "/c/"+actor.slug
+            , user = actor.Mentors, links = [];
+        _.each(user, function(m){
+            links.push(userLink(m.token, m.name));
+        });
         return {
-            picture: actor.picture
-            , link: '/u/'+actor.token
-            , uLink: uLink
+            picture: actor.logo
+            , link: actorLink
             , name: actor.name
-            , subTitle: userLink(actor.token, actor.name) + ' invited '+uLink+' as a mentor.'
-            , actor : actor
-            , user : user
+            , subTitle: '<a href="'+actorLink+'">'+actor.name + '</a> got approved by ' + links.join(", ")+'.'
+            , actor: actor
+        }
+    }
+    , getInviteModel = function(role){
+        return function(model){
+            var actor = model.get("Invitor"), user = model.get("User"), uLink = user.token?userLink(user.token, user.name):'<strong>' + user.name + '</strong>';
+            return {
+                picture: actor.picture
+                , link: '/u/'+actor.token
+                , uLink: uLink
+                , name: actor.name
+                , subTitle: userLink(actor.token, actor.name) + ' invited '+uLink+' as a '+role+'.'
+                , actor : actor
+                , user : user
+            }
+        }
+    }
+    , getAcceptModel = function(role){
+        return function(model){
+            var actor = model.get("User");
+            return {
+                picture: actor.picture
+                , link: '/u/'+actor.token
+                , name: actor.name
+                , subTitle: userLink(actor.token, actor.name) + ' is now a '+role+' of this company.'
+            }
         }
     }
     , getMemberInviteModel = function(model){
@@ -87,8 +111,10 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
         , 'COMPANY_SETUP': getCompanySetupModel
         , 'WAITING_FOR_APROVAL': getPendingModel
         , 'PUBLISHED': getPublishedModel
-        , 'MENTOR_INVITE': getMentorInviteModel
-        , 'TEAM_MEMBER_INVITE': getMemberInviteModel
+        , 'MENTOR_INVITE': getInviteModel('mentor')
+        , 'MENTOR_ACCEPT': getAcceptModel('mentor')
+        , 'TEAM_MEMBER_INVITE': getInviteModel('member')
+        , 'TEAM_MEMBER_ACCEPT': getAcceptModel('member')
     }
 
     , Activity = ajax.Model.extend({
