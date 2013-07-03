@@ -37,7 +37,7 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
     <div class="col col-lg-12">
         <h1 class="section-title">
             %if canEdit:
-                <span class="btn-wrapper"><a title="Edit" href="${url(ctxt, 'edit')}"><span class="glyphicon glyphicon-pencil"></span></a></span>
+                <span class="btn-wrapper"><a title="Edit" class="glyphicon glyphicon-pencil" href="${url(ctxt, 'edit')}">Edit</a></span>
             %endif
             <span class="brand-primary">${caller.body()}</span>
         </h1>
