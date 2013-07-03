@@ -71,9 +71,9 @@
 
             ${self.productBox(company)}
 
-            <div class="mar-top-2 highlight-target">
+            <div class="mar-top-4 highlight-target">
                 <div class="highlight-anchor" id="target-funding"></div>
-                <div class="box-title">Investments</div>
+                <div class="box-title">Funding</div>
                 ${self.investmentBox(ctxt.round.Funding)}
             </div>
 
@@ -109,7 +109,7 @@
             ${widgets.member_pic(user, classes='mini')}
         %endfor
         %if ctxt.canEdit:
-            <a href="${url(ctxt.__parent__, query = [('invite', '1')])}#invite-team-members"><small>Invite team<br/>members</small></a>
+            <a  class="btn btn-primary" href="${url(ctxt.__parent__, query = [('invite', '1')])}#invite-team-members">Invite Team Members</a>
         %endif
         </div>
     </div>
@@ -135,7 +135,7 @@
 
 <%def name="investmentBox(funding)">
     %if not funding.amount:
-        <div class="empty">No Investment set up yet</div>
+        <div class="empty">Funding not set up yet</div>
         <a class="btn btn-primary" href="${url(ctxt, 'fundingsetup')}">Set up funding</a>
     %else:
         <div class="row">
@@ -178,7 +178,7 @@
 
 </%def>
 <%def name="productBox(company)">
-    <div class="mar-top-2 highlight-target">
+    <div class="mar-top-4 highlight-target">
         <div id="target-create-product" class="highlight-anchor"></div>
         <div class="box-title">Product</div>
         %if not company.product_is_setup:

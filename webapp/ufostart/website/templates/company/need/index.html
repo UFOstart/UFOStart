@@ -167,7 +167,7 @@
 
 
 <%def name="needDetails(canEdit, company, need)">
-    ${html.nn(need.customText)}
+    ${html.nn(need.customText) | html.html,n }
 
     <div class="mar-top-2">
         %for tag in need.tags:

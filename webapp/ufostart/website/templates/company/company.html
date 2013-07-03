@@ -90,7 +90,7 @@
 
 <%def name="companyMainInfo(company)">
     ${widgets.company_logo(company)}
-    <a class="entity-link  mar-top-half" href="${url(ctxt)}">${ctxt.company.name}</a>
+    <a class="entity-link mar-top-half" href="${url(ctxt)}">${ctxt.company.name}</a>
     <div class="pitch">${html.nn(company.pitch)}</div>
     <div class="number-widget mar-top-1">
         <h6>Startup Value</h6>
@@ -233,6 +233,7 @@
     <link href='${STATIC_URL}scripts/colorbox/colorbox.css' rel='stylesheet' type='text/css'>
 </%def>
 <%def name="post_scripts()">
+    <script src="${STATIC_URL}scripts/colorbox/jquery.colorbox-min.js"></script>
     <script>
         require(["tools/ajax"], function(ajax){
             $(".form-validated").each(function(idx, form){

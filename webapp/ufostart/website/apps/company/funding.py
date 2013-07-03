@@ -26,7 +26,7 @@ class FundingCreateForm(BaseForm):
     id="FundingCreate"
     label = ""
     fields=[
-     SanitizedHtmlField("description", "Funding Message", REQUIRED, input_classes='x-high')
+     SanitizedHtmlField("description", "Deal Description", REQUIRED, input_classes='x-high')
      , IntField('amount', "Amount", min = 1)
      , IntField('valuation', "Valuation", min = 1)
     ]
