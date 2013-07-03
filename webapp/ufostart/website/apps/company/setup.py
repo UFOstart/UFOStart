@@ -18,9 +18,9 @@ class CompanyCreateForm(BaseForm):
     id="CompanyCreate"
     label = ""
     fields=[
-        FileUploadField('logo', 'Project Logo', REQUIRED)
-        , StringField('name', 'Project Name', REQUIRED)
-        , CleanHtmlField('pitch', 'Elevator Pitch', REQUIRED, max = 90)
+        FileUploadField('logo', 'Logo', REQUIRED)
+        , StringField('name', 'Name', REQUIRED)
+        , CleanHtmlField('pitch', 'Slogan', REQUIRED, max = 90)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
         , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')
         , StringField("video", "Paste a Vimeo or Youtube Url")

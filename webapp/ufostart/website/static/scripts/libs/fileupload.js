@@ -6,7 +6,23 @@
                 , uploader = this.$(".file-picker-upload")
                 , picture_template = _.template(this.$(".picture-template").html());
 
-           filepicker.makeDropPane(uploader[0], {
+            this.$(".file-upload-btn").on("change", function(e){
+                if(!e.target.value)return;
+                filepicker.store(e.target, function onSuccess(file) {
+                    uploader.html('<div class="info">Done!</div>').removeClass("empty");
+                    uploader.html(picture_template({pic: file}));
+                    view.$el.closest(".form-validated").validate().element(view.$el.find('input[type=hidden]').val(file.url));
+                }, function onError(type, message) {
+                    uploader.after().text('('+type+') '+ message);
+                }
+                , function onProgress(percentage) {
+                    uploader.html('<div class="info">Uploading ('+percentage+'%)');
+                });
+            });
+
+
+
+            filepicker.makeDropPane(uploader[0], {
                 dragEnter: function() {
                     uploader.addClass("drop-target");
                 },

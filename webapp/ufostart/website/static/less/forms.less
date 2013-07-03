@@ -61,14 +61,15 @@ ul.styled {
 }
 
 .file-upload-control {
+  @width: 120px;
   .file-picker-upload {
-    min-height:120px;
-    max-width: 120px;
+    min-height:@width;
+    max-width: @width;
     padding-bottom: 0;
     position: relative;
     overflow:hidden;
     .pseudo-input();
-
+    > .info {color:@text-color;}
     &.empty:before {
       font-family: 'Glyphicons Halflings';
       font-style: normal;
@@ -87,6 +88,13 @@ ul.styled {
       content: "\e025";
     }
   }
+  .file-upload-wrap {
+    position: relative;
+    >.btn{width:@width;}
+    >.file-upload-btn{.opacity(0);position:absolute;width:@width;height: 100%;left: 0;top:0;}
+
+
+  }
   .info {font-size: @font-size-small;}
 }
 
@@ -98,6 +106,15 @@ ul.styled {
     position: relative;
     overflow:hidden;
     .pseudo-input();
+    padding-bottom:50px;
+    .file-upload-btn {
+        position: absolute;
+        .opacity(0);
+        right: 0;
+        bottom: 0;
+        height: 50px;
+        width: 100%;
+    }
     &:before {
       font-family: 'Glyphicons Halflings';
       font-style: normal;
@@ -145,10 +162,10 @@ ul.styled {
 }
 
 .tagsearch-container {
-  .search-field{ background-color: @input-bg; }
+  .search-field{ background-color: @input-bg; .clearfix;}
   .query {width:auto;border:none;}
   .current-tags {
-    padding:5px 10px 6px;
+    padding:6px 10px 0px;
     float:left;
     >.label {margin-right:5px;}
   }

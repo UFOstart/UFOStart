@@ -5,11 +5,16 @@
     <div class="js-form-widget"  data-field-name="${widget.getName(prefix)}" data-module="libs/fileupload">
         <script type="text/template" class="picture-template"><img src="{{ pic.url }}"/></script>
         <input type="hidden" name="${widget.getName(prefix)}" value="${value}" class="${widget.getClasses()}"/>
-        <div class="file-picker-upload ${'' if value else 'empty'}">
+        <div class="file-picker-upload ${'' if value else 'empty'}" data-fp-mimetype="image/*">
             %if value:
                 <img src="${value}"/>
             %endif
         </div>
+        <div class="file-upload-wrap">
+            <button type="button" class="btn btn-default">Pick File</button>
+            <input type="file" class="file-upload-btn" accept="image/*">
+        </div>
         <div class="info">Drag & Drop a Picture here</div>
+
     </div>
 </%block>

@@ -12,6 +12,22 @@
                 , picture_template = _.template(this.$(".picture-template").html())
                 , backupText = uploader.siblings(".info").html();
 
+            this.$(".file-upload-btn").on("change", function(e){
+                if(!e.target.files)return;
+                _.each(e.target.files, function(f){
+                    filepicker.store(f,  function(file) {
+                       uploader.removeClass("empty");
+                       uploader.append(picture_template({pic: file, field_name: opts.fieldName}));
+                       uploader.siblings(".info").html(backupText)
+                    }, function onError(type, message) {
+                        uploader.after().text('('+type+') '+ message);
+                    }
+                    , function onProgress(percentage) {
+                        uploader.siblings(".info").html('Uploading ('+percentage.toFixed(2)+'%)');
+                    });
+                })
+            });
+
            filepicker.makeDropPane(uploader[0], {
                 multiple: true
                 , dragEnter: function() {
@@ -20,11 +36,14 @@
                 , dragLeave: function() {
                     uploader.removeClass("drop-target");
                 }
+                , onStart: function(fpfiles){
+
+                }
                 , onSuccess: function(fpfiles) {
                    uploader.removeClass("empty");
                    _.each(fpfiles, function(file){
                        uploader.append(picture_template({pic: file, field_name: opts.fieldName}));
-                   })
+                   });
                    uploader.siblings(".info").html(backupText)
                 }
                 , onError: function(type, message) {

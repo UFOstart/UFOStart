@@ -1,12 +1,19 @@
-<%inherit file="layout.html"/>
+<%inherit file="../../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
-
-<%def name="slogan()">${self.crumbs(3)}</%def>
-<%def name="sectionTitle()">Create Your Company</%def>
+<%namespace file="create.html" name="create"/>
 
 
-<%def name="bodyContent()">
+
+<%def name="content()">
+    <div class="container">
     <div class="row">
+        <div class="col col-lg-12">
+          <h1 class="section-title">
+              <span class="brand-primary">Edit Your Company</span>
+          </h1>
+        </div>
+    </div>
+    <div class="row mar-top-2">
         <div class="col col-lg-8">
             <div class="box-dark">
                 <div class="box-content">
@@ -14,10 +21,10 @@
                 </div>
             </div>
         </div>
-        <div class="col col-lg-4">
-            <h3 class="no-margin">Or import your Data from Angellist</h3>
-            <a href="${request.root.angellist_url}" class="btn btn-primary mar-top-1">Angellist Import</a>
+        <div class="col col-lg-3 col-offset-1">
+            ${create.wtfBox()}
         </div>
+    </div>
     </div>
 </%def>
 
@@ -38,8 +45,8 @@
         ${form.fieldMap['Pictures'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         ${form.fieldMap['video'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         ${form.fieldMap['slideShare'].render(form.id, request, values, errors, view, grid = form.grid)|n}
-       <button type="submit" class="btn btn-primary">Start Project</button>
-       <a href="${url(ctxt.__parent__)}" class="btn btn-default">Cancel</a>
+       <button type="submit" class="btn btn-primary">Save Project</button>
+       <a href="${url(ctxt)}" class="btn btn-default">Cancel</a>
     </form>
 </%def>
 
@@ -58,12 +65,3 @@
     </script>
 </%def>
 
-<%def name="wtfBox()">
-<div class="wtf-box">
-    <h2 class="wtf-title">Tell us a little more?</h2>
-    <div class="wtf-content mar-top-1">
-        <p>Now we know your company's stage we need a little more information about what you're up to.</p>
-        <p>Then you can start setting up your round.</p>
-    </div>
-</div>
-</%def>

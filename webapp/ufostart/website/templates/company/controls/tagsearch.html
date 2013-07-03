@@ -16,4 +16,4 @@ ${self.tagTempl(widget, str(i), tag['name'], tag['name'])}\
     </div>
 </%block>
 
-<%def name="tagTempl(widget, pos, label, id)"><span class="${widget.tag_class}">${label|n}<span class="close">×</span><input type="hidden" name="${widget.getName(prefix)}-${pos|n}.name" value="${id|n}"/></span></%def>
+<%def name="tagTempl(widget, pos, label, id)"><span class="${widget.tag_class}"><span class="close">×</span>${label|n}<input type="hidden" name="${widget.getName(prefix)}-${pos|n}.name" value="${id|n}"/></span></%def>

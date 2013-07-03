@@ -258,11 +258,10 @@ class ProtoInviteContext(BaseProjectContext):
 def includeme(config):
     config.add_view(setup.basics                , context = TemplatesRootContext                        , renderer = "ufostart:website/templates/company/setup/basic.html")
     config.add_view(setup.details               , context = TemplateContext                             , renderer = "ufostart:website/templates/company/setup/details.html")
-    config.add_view(setup.CreateProjectHandler  , context = TemplateContext   ,name = 'startcompany'    , renderer = "ufostart:website/templates/company/setup/create.html", permission = 'create')
 
-
-    config.add_view(invite.CompanyIndexHandler  , context = CompanyContext                              , renderer = "ufostart:website/templates/company/company.html")
-    config.add_view(setup.EditProjectHandler    , context = CompanyContext    , name='edit'             , renderer = "ufostart:website/templates/company/edit.html", permission = 'edit')
+    config.add_view(setup.CreateProjectHandler  , context = TemplateContext   , name = 'startcompany'   , renderer = "ufostart:website/templates/company/company/create.html", permission = 'create')
+    config.add_view(invite.CompanyIndexHandler  , context = CompanyContext                              , renderer = "ufostart:website/templates/company/company/index.html")
+    config.add_view(setup.EditProjectHandler    , context = CompanyContext    , name='edit'             , renderer = "ufostart:website/templates/company/company/edit.html", permission = 'edit')
 
     config.add_view(invite.AddMentorHandler     , context = RoundContext      , name='mentor'           , renderer = "ufostart:website/templates/company/addmentor.html")
     config.add_view(invite.add_top_mentor       , context = RoundContext      , name='topmentor'        )

@@ -10,6 +10,7 @@
             %for v in value:
                 ${self.templ(widget.getName(prefix), v['url'])}
             %endfor
+            <input type="file" class="file-upload-btn" accept="image/*" multiple>
         </div>
         <div class="info">Drag & Drop Files here</div>
     </div>
