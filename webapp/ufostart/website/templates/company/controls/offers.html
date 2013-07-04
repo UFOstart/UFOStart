@@ -41,7 +41,7 @@
                         </div>
                     </div>
                 </div>
-                <a class="btn btn-primary link save-offer-btn">Add Offer</a>
+                <a class="btn btn-primary link save-offer-btn" href="#">Add Offer</a>
             </div>
             <div class="col col-lg-6">
                 <strong class="text-small">Offers Preview</strong>
@@ -49,7 +49,7 @@
                 <div class="pseudo-input">
 
 
-%for j, (values, errors) in enumerate(izip_longest(value or [{}], getattr(error, "error_list", [{}]), fillvalue = {})):
+%for j, (values, errors) in enumerate(izip_longest(value or [], getattr(error, "error_list", []), fillvalue = {})):
 
     <div class="single-offer-mock">
         <span class="remove remove-link">×</span>
@@ -68,8 +68,6 @@
     </div>
 
 %endfor
-
-
 
                 </div>
 
