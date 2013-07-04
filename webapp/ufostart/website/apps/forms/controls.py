@@ -1,7 +1,7 @@
 from BeautifulSoup import BeautifulSoup
 import formencode
 from hnc.forms import formfields
-from hnc.forms.formfields import StringField, TextareaField
+from hnc.forms.formfields import StringField, TextareaField, IntField
 from ufostart.lib.html import getSlideshareMeta, getYoutubeVideoId, getVimeoMeta, getYoutubeMeta
 from ufostart.models.tasks import TASK_CATEGORIES
 
@@ -9,6 +9,9 @@ from ufostart.models.tasks import TASK_CATEGORIES
 _ = lambda s:s
 def optionGetter(request):
     return [formfields.NullConfigModel()] + TASK_CATEGORIES
+
+class CurrencyIntField(IntField):
+    template = "ufostart:website/templates/company/controls/currencyint.html"
 
 
 class PictureUploadField(formfields.StringField):

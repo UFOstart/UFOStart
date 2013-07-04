@@ -363,6 +363,7 @@ class FundingModel(Mapping):
     amount = IntegerField(default = 0)
     valuation = IntegerField(default = 0)
     description = TextField()
+    contract = TextField()
     Investments = ListField(DictField(InvestmentModel))
 
     @property

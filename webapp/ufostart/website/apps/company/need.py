@@ -3,7 +3,7 @@ from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField,
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
-from ufostart.website.apps.forms.controls import PictureUploadField, TagSearchField
+from ufostart.website.apps.forms.controls import PictureUploadField, TagSearchField, CurrencyIntField
 from ufostart.website.apps.models.company import NeedModel
 from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc, InviteToNeedProc, AddNeedToRound
 
@@ -67,8 +67,8 @@ class NeedCreateForm(BaseForm):
     fields = [
         PictureUploadField("picture", 'Picture', group_classes='file-upload-control')
         , StringField('name', "Title", REQUIRED)
-        , DecimalField('cash', "Cash Value", REQUIRED, input_classes='data-input cash', maxlength = 10, max = 99999999)
-        , DecimalField('equity', "Equity Value", REQUIRED, input_classes='data-input equity', maxlength = 10, max = 99999999)
+        , CurrencyIntField('cash', "Cash Value", REQUIRED, input_classes='data-input cash', maxlength=9, currency='$')
+        , CurrencyIntField('equity', "Equity Value", REQUIRED, input_classes='data-input equity', maxlength=9, currency='$')
         , TextareaField("customText", "Description", REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
     ]

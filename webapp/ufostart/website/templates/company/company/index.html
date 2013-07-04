@@ -116,12 +116,14 @@
         </div>
     %endif
     %for update in company.getUpdates():
-        <div class="box-card shaded single-update extra-compact">
+        <div class="box-card single-update extra-compact">
             ${widgets.profile_pic(update.userPicture, update.userToken)}
             <div class="right-box">
                 <div class="pull-right"><small>${html.format_datetime(update.created, 'medium')}</small></div>
                 <a class="entity-link" href="${root.profile_url(update.userToken)}">${update.userName}</a>
-                <small class="text-muted">${html.nn(update.userHeadline)}</small>
+                %if update.userHeadline:
+                    <small class="text-muted">${update.userHeadline}</small>
+                %endif
                 <div class="mar-top-2">${html.html(update.text)|n}</div>
             </div>
         </div>
@@ -207,6 +209,7 @@
             </div>
             </div>
         </div>
+        <div class="mar-top-2"></div>
     %endif
 </%def>
 
