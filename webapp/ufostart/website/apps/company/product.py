@@ -14,7 +14,7 @@ class OfferField(MultipleFormField):
         CleanHtmlField("name", "Title", REQUIRED)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
         , IntField("price", "Price", REQUIRED)
-        , IntField("stock", "Stock")
+        , IntField("stock", "Stock", REQUIRED)
     ]
 
 

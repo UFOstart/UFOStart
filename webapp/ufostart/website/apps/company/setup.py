@@ -4,7 +4,7 @@ from hnc.forms.handlers import FormHandler
 from ufostart.lib.html import getSlideshareMeta
 from ufostart.website.apps.auth.imp import SESSION_SAVE_TOKEN
 from ufostart.website.apps.models.procs import CreateCompanyProc, EditCompanyProc
-from ufostart.website.apps.forms.controls import FileUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField, SlideshareField, VideoUrlField
+from ufostart.website.apps.forms.controls import PictureUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField, SlideshareField, VideoUrlField
 
 
 def basics(context, request):
@@ -18,7 +18,7 @@ class CompanyCreateForm(BaseForm):
     id="CompanyCreate"
     label = ""
     fields=[
-        FileUploadField('logo', 'Logo', REQUIRED)
+        PictureUploadField('logo', 'Logo', REQUIRED)
         , StringField('name', 'Name', REQUIRED)
         , CleanHtmlField('pitch', 'Slogan', REQUIRED, max = 90)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
@@ -73,7 +73,7 @@ class CompanyEditForm(BaseForm):
     id="CompanyEdit"
     label = ""
     fields=[
-        FileUploadField('logo', 'Project Logo', REQUIRED)
+        PictureUploadField('logo', 'Project Logo', REQUIRED)
         , StringField('name', 'Project Name', REQUIRED)
         , CleanHtmlField('pitch', 'Elevator Pitch', REQUIRED, max = 90)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')

@@ -547,6 +547,9 @@ class CompanyModel(BaseCompanyModel):
         return self.Round.Product.name if self.product_is_setup else ''
 
 
+    currency = 'USD'
+    currency_symbol = get_currency_symbol('USD', locale = 'en')
+
     def product_picture(self, request):
         product = self.Round.Product
         if not product: return None

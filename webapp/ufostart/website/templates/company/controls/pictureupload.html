@@ -3,14 +3,15 @@
 
 <%block name="controls">
     <div class="js-form-widget"  data-field-name="${widget.getName(prefix)}" data-module="libs/fileupload">
-        <input type="file" class="file-upload-btn" accept="application/pdf">
+        <input type="file" class="file-upload-btn" accept="image/*">
         <script type="text/template" class="picture-template"><img src="{{ pic.url }}"/></script>
         <input type="hidden" name="${widget.getName(prefix)}" value="${value}" class="${widget.getClasses()}"/>
-        <div class="file-picker-upload document ${'' if value else 'empty'}" data-fp-mimetype="application/pdf">
+        <div class="file-picker-upload ${'' if value else 'empty'}" data-fp-mimetype="image/*">
             %if value:
-                <a href="${value}">Contract</a>
+                <img src="${value}"/>
             %endif
         </div>
-        <div class="info">Drag & Drop a PDF here</div>
+        <div class="info">Drag & Drop a Picture here</div>
+
     </div>
 </%block>

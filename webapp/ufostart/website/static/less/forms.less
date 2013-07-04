@@ -71,13 +71,13 @@ ul.styled {
     overflow:hidden;
     .pseudo-input();
     > .info {color:@text-color;}
-    &.empty:before {
+    &.empty:before {content: "\e060";
       font-family: 'Glyphicons Halflings';
       font-style: normal;
       font-weight: normal;
       font-size: 3em;
       -webkit-font-smoothing: antialiased;
-      content: "\e060";
+
       color:@wtf-color;
       position: absolute;
       left: 50%;
@@ -85,8 +85,11 @@ ul.styled {
       line-height: 0;
       margin-left: -.5em;
     }
-    &.empty.drop-target:before {
-      content: "\e025";
+    &.empty.drop-target:before {content: "\e025";}
+    &.document{
+      min-height:@width * 2 / 3;
+      max-width: @width * 2 / 3;
+      &.empty:before {content: "\e142";}
     }
   }
   .file-upload-wrap {

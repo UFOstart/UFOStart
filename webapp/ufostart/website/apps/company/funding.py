@@ -1,6 +1,6 @@
 from hnc.forms.formfields import BaseForm, REQUIRED, IntField
 from hnc.forms.handlers import FormHandler
-from ufostart.website.apps.forms.controls import SanitizedHtmlField
+from ufostart.website.apps.forms.controls import SanitizedHtmlField, FileUploadField
 from ufostart.website.apps.models.procs import CreateFundingProc, InvestInCompanyProc
 
 
@@ -27,8 +27,9 @@ class FundingCreateForm(BaseForm):
     label = ""
     fields=[
      SanitizedHtmlField("description", "Deal Description", REQUIRED, input_classes='x-high')
-     , IntField('amount', "Amount", min = 1)
-     , IntField('valuation', "Valuation", min = 1)
+     , IntField('amount', "Funding Amount", REQUIRED, input_classes='data-input amount', maxlength = 10)
+     , IntField('valuation', "Company Valuation", REQUIRED, input_classes='data-input valuation', maxlength = 10)
+     , FileUploadField("contract", "Contract")
     ]
     @classmethod
     def on_success(cls, request, values):

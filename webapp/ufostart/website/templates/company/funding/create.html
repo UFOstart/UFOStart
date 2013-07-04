@@ -28,26 +28,32 @@
 <%def name="build_form(form, values, errors)">
     <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
+        <div class="row">
+            <div class="col col-lg-3">
+                ${form.fieldMap['amount'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+            </div>
+            <div class="col col-lg-3">
+                ${form.fieldMap['valuation'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+            </div>
+            <div class="col col-lg-3">
+                <div class="control-group">
+                    <label class="control-label">
+                        Equity Value
+                    </label>
+                    <div class="pseudo-controls data-target equity" data-currency-symbol="${ctxt.company.currency_symbol}">---</div>
+                </div>
+            </div>
+            <div class="col col-lg-3">
+                ${form.fieldMap['contract'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+            </div>
+        </div>
 
-
-        ${form.fieldMap['amount'].render(form.id, request, values, errors, view, grid = form.grid)|n}
-        ${form.fieldMap['valuation'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         ${form.fieldMap['description'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+
 
        <button type="submit" class="btn btn-primary">Setup Funding</button>
        <a href="${url(ctxt)}" class="btn btn-default">Cancel</a>
     </form>
-</%def>
-
-
-<%def name="post_scripts()">
-    <script>
-        require(["form"], function(View){
-            $(".form-validated").each(function(idx, form){
-                new View({el:form});
-            });
-        });
-    </script>
 </%def>
 
 <%def name="wtfBox()">
@@ -57,4 +63,20 @@
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
     </div>
 </div>
+</%def>
+
+
+
+<%def name="post_scripts()">
+    <script type="text/javascript">
+        (function(a){if(window.filepicker){return}var b=a.createElement("script");b.type="text/javascript";b.async=!0;b.src=("https:"===a.location.protocol?"https:":"http:")+"//api.filepicker.io/v1/filepicker.js";var c=a.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c);var d={};d._queue=[];var e="pick,pickMultiple,pickAndStore,read,write,writeUrl,export,convert,store,storeUrl,remove,stat,setKey,constructWidget,makeDropPane".split(",");var f=function(a,b){return function(){b.push([a,arguments])}};for(var g=0;g<e.length;g++){d[e[g]]=f(e[g],d._queue)}window.filepicker=d})(document);
+    </script>
+    <script>
+        require(["views/company/funding_edit"], function(View){
+            filepicker.setKey('A0Me4BRKSLSnOkrY6Jb2xz');
+            $(".form-validated").each(function(idx, form){
+                new View({el:form})
+            });
+        });
+    </script>
 </%def>

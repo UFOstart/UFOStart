@@ -3,7 +3,7 @@ from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField,
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
-from ufostart.website.apps.forms.controls import FileUploadField, TagSearchField
+from ufostart.website.apps.forms.controls import PictureUploadField, TagSearchField
 from ufostart.website.apps.models.company import NeedModel
 from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc, InviteToNeedProc, AddNeedToRound
 
@@ -65,12 +65,10 @@ class NeedCreateForm(BaseForm):
     id="NeedCreate"
     label = ""
     fields = [
-        FileUploadField("picture", 'Picture', group_classes='file-upload-control')
+        PictureUploadField("picture", 'Picture', group_classes='file-upload-control')
         , StringField('name', "Title", REQUIRED)
-        , IntField('total', "Total value ($)", REQUIRED, input_classes='data-input value')
-        , IntField('ratio', "of this Equity (%)", REQUIRED, input_classes='data-input ratio', max = 100)
-        , DecimalField('cash', None)
-        , DecimalField('equity', None)
+        , DecimalField('cash', "Cash Value", REQUIRED, input_classes='data-input cash')
+        , DecimalField('equity', "Equity Value", REQUIRED, input_classes='data-input equity')
         , TextareaField("customText", "Description", REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
     ]
@@ -98,16 +96,7 @@ class NeedCreateHandler(FormHandler):
 class NeedEditForm(BaseForm):
     id="NeedEdit"
     label = ""
-    fields = [
-        FileUploadField("picture", 'Picture', group_classes='file-upload-control')
-        , StringField('name', "Title", REQUIRED)
-        , IntField('total', "Total value ($)", REQUIRED, input_classes='data-input value')
-        , IntField('ratio', "of this Equity (%)", REQUIRED, input_classes='data-input ratio', max = 100)
-        , DecimalField('cash', None)
-        , DecimalField('equity', None)
-        , TextareaField("customText", "Description", REQUIRED, input_classes='x-high')
-        , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
-    ]
+    fields = NeedCreateForm.fields
 
     @classmethod
     def on_success(cls, request, values):
@@ -125,10 +114,11 @@ class NeedEditForm(BaseForm):
             else:
                 raise e
 
-        request.session.flash(GenericSuccessMessage("Task edited successfully!"), "generic_messages")
         if newNeed:
+            request.session.flash(GenericSuccessMessage("Task added to round!"), "generic_messages")
             return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
         else:
+            request.session.flash(GenericSuccessMessage("Changes saved!"), "generic_messages")
             return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class NeedEditHandler(FormHandler):

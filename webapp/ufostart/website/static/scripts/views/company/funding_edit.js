@@ -10,20 +10,18 @@ define(["tools/ajax", "form"], function(ajax, Form){
             var $inputs = this.$el.find(".data-input")
                 , $targets = this.$el.find(".data-target");
 
-            this.$cash = $inputs.filter('.cash');
-            this.$equity = $inputs.filter('.equity');
-            this.$total = $targets.filter('.total');
-
-            this.cashCur = this.$total.data('currencySymbol');
+            this.$valuation = $inputs.filter('.valuation');
+            this.$amount = $inputs.filter('.amount');
+            this.$equity = $targets.filter('.equity');
             this.dataEntry(null);
         }
         , dataEntry : function(e){
-            var cash = parseInt(this.$cash.val(), 10)
-                , equity = parseInt(this.$equity.val(), 10);
-            if(isNaN(cash) || isNaN(equity)){
-                this.$total.html( this.cashCur + '---' );
+            var valuation = parseInt(this.$valuation.val(), 10)
+                , amount = parseInt(this.$amount.val(), 10);
+            if(isNaN(valuation) || isNaN(amount)){
+                this.$equity.html( '---' );
             } else {
-                this.$total.html( this.cashCur + (cash + equity) );
+                this.$equity.html( ((amount/valuation)*100).toFixed(2)+"%" );
             }
         }
         , render: function(){

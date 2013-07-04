@@ -11,8 +11,8 @@ def optionGetter(request):
     return [formfields.NullConfigModel()] + TASK_CATEGORIES
 
 
-class FileUploadField(formfields.StringField):
-    template = "ufostart:website/templates/company/controls/fileupload.html"
+class PictureUploadField(formfields.StringField):
+    template = "ufostart:website/templates/company/controls/pictureupload.html"
     group_classes='file-upload-control'
 
     def getInputAttrs(self, request):
@@ -22,6 +22,9 @@ class FileUploadField(formfields.StringField):
         if self.max:
             attrs += ' maxlength="{}"'.format(self.max)
         return attrs
+
+class FileUploadField(PictureUploadField):
+    template = "ufostart:website/templates/company/controls/fileupload.html"
 
 class PictureGalleryUploadField(formfields.StringField):
     template = "ufostart:website/templates/company/controls/multifileupload.html"

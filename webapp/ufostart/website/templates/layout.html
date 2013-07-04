@@ -96,12 +96,12 @@
                                  <ul class="dropdown-menu">
                                     %for company in user.Companies:
                                         <li>
-                                            <a href="${url(root, 'c', company.slug)}">${company.name}</a></li>
+                                            <a href="${root.round_url(company.slug, '1')}">${company.name}</a></li>
                                     %endfor
                                  </ul>
                              </li>
                         %elif len(user.Companies) == 1:
-                            <li><a href="${url(root, 'c', user.getDefaultCompanySlug())}">${user.getDefaultCompanyName()}</a></li>
+                            <li><a href="${root.round_url(user.getDefaultCompanySlug(), '1')}">${user.getDefaultCompanyName()}</a></li>
                         %endif
                         <li><a href="${request.root.logout_url()}">Log out</a></li>
                     </ul>
