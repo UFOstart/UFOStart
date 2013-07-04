@@ -1,4 +1,4 @@
-from hnc.forms.formfields import BaseForm, REQUIRED, IntField
+from hnc.forms.formfields import BaseForm, REQUIRED, IntField, HtmlAttrs
 from hnc.forms.handlers import FormHandler
 from ufostart.website.apps.forms.controls import SanitizedHtmlField, FileUploadField
 from ufostart.website.apps.models.procs import CreateFundingProc, InvestInCompanyProc
@@ -23,16 +23,18 @@ class InvestmentHandler(FormHandler):
 
 
 class FundingCreateForm(BaseForm):
-    id="FundingCreate"
+    id="Funding"
     label = ""
     fields=[
      SanitizedHtmlField("description", "Deal Description", REQUIRED, input_classes='x-high')
-     , IntField('amount', "Funding Amount", REQUIRED, input_classes='data-input amount', maxlength = 10)
-     , IntField('valuation', "Company Valuation", REQUIRED, input_classes='data-input valuation', maxlength = 10)
+     , IntField('amount', "Funding Amount", REQUIRED, input_classes='data-input amount lessThanEqual', maxlength = 10, max = 99999999)
+     , IntField('valuation', "Company Valuation", REQUIRED, input_classes='data-input valuation', maxlength = 10, max = 99999999)
      , FileUploadField("contract", "Contract")
     ]
     @classmethod
     def on_success(cls, request, values):
+        if values['amount'] > values['valuation']:
+            return {'success':False, 'errors': {'amount': 'Amount needs to be lower than valuation!'}}
         data = {'token': request.context.round.token, 'Funding': values}
         CreateFundingProc(request, data)
         return {'success':True, 'redirect': request.resource_url(request.context)}
@@ -42,10 +44,13 @@ class FundingCreateHandler(FormHandler):
 
 
 class FundingEditForm(FundingCreateForm):
-    id="FundingEdit"
+    id="Funding"
     @classmethod
     def on_success(cls, request, values):
-        return {'success':True, 'redirect': request.fwd_url("")}
+        if values['amount'] > values['valuation']:
+            return {'success':False, 'errors': {'amount': 'Amount needs to be lower than valuation!'}}
+
+        return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class FundingEditHandler(FormHandler):
     form = FundingEditForm

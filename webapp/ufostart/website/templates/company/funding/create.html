@@ -35,15 +35,15 @@
             <div class="col col-lg-3">
                 ${form.fieldMap['valuation'].render(form.id, request, values, errors, view, grid = form.grid)|n}
             </div>
-            <div class="col col-lg-3">
+            <div class="col col-lg-2">
                 <div class="control-group">
                     <label class="control-label">
                         Equity Value
                     </label>
-                    <div class="pseudo-controls data-target equity" data-currency-symbol="${ctxt.company.currency_symbol}">---</div>
+                    <div class="pseudo-controls data-target equity overflow" data-currency-symbol="${ctxt.company.currency_symbol}">---</div>
                 </div>
             </div>
-            <div class="col col-lg-3">
+            <div class="col col-lg-4">
                 ${form.fieldMap['contract'].render(form.id, request, values, errors, view, grid = form.grid)|n}
             </div>
         </div>

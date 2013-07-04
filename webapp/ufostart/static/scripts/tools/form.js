@@ -41,6 +41,7 @@ define([], function(){
             $elem.rules("add", {remote: $elem.data("validationUrl")});
         });
 
+
         if(params.focus){
             form.find("input,select,textarea").filter(":visible").first().focus();
         }

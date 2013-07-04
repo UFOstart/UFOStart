@@ -18,7 +18,7 @@ define(["tools/ajax", "form"], function(ajax, Form){
         , dataEntry : function(e){
             var valuation = parseInt(this.$valuation.val(), 10)
                 , amount = parseInt(this.$amount.val(), 10);
-            if(isNaN(valuation) || isNaN(amount)){
+            if(isNaN(valuation) || isNaN(amount) || amount > valuation){
                 this.$equity.html( '---' );
             } else {
                 this.$equity.html( ((amount/valuation)*100).toFixed(2)+"%" );
