@@ -7,7 +7,7 @@
                 , picture_template = _.template(this.$(".picture-template").html());
 
             this.$el.on("click", function(e){
-                if($(e.target).is(".file-upload-btn"))return;
+                if($(e.target).is(".file-upload-btn,.stop-propagation"))return;
                 view.$(".file-upload-btn").click();e.stopPropagation();e.preventDefault();return false;
             });
 

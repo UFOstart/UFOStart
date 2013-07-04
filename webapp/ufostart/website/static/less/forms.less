@@ -89,6 +89,12 @@ ul.styled {
       min-height:@width * 2 / 3;
       max-width: @width * 2 / 3;
       &.empty:before {content: "\e142";}
+      > .file-download {
+        line-height:@width / 6;
+        text-align: center;
+        padding-top:@width / 6;
+        padding-bottom:@width / 6;
+      }
     }
   }
   .file-upload-wrap {

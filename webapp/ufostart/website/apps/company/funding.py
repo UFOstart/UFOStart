@@ -46,3 +46,7 @@ class FundingCreateHandler(FormHandler):
 
 class FundingEditHandler(FormHandler):
     form = FundingCreateForm
+
+    def pre_fill_values(self, request, result):
+        result['values'][self.form.id] = request.context.round.Funding.unwrap()
+        return super(FundingEditHandler, self).pre_fill_values(request, result)
