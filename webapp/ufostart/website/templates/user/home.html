@@ -172,7 +172,7 @@
 
 
 <%def name="bestMatchNeeds(isMyProfile, needs)">
-    <div class="box-title">Needs that best match ${'your' if isMyProfile else u"{}'s".format(ctxt.profile.name)} skills</div>
+    <div class="box-title">Tasks that best match ${'your' if isMyProfile else u"{}'s".format(ctxt.profile.name)} skills</div>
     %if len(needs):
         <div class="row">
             %for need in needs:
@@ -182,12 +182,12 @@
             %endfor
         </div>
     %else:
-        <div class="empty">No Needs matching ${'your' if isMyProfile else u"{}'s".format(ctxt.profile.name)} skill set found</div>
+        <div class="empty">No Tasks matching ${'your' if isMyProfile else u"{}'s".format(ctxt.profile.name)} skill set found</div>
     %endif
 </%def>
 
 <%def name="closeByNeeds(isMyProfile, needs)">
-    <div class="box-title">Current Needs close by</div>
+    <div class="box-title">Current Tasks close by</div>
     %if len(needs):
         <div class="row">
             %for need in needs:
@@ -197,7 +197,7 @@
             %endfor
         </div>
     %else:
-        <div class="empty">No Needs matching ${'your' if isMyProfile else u"{}'s".format(ctxt.profile.name)} skill set found</div>
+        <div class="empty">No Tasks matching ${'your' if isMyProfile else u"{}'s".format(ctxt.profile.name)} skill set found</div>
     %endif
 
 </%def>

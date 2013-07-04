@@ -1,6 +1,6 @@
 <%inherit file="../layout.html"/>
 <%namespace file="../widgets.html" name="widgets"/>
-<%namespace file="widgets.html" name="companyWidgets"/>
+<%namespace file="company/widgets.html" name="companyWidgets"/>
 
 <%def name="content()">
     <div class="container" id="project-round-need-dashboard">
@@ -88,7 +88,7 @@
                 <div class="box-card box-header">
                     ${widgets.company_logo(company)}
                     <div class="box-content">
-                        <a class="entity-link  mar-top-1" href="${url(ctxt.__parent__)}">${ctxt.company.name}</a>
+                        <a class="entity-link" href="${url(ctxt.__parent__)}">${ctxt.company.name}</a>
                         <div class="pitch">${html.nn(company.pitch)}</div>
                     </div>
                 </div>
@@ -109,7 +109,7 @@
                 %endfor
                 </div>
                 %if ctxt.canEdit:
-                    <a class="btn btn-primary btn-block mar-top-1" href="${url(ctxt.__parent__, query = [('invite', '1')])}#invite-team-members">Invite Team Members</a>
+                    ${companyWidgets.invite_team_form(view.form, values, errors)}
                 %endif
             </div>
 
@@ -260,7 +260,7 @@
             <div class="col col-lg-12">
                 <div class="box-title highlight-target">
                     <div id="target-customise-needs" class="highlight-anchor"></div>
-                    Pending Needs
+                    Pending Tasks
                 </div>
             </div>
         </%self:renderNeedColumns>
@@ -268,9 +268,9 @@
         <%self:renderNeedColumns needs="${company.groupedNeeds(3, True)}">
             <div class="col col-lg-12 mar-top-2"><div class="box-title">
                 %if ctxt.round.published:
-                    Needs
+                    Tasks
                 %else:
-                    Customized Needs
+                    Customized Tasks
                 %endif
             </div></div>
         </%self:renderNeedColumns>
@@ -291,7 +291,7 @@
                 %if not i and ctxt.canEdit and not ctxt.round.published:
                     <a href="${url(ctxt, 'addneed')}" class="need-card-inner add-card">
                         <img src="${STATIC_URL}img/addneed.png"/>
-                        <h4>Create a new Need</h4>
+                        <h4>Create a new Task</h4>
                     </a>
                 %endif
             </div>
@@ -302,12 +302,12 @@
 <%def name="buildNeed(need, published)">
     <div class="need-card ${need.status}" data-entity-id="${need.token}">
         %if need.fulfilled:
-            <a class="customize success" href="#"><span class="glyphicon glyphicon-ok-sign"></span> Need Fulfilled</a>
+            <a class="customize success" href="#"><span class="glyphicon glyphicon-ok-sign"></span> Task Fulfilled</a>
         %elif not published  and ctxt.canEdit:
             %if need.customized:
                 <a class="customize success" href="${url(ctxt, need.slug)}"><span class="glyphicon glyphicon-ok-sign"></span> Customized</a>
             %else:
-                <a class="customize danger" href="${url(ctxt, need.slug, 'edit')}"><span class="glyphicon glyphicon-pencil"></span> Customize Need</a>
+                <a class="customize danger" href="${url(ctxt, need.slug, 'edit')}"><span class="glyphicon glyphicon-pencil"></span> Customize Task</a>
             %endif
         %endif
         <div class="need-card-inner">
@@ -439,7 +439,7 @@
                         </div>
                         <h2>to fulfill
                             ${u"your" if ctxt.canEdit else "their"}
-                         needs.</h2>
+                         tasks.</h2>
                     </div>
                 </div>
                 <div class="box-content">
@@ -451,7 +451,7 @@
                             <div class="progress-bar" style="width: ${100.0 * currentRound.noFulfilledNeeds / currentRound.noTotalNeeds}%"></div>
                         </div>
                         <h2 class="offset">
-                            ${currentRound.noFulfilledNeeds}<small>${pluralize("need", "needs", currentRound.noFulfilledNeeds)}</small>
+                            ${currentRound.noFulfilledNeeds}<small>${pluralize("task", "tasks", currentRound.noFulfilledNeeds)}</small>
                         </h2>
                     </div>
                 </div>

@@ -265,7 +265,7 @@ def includeme(config):
     config.add_view(setup.EditProjectHandler    , context = CompanyContext    , name='edit'             , renderer = "ufostart:website/templates/company/company/edit.html", permission = 'edit')
 
 
-    config.add_view(general.round_dashboard     , context = RoundContext                                , renderer = "ufostart:website/templates/company/round.html")
+    config.add_view(general.RoundDashboardHandler, context = RoundContext                                , renderer = "ufostart:website/templates/company/round.html")
     config.add_view(general.AddMentorHandler    , context = RoundContext      , name='mentor'           , renderer = "ufostart:website/templates/company/addmentor.html")
     config.add_view(general.add_top_mentor      , context = RoundContext      , name='topmentor'        , permission='edit')
     config.add_view(general.publish_round       , context = RoundContext      , name='approve'          , permission='approve')

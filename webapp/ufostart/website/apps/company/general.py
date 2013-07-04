@@ -8,8 +8,6 @@ from ufostart.website.apps.forms.controls import SanitizedHtmlField
 from ufostart.website.apps.models.procs import InviteToCompanyProc, AcceptInviteProc, RefreshProfileProc, AddUpdateCompanyProc, GetTopMentorsProc, GetProfileProc, PublishRoundProc, AskForApprovalProc
 
 
-def round_dashboard(context, request):
-    return {}
 
 
 def publish_round(context, request):
@@ -50,7 +48,6 @@ class BaseInviteForm(BaseForm):
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class MentorInviteForm(BaseInviteForm):
-
     @classmethod
     def on_success(cls, request, values):
         values['role'] = 'MENTOR'
@@ -65,6 +62,9 @@ class InviteTeamForm(BaseInviteForm):
 
 
 
+
+class RoundDashboardHandler(FormHandler):
+    form = InviteTeamForm
 
 
 class PostUpdateForm(BaseForm):

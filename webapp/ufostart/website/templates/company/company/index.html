@@ -1,6 +1,7 @@
 <%inherit file="../../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../../widgets.html" name="widgets"/>
+<%namespace file="widgets.html" name="companyWidgets"/>
 
 <%def name="bcrumbs()">
     <div class="container breadcrumbs">
@@ -87,7 +88,7 @@
                     <div class="heading">Time left</div>
                     <div class="small-value">${round.expiry_days} Days</div>
                 </div><div class="halves">
-                    <div class="heading">Needs</div>
+                    <div class="heading">Tasks</div>
                     <div class="small-value">${round.noFulfilledNeeds}/${round.noTotalNeeds}</div>
                 </div>
             </div>
@@ -157,7 +158,9 @@
         ${buildMember(member)}
     %endfor
     %if ctxt.canEdit and hasattr(view, 'schemas'):
-        ${self.build_forms(view.schemas.get('InviteCompany'), values, errors)}
+        <div class="box-content">
+            ${companyWidgets.invite_team_form(view.schemas.get('InviteCompany'), values, errors)}
+        </div>
     %endif
 
     <div class="mar-top-4">
@@ -166,25 +169,11 @@
             ${buildMember(member)}
         %endfor
         %if ctxt.canEdit and hasattr(view, 'schemas'):
-            <a href="${url(ctxt, '1', 'mentor')}" class="btn btn-primary mar-top-1">Invite Mentor</a>
+            <div class="box-content">
+                <a href="${url(ctxt, '1', 'mentor')}" class="btn btn-primary btn-block">Invite Mentor</a>
+            </div>
         %endif
     </div>
-</%def>
-
-<%def name="build_forms(form, values, errors)">
-    %if form:
-        <div class="expander ${'expanded' if request.params.get('invite') else ''}">
-            <a class="btn btn-primary show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Invite Team Members</a>
-            <form class="box-content box-dark show-expanded ${form.grid.form_classes}" id="${form.id}" method="POST">
-                ${baseform.prelims(form)}
-                ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                ${form.fieldMap['role'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                <button type="submit" class="btn btn-primary">Invite member</button>
-                <a class="btn btn-default" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
-            </form>
-        </div>
-    %endif
 </%def>
 
 

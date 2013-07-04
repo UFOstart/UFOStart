@@ -31,7 +31,7 @@ requires = [
     "httplib2",
     "markdown",
     "smartypants",
-    'hnc>=0.0.8dev'
+    'hnc>=0.0.9dev'
     ]
 
 setup(name='ufostart',

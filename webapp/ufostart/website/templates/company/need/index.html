@@ -34,9 +34,9 @@
 
 <%def name="needOverview(need)">
     %if need.fulfilled:
-        <div class="box-title">Need Details - Closed</div>
+        <div class="box-title">Task Details - Closed</div>
     %else:
-        <div class="box-title">Need Details</div>
+        <div class="box-title">Task Details</div>
     %endif
 
     %if need.picture:
@@ -61,7 +61,7 @@
 
     %if need.fulfilled:
         <div class="mar-top-2">
-            <div class="box-title">Need Fulfilled by</div>
+            <div class="box-title">Task Fulfilled by</div>
             <div class="box-card compact mar-top-half">
                 ${companyWidgets.applicationCard(need.acceptedApplication)}
             </div>
@@ -78,7 +78,7 @@
 <%def name="build_form(form, values, errors)">
     %if form:
         <div class="mar-top-2 expander ${'expanded' if request.params.get('invite') else ''}">
-            <a class="btn btn-primary show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Invite to Need</a>
+            <a class="btn btn-primary show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Invite to Task</a>
             <form class="box-content box-dark show-expanded ${form.grid.form_classes}" id="${form.id}" method="POST">
                 ${baseform.prelims(form)}
                 ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
@@ -224,7 +224,7 @@
                 </div>
             </div>
         %else:
-            <h2>Endorse a contact for this need</h2>
+            <h2>Endorse a contact for this task</h2>
             <div class="linkedin-widget" data-widget="ContactSearch">
                 <script type="text/template" class="contact-template">
                     <div class="row single-candidate search-result-item" data-entity-id="{{ model.id }}">

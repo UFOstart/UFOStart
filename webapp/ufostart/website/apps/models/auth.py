@@ -66,6 +66,7 @@ class UserEndorsementsModel(Mapping):
 
 class UserModel(Mapping):
     token = TextField()
+    slug = TextField()
     name = TextField()
     pwd = TextField()
     email = TextField()

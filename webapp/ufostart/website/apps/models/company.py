@@ -15,12 +15,12 @@ from ufostart.lib.tools import format_currency
 from ufostart.models.tasks import NamedModel
 from ufostart.website.apps.models.workflow import WorkflowModel
 
-TEMPLATE_STYLE_KEYS = {
-    'E-COMMERCE':'ecommerce'
-    , 'STEVE_BLANK':'hitech'
-    , 'SCALE':'seed'
-    , 'LAUNCH':'started'
-    , 'START':'seriesb'
+TEMPLATE_KEYS = {
+    'E-COMMERCE':{'key':'ecommerce', 'name':'E-Commerce'}
+    , 'STEVE_BLANK':{'key':'hitech', 'name':'Steve Blank'}
+    , 'SCALE':{'key':'seed', 'name':'Looking to scale'}
+    , 'LAUNCH':{'key':'started', 'name':'About to launch'}
+    , 'START':{'key':'seriesb', 'name':'Just starting out'}
 }
 
 
@@ -280,14 +280,20 @@ class NeedModel(Mapping):
     _inUse = BooleanField()
 
 class TemplateModel(Mapping):
-    key = TextField()
-    name = TextField()
+    _key = TextField(name="key")
+    _name = TextField(name="name")
     Need = ListField(DictField(NeedModel))
 
+
     def getStyleKey(self):
-        if not self.key:
-            self.key = self.name.replace(" ", "_").upper()
-        return TEMPLATE_STYLE_KEYS[self.key]
+        return TEMPLATE_KEYS[self.key]['key']
+
+    @property
+    def key(self):
+        return self._name.replace(" ", "_").upper()
+    @property
+    def name(self):
+        return TEMPLATE_KEYS[self.key]['name']
 
     @reify
     def display_tags(self):
