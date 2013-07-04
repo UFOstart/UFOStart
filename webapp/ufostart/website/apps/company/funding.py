@@ -11,10 +11,14 @@ class InvestmentForm(BaseForm):
     id="Investment"
     label = ""
     fields=[
-        CurrencyIntField('amount', "Investment Amount", REQUIRED, input_classes='data-input amount', maxlength=9, currency='$')
+        CurrencyIntField('amount', "Investment Amount", REQUIRED, input_classes='data-input amount', maxlength=7, currency='$')
     ]
     @classmethod
     def on_success(cls, request, values):
+        # funding = request.context.funding
+        # if values['amount'] > funding.amount - funding.invested_amount:
+        #     return {'success':False, 'errors': {'amount': 'Amount needs to be lower than valuation!'}}
+
         values['User'] = {'token': request.root.user.token}
         data = {"token": request.context.round.token, "Funding": {"Investment": values}}
         InvestInCompanyProc(request, data)
@@ -29,8 +33,8 @@ class FundingCreateForm(BaseForm):
     label = ""
     fields=[
      SanitizedHtmlField("description", "Deal Description", REQUIRED, input_classes='x-high')
-     , CurrencyIntField('amount', "Funding Amount", REQUIRED, input_classes='data-input amount', maxlength=9, currency='$')
-     , CurrencyIntField('valuation', "Company Valuation", REQUIRED, input_classes='data-input valuation', maxlength=9, currency='$')
+     , CurrencyIntField('amount', "Funding Amount", REQUIRED, input_classes='data-input amount', maxlength=7, currency='$')
+     , CurrencyIntField('valuation', "Company Valuation", REQUIRED, input_classes='data-input valuation', maxlength=7, currency='$')
      , FileUploadField("contract", "Contract")
     ]
     @classmethod

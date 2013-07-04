@@ -336,7 +336,7 @@
                     <span class="remove" data-target=".need-card">×</span>
                 %endif
                 <h3 class="no-margin">
-                    <a href="${url(ctxt, need.slug, 'edit') if need.customized and ctxt.canEdit else url(ctxt, need.slug)}">
+                    <a href="${url(ctxt, need.slug, 'edit') if not need.customized and ctxt.canEdit else url(ctxt, need.slug)}">
                         ${need.name}
                     </a>
                 </h3>

@@ -150,19 +150,19 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
 
 
 <%def name="valuation(need)">
-    <div class="valuation">
+    <div class="number-widget">
         <div class="number total">
-            <strong class="text-small text-muted">VALUE</strong>
-            <h2>${need.display_total}</h2>
+            <strong class="text-small">Value</strong>
+            <h2 class="no-margin">${need.display_total}</h2>
         </div>
-        <div class="secondary">
-            <div class="number equity">
-                <div class="text-small text-muted">Equity</div>
-                <h2>${need.display_mix}</h2>
+        <div class="row mar-top-half">
+            <div class="col col-lg-6">
+                <small>Cash</small>
+                <h2 class="no-margin">${need.display_cash}</h2>
             </div>
-            <div class="number cash">
-                <div class="text-small text-muted">Cash</div>
-                <h2>${need.display_cash}</h2>
+            <div class="col col-lg-6">
+                <small>Equity</small>
+                <h2 class="no-margin">${need.display_equity}</h2>
             </div>
         </div>
     </div>

@@ -26,9 +26,7 @@
 
 
 <%def name="infoSideBar(funding)">
-    <div class="box-card">
-        ${widgets.company_logo(ctxt.company, classes='medium')}
-    </div>
+    ${widgets.company_logo(ctxt.company, classes='medium')}
     <a class="entity-link  mar-top-half" href="${root.company_url(ctxt.company.slug)}">${ctxt.company.name}</a>
     <div class="pitch">${html.nn(ctxt.company.pitch)}</div>
 
@@ -66,12 +64,12 @@
 
         %if len(funding.Investments):
             <div class="box-content">
-            <h6>Investors</h6>
-            <div class="face-pile-mini clearfix">
-            %for investor in funding.Investments:
-                ${widgets.profile_pic(investor.User.picture, investor.User.token, classes='mini')}
-            %endfor
-            </div>
+                <strong class="text-small">Investors</strong>
+                <div class="face-pile-mini clearfix">
+                %for investor in funding.Investments:
+                    ${widgets.profile_pic(investor.User.picture, investor.User.token, classes='mini')}
+                %endfor
+                </div>
             </div>
         %else:
             <div class="empty">

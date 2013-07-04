@@ -33,31 +33,19 @@
 </%def>
 
 <%def name="needOverview(need)">
-    %if need.fulfilled:
-        <div class="box-title">Task Details - Closed</div>
-    %else:
-        <div class="box-title">Task Details</div>
-    %endif
+    ${widgets.company_logo(ctxt.company, classes='medium')}
+    <a class="entity-link  mar-top-half" href="${root.company_url(ctxt.company.slug)}">${ctxt.company.name}</a>
+    <div class="pitch">${html.nn(ctxt.company.pitch)}</div>
 
-    %if need.picture:
-        <div class="picture-header">
-            <img src="${need.picture}"/>
+    <div class="box-shaded mar-top-4">
+        <div class="box-shaded">
+            <div class="box-title">Task Details</div>
+            <div class="box-shaded box-content">
+                <p class="text-small">We are working with mixed equity-cash payments. You’ll get paid in cash as well as company shares.</p>
+                ${widgets.valuation(need)}
+            </div>
         </div>
-    %endif
-
-    <div class="mar-top-1">
-        %if need.fulfilled:
-            ${widgets.valuation_sml(need)}
-        %else:
-            ${widgets.valuation(need)}
-        %endif
     </div>
-
-    <hr/>
-    <div class="box-card compact">
-        ${widgets.companyInfo(ctxt.company, False)}
-    </div>
-    <hr/>
 
     %if need.fulfilled:
         <div class="mar-top-2">
@@ -78,7 +66,7 @@
 <%def name="build_form(form, values, errors)">
     %if form:
         <div class="mar-top-2 expander ${'expanded' if request.params.get('invite') else ''}">
-            <a class="btn btn-primary show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Invite to Task</a>
+            <a class="btn btn-primary show-contracted" data-toggle-target=".expander" data-toggle-class="expanded">Invite to Task</a>
             <form class="box-content box-dark show-expanded ${form.grid.form_classes}" id="${form.id}" method="POST">
                 ${baseform.prelims(form)}
                 ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
@@ -147,6 +135,11 @@
 
 
 <%def name="needDetails(canEdit, company, need)">
+
+    %if need.picture:
+        <img src="${need.picture}"/>
+    %endif
+
     ${html.nn(need.customText) | html.html,n }
 
     <div class="mar-top-2">
