@@ -468,6 +468,10 @@ class RoundModel(Mapping):
     def noTotalNeeds(self):
         return len(self.Needs)
 
+
+    @property
+    def roundTasks(self):
+        return filter(attrgetter("customized"), self.Needs)
 class CompanyModel(BaseCompanyModel):
     tagString = TextField()
 

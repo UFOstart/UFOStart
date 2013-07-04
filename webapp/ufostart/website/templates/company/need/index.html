@@ -20,6 +20,7 @@
             </div>
             <div class="col col-lg-3">
                 ${self.wtfBox()}
+                ${self.otherTasks(ctxt.round)}
                 ${widgets.sharebtns()}
             </div>
         </div>
@@ -294,6 +295,14 @@
 %endif
 </%def>
 
+<%def name="otherTasks(round)">
+%for need in round.roundTasks:
+    %if need.slug != ctxt.need.slug:
+        <div class="box-title">${need.name}</div>
+    %endif
+%endfor
+<div class="mar-top-2"></div>
+</%def>
 <%def name="wtfBox()">
     %if ctxt.need.summary:
         <div class="wtf-box active">
@@ -304,6 +313,7 @@
                 ${ctxt.need.summary}
             </div>
         </div>
+        <div class="mar-top-2"></div>
     %endif
 </%def>
 
