@@ -141,12 +141,12 @@
 <%def name="pledgeList(pledges)">
 %if len(pledges):
     %for pledge in pledges:
-        <div class="box-card shaded compact single-update">
+        <div class="box-card compact single-update">
             ${widgets.profile_pic(pledge.picture, pledge.networkId)}
             <div class="right-box">
-                <div class="pull-right"><small>${html.format_datetime(pledge.created, 'medium')}</small></div>
+                <div class="pull-right"><small class="text-muted">${html.format_datetime(pledge.created, 'medium')}</small></div>
                 <a class="entity-link" href="${root.profile_url(pledge.networkId)}">${pledge.name}</a>
-                <p class="text-small text-muted">Pledged to buy <strong>${pledge.offerName}</strong></p>
+                <p class="text-small">Pledged to buy <strong>${pledge.offerName}</strong></p>
                 <div class="long-description">${html.nn(pledge.comment)}</div>
             </div>
         </div>

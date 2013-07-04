@@ -208,8 +208,8 @@ class NeedModel(Mapping):
     category = TextField()
     customText = TextField()
     picture = TextField()
-    cash = IntegerField(default = 0)
-    equity = IntegerField(default = 0)
+    cash = IntegerField()
+    equity = IntegerField()
     Tags = ListField(DictField(NamedModel))
     Applications = ListField(DictField(ApplicationModel))
     Endorsements = ListField(DictField(EndorsementModel))
@@ -232,10 +232,10 @@ class NeedModel(Mapping):
 
     @property
     def added(self):
-        return self.status != 'ADDED'
+        return self.status in ['ADDED', 'CUSTOMISED']
     @property
     def customized(self):
-        return self.status != 'CUSTOMISED'
+        return self.status == 'CUSTOMISED'
     @property
     def fulfilled(self):
         return self.status == 'FULFILED'

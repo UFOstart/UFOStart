@@ -149,6 +149,10 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
             var lengths = [], max, min, view = this;
             if(opts.tacho) this.tacho = new Tachymeter(opts.tacho);
 
+            this.$el.find(".form-validated").each(function(idx, form){
+                ajax.ifyForm({form:form});
+            });
+
 
             this.$activity = this.$(".activity-stream");
             this.model = new ActivityStream();

@@ -5,7 +5,7 @@ from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
 from ufostart.website.apps.forms.controls import FileUploadField, TagSearchField
 from ufostart.website.apps.models.company import NeedModel
-from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc, InviteToNeedProc
+from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc, InviteToNeedProc, AddNeedToRound
 
 
 class NeedIndexForm(BaseForm):
@@ -29,7 +29,7 @@ class NeedIndexForm(BaseForm):
 
         InviteToNeedProc(request, {'Invite': values})
 
-        request.session.flash(GenericSuccessMessage(u"You successfully invited {name} to this need!".format(**values)), "generic_messages")
+        request.session.flash(GenericSuccessMessage(u"You successfully invited {name} to this task!".format(**values)), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class NeedIndexHandler(FormHandler):
@@ -53,7 +53,7 @@ class ApplicationForm(BaseForm):
     @classmethod
     def on_success(cls, request, values):
         ApplyForNeedProc(request, {'token':request.context.need.token, 'Application': {'User':{'token':request.root.user.token}, 'message':values['message']}})
-        request.session.flash(GenericSuccessMessage("You have applied for this need successfully. One of the team members will contact you shortly."), "generic_messages")
+        request.session.flash(GenericSuccessMessage("You have applied for this task successfully. One of the team members will contact you shortly."), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class ApplicationHandler(FormHandler):
@@ -66,7 +66,7 @@ class NeedCreateForm(BaseForm):
     label = ""
     fields = [
         FileUploadField("picture", 'Picture', group_classes='file-upload-control')
-        , StringField('name', "Need Name", REQUIRED)
+        , StringField('name', "Title", REQUIRED)
         , IntField('total', "Total value ($)", REQUIRED, input_classes='data-input value')
         , IntField('ratio', "of this Equity (%)", REQUIRED, input_classes='data-input ratio', max = 100)
         , DecimalField('cash', None)
@@ -80,11 +80,11 @@ class NeedCreateForm(BaseForm):
             need = CreateNeedProc(request, {'Needs':[values], 'token': request.context.round.token})
         except DBNotification, e:
             if e.message == 'Need_Already_Exists':
-                return {'success':False, 'errors': {'name': "This need already exists, if you intend to create this need, please change its name to something less ambiguous!"}}
+                return {'success':False, 'errors': {'name': "This task already exists, if you intend to create this task, please change its name to something less ambiguous!"}}
             else:
                 raise e
 
-        request.session.flash(GenericSuccessMessage("Need created successfully!"), "generic_messages")
+        request.session.flash(GenericSuccessMessage("Task created successfully!"), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class NeedCreateHandler(FormHandler):
@@ -100,7 +100,7 @@ class NeedEditForm(BaseForm):
     label = ""
     fields = [
         FileUploadField("picture", 'Picture', group_classes='file-upload-control')
-        , StringField('name', "Need Name", REQUIRED)
+        , StringField('name', "Title", REQUIRED)
         , IntField('total', "Total value ($)", REQUIRED, input_classes='data-input value')
         , IntField('ratio', "of this Equity (%)", REQUIRED, input_classes='data-input ratio', max = 100)
         , DecimalField('cash', None)
@@ -111,26 +111,35 @@ class NeedEditForm(BaseForm):
 
     @classmethod
     def on_success(cls, request, values):
-        values['token'] = request.context.need.token
-
+        need = request.context.need
+        round = request.context.round
+        values['token'] = need.token
+        newNeed = not need.added
+        if newNeed:
+            AddNeedToRound(request, {'Round': {'token':round.token, 'Needs':[{'token':need.token}]}})
         try:
             round = EditNeedProc(request, {'Needs':[values]})
         except DBNotification, e:
             if e.message == 'Need_Already_Exists':
-                return {'success':False, 'errors': {'name': "This need already exists, if you intend to Edit this need, please change its name to something less ambiguous!"}}
+                return {'success':False, 'errors': {'name': "This task already exists, if you intend to Edit this task, please change its name to something less ambiguous!"}}
             else:
                 raise e
 
-        request.session.flash(GenericSuccessMessage("Need edited successfully!"), "generic_messages")
-        return {'success':True, 'redirect': request.resource_url(request.context)}
+        request.session.flash(GenericSuccessMessage("Task edited successfully!"), "generic_messages")
+        if newNeed:
+            return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
+        else:
+            return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class NeedEditHandler(FormHandler):
     form = NeedEditForm
 
     def pre_fill_values(self, request, result):
         need = self.context.need
+        round = self.context.round
         values = need.unwrap()
         values['total'] = need.total
         values['ratio'] = need.equity_ratio
         result['values'][self.form.id] = values
         return super(NeedEditHandler, self).pre_fill_values(request, result)
+

@@ -12,10 +12,15 @@
                 </h1>
             </div>
         </div>
+        <div class="row">
+            <div class="col col-lg-9">
+              <p>${ctxt.need.summary}</p>
+            </div>
+        </div>
         <div class="row mar-top-2">
             <div class="col col-lg-9">
                 <div class="box-content box-dark">
-                    ${self.build_form(ctxt.need, "Save Changes", view.form, values.get(view.form.id), errors.get(view.form.id))}
+                    ${self.build_form(ctxt.need, "Save Changes" if ctxt.need.added else "Add to Round", view.form, values.get(view.form.id), errors.get(view.form.id))}
                 </div>
             </div>
             <div class="col col-lg-3">
@@ -25,33 +30,13 @@
                             Before you go on
                         </h2>
                         <div class="wtf-content mar-top-1">
-                            ${ctxt.need.summary}
+                            lorem ipsum
                         </div>
                     </div>
                 %endif
             </div>
-
         </div>
 
-        <div class="row mar-top-2">
-            <div class="col col-lg-3">
-                ${self.needOverview(ctxt.need)}
-            </div>
-            <div class="col col-lg-6">
-                ${self.needDetails(ctxt.canEdit, ctxt.company, ctxt.need)}
-            </div>
-            <div class="col col-lg-3">
-            </div>
-        </div>
-
-        <div class="row mar-top-2">
-            <div class="col col-lg 12">
-                <h1 class="section-title">
-                    <span class="brand-primary">Applications</span>
-                </h1>
-                ${self.applications(ctxt.need, ctxt.need.Applications)}
-            </div>
-        </div>
     </div>
 </%def>
 
@@ -101,7 +86,7 @@
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">${btn_label}</button>
-            <a href="${url(ctxt)}" class="btn btn-default">Cancel</a>
+            <a href="${url(ctxt) if ctxt.need.added else url(ctxt.__parent__)}" class="btn btn-default">Cancel</a>
         </div>
     </form>
 </%def>

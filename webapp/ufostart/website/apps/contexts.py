@@ -88,16 +88,16 @@ class WebsiteRootContext(RootContext):
     @property
     def template_select_url(self):
         return self.request.resource_url(self, 'template')
-    def template_url(self, slug):
-        return self.request.resource_url(self, 'template', slug)
-    def company_url(self, slug):
-        return self.request.resource_url(self, 'c', slug)
-    def round_url(self, slug, round_no):
-        return self.request.resource_url(self, 'c', slug, round_no)
-    def need_url(self, company_slug, need_slug):
-        return self.request.resource_url(self, 'c', company_slug, 1, need_slug)
-    def product_url(self, slug):
-        return self.request.resource_url(self, 'c', slug, 1, 'product')
+    def template_url(self, slug, *args, **kwargs):
+        return self.request.resource_url(self, 'template', slug, *args, **kwargs)
+    def company_url(self, slug, *args, **kwargs):
+        return self.request.resource_url(self, 'c', slug, *args, **kwargs)
+    def round_url(self, slug, round_no, *args, **kwargs):
+        return self.request.resource_url(self, 'c', slug, round_no, *args, **kwargs)
+    def need_url(self, company_slug, need_slug, *args, **kwargs):
+        return self.request.resource_url(self, 'c', company_slug, 1, need_slug, *args, **kwargs)
+    def product_url(self, slug, *args, **kwargs):
+        return self.request.resource_url(self, 'c', slug, 1, 'product', *args, **kwargs)
     def auth_url(self, network):
         return self.request.resource_url(self, 'login', network, query = [('furl', self.request.url)])
     @property

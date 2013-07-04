@@ -26,7 +26,7 @@ STAGE_NAMES = {
     , u'ADD_MENTOR':'Add a Mentor'
     , u'INVITE_TEAM':'Invite Team Members'
     , u'CREATE_PRODUCT':'Add Product'
-    , u'CUSTOMISE_NEEDS': 'Customize Needs'
+    , u'CUSTOMISE_NEEDS': 'Add Tasks'
     , u'SENT_FOR_MENTOR_APRROVAL':'Ask Mentor for Approval'
     , u'PUBLISH': 'Publish Round'
     , u'FUNDING': 'Define Funding'

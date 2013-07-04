@@ -185,6 +185,26 @@
   }
 }
 
+.cut-corner {
+  position: relative;
+  max-width:100%;
+  &:after {
+    content:".";
+    position: absolute;
+    height:22px;
+    width:100%;
+    bottom:-1px;
+    left:0;
+    .background-image("../img/cornerw.png");
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    overflow:hidden;
+    text-indent: -999em;
+    display: block;
+  }
+}
+
+
 div.box-title{font-weight: 600;}
 .box-shaded {background-color: fadeout(@box-title, 95%);}
 .box-content {padding: 12px;}
@@ -192,6 +212,7 @@ div.box-title{font-weight: 600;}
 .box-darker {background-color: rgba(0,0,0,.1);}
 .box-light {background-color:#f4f4f4;}
 .box-buster {margin:0 -12px;}
+a.no-link {&:hover, &:active {text-decoration: none;}color:@text-color;display: block;}
 .box-header {
   margin: 0 6px;
   position: relative;
@@ -262,15 +283,8 @@ div.box-title{font-weight: 600;}
 }
 
 
-.box-header-muted {
-  padding-left:12px;
-  padding-right:12px;
-  padding-bottom: 24px;
-  background-color: @light-muted;
-}
-.box-header-wtf{
-  .box-shadow(0 0 25px @wtf-color inset);
-}
+.box-header-muted {background-color: fadeout(@box-title, 85%);}
+.box-header-wtf {.box-shadow(0 0 25px @wtf-color inset);}
 
 
 .number-widget{

@@ -51,11 +51,11 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
 %endif
 </%def>
 
-<%def name="member_pic(member, classes='')">${self.profile_pic(member.picture_url, member.slug, member.confirmed, classes)}</%def>
-<%def name="profile_pic(picture, slug, confirmed = True, classes='')">
+<%def name="member_pic(member, classes='')">${self.profile_pic(member.picture_url, member.token, member.confirmed, classes)}</%def>
+<%def name="profile_pic(picture, token, confirmed = True, classes='')">
     %if confirmed:
-        <div class="picture hover-container ${classes}" data-entity-id="${slug}">
-            <a href="${root.profile_url(slug)}"><img class="image" src="${picture}"/></a>
+        <div class="picture hover-container ${classes}" data-entity-id="${token}">
+            <a href="${root.profile_url(token)}"><img class="image" src="${picture}"/></a>
         </div>
     %else:
         <div class="picture ${classes}">

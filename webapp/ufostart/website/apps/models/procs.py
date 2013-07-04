@@ -97,6 +97,8 @@ CreateNeedProc = ClientTokenProc("/web/round/needcreate", result_cls=NeedModel, 
 EditNeedProc = ClientTokenProc("/web/round/need", result_cls=RoundModel, root_key="Round")
 ApplyForNeedProc = ClientTokenProc("/web/need/application")
 ApproveApplicationProc = ClientTokenProc("/web/need/approveapplication")
+AddNeedToRound = ClientTokenProc("/web/round/needAdd")
+
 
 InviteToCompanyProc = ClientTokenProc("/web/company/invite")
 InviteToNeedProc = ClientTokenProc("/web/need/invite")

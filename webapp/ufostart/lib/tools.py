@@ -18,6 +18,7 @@ def format_int_amount(number, locale = 'en'):
 
 
 def format_currency(number, currency = 'USD', locale = 'en'):
+    if number is None: number = 0
     if round(number) == number:
         return u'{}{}'.format(get_currency_symbol(currency, locale = locale), format_int_amount(number, locale))
     else:

@@ -75,7 +75,7 @@ class ApplicationContext(BaseProjectContext):
 
 
 class NeedContext(BaseProjectContext):
-    displayType = "Need"
+    displayType = "Task"
     @property
     def displayName(self):
         return self.need.name
@@ -298,7 +298,7 @@ def includeme(config):
     config.add_view(funding.FundingEditHandler  , context = FundingContext    , name='edit'             , renderer = "ufostart:website/templates/company/funding/edit.html", permission='edit')
 
 
-    config.add_view(need.NeedCreateHandler      , context = RoundContext      , name='addneed'          , renderer = "ufostart:website/templates/company/need/create.html", permission='edit')
+    config.add_view(need.NeedCreateHandler      , context = RoundContext      , name='new'          , renderer = "ufostart:website/templates/company/need/create.html", permission='edit')
     config.add_view(need.NeedIndexHandler       , context = NeedContext                                 , renderer = "ufostart:website/templates/company/need/index.html")
     config.add_view(need.ApplicationHandler     , context = NeedContext       , name = 'apply'          , renderer = "ufostart:website/templates/company/need/apply.html", permission='apply')
     config.add_view(need.accept_application     , context = ApplicationContext, name = 'accept')
