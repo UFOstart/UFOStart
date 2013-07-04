@@ -30,7 +30,7 @@ class BaseInviteForm(BaseForm):
     id="InviteCompany"
     fields = [
         StringField("name", "Name", REQUIRED)
-        , EmailField("email", "email address", REQUIRED)
+        , EmailField("email", "Email address", REQUIRED)
     ]
 
     @classmethod

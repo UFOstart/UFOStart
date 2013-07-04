@@ -72,13 +72,14 @@
   position: relative;
   > .progress {
     position: absolute;
+    border:none;
     bottom:0;
     height:20px;
     width:100%;
     margin:0;
   }
   .offset {
-    color:white;position: relative;z-index:2;font-size:50px;
+    color:white;position: relative;z-index:2;font-size:50px;line-height: 50px;
     &.dark {color:@text-color;}
     > small {
       font-size:18px;
@@ -129,7 +130,9 @@
   > .box-content {
     > h2 {color:white;margin:0;}
     > .offset {margin-top:50px;display: block;}
+
   }
+  .heading {margin-top:30px;display: block;position: relative;z-index:2;font-size:50px; > small {color:white;}}
   .dark {color:black;}
 }
 

@@ -213,7 +213,7 @@ class ProtoCompanyContext(BaseProjectContext):
 
 
 
-class InviteContext(BaseProjectContext):
+class InviteContext(RoundContext):
     displayType = "Company"
     @property
     def displayName(self):
@@ -231,6 +231,8 @@ class InviteContext(BaseProjectContext):
     def __init__(self, parent, name):
         self.__name__ = name
         self.__parent__ = parent
+        if self.company.isMember(self.request.root.user.token):
+            raise HTTPFound(self.request.root.round_url(self.company.slug, '1'))
 
     @reify
     def invite(self):
@@ -254,6 +256,8 @@ class InviteContext(BaseProjectContext):
     @reify
     def round(self):
         return self.company.Round
+
+
 
 
 class ProtoInviteContext(BaseProjectContext):
