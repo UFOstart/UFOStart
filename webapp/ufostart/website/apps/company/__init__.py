@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from hnc.apiclient.backend import DBNotification
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.decorator import reify
@@ -152,6 +153,19 @@ class RoundContext(BaseProjectContext):
     @reify
     def company(self):
         return self.__parent__.company
+
+
+    def groupedNeeds(self, n = 4, added = False):
+        needs = [need for need in self.round.Needs if need.added == added]
+        length = len(needs)
+        if not length: return []
+        result = OrderedDict()
+        for i, need in enumerate(needs):
+            l = result.setdefault(i % n, [])
+            l.append(need)
+        return result.values()
+
+
 
 
 class CompanyContext(BaseProjectContext):

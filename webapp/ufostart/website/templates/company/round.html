@@ -256,24 +256,22 @@
 
 <%def name="tasksSection(company)">
     <div class="row mar-top-2" id="project-round-need-dashboard" data-entity-id="${ctxt.round.token}">
-        <%self:renderNeedColumns needs="${company.groupedNeeds(3, False)}">
+
+        <%self:renderNeedColumns needs="${ctxt.groupedNeeds(3, True)}">
+            <div class="col col-lg-12 mar-top-2"><div class="box-title">
+                    ${'Tasks' if ctxt.round.published else 'Customized Tasks'}
+            </div></div>
+        </%self:renderNeedColumns>
+
+        <%self:renderNeedColumns needs="${ctxt.groupedNeeds(3, False)}">
             <div class="col col-lg-12">
                 <div class="box-title highlight-target">
                     <div id="target-customise-needs" class="highlight-anchor"></div>
-                    Pending Tasks
+                    Suggested Tasks
                 </div>
             </div>
         </%self:renderNeedColumns>
 
-        <%self:renderNeedColumns needs="${company.groupedNeeds(3, True)}">
-            <div class="col col-lg-12 mar-top-2"><div class="box-title">
-                %if ctxt.round.published:
-                    Tasks
-                %else:
-                    Customized Tasks
-                %endif
-            </div></div>
-        </%self:renderNeedColumns>
     </div>
 </%def>
 

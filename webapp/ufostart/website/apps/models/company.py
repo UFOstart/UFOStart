@@ -231,8 +231,11 @@ class NeedModel(Mapping):
         return sorted(self.Applications, key = attrgetter('created'), reverse = True)[:n]
 
     @property
+    def added(self):
+        return self.status != 'ADDED'
+    @property
     def customized(self):
-        return self.status != 'PENDING'
+        return self.status != 'CUSTOMISED'
     @property
     def fulfilled(self):
         return self.status == 'FULFILED'
@@ -575,17 +578,6 @@ class CompanyModel(BaseCompanyModel):
     @property
     def pledgees(self):
         return self.Round and self.Round.Pledges or []
-
-    def groupedNeeds(self, n = 4, customized = False):
-        if not self.Round: return []
-        needs = [need for need in self.Round.Needs if need.customized == customized]
-        length = len(needs)
-        if not length: return []
-        result = OrderedDict()
-        for i, need in enumerate(needs):
-            l = result.setdefault(i % n, [])
-            l.append(need)
-        return result.values()
 
 
 class InviteModel(Mapping):
