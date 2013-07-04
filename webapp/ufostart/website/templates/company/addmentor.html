@@ -50,7 +50,11 @@
                                         <div class="col col-lg-6">
                                             <a href="${root.profile_url(mentor.token)}" class="entity-link">${mentor.name}</a>
                                             <p class="text-small">${mentor.headline}</p>
-                                            <a href="${url(ctxt, 'topmentor')}?m=${mentor.token}" class="btn btn-primary">Invite as Mentor</a>
+                                            %if mentor.token in ctxt.company.mentorTokens:
+                                                <a class="btn btn-primary disabled">Already Invited</a>
+                                            %else:
+                                                <a href="${url(ctxt, 'topmentor')}?m=${mentor.token}" class="btn btn-primary">Invite as Mentor</a>
+                                            %endif
                                         </div>
                                         <div class="col col-lg-6">
                                             %if mentor.Companies:
@@ -71,13 +75,15 @@
                         </div>
                     %endfor
                 </div>
-
+                <hr class="mar-top-2" style="margin-bottom:0;"/>
+                <strong class="text-small">Or invite by name and email:</strong>
+                <div class="mar-top-2">
                 ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
                 ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                ${form.fieldMap['role'].render(form.id, request, dict(role = form.role), errors, view)|n}
                 <div class="mar-top-1">
                     <button type="submit" class="btn btn-primary">Invite Mentor</button>
                     <a href="${url(ctxt)}" class="btn btn-default">Cancel</a>
+                </div>
                 </div>
             </div>
         </div>

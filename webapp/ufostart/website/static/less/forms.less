@@ -18,7 +18,8 @@
   margin-top:6px;
 }
 
-.pseudo-input(){
+.pseudo-input{
+  color:@text-color;
   background-color: @input-bg;
   .box-shadow(inset -1px 1px 3px rgba(0,0,0,.15));
 }
@@ -111,15 +112,6 @@ ul.styled {
     position: relative;
     overflow:hidden;
     .pseudo-input();
-    padding-bottom:50px;
-    .file-upload-btn {
-        position: absolute;
-        .opacity(0);
-        right: 0;
-        bottom: 0;
-        height: 50px;
-        width: 100%;
-    }
     &:before {
       font-family: 'Glyphicons Halflings';
       font-style: normal;

@@ -6,11 +6,13 @@
   padding:12px;
   > .wtf-title {
     color:white;
-    margin:0;
+    margin:-12px 0 0;
     font-weight: 300;
+    line-height: 1.2em;
   }
   > .wtf-content {
     color:white;
+    margin-top:24px;
     font-size: @font-size-small;
   }
   &.active {color: white;}
@@ -146,6 +148,72 @@
     }
   }
 }
+
+
+.box-title {
+  display: block;
+  background-color: @box-title;
+  color:white;
+  font-weight: 600;
+  padding: 0 12px;
+  font-size:13px;
+  line-height:24px;
+  margin:0;
+
+  &.dark {
+    background-color:@text-muted;
+  }
+  &.success {
+    background-color: @alert-success-bg;
+    color: @alert-success-text;
+    > .glyphicon {
+      position: relative;
+      top: -3px;
+      font-size: 14px;
+      line-height: 10px;
+      height: 9px;
+      display: inline-block
+    }
+  }
+  &.major {
+    font-size: 24px;
+    line-height:1em;
+    font-weight:300;
+    padding: 5px 8px 20px;
+    border:none;
+    background-color: transparent;
+  }
+}
+
+div.box-title{font-weight: 600;}
+.box-shaded {background-color: fadeout(@box-title, 95%);}
+.box-content {padding: 12px;}
+.box-dark {background-color: #6D6D6D;color:white;}
+.box-darker {background-color: rgba(0,0,0,.1);}
+.box-light {background-color:#f4f4f4;}
+
+.box-header {
+  margin: 0 6px;
+  position: relative;
+  background-color:#f4f4f4;
+  max-width:100%;
+  &:after {
+    content:".";
+    position: absolute;
+    height:22px;
+    width:100%;
+    bottom:-1px;
+    left:0;
+    .background-image("../img/cornerb.png");
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    overflow:hidden;
+    text-indent: -999em;
+    display: block;
+  }
+}
+
+
 .box-card {
   .clearfix;
   > h3 {margin: 6px 0;}

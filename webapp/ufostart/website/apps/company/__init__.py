@@ -3,7 +3,7 @@ from hnc.forms.messages import GenericErrorMessage
 from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound
 from pyramid.security import Allow, Everyone, Authenticated, has_permission
-import product, general, invite, need, setup, funding
+import product, general, need, setup, funding
 from ufostart.website.apps.models.procs import GetCompanyProc, GetTemplateDetailsProc, GetAllCompanyTemplatesProc, GetInviteDetailsProc
 
 
@@ -259,15 +259,17 @@ def includeme(config):
     config.add_view(setup.basics                , context = TemplatesRootContext                        , renderer = "ufostart:website/templates/company/setup/basic.html")
     config.add_view(setup.details               , context = TemplateContext                             , renderer = "ufostart:website/templates/company/setup/details.html")
 
+
     config.add_view(setup.CreateProjectHandler  , context = TemplateContext   , name = 'startcompany'   , renderer = "ufostart:website/templates/company/company/create.html", permission = 'create')
-    config.add_view(invite.CompanyIndexHandler  , context = CompanyContext                              , renderer = "ufostart:website/templates/company/company/index.html")
+    config.add_view(general.CompanyIndexHandler , context = CompanyContext                              , renderer = "ufostart:website/templates/company/company/index.html")
     config.add_view(setup.EditProjectHandler    , context = CompanyContext    , name='edit'             , renderer = "ufostart:website/templates/company/company/edit.html", permission = 'edit')
 
-    config.add_view(invite.AddMentorHandler     , context = RoundContext      , name='mentor'           , renderer = "ufostart:website/templates/company/addmentor.html")
-    config.add_view(invite.add_top_mentor       , context = RoundContext      , name='topmentor'        )
-    config.add_view(general.index               , context = RoundContext                                , renderer = "ufostart:website/templates/company/round.html")
+
+    config.add_view(general.round_dashboard     , context = RoundContext                                , renderer = "ufostart:website/templates/company/round.html")
+    config.add_view(general.AddMentorHandler    , context = RoundContext      , name='mentor'           , renderer = "ufostart:website/templates/company/addmentor.html")
+    config.add_view(general.add_top_mentor      , context = RoundContext      , name='topmentor'        , permission='edit')
     config.add_view(general.publish_round       , context = RoundContext      , name='approve'          , permission='approve')
-    config.add_view(general.publish_round       , context = RoundContext      , name='reject'           , permission='approve')
+    config.add_view(general.reject_round        , context = RoundContext      , name='reject'           , permission='approve')
     config.add_view(general.ask_for_approval    , context = RoundContext      , name='askforapproval'   , permission='edit')
 
 
@@ -283,14 +285,14 @@ def includeme(config):
 
 
     config.add_view(need.NeedCreateHandler      , context = RoundContext      , name='addneed'          , renderer = "ufostart:website/templates/company/need/create.html", permission='edit')
-    config.add_view(need.index                  , context = NeedContext                                 , renderer = "ufostart:website/templates/company/need/index.html")
+    config.add_view(need.NeedIndexHandler       , context = NeedContext                                 , renderer = "ufostart:website/templates/company/need/index.html")
     config.add_view(need.ApplicationHandler     , context = NeedContext       , name = 'apply'          , renderer = "ufostart:website/templates/company/need/apply.html", permission='apply')
     config.add_view(need.accept_application     , context = ApplicationContext, name = 'accept')
     config.add_view(need.NeedEditHandler        , context = NeedContext       , name = 'edit'           , renderer = "ufostart:website/templates/company/need/edit.html", permission='edit')
 
 
-    config.add_view(invite.showInfo             , context = InviteContext                               , renderer = "ufostart:website/templates/company/invite_confirm.html", permission='join')
-    config.add_view(invite.confirm              , context = InviteContext     , name = 'confirm'        , permission='join')
-    config.add_view(invite.reject               , context = InviteContext     , name = 'reject'         , permission='join')
+    config.add_view(general.invite_landing      , context = InviteContext                               , renderer = "ufostart:website/templates/company/invite_confirm.html", permission='join')
+    config.add_view(general.confirm             , context = InviteContext     , name = 'confirm'        , permission='join')
+    config.add_view(general.reject              , context = InviteContext     , name = 'reject'         , permission='join')
 
 

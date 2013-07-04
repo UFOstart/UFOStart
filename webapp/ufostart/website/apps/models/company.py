@@ -498,10 +498,15 @@ class CompanyModel(BaseCompanyModel):
         return len(self.Users)
 
     @reify
+    def mentorTokens(self):
+        return set([m.token for m in self.mentors])
+
+    @reify
     def mentors(self):
         return [u for u in self.Users if u.isMentor]
     @reify
     def members(self):
+        if len(self.Users) == 1: return []
         return sorted([u for u in self.Users if u.isTeamMember], key = attrgetter('role'))
 
     @property

@@ -1,0 +1,80 @@
+<%!
+    from itertools import izip_longest
+%>
+
+<div class="js-form-widget repeatable-form"
+    data-module="views/company/offer"
+    data-append-target=".pseudo-input"
+    data-add-class="single-offer-mock"
+    ${'data-required="true"' if widget.attrs.required else ''|n}>
+
+<script type="text/template" class="template">
+    <span class="remove remove-link">×</span>
+    <strong>{{ name.value }}<input type="hidden" name="{{ name.name }}" value="{{ name.value }}" /></strong>
+    <div class="text-muted text-small">{{ description.value }}<input type="hidden" name="{{ description.name }}" value="{{ description.value }}" /></div>
+
+    <div class="row">
+        <div class="col col-lg-6">
+            <strong class="text-muted text-small">Price</strong>
+            <div class="text-small">{{ price.value }}<input type="hidden" name="{{ price.name }}" value="{{ price.value }}" /></div>
+        </div>
+        <div class="col col-lg-6">
+            <strong class="text-muted text-small">Stock</strong>
+            <div class="text-small">{{ stock.value }}<input type="hidden" name="{{ stock.name }}" value="{{ stock.value }}" /></div>
+        </div>
+    </div>
+</script>
+
+    <label class="control-label">${widget.name}</label>
+    <div class="box-content box-darker" style="margin-bottom: 24px;">
+        <div class="row">
+            <div class="col col-lg-6">
+                <div class="single-offer-form">
+                    ${widget.fieldMap['name'].render('{}-{}'.format(prefix, 0), request, {}, {}, view, grid = grid)|n}
+                    ${widget.fieldMap['description'].render('{}-{}'.format(prefix, 0), request, {}, {}, view, grid = grid)|n}
+                    <div class="row">
+                        <div class="col col-lg-6">
+                            ${widget.fieldMap['price'].render('{}-{}'.format(prefix, 0), request, {}, {}, view, grid = grid)|n}
+                        </div>
+                        <div class="col col-lg-6">
+                            ${widget.fieldMap['stock'].render('{}-{}'.format(prefix, 0), request, {}, {}, view, grid = grid)|n}
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-primary link save-offer-btn">Add Offer</a>
+            </div>
+            <div class="col col-lg-6">
+                <strong class="text-small">Offers Preview</strong>
+
+                <div class="pseudo-input">
+
+
+%for j, (values, errors) in enumerate(izip_longest(value or [{}], getattr(error, "error_list", [{}]), fillvalue = {})):
+
+    <div class="single-offer-mock">
+        <span class="remove remove-link">×</span>
+        <strong>${values.get('name')}<input type="hidden" name="${'{}-{}'.format(prefix, j)}.name" value="${values.get('name')}" /></strong>
+        <div class="text-muted text-small">${values.get('description')}<input type="hidden" name="${'{}-{}'.format(prefix, j)}.description" value="${values.get('description')}" /></div>
+        <div class="row">
+            <div class="col col-lg-6">
+                <strong class="text-muted text-small">Price</strong>
+                <div class="text-small">${values.get('price')}<input type="hidden" name="${'{}-{}'.format(prefix, j)}.price" value="${values.get('price')}" /></div>
+            </div>
+            <div class="col col-lg-6">
+                <strong class="text-muted text-small">Stock</strong>
+                <div class="text-small">${values.get('stock', '')}<input type="hidden" name="${'{}-{}'.format(prefix, j)}.stock" value="${values.get('stock', '')}" /></div>
+            </div>
+        </div>
+    </div>
+
+%endfor
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

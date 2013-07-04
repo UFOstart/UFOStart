@@ -6,69 +6,31 @@
 
 <%def name="content()">
     <div class="container">
-
         <%widgets:pageHeader canEdit="${ctxt.canEdit and not ctxt.need.fulfilled}">
             ${ctxt.need.name}
         </%widgets:pageHeader>
 
-
-        <div class="row mar-top-1">
+        <div class="row mar-top-2">
             <div class="col col-lg-3">
                 ${self.needOverview(ctxt.need)}
+                ${self.build_form(view.form, values, errors)}
             </div>
             <div class="col col-lg-6">
                 ${self.needDetails(ctxt.canEdit, ctxt.company, ctxt.need)}
             </div>
             <div class="col col-lg-3">
-                %if ctxt.need.summary:
-                    <div class="wtf-box active">
-                        <h2 class="wtf-title">
-                            Before you go on
-                        </h2>
-                        <div class="wtf-content mar-top-1">
-                            ${ctxt.need.summary}
-                        </div>
-                    </div>
-                %endif
-
-                <div class="mar-top-4">
-                    <script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
-                    <script type="IN/Share" data-counter="top"></script>
-                </div>
-                <div class="mar-top-1">
-                    <div id="fb-root"></div>
-                    <script>(function(d, s, id) {
-                      var js, fjs = d.getElementsByTagName(s)[0];
-                      if (d.getElementById(id)) return;
-                      js = d.createElement(s); js.id = id;
-                      js.src = "//connect.facebook.net/de_DE/all.js#xfbml=1";
-                      fjs.parentNode.insertBefore(js, fjs);
-                    }(document, 'script', 'facebook-jssdk'));</script>
-                    <div class="fb-send" data-href="${request.url}"></div>
-                </div>
-                <div class="mar-top-1">
-                    <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
-                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                </div>
+                ${self.wtfBox()}
+                ${widgets.sharebtns()}
             </div>
         </div>
 
         <div class="row mar-top-2">
             <div class="col col-lg 12">
-                <h1 class="section-title">
-                    %if ctxt.need.fulfilled:
-                        <span class="brand-primary">Accepted Application</span>
-                    %else:
-                        <span class="brand-primary">Applications</span>
-                    %endif
-                </h1>
                 ${self.applications(ctxt.need, ctxt.need.Applications)}
             </div>
         </div>
     </div>
 </%def>
-
-
 
 <%def name="needOverview(need)">
     %if need.fulfilled:
@@ -98,18 +60,36 @@
     <hr/>
 
     %if need.fulfilled:
-        <div class="mar-top-1">
+        <div class="mar-top-2">
             <div class="box-title">Need Fulfilled by</div>
             <div class="box-card compact mar-top-half">
                 ${companyWidgets.applicationCard(need.acceptedApplication)}
             </div>
         </div>
     %elif ctxt.round.published:
-        <div class="mar-top-1">
+        <div class="mar-top-2">
             <a href="${url(ctxt, 'apply')}#application-form" class="btn btn-primary btn-block">${'Login to Apply' if root.user.isAnon() else 'Apply'}</a>
         </div>
     %endif
 </%def>
+
+
+
+<%def name="build_form(form, values, errors)">
+    %if form:
+        <div class="mar-top-2 expander ${'expanded' if request.params.get('invite') else ''}">
+            <a class="btn btn-primary show-contracted inline" data-toggle-target=".expander" data-toggle-class="expanded">Invite to Need</a>
+            <form class="box-content box-dark show-expanded ${form.grid.form_classes}" id="${form.id}" method="POST">
+                ${baseform.prelims(form)}
+                ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                <button type="submit" class="btn btn-primary">Invite member</button>
+                <a class="btn btn-default" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
+            </form>
+        </div>
+    %endif
+</%def>
+
 
 
 <%def name="recommendedExperts(company, need)">
@@ -133,7 +113,7 @@
                 <div class="expert-details show-expanded">
                     <h6 class="text-muted">Introducers</h6>
                     %for intro in expert.introducers:
-                    <div class="box-card box-card extra-compact mar-top-1">
+                    <div class="box-card box-card extra-compact mar-top-2">
                         <div class="picture mini">
                             <img src="${intro.picture}" alt="${intro.name}"/>
                         </div>
@@ -239,7 +219,7 @@
         %if root.user.isAnon():
             <h2>Login to endorse</h2>
             <div class="text-center">
-                <div class="mar-top-1">
+                <div class="mar-top-2">
                     ${widgets.login_btn('linkedin')}
                 </div>
             </div>
@@ -276,11 +256,14 @@
 
 
 <%def name="applications(need, apps)">
+<h1 class="section-title"><span class="brand-primary">
+    ${'Accepted Application' if need.fulfilled else 'Applications'}
+</span></h1>
 %if apps:
     <div id="applications">
     %for application in sorted(apps, reverse = True):
         %if application.approved or not need.fulfilled:
-        <div class="mar-top-1 single-application">
+        <div class="mar-top-2 single-application">
             <div class="row">
                 <div class="col col-lg-4">
                     <div class="row">
@@ -318,10 +301,27 @@
 %endif
 </%def>
 
+<%def name="wtfBox()">
+    %if ctxt.need.summary:
+        <div class="wtf-box active">
+            <h2 class="wtf-title">
+                Before you go on
+            </h2>
+            <div class="wtf-content mar-top-2">
+                ${ctxt.need.summary}
+            </div>
+        </div>
+    %endif
+</%def>
+
+
 <%def name="post_scripts()">
     <script>
         require(["views/company/endorse"], function(View){
             new View({el: $(".endorsements"), watch: $(".linkedin-widget")})
-        })
+        });
+        require(["tools/ajax"], function(ajax){
+            ajax.ifyForm({root: $("#${view.form.id}")});
+        });
     </script>
 </%def>

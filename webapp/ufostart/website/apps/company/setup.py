@@ -38,6 +38,7 @@ class CompanyCreateForm(BaseForm):
         if al_company:
             values['angelListId'] = al_company.id
             values['angelListToken'] = al_company.token
+            del request.session[SESSION_SAVE_TOKEN]
 
         try:
             company = CreateCompanyProc(request, {'token':request.root.user.token, 'Company':values})

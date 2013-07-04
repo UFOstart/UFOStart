@@ -55,7 +55,7 @@
         require(["form"], function(View){
             filepicker.setKey('A0Me4BRKSLSnOkrY6Jb2xz');
             $(".form-validated").each(function(idx, form){
-                new View({el:form})
+                new View({el:form,validatorOpts: {ignore: ".super-valid"}})
             });
         });
     </script>

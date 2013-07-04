@@ -1,11 +1,21 @@
 from operator import methodcaller
 from hnc.apiclient.backend import DBNotification, DBException
-from hnc.forms.formfields import BaseForm, REQUIRED, StringField, TextareaField, HORIZONTAL_GRID, DecimalField, IntField
+from hnc.forms.formfields import BaseForm, REQUIRED, StringField, TextareaField, HORIZONTAL_GRID, DecimalField, IntField, MultipleFormField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.httpexceptions import HTTPForbidden, HTTPFound
 from ufostart.website.apps.models.procs import SetProductOffersProc, PledgeCompanyProc, CreateProductProc, RemoveProductOfferProc
 from ufostart.website.apps.forms.controls import PictureGalleryUploadField, SanitizedHtmlField, CleanHtmlField, VideoUrlField
+
+
+class OfferField(MultipleFormField):
+    template = 'ufostart:website/templates/company/controls/offers.html'
+    fields = [
+        CleanHtmlField("name", "Title", REQUIRED)
+        , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
+        , DecimalField("price", "Price", REQUIRED)
+        , IntField("stock", "Stock")
+    ]
 
 
 class ProductCreateForm(BaseForm):
@@ -14,6 +24,7 @@ class ProductCreateForm(BaseForm):
     fields=[
         StringField('name', "Name", REQUIRED)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
+        , OfferField("Offers", "Add Offers")
         , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')
         , VideoUrlField("video", "Vimeo/YouTube")
     ]
@@ -22,9 +33,17 @@ class ProductCreateForm(BaseForm):
         if isinstance(values.get('pictures'), basestring):values['Pictures'] = [values['Pictures']]
         values['Pictures'] = [{'url':url} for url in values['Pictures']]
 
+        offers = values.pop('Offers')
         data = {'token': request.context.round.token, 'Product': values}
-        result = CreateProductProc(request, data)
-        return {'success':True, 'redirect': request.resource_url(request.context, 'product')}
+        round = CreateProductProc(request, data)
+
+        try:
+            SetProductOffersProc(request, {'Product': {'token': round.Product.token, 'Offers':offers}})
+        except DBNotification, e:
+            return {'errors': {'name': e.message}, 'success':False}
+
+
+        return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class ProductCreateHandler(FormHandler):
     form = ProductCreateForm
@@ -43,7 +62,14 @@ class ProductEditForm(ProductCreateForm):
         product = request.context.product
         values['token'] = product.token
         data = {'token': request.context.round.token, 'Product': values}
-        result = CreateProductProc(request, data)
+
+        offers = values.pop('Offers')
+        try:
+            SetProductOffersProc(request, {'Product': {'token': product.token, 'Offers':offers}})
+        except DBNotification, e:
+            return {'errors': {'name': e.message}, 'success':False}
+
+
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
 

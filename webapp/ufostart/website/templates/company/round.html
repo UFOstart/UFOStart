@@ -54,178 +54,207 @@
         <div class="row mar-top-1">
             <div class="col col-lg-3 pull-right">
                 ${self.sideBar(ctxt.round, ctxt.canEdit)}
+                <div class="box-title">
+                    Recent Activity
+                </div>
+                <div class="text-center empty activity-stream" data-entity-id="${ctxt.round.token}">
+                    <div class="show-loading"><img src="${ROOT_STATIC_URL}/img/ajax-loader-light.gif"/></div>
+                </div>
             </div>
             <div class="col col-lg-9">
-                ${self.upperContent(ctxt.company, ctxt.round.published)}
-                ${self.lowerContent(ctxt.company)}
+                <div class="row">
+                    <div class="col col-lg-4">
+                        ${self.companyBox(ctxt.company)}
+                    </div>
+                    <div class="col col-lg-4">
+                        ${self.productBox(ctxt.company)}
+                    </div>
+                    <div class="col col-lg-4">
+                        ${self.investmentBox(ctxt.round.Funding)}
+                    </div>
+                </div>
+
+                ${self.tasksSection(ctxt.company)}
             </div>
-        </div>
-    </div>
-</%def>
-
-<%def name="upperContent(company, isPublished)">
-    <div class="row">
-        <div class="col col-lg-4">
-            <div class="box-title">Company</div>
-            ${self.companyBox(company)}
-
-            ${self.productBox(company)}
-
-            <div class="mar-top-4 highlight-target">
-                <div class="highlight-anchor" id="target-funding"></div>
-                <div class="box-title">Funding</div>
-                ${self.investmentBox(ctxt.round.Funding)}
-            </div>
-
-        </div>
-        <div class="col col-lg-8">
-            <div class="box-title">
-                Recent Activity
-            </div>
-            <div class="text-center empty activity-stream" data-entity-id="${ctxt.round.token}">
-                <div class="show-loading"><img src="${ROOT_STATIC_URL}/img/ajax-loader-light.gif"/></div>
-            </div>
-
         </div>
     </div>
 </%def>
 
 <%def name="companyBox(company)">
-    <div class="box-card shaded">
-        ${widgets.company_logo(company)}
-        <a class="entity-link  mar-top-1" href="${url(ctxt.__parent__)}">${ctxt.company.name}</a>
-        <div class="pitch">${html.nn(company.pitch)}</div>
-    </div>
-    <div class="number-widget mar-top-1">
-        <h6>Startup Value</h6>
-        <div class="value light">${company.displayStartupValue}</div>
-    </div>
-    <hr/>
-    <div class="mar-top-half highlight-target">
-        <span id="target-invite-team" class="highlight-anchor"></span>
-        <h6>Team members</h6>
-        <div class="picture-pile">
-        %for user in company.members[:8]:
-            ${widgets.member_pic(user, classes='mini')}
-        %endfor
-        %if ctxt.canEdit:
-            <a  class="btn btn-primary" href="${url(ctxt.__parent__, query = [('invite', '1')])}#invite-team-members">Invite Team Members</a>
-        %endif
-        </div>
-    </div>
-    <hr/>
-    <div class="highlight-target">
-        <h6>Mentors</h6>
-        <div class="picture-pile">
-            %for user in company.mentors[:8]:
-                ${widgets.member_pic(user, classes='mini')}
-            %endfor
-            <span style="display:inline-block;">
-                <span id="target-add-mentor" class="highlight-anchor"></span>
+    <div class="box-title">Company</div>
+    <div class="box-shaded">
+        <div class="box-shaded">
+            <div class="box-shaded">
+                <div class="box-card box-header">
+                    ${widgets.company_logo(company)}
+                    <div class="box-content">
+                        <a class="entity-link  mar-top-1" href="${url(ctxt.__parent__)}">${ctxt.company.name}</a>
+                        <div class="pitch">${html.nn(company.pitch)}</div>
+                    </div>
+                </div>
+
+                <div class="number-widget box-content">
+                    <h6>Startup Value</h6>
+                    <div class="value light">${company.displayStartupValue}</div>
+                </div>
+
+            </div>
+
+            <div class="box-content highlight-target">
+                <span id="target-invite-team" class="highlight-anchor"></span>
+                <strong class="text-small">Team members</strong>
+                <div class="picture-pile">
+                %for user in company.members[:8]:
+                    ${widgets.member_pic(user, classes='mini')}
+                %endfor
+                </div>
                 %if ctxt.canEdit:
-                    <a href="${url(ctxt, 'mentor')}" class="btn btn-primary">Add Mentor</a>
+                    <a class="btn btn-primary btn-block mar-top-1" href="${url(ctxt.__parent__, query = [('invite', '1')])}#invite-team-members">Invite Team Members</a>
                 %endif
-            </span>
+            </div>
+
         </div>
+
+        <div class="box-content highlight-target">
+            <span id="target-add-mentor" class="highlight-anchor"></span>
+            <strong class="text-small">Mentors</strong>
+            <div class="picture-pile">
+                %for user in company.mentors[:8]:
+                    ${widgets.member_pic(user, classes='mini')}
+                %endfor
+            </div>
+            %if ctxt.canEdit:
+                <a class="btn btn-primary btn-block mar-top-1" href="${url(ctxt, 'mentor')}">Add Mentor</a>
+            %endif
+
+        </div>
+
     </div>
-    <hr/>
+</%def>
+
+<%def name="productBox(company)">
+    <div class="highlight-target box-shaded">
+        <div id="target-create-product" class="highlight-anchor"></div>
+        <div class="box-title">Product</div>
+        %if not company.product_is_setup:
+            <div class="box-shaded">
+                <div class="box-content box-shaded text-center">
+                    %if ctxt.canEdit:
+                        <a href="${url(ctxt, 'productsetup')}" class="btn btn-primary btn-block">Set up now</a>
+                    %else:
+                        Product not set up
+                    %endif
+                </div>
+            </div>
+        %else:
+            <div class="box-shaded">
+                <div class="box-shaded">
+                    <% ppic = company.product_picture(request) %>
+                    %if ppic:
+                        <div class="box-header">
+                            <img src="${ppic}"/>
+                        </div>
+                    %endif
+
+                    <div class="box-content">
+                        <a href="${url(ctxt, 'product')}" class="overflow"><strong>${company.product_name}</strong></a>
+                        <small>${html.nn(company.product_description) | html.trunc(90)}</small>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <div class="number-widget">
+                        <strong class="text-small">Pledges</strong>
+                        <div class="value light">${company.no_pledges}</div>
+                    </div>
+                    %if len(company.pledgees):
+                        <div class="picture-pile box-content">
+                            %for pledge in company.pledgees[:4]:
+                                <div class="picture mini">
+                                    <img src="${pledge.picture}"/>
+                                </div>
+                            %endfor
+                        </div>
+                    %endif
+                    <a href="${url(ctxt, 'product')}" class="btn btn-primary btn-block mar-top-1">Pledge</a>
+                </div>
+            </div>
+        %endif
+    </div>
 </%def>
 
 
 
 <%def name="investmentBox(funding)">
-    %if not funding.amount:
-        <div class="empty">Funding not set up yet</div>
-        %if ctxt.canEdit:
-            <a class="btn btn-primary" href="${url(ctxt, 'fundingsetup')}">Set up funding</a>
-        %endif
-    %else:
-        <div class="row">
-            <div class="col col-lg-6">
-                <div class="number-widget mar-top-half">
-                    <h6>Target</h6>
-                    <div class="small-value">${funding.display_amount}</div>
-                </div>
-            </div>
-            <div class="col col-lg-6">
-                <div class="number-widget mar-top-half">
-                    <h6>Invested</h6>
-                    <div class="small-value">${funding.display_invested_amount}</div>
-                </div>
-            </div>
-        </div>
-        <div class="progress-container mar-top-half">
-            <div class="progress">
-                <div class="progress-bar" style="width: ${funding.investment_progress}"></div>
-            </div>
-            <h2 class="offset dark  no-margin">
-                ${funding.investment_progress}
-            </h2>
-        </div>
-        <hr/>
-        %if len(funding.Investments):
-            <h6>Investors</h6>
-            <h2 class="no-margin">${len(funding.Investments)}</h2>
-            <div class="picture-pile mar-top-half">
-                %for invest in funding.Investments:
-                    <div class="picture mini">
-                        <img src="${invest.User.picture}"/>
-                    </div>
-                %endfor
-            </div>
-            <hr/>
-        %endif
-        <a href="${url(ctxt, 'funding')}" class="btn btn-primary">Invest</a>
-    %endif
+    <div class="highlight-target box-shaded">
+        <div class="highlight-anchor" id="target-funding"></div>
+        <div class="box-title">Funding</div>
 
-</%def>
-<%def name="productBox(company)">
-    <div class="mar-top-4 highlight-target">
-        <div id="target-create-product" class="highlight-anchor"></div>
-        <div class="box-title">Product</div>
-        %if not company.product_is_setup:
-            <div class="box-card shaded"><div class="empty">Product not set up</div></div>
-            <div class="mar-top-1">
-            %if ctxt.canEdit:
-                <a href="${url(ctxt, 'productsetup')}" class="btn btn-primary">Setup Your Product</a>
-            %endif
+        %if not funding.amount:
+            <div class="box-shaded">
+                <div class="box-shaded box-content text-center">
+                %if ctxt.canEdit:
+                    <a class="btn btn-primary btn-block" href="${url(ctxt, 'fundingsetup')}">Set up now</a>
+                %else:
+                    Funding not set up
+                %endif
+                </div>
             </div>
         %else:
-            <% ppic = company.product_picture(request) %>
-            %if ppic:
-                <div class="clearfix"><div class="cut-corner pull-left">
-                    <img src="${ppic}"/>
-                </div></div>
-            %endif
-
-            <div class="mar-top-half">
-                <a href="${url(ctxt, 'product')}" class="overflow"><strong>${company.product_name}</strong></a>
-                <small>${html.nn(company.product_description) | html.trunc(90)}</small>
-            </div>
-            <hr/>
-            <div class="number-widget">
-                <h6>Pledges</h6>
-                <div class="value light">${company.no_pledges}</div>
-            </div>
-            <hr/>
-            %if len(company.pledgees):
-                <h6>Customers</h6>
-                <div class="picture-pile">
-                    %for pledge in company.pledgees[:4]:
-                        <div class="picture mini">
-                            <img src="${pledge.picture}"/>
+            <div class="box-shaded">
+                <div class="box-shaded">
+                    <div class="box-header">
+                        <div class="row">
+                            <div class="col col-lg-6">
+                                <div class="number-widget mar-top-half">
+                                    <h6>Target</h6>
+                                    <div class="small-value">${funding.display_amount}</div>
+                                </div>
+                            </div>
+                            <div class="col col-lg-6">
+                                <div class="number-widget mar-top-half">
+                                    <h6>Invested</h6>
+                                    <div class="small-value">${funding.display_invested_amount}</div>
+                                </div>
+                            </div>
                         </div>
-                    %endfor
+
+                        <div class="box-content">
+                            <div class="progress-container">
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: ${funding.investment_progress}"></div>
+                                </div>
+                                <h2 class="offset dark no-margin">
+                                    ${funding.investment_progress}
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box-content">
+                        <div class="number-widget">
+                            <strong class="text-small">Investors</strong>
+                            <div class="value light">${len(funding.Investments)}</div>
+                        </div>
+
+                        %if len(funding.Investments):
+                            <div class="picture-pile mar-top-half">
+                                %for invest in funding.Investments:
+<div class="picture mini"><img src="${invest.User.picture}"/></div>\
+                                %endfor
+                            </div>
+                        %endif
+                        <a href="${url(ctxt, 'funding')}" class="btn btn-primary btn-block mar-top-1">Invest</a>
+                    </div>
                 </div>
-            <hr/>
-            %endif
+            </div>
         %endif
     </div>
 </%def>
 
 
 
-<%def name="lowerContent(company)">
+
+<%def name="tasksSection(company)">
     <div class="row mar-top-2" id="project-round-need-dashboard" data-entity-id="${ctxt.round.token}">
         <%self:renderNeedColumns needs="${company.groupedNeeds(3, False)}">
             <div class="col col-lg-12">
@@ -245,7 +274,7 @@
                 %endif
             </div></div>
         </%self:renderNeedColumns>
-        </div>
+    </div>
 </%def>
 
 

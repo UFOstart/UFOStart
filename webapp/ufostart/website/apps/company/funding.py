@@ -34,7 +34,7 @@ class FundingCreateForm(BaseForm):
     def on_success(cls, request, values):
         data = {'token': request.context.round.token, 'Funding': values}
         CreateFundingProc(request, data)
-        return {'success':True, 'redirect': request.resource_url(request.context, "funding")}
+        return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class FundingCreateHandler(FormHandler):
     form = FundingCreateForm

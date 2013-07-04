@@ -78,7 +78,7 @@ GetRoundProc = ClientTokenProc("/web/round", root_key="Round", result_cls=RoundM
 CreateFundingProc = ClientTokenProc("/web/funding/create")
 InvestInCompanyProc = ClientTokenProc("/web/funding/invest")
 
-CreateProductProc = ClientTokenProc("/web/product/create")
+CreateProductProc = ClientTokenProc("/web/product/create", root_key="Round", result_cls=RoundModel)
 SetProductOffersProc = ClientTokenProc("/web/product/offer")
 RemoveProductOfferProc = ClientTokenProc("/web/product/offerDelete")
 
@@ -99,6 +99,7 @@ ApplyForNeedProc = ClientTokenProc("/web/need/application")
 ApproveApplicationProc = ClientTokenProc("/web/need/approveapplication")
 
 InviteToCompanyProc = ClientTokenProc("/web/company/invite")
+InviteToNeedProc = ClientTokenProc("/web/need/invite")
 GetInviteDetailsProc = ClientTokenProc("/web/company/getInvite", result_cls=InviteModel, root_key="Invite")
 AcceptInviteProc = ClientTokenProc("/web/company/acceptInvite")
 

@@ -15,19 +15,8 @@
                 ${widgets.mainMedia("Product Presentation", product.video, picture_url = product.Pictures)}
             </div>
             <div class="col col-lg-3">
-                %if product.Pictures:
-                    <div class="progress-step">
-                    <div class="progress-step">
-                    <div class="progress-step">
-                    <div class="progress-step">
-                    <div class="picture-gallery-preview">
-                        ${widgets.gallery("Picture Gallery", "Play Slideshow", product.Pictures)}
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                %endif
+                ${self.sidebarMedia(product.Pictures)}
+                ${widgets.sharebtns()}
             </div>
         </div>
 
@@ -168,6 +157,23 @@
     </div>
 %endif
 </%def>
+
+<%def name="sidebarMedia(pictures)">
+    %if pictures:
+        <div class="progress-step">
+        <div class="progress-step">
+        <div class="progress-step">
+        <div class="progress-step">
+        <div class="picture-gallery-preview">
+            ${widgets.gallery("Picture Gallery", "Play Slideshow", pictures)}
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+    %endif
+</%def>
+
 
 
 <%def name="extra_head()">

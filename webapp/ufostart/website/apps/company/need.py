@@ -1,15 +1,41 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, IntField, HtmlAttrs, HORIZONTAL_GRID, DecimalField
+from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, IntField, HtmlAttrs, HORIZONTAL_GRID, DecimalField, EmailField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
 from ufostart.website.apps.forms.controls import FileUploadField, TagSearchField
 from ufostart.website.apps.models.company import NeedModel
-from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc
+from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc, InviteToNeedProc
 
 
-def index(context, request):
-    return {'need': context.need}
+class NeedIndexForm(BaseForm):
+    id="NeedIndex"
+    label = ""
+    fields=[
+        StringField("name", "Name", REQUIRED)
+        , EmailField("email", "email address", REQUIRED)
+    ]
+    @classmethod
+    def on_success(cls, request, values):
+        user = request.root.user
+        company = request.context.company
+
+        values['invitorToken'] = user.token
+        values['invitorName'] = user.name
+        values['companySlug'] = company.slug
+        values['companyName'] = company.name
+        need = request.context.need
+        values['Need'] = { "slug": need.slug, "name": need.name }
+
+        InviteToNeedProc(request, {'Invite': values})
+
+        request.session.flash(GenericSuccessMessage(u"You successfully invited {name} to this need!".format(**values)), "generic_messages")
+        return {'success':True, 'redirect': request.resource_url(request.context)}
+
+class NeedIndexHandler(FormHandler):
+    form = NeedIndexForm
+
+
 
 
 def accept_application(context, request):
@@ -59,7 +85,7 @@ class NeedCreateForm(BaseForm):
                 raise e
 
         request.session.flash(GenericSuccessMessage("Need created successfully!"), "generic_messages")
-        return {'success':True, 'redirect': request.resource_url(request.context, need.slug)}
+        return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class NeedCreateHandler(FormHandler):
     form = NeedCreateForm

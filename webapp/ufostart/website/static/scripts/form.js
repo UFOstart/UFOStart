@@ -35,7 +35,8 @@ define(['tools/ajax'], function(ajax){
         , addRow : function(e){
             if((!e.keyCode || e.keyCode == 13)){
                 var $target = $(e.target)
-                    , templ = $target.closest(this.wrapperSelector).find(this.templateSelector).last()
+                    , $root = $target.closest(this.wrapperSelector)
+                    , templ = $root.find(this.templateSelector).last()
                     , new_node = templ.clone()
                     , new_position = parseInt(templ.data("sequence"), 10) + 1
                     , inc = function(elem, attr){
@@ -51,12 +52,12 @@ define(['tools/ajax'], function(ajax){
                 new_node.removeAttr("data-sequence").attr("data-sequence", new_position);
                 if(!new_node.find(".remove-link").length) new_node.prepend(this.removeLink);
                 new_node.find(".numbering").html(new_position+1);
-
+                if($target.data('addClass')){new_node.addClass($target.data('addClass'));}
                 if($target.data("appendFirst")){
-                    templ.closest(this.wrapperSelector).prepend("<hr/>").prepend(new_node);
+                    $root.prepend("<hr/>").prepend(new_node);
                     $target.hide();
                 } else {
-                    templ.after(new_node);
+                    $root.find($target.data('appendTarget')).append(new_node);
                 }
                 new_node.trigger("change");
 
