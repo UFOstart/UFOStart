@@ -16,14 +16,13 @@
             </div>
             <div class="col col-lg-3">
                 ${self.sidebarMedia(product.Pictures)}
-                ${widgets.sharebtns()}
             </div>
         </div>
 
-        <div class="row mar-top-1">
+        <div class="row mar-top-2">
             <div class="col col-lg-3">
                 <div class="box-card">
-                    ${widgets.companyInfo(ctxt.company)}
+                    ${widgets.companyInfo(ctxt.company, picclasses='medium')}
                 </div>
                 <div class="mar-top-4">
                     <div class="box-title">Customers</div>
@@ -41,6 +40,9 @@
             </div>
             <div class="col col-lg-3">
                 ${self.offerSection(company, company.Round.Product)}
+                <div class="mar-top-4">
+                    ${widgets.sharebtns()}
+                </div>
             </div>
         </div>
     </div>
@@ -64,13 +66,9 @@
 
 
 <%def name="offerSection(company, product)">
-    <h2>Offers</h2>
+    <h2 class="no-margin">Offers</h2>
     <% form = view.schemas['ProductPledge'] %>
     ${self.displayOffer(product.offers, form)}
-    %if ctxt.canEdit:
-        <% form = view.schemas['ProductOffer'] %>
-        ${self.createOfferForm(product, form, values.get(form.id), errors.get(form.id))}
-    %endif
 </%def>
 
 <%def name="displayOffer(offers, form)">
@@ -95,46 +93,26 @@
                     </div>
                 </div>
                 <div class="mar-top-1">
-                    %if root.user.isAnon():
-                        <a href="${root.auth_url('linkedin')}" class="btn btn-primary btn-block">Login to Pledge</a>
-                    %else:
-                        <div class="control-group show-expanded">
-                            <label class="control-label">Message</label>
-                            <div class="controls">
-                                <textarea class="x-high" name="ProductPledge.${offer.token}"></textarea>
+                    %if offer.stock:
+                        %if root.user.isAnon():
+                            <a href="${root.auth_url('linkedin')}" class="btn btn-primary btn-block">Login to Pledge</a>
+                        %else:
+                            <div class="control-group show-expanded">
+                                <label class="control-label">Message</label>
+                                <div class="controls">
+                                    <textarea class="x-high" name="ProductPledge.${offer.token}"></textarea>
+                                </div>
                             </div>
-                        </div>
-                        <a class="btn btn-primary show-contracted" data-toggle-target=".single-product-offer" data-toggle-class="expanded">Pledge</a>
-                        <button class="btn btn-primary show-expanded inline" name="ProductPledge.offer" value="${offer.token}">Pledge Now</button>
-                        <a class="btn btn-default show-expanded inline" data-toggle-target=".single-product-offer" data-toggle-class="expanded">Cancel</a>
+                            <a class="btn btn-primary show-contracted" data-toggle-target=".single-product-offer" data-toggle-class="expanded">Pledge</a>
+                            <button class="btn btn-primary show-expanded inline" name="ProductPledge.offer" value="${offer.token}">Pledge Now</button>
+                            <a class="btn btn-default show-expanded inline" data-toggle-target=".single-product-offer" data-toggle-class="expanded">Cancel</a>
+                        %endif
                     %endif
                 </div>
             </div>
         </div>
     %endfor
     </form>
-</%def>
-
-<%def name="createOfferForm(product, form, values, errors)">
-    <h6 class="mar-top-1">Add a new Offer</h6>
-    <div class="box-dark">
-        <div class="box-content clearfix">
-            <form class="${form.grid.form_classes} form-compacted" id="${form.id}" method="POST">
-                ${baseform.prelims(form)}
-                ${form.fieldMap['name'].render(form.id, request, values, errors, view, grid = form.grid)|n}
-                ${form.fieldMap['description'].render(form.id, request, values, errors, view, grid = form.grid)|n}
-                <div class="row">
-                    <div class="col col-lg-6">
-                        ${form.fieldMap['price'].render(form.id, request, values, errors, view, grid = form.grid)|n}
-                    </div>
-                    <div class="col col-lg-6">
-                        ${form.fieldMap['stock'].render(form.id, request, values, errors, view, grid = form.grid)|n}
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Add Offer</button>
-            </form>
-        </div>
-    </div>
 </%def>
 
 

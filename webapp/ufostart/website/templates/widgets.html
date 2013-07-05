@@ -253,8 +253,8 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
 </%def>
 
 
-<%def name="companyInfo(company, withValue = True)">
-    ${self.company_logo(company)}
+<%def name="companyInfo(company, withValue = True, picclasses='')">
+    ${self.company_logo(company, classes=picclasses)}
     <div class="right-box">
         <a href="${root.company_url(company.slug)}" class="overflow"><strong>${company.display_name}</strong></a>
         <small class="description">${html.nn(company.pitch)}</small>
