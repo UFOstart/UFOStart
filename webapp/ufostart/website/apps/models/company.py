@@ -243,7 +243,7 @@ class NeedModel(Mapping):
 
     @property
     def added(self):
-        return self.status in ['ADDED', 'CUSTOMISED']
+        return self.status in ['ADDED', 'CUSTOMISED', 'FULFILED']
     @property
     def customized(self):
         return self.status == 'CUSTOMISED'
@@ -482,7 +482,7 @@ class RoundModel(Mapping):
         return len([n for n in self.Needs if n.fulfilled])
     @property
     def noTotalNeeds(self):
-        return len(self.Needs)
+        return len([n for n in self.Needs if n.added])
 
 
     @property
