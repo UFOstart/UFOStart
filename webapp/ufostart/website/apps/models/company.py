@@ -4,14 +4,14 @@ from datetime import datetime, timedelta
 from operator import attrgetter
 from random import random, sample
 from babel.dates import format_date
-from babel.numbers import get_currency_symbol
+from babel.numbers import get_currency_symbol, format_decimal
 from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField, IntegerField, DateField, DecimalField
 from hnc.tools.tools import word_truncate_by_letters
 from httplib2 import Http
 from pyramid.decorator import reify
 import simplejson
 from ufostart.lib.html import getYoutubeVideoId, getVimeoVideoId, getVimeoMeta
-from ufostart.lib.tools import format_currency
+from ufostart.lib.tools import format_currency, format_int_amount
 from ufostart.models.tasks import NamedModel
 from ufostart.website.apps.models.workflow import WorkflowModel
 
@@ -384,7 +384,7 @@ class FundingModel(Mapping):
 
     @property
     def display_equity(self):
-        return '{}%'.format(self.amount / self.valuation)  if self.valuation else '0%'
+        return '{}%'.format(format_decimal(100.0 * self.amount / self.valuation, format='#,###.##', locale='en'))  if self.valuation else '0%'
     @reify
     def invested_amount(self):
         return sum(map(attrgetter('amount'), self.Investments))
