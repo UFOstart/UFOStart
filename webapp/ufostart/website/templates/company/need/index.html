@@ -346,7 +346,9 @@
             new View({el: $(".endorsements"), watch: $(".linkedin-widget")})
         });
         require(["tools/ajax"], function(ajax){
-            ajax.ifyForm({root: $("#${view.form.id}")});
+            $(".form-validated").each(function(idx, elem){
+                ajax.ifyForm({root: elem});
+            });
         });
     </script>
 </%def>

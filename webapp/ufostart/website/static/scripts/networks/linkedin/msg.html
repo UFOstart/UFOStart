@@ -25,6 +25,10 @@ Regards, {{ sender }}
                          </textarea>
                      </div>
                  </div>
+                 {% if(!direct){ %}
+                 <p>This is not a direct contact of you. The recipient will get Connection Invitation in his inbox.</p>
+                 {% } %}
+
                  <div class="control-group">
                      <button type="submit" class="btn btn-primary">Send Message</button>
                      <a class="btn btn-default cancel">Cancel</a>

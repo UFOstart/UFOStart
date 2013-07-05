@@ -47,7 +47,10 @@
 <%def name="post_scripts()">
     <script>
         require(["tools/ajax"], function(ajax){
-            ajax.ifyForm({root: $(".form-validated")})
+            $(".form-validated").each(function(idx, elem){
+                ajax.ifyForm({root: elem});
+            });
         });
+
     </script>
 </%def>

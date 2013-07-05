@@ -26,6 +26,7 @@ define(["tools/form", "tools/messaging", "tools/ajax", "text!networks/linkedin/m
                     , host : window.location.host
                     , link : window.location.href
                     , name: name
+                    , direct: !!contact
                     , company: this.entity.companyName
                     , need:this.entity.name
                 }
