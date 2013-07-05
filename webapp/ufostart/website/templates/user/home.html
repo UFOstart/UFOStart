@@ -62,9 +62,7 @@
                 %if profile.Applications or profile.Endorsements:
                     <div class="col col-lg-6">
                         ${self.applications(profile.Applications)}
-                        <div class="mar-top-3">
                         ${self.displayEndorsements(profile.getEndorsements())}
-                        </div>
                     </div>
                 %endif
             </div>
@@ -159,6 +157,7 @@
                 </div>
             </div>
         %endfor
+        <div class="mar-top-3"></div>
     %endif
 </%def>
 
