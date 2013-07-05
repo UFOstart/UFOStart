@@ -2,15 +2,56 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../widgets.html" name="widgets"/>
 
+
+
+<%def name="bc(res, link = False)">
+    <a class="crumb" href="${url(res)}"><span class="title">Home</span><br/>UFOStart</a>
+    <span class="crumb"><span class="title">Browse</span><br/>Top Tasks</span>
+</%def>
+
 <%def name="content()">
     <div class="container">
-        <%widgets:pageHeader>
-            Browse
-        </%widgets:pageHeader>
+
+        <div class="row">
+            <div class="col col-lg-10">
+                <h1 class="section-title">
+                    <span class="brand-primary">
+                        Tasks that might interest you
+                    </span>
+                </h1>
+            </div>
+            <div class="col col-lg-2">
+                <h2 class="brand-primary">Top 20 Tags</h2>
+            </div>
+        </div>
+
         ${self.bodyContent()}
     </div>
 </%def>
 
 <%def name="bodyContent()">
-    something
+    <div class="row">
+        <div class="col col-lg-10">
+            <div class="row">
+                %for task in ctxt.tasks:
+                    <div class="col col-lg-4">
+                        ${widgets.publicNeedCard(task, descr_len = 300)}
+                    </div>
+                %endfor
+            </div>
+        </div>
+        <div class="col col-lg-2">
+            <ul class="list-unstyled">
+                %for tag in ctxt.tags:
+                    <li>
+                        %if tag.name == ctxt.tag:
+                            <strong>${tag.name}</strong>
+                        %else:
+                            <a class="text-strong" href="${ctxt.browse_url(tag.name)}">${tag.name}</a>
+                        %endif
+                    </li>
+                %endfor
+            </ul>
+        </div>
+    </div>
 </%def>

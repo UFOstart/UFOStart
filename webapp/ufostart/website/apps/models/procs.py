@@ -1,5 +1,6 @@
 from hnc.apiclient import Mapping, ListField, DictField
 from hnc.apiclient.backend import ClientTokenProc, DBNotification
+from ufostart.models.tasks import NamedModel
 from ufostart.website.apps.models.auth import UserModel
 from ufostart.website.apps.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel, InviteModel
 
@@ -58,6 +59,8 @@ FindPublicNeeds = ClientTokenProc("/web/need/search", result_cls=NeedModel, root
 FindPublicNeedsByLocation = ClientTokenProc("/web/need/location", result_cls=NeedModel, root_key="Needs", result_list=True)
 GetPopularNeeds = ClientTokenProc("/web/need/popular", result_cls=NeedModel, root_key='Needs', result_list=True)
 GetNewProductsProc = ClientTokenProc("/web/product/newest", root_key="Companies", result_cls=CompanyModel, result_list=True)
+
+GetTopTags = ClientTokenProc("/web/tag/top20", root_key='Tags', result_cls=NamedModel, result_list=True)
 
 #
 ################# COMPANY
