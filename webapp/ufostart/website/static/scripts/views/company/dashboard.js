@@ -163,7 +163,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
                 , data:{token: this.$activity.data('entityId')}
                 , success: function(resp, status, xhr){
                     view.$activity.html('');
-                    view.model.addOrUpdate(resp.Activity.Item);
+                    view.model.addOrUpdate(hnc.getRecursive(resp, 'Activity.Item', []));
                 }
             })
         }

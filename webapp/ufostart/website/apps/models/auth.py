@@ -87,6 +87,8 @@ class UserModel(Mapping):
         json.pop("Profile", None)
         json.pop("Companies", None)
         json.pop("Company", None)
+        json.pop("Applications", None)
+        json.pop("Endorsements", None)
         return simplejson.dumps(json) if stringify else json
 
     def getSocialProfileJSON(self, stringify = True):
@@ -95,6 +97,11 @@ class UserModel(Mapping):
 
     def getEndorsements(self):
         return self.Endorsements
+
+    def isMe(self, network, id):
+        map = {n.inferredNetwork():n.id for n in self.Profile if n.id}
+        netId = map.get(network)
+        return netId == id
 
     @property
     def displayStartupValue(self):

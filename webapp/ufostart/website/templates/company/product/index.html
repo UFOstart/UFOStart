@@ -147,7 +147,7 @@
                 <div class="pull-right"><small class="text-muted">${html.format_datetime(pledge.created, 'medium')}</small></div>
                 <a class="entity-link" href="${root.profile_url(pledge.networkId)}">${pledge.name}</a>
                 <p class="text-small">Pledged to buy <strong>${pledge.offerName}</strong></p>
-                <div class="long-description">${html.nn(pledge.comment)}</div>
+                <div>${html.nn(pledge.comment)}</div>
             </div>
         </div>
     %endfor

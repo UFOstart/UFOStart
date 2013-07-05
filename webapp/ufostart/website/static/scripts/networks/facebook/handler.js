@@ -244,5 +244,5 @@ define(["tools/ajax"], function(ajax){
             document.getElementById(options.fbRootNode || "fb-root").appendChild(e);
         }
     });
-    return {AuthHandler:AuthHandler};
+    return {AuthHandler:function(){}};
 });

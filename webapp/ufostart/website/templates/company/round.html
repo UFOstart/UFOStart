@@ -198,9 +198,7 @@
                     %if len(company.pledgees):
                         <div class="picture-pile">
                             %for pledge in company.pledgees[:4]:
-                                <div class="picture mini">
-                                    <img src="${pledge.picture}"/>
-                                </div>
+                                ${widgets.member_pic(pledge, classes='mini')}
                             %endfor
                         </div>
                     %endif
@@ -275,7 +273,7 @@
                         %if len(funding.Investments):
                             <div class="picture-pile mar-top-half">
                                 %for invest in funding.Investments:
-<div class="picture mini"><img src="${invest.User.picture}"/></div>\
+                                ${widgets.member_pic(invest.User, classes='mini')}
                                 %endfor
                             </div>
                         %endif

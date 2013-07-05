@@ -185,31 +185,33 @@ define(["tools/hash"
                 this.$resultNode.empty().hide();
                 this.trigger("hide");
             }
-        });
+        })
 
+        , init = function(opts){
+            var queryId = null, results = new models.Contacts();
+            return new AbstractSearch({
+                    el: opts.$el
+                    , model: results
+                    , template: _.template(opts.$el.find("script.contact-template").html())
+                    , blacklist: []
+                    , doSearch: function(query){
+                        var result = [], conDef = opts.auth.getContacts();
+                        conDef.done(
+                            function(collection){
+                                if(query){
+                                    var queryId = queryId = hashlib.UUID();
+                                    _.each(collection.models, function(model){
+                                        if(model.matches(query))result.push(model.attributes);
+                                    });
+                                } else {
+                                    collection.each(function(m){result.push(m.attributes)});
+                                }
+                                results.addOrUpdate(result);
+                            }
+                        )
+                    }
+            });
+        };
 
-    return function(opts){
-        var queryId = null, results = new models.Contacts()
-            , search = new AbstractSearch({
-                el: opts.$el
-                , model: results
-                , template: _.template(opts.$el.find("script.contact-template").html())
-                , blacklist: []
-                , doSearch: function(query){
-                    var result = [];
-                    opts.auth.getContacts(function(collection){
-                        if(query){
-                            var queryId = queryId = hashlib.UUID();
-                            _.each(collection.models, function(model){
-                                if(model.matches(query))result.push(model.attributes);
-                            });
-                        } else {
-                            collection.each(function(m){result.push(m.attributes)});
-                        }
-                        results.addOrUpdate(result);
-                    })
-                }
-        });
-        return search;
-    }
+    return init;
 });

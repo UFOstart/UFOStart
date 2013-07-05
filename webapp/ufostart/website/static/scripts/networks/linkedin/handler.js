@@ -23,6 +23,9 @@ define(["tools/hash"
         , isLoggedIn : function () {
             return this.options.accessToken
         }
+        , isMe : function (token) {
+            return this.options.accessToken == token
+        }
         , api: function(path, cb, ctxt){
             $.get(this.getApiUrl(path), function(data, status, xhr){
                 cb.apply(ctxt, [data, status, xhr]);
@@ -31,21 +34,32 @@ define(["tools/hash"
         , getApiUrl: function(path){
             return this.prefix + path+ '?oauth2_access_token='+this.options.accessToken
         }
-        , getContacts: function(cb, ctxt){
+        , getContact: function(id){
+            if(!this.profiles[id]){
+                this.profiles[id] = $.Deferred();
+                this.api('/people/id='+id+':(first-name,last-name,api-standard-profile-request)', function(data, xhr, status){
+                    this.profiles[id].resolve(data);
+                }, this);
+            }
+            return this.profiles[id];
+        }
+        , getContacts: function(){
             var view = this;
-            if(this.contacts)cb.call(ctxt, this.contacts);
-            else {
+            if(!this.contactDef){
+                this.contactDef = $.Deferred();
                 this.contacts = new models.Contacts();
                 this.api('/people/~/connections', function(data, xhr, status){
                     var result = [];
                     this.contacts.addOrUpdate(data.values);
-                    cb.call(ctxt, this.contacts);
+                    this.contactDef.resolve(this.contacts);
                 }, this);
             }
+            return this.contactDef;
         }
         , initialize: function(options){
             var _t = this;
             this.options = options;
+            this.profiles = {};
             $(".linkedin-widget").each(function(idx, el){
                 var $el = $(el), module = _t.widgets[$el.data('widget')];
                 require([module], function(init){

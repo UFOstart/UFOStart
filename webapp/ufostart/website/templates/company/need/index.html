@@ -5,7 +5,7 @@
 
 
 <%def name="content()">
-    <div class="container">
+    <div class="container" data-entity="need" data-entity-id="${ctxt.need.slug}" data-name="${ctxt.need.name}" data-company-name="${ctxt.company.display_name}">
         <%widgets:pageHeader canEdit="${ctxt.canEdit and not ctxt.need.fulfilled}">
             ${ctxt.need.name}
         </%widgets:pageHeader>
@@ -91,9 +91,9 @@
         <div class="right-box">
                 %if expert.introducers:
                     <a class="expander btn btn-default btn-large pull-right" data-toggle-target=".single-team-member" data-toggle-class="expanded" data-toggle-text="▼">◀</a>
-                %else:
-                    <div class="pull-right linkedin-widget" data-widget="SendMessage" data-entity-id="MIpEeQQFUd">
-                        <a class=" btn btn-primary">Send Message</a>
+                %elif not root.user.isMe('linkedin', expert.linkedinId):
+                    <div class="pull-right linkedin-widget" data-widget="SendMessage" data-entity-id="${expert.linkedinId}" data-entity-name="${expert.name}">
+                        <a class="btn btn-primary">Send Message</a>
                     </div>
                 %endif
             <strong>${expert.name}</strong>
@@ -187,6 +187,9 @@
                     </div>
                 </div>
                 <div class="col col-sm-10">
+                    <div class="pull-right linkedin-widget" data-widget="SendMessage" data-entity-id="{{ model.id }}"  data-entity-name="{{ expert.getName() }}">
+                        <a class=" btn btn-primary">Send Message</a>
+                    </div>
                     <strong>{{ model.getName() }}</strong>
                     <p class="text-small text-muted">{{ model.getPosition() }}</p>
                 </div>
@@ -201,6 +204,11 @@
                         </div>
                     </div>
                     <div class="col col-sm-10">
+                        %if not root.user.isMe('linkedin', model.id):
+                        <div class="pull-right linkedin-widget" data-widget="SendMessage" data-entity-id="${ model.id }"  data-entity-name="${model.endorseeName}">
+                            <a class=" btn btn-primary">Send Message</a>
+                        </div>
+                        %endif
                         <strong>${ model.getName() }</strong>
                         <p class="text-small text-muted">${ model.getPosition() }</p>
                     </div>
@@ -313,12 +321,10 @@
                 </div>
             </div>
         </div>
-
-
     %endif
     </div>
-
 </%def>
+
 <%def name="wtfBox()">
     %if ctxt.need.summary:
         <div class="wtf-box active">

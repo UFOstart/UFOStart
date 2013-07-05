@@ -24,9 +24,15 @@ TEMPLATE_KEYS = {
 }
 
 
+STANDARD_RUN_TIME = 30
+
 def getRoleName(role):
     return role.title().replace("_", " ")
 
+def default_user_pic(attr):
+    def picture_url(self):
+        return getattr(self, attr) or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+    return picture_url
 
 class CompanyUserModel(Mapping):
     token = TextField()
@@ -34,6 +40,8 @@ class CompanyUserModel(Mapping):
     role = TextField()
     headline = TextField()
     picture = TextField()
+    picture_url = property(default_user_pic('picture'))
+
     unconfirmed = BooleanField()
     startupValue = IntegerField()
 
@@ -50,9 +58,7 @@ class CompanyUserModel(Mapping):
     @property
     def confirmed(self):
         return not self.unconfirmed
-    @property
-    def picture_url(self):
-        return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+
     @property
     def position(self):
         return getRoleName(self.role) if self.role else self.headline
@@ -64,10 +70,11 @@ class IntroducerModel(Mapping):
     firstName = TextField()
     lastName = TextField()
     picture = TextField()
+    picture_url = property(default_user_pic('picture'))
+
     @property
     def name(self):
         return u"{} {}".format(self.firstName, self.lastName)
-
     @property
     def position(self):
         return "IT Expert"
@@ -78,6 +85,7 @@ class ExpertModel(Mapping):
     lastName = TextField()
     headline = TextField()
     picture = TextField()
+    picture_url = property(default_user_pic('picture'))
     Introducer = ListField(DictField(IntroducerModel))
 
 
@@ -88,12 +96,10 @@ class ExpertModel(Mapping):
     @property
     def name(self):
         return u"{} {}".format(self.firstName, self.lastName)
+
     @property
     def position(self):
         return self.headline or 'IT Expert'
-    @property
-    def picture_url(self):
-        return self.picture or "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
     @property
     def display_skills(self):
         return ', '.join([])
@@ -110,6 +116,7 @@ class ServiceModel(Mapping):
 
     worker = TextField()
     picture = TextField()
+    picture_url = property(default_user_pic('picture'))
 
     @property
     def worker_name(self):
@@ -146,6 +153,7 @@ class UpdateModel(Mapping):
     userToken = TextField()
     userHeadline = TextField()
     userPicture = TextField()
+    picture_url = property(default_user_pic('userPicture'))
     def __repr__(self):
         return self.text
 
@@ -188,7 +196,7 @@ class EndorsementModel(Mapping):
     endorseeHeadline = TextField()
     endorseeLinkedinId = TextField()
     endorseePicture = TextField()
-
+    picture_url = property(default_user_pic('endorseePicture'))
     @property
     def id(self):
         return self.endorseeLinkedinId
@@ -217,6 +225,7 @@ class NeedModel(Mapping):
 
     Services = ListField(DictField(ServiceModel))
     Experts = ListField(DictField(ExpertModel))
+
 
     @reify
     def applicationMap(self):
@@ -321,7 +330,10 @@ class PledgeModel(Mapping):
     name = TextField()
     network = TextField()
     networkId = TextField()
+    token = property(attrgetter('networkId'))
+    confirmed = True
     picture = TextField()
+    picture_url = property(default_user_pic('picture'))
     offerToken = TextField()
     offerName = TextField()
     comment = TextField()
@@ -335,6 +347,7 @@ class PledgeModel(Mapping):
 class EventModel(Mapping):
     name = TextField()
     picture = TextField()
+    picture_url = property(default_user_pic('picture'))
     text = TextField()
     recency =TextField()
 
@@ -431,7 +444,7 @@ class RoundModel(Mapping):
 
     @reify
     def expiry(self):
-        return self.start+timedelta(90)
+        return self.start+timedelta(STANDARD_RUN_TIME)
     @reify
     def needMap(self):
         return {n.slug:n for n in self.Needs}
@@ -440,7 +453,7 @@ class RoundModel(Mapping):
         return self.Template.name
     @reify
     def expiry_days(self):
-        delta = (self.start+timedelta(90)) - datetime.today()
+        delta = (self.start+timedelta(STANDARD_RUN_TIME)) - datetime.today()
         return delta.days + 1
 
     def getExpiryDays(self, singular = "{} Day Left", plural="{} Days Left", closed = "Closed"):
@@ -452,10 +465,10 @@ class RoundModel(Mapping):
         else:
             return closed
     def getExpiryDate(self):
-        return format_date(self.start+timedelta(90), format="medium", locale='en')
+        return format_date(self.start+timedelta(STANDARD_RUN_TIME), format="medium", locale='en')
     def getExpiryPercentage(self):
-        delta = (self.start+timedelta(90)) - datetime.today()
-        return 100.0 * (90-delta.days) / 90
+        delta = (self.start+timedelta(STANDARD_RUN_TIME)) - datetime.today()
+        return 100.0 * (STANDARD_RUN_TIME-delta.days) / STANDARD_RUN_TIME
     @property
     def published(self):
         return self.status == 'PUBLISHED'
