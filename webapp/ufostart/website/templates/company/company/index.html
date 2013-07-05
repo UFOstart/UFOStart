@@ -42,7 +42,7 @@
             <div class="main-description mar-top-2">
                 ${company.description | html.html,n}
             </div>
-            <div class="updates mar-top-4">
+            <div class="updates mar-top-3">
                 ${self.updates(company, view.schemas.get('PostUpdate'), values, errors)}
             </div>
         </div>
@@ -55,7 +55,7 @@
 </%def>
 
 <%def name="companyMainInfo(company)">
-    ${widgets.company_logo(company)}
+    ${widgets.company_logo(company, classes="large")}
     <a class="entity-link mar-top-half" href="${url(ctxt)}">${ctxt.company.name}</a>
     <div class="pitch">${html.nn(company.pitch)}</div>
     <div class="number-widget mar-top-1">
@@ -64,11 +64,11 @@
             ${company.displayStartupValue}
         </div>
     </div>
-    <div class="mar-top-4">
+    <div class="mar-top-3">
         ${self.teamMembers(company.mentors, company.members)}
     </div>
 
-    <div class="mar-top-4">
+    <div class="mar-top-3">
         ${self.rounds(company, company.rounds)}
     </div>
 </%def>
@@ -169,7 +169,7 @@
         %endif
     </div>
 
-    <div class="mar-top-4">
+    <div class="mar-top-3">
         <div class="box-title">Mentors</div>
         <div class="box-hor-content box-dark-shaded">
             %for member in mentors:

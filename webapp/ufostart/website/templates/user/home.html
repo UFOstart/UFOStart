@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col col-lg-3">
             <div class="box-card">
-                ${widgets.logo(profile.picture, alt=profile.name, classes="medium")}
+                ${widgets.logo(profile.picture, alt=profile.name, classes="large")}
             </div>
 
             <div class="mar-top-1 brand-teal text-strong">${profile.name}</div>
@@ -23,7 +23,7 @@
                 <p class="text-small">${profile.headline}</p>
             %endif
 
-            <div class="mar-top-4">
+            <div class="mar-top-3">
                 <div class="box-title">User Details</div>
                 <div class="box-content box-dark-shaded">
                     <div class="number-widget">
@@ -47,21 +47,22 @@
                     </div>
                 </div>
             </div>
+            <div class="mar-top-3">
+                ${widgets.sharebtns()}
+            </div>
         </div>
         <div class="col col-lg-9">
             <div class="row">
                 <div class="col col-lg-${'6' if profile.Applications or profile.Endorsements else '12'}">
                     ${self.mentoredCompanies(profile.mentoredStartups)}
-                    <div class="mar-top-4">
                     ${self.companies(profile.Companies)}
-                    </div>
                 </div>
 
 
                 %if profile.Applications or profile.Endorsements:
                     <div class="col col-lg-6">
                         ${self.applications(profile.Applications)}
-                        <div class="mar-top-4">
+                        <div class="mar-top-3">
                         ${self.displayEndorsements(profile.getEndorsements())}
                         </div>
                     </div>
@@ -70,7 +71,7 @@
         </div>
     </div>
 
-    <div class="row mar-top-2">
+    <div class="row mar-top-3">
         <div class="col col-lg-12">
             ${self.bestMatchNeeds(isMyProfile, best_match)}
         </div>
@@ -103,6 +104,7 @@
             </div>
         %endif
     %endfor
+        <div class="mar-top-3"></div>
     %endif
 </%def>
 

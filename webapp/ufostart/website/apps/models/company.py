@@ -67,6 +67,7 @@ class CompanyUserModel(Mapping):
         return format_currency(self.startupValue)
 
 class IntroducerModel(Mapping):
+    linkedinId = TextField()
     firstName = TextField()
     lastName = TextField()
     picture = TextField()
@@ -92,6 +93,7 @@ class ExpertModel(Mapping):
     introFirstName = TextField()
     introLastName = TextField()
     introPicture = TextField()
+    introLinkedinId = TextField()
 
     @property
     def name(self):
@@ -106,7 +108,7 @@ class ExpertModel(Mapping):
     @property
     def introducers(self):
         if not self.introFirstName: return []
-        return [IntroducerModel(picture = self.introPicture, firstName = self.introFirstName, lastName = self.introLastName)]#self.Introducer
+        return [IntroducerModel(picture = self.introPicture, firstName = self.introFirstName, lastName = self.introLastName, linkedinId = self.introLinkedinId)]#self.Introducer
 
 class ServiceModel(Mapping):
     name = TextField()

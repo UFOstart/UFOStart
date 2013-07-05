@@ -14,23 +14,24 @@ define(["tools/form", "tools/messaging", "tools/ajax", "text!networks/linkedin/m
             this.$(".modal").modal('hide');
         }
         , addHandler: function(opts){
-            var liId = opts.$el.data('entityId')
-                , conDef = opts.auth.getContacts();
+            opts.auth.getContacts(); // kick it off now, so dont wait later
             opts.$el.on({"click": _.bind(this.onClick, this)});
         }
 
-        , show : function(id, name, contact){
+        , show : function(data, contact){
             var view = this
+                , isIntro = !!data.expertName
                 , params = {
                     sender: window.__options__.user.name
-                    , host : window.location.host
-                    , link : window.location.href
-                    , name: name
+                    , text: isIntro?
+                                "I've seen this task on http://"+window.location.host+" and thought "+data.expertName+" can help out. Can you introduce me to "+data.expertName+" so I can let him know of this task at "+window.location.href+"."
+                                :"I've seen this task on http://"+window.location.host+" and thought you can help out. Your skills match perfectly, so checkout this task at "+window.location.href+"."
+                    , name: data.entityName
                     , direct: !!contact
                     , company: this.entity.companyName
                     , need:this.entity.name
                 }
-                , def = contact?null:this.options.auth.getContact(id);
+                , def = contact?null:this.options.auth.getContact(data.entityId);
 
             this.$el.find(".form-validated").off();
             this.$el.html(this.template(params)).find(".modal").modal('show');
@@ -41,7 +42,7 @@ define(["tools/form", "tools/messaging", "tools/ajax", "text!networks/linkedin/m
                       "recipients": {
                          "values": [{
                            "person": {
-                                "_path": "/people/"+id
+                                "_path": "/people/"+data.entityId
                              }
                            }]
                          },
@@ -99,11 +100,10 @@ define(["tools/form", "tools/messaging", "tools/ajax", "text!networks/linkedin/m
         , onClick: function(e){
             var view = this
                 , $el = $(e.currentTarget)
-                , id = $el.data("entityId")
-                , name = $el.data("entityName")
+                , data = $el.data()
                 , conDef = this.options.auth.getContacts();
                 conDef.done(function(collection){
-                    view.show(id, name, collection.get(id));
+                    view.show(data, collection.get(data.entityId));
                 })
         }
     })

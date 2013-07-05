@@ -24,7 +24,7 @@
                 <div class="box-card">
                     ${widgets.companyInfo(ctxt.company, picclasses='medium')}
                 </div>
-                <div class="mar-top-4">
+                <div class="mar-top-3">
                     <div class="box-title">Customers</div>
                     ${self.customerFacepile(company.Round.Pledges)}
                 </div>
@@ -33,14 +33,14 @@
                 <div class="main-description">
                     ${product.description | html.html,n}
                 </div>
-                <div class="mar-top-4">
+                <div class="mar-top-3">
                     <div class="box-title">Pledges</div>
                     ${self.pledgeList(company.Round.Pledges)}
                 </div>
             </div>
             <div class="col col-lg-3">
                 ${self.offerSection(company, company.Round.Product)}
-                <div class="mar-top-4">
+                <div class="mar-top-3">
                     ${widgets.sharebtns()}
                 </div>
             </div>
@@ -77,9 +77,6 @@
     %for idx, offer in enumerate(offers):
         <div class="single-product-offer progress-step progress-${idx+1}" data-entity-id="${offer.token}">
             <div class="box-content">
-                %if ctxt.canEdit:
-                    <a href="${url(ctxt, 'delete', query=[('offer', offer.token)])}" data-target=".single-product-offer" class="remove">×</a>
-                %endif
                 <p><strong class="dark">${offer.name}</strong></p>
                 <p class="text-small">${offer.description}</p>
                 <div class="row">

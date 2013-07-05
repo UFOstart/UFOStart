@@ -292,7 +292,7 @@
         ${self.renderNeedColumns(ctxt.groupedNeeds(3, True))}
 
         %if not ctxt.round.published and ctxt.canEdit:
-            <div class="col col-lg-12 mar-top-4">
+            <div class="col col-lg-12 mar-top-3">
                 <div class="box-title highlight-target"><div id="target-customise-needs" class="highlight-anchor"></div>
                     Suggested Tasks
                 </div>
@@ -461,7 +461,7 @@
                             <div class="progress">
                                 <div class="progress-bar" style="width: ${100.0 * currentRound.noFulfilledNeeds / currentRound.noTotalNeeds}%"></div>
                             </div>
-                            <h2 class="heading mar-top-4">
+                            <h2 class="heading mar-top-3">
                                 ${currentRound.noFulfilledNeeds}<small> ${pluralize("Task", "Tasks", currentRound.noFulfilledNeeds)}</small>
                             </h2>
                         </div>
@@ -480,7 +480,7 @@
                     <div class="progress">
                         <div class="progress-bar" style="width: ${currentRound.Funding.investment_progress}"></div>
                     </div>
-                    <h2 class="heading mar-top-4">
+                    <h2 class="heading mar-top-3">
                         ${currentRound.Funding.investment_progress}<small> Funding</small>
                     </h2>
                 </div>

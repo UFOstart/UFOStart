@@ -40,7 +40,7 @@
     <a class="entity-link  mar-top-half" href="${root.company_url(ctxt.company.slug)}">${ctxt.company.name}</a>
     <div class="pitch">${html.nn(ctxt.company.pitch)}</div>
 
-    <div class="box-shaded mar-top-4">
+    <div class="box-shaded mar-top-3">
         <div class="box-shaded">
             <div class="box-title">Task Details</div>
             <div class="box-shaded box-content">
@@ -109,7 +109,12 @@
                             <img src="${intro.picture}" alt="${intro.name}"/>
                         </div>
                         <div class="right-box">
-                            <a href="#" class="btn btn-primary pull-right">Get Introduction</a>
+
+                            %if not root.user.isMe('linkedin', intro.linkedinId):
+                                <div class="pull-right linkedin-widget" data-widget="SendMessage" data-entity-id="${intro.linkedinId}" data-entity-name="${intro.name}"  data-expert-name="${expert.name}">
+                                    <a class="btn btn-primary">Get Introduction</a>
+                                </div>
+                            %endif
                             <a class="overflow" href="#"><strong>${intro.name}</strong></a>
                             <p class="text-muted text-small">${intro.position}</p>
                         </div>
@@ -125,13 +130,14 @@
 
 <%def name="recommendedServices(company, need)">
     %for service in need.services:
-        <div class="col col-lg-4 service-briefing">
+        <div class="col col-lg-4 service-briefing mar-top-1">
             <div class="picture medium">
                 <img src="${service.logo_url}" name="${service.name}"/>
             </div>
             <a href="${service.url or '#'}" class="overflow"><strong>${service.name}</strong></a>
             <p class="text-muted text-small">${service.description | html.trunc(50)}</p>
             <a href="${service.url or '#'}" target="_blank" class="btn btn-block btn-primary">See Details</a>
+            <div class="mar-top-1"></div>
         </div>
     %endfor
 </%def>

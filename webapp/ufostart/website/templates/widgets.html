@@ -6,7 +6,7 @@
         <div class="box-shaded">
             <div class="box-hor-content box-shaded">
                 <div class="row">
-                    <div class="col col-lg-4 mar-top-4">
+                    <div class="col col-lg-4 mar-top-3">
                         <div id="fb-root"></div>
                         <script>(function(d, s, id) {
                           var js, fjs = d.getElementsByTagName(s)[0];
@@ -17,7 +17,7 @@
                         }(document, 'script', 'facebook-jssdk'));</script>
                         <div class="fb-send" data-href="${request.url}"></div>
                     </div>
-                    <div class="col col-lg-4 mar-top-4">
+                    <div class="col col-lg-4 mar-top-3">
                         <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
                         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                     </div>
@@ -243,7 +243,7 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
         <div class="box-content">
             <div class="valuation small">
                 <div class="number total">
-                    <strong class="text-muted">PLEDGES</strong>
+                    <strong class="text-small text-muted">Pledges</strong>
                     <h2 class="no-margin">${company.no_pledges or '0'}</h2>
                 </div>
             </div>
