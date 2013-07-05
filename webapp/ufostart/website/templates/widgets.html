@@ -4,7 +4,7 @@
     </div>
     <div class="box-shaded">
         <div class="box-shaded">
-            <div class="box content box-shaded">
+            <div class="box-hor-content box-shaded">
                 <div class="row">
                     <div class="col col-lg-4 mar-top-4">
                         <div id="fb-root"></div>
@@ -190,18 +190,20 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
 %>
 <div class="need-card home">
     <div class="need-card-inner">
-        <div class="cut-corner box-header-muted box-card">
-            <div class="picture">
-                <a href="${root.company_url(need.Company.slug)}"><img src="${need.Company.logo}"></a>
-            </div>
-            <div class="right-box">
-                <h5><a href="${need_url}" class="overflow">${need.Company.name}</a></h5>
-                <div class="description">${need.Company.description | html.trunc(50)}</div>
+        <div class="cut-corner box-header-muted">
+            <div class="box-card extra-compact box-content">
+                <div class="picture">
+                    <a href="${root.company_url(need.Company.slug)}"><img src="${need.Company.logo}"></a>
+                </div>
+                <div class="right-box">
+                    <a href="${root.company_url(need.Company.slug)}" class="overflow entity-link"><strong>${need.Company.display_name}</strong></a>
+                    <div class="description">${need.Company.description | html.trunc(50)}</div>
+                </div>
             </div>
         </div>
         <div class="box-content">
-            <h5><a href="${need_url}">${need.name}</a></h5>
-            <div class="long-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
+            <h3 class="no-margin"><a class="overflow" href="${need_url}">${need.name}</a></h3>
+            <div class="mar-top-1 long-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
         </div>
         <div class="box-content">
             ${self.valuation_sml(need)}
@@ -223,12 +225,18 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
     %>
     <div class="need-card home product">
     <div class="need-card-inner">
-        <div class="picture-header">
+        <div class="cut-corner">
             <img src="${company.product_picture(request)}"/>
         </div>
         <div class="box-content">
-            <h5><a href="${product_url}" class="overflow">${company.product_name}</a></h5>
-            <div class="long-description">${company.product_description | html.trunc(descr_len)}</div>
+            <h3 class="no-margin"><a href="${product_url}" class="overflow">${company.product_name}</a></h3>
+            <div class="box-card extra-compact mar-top-1">
+                ${self.company_logo(company)}
+                <div class="right-box">
+                    <a href="${root.round_url(company.slug, '1')}" class="entity-link">${company.display_name}</a>
+                </div>
+            </div>
+            <div class="mar-top-1 long-description">${company.product_description | html.trunc(descr_len)}</div>
         </div>
         <div class="box-content">
             <div class="valuation small">
