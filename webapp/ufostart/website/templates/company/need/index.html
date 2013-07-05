@@ -315,7 +315,7 @@
                     %for need in round.roundTasks:
                         %if need.slug != ctxt.need.slug:
                             <div class="list-item">
-                                <a class="entity-link" href="${root.need_url(ctxt.company.slug, need.slug)}">${need.name}</a>
+                                <h3 class="other-task-card-header"><a href="${root.need_url(ctxt.company.slug, need.slug)}">${need.name}</a></h3>
                                 ${widgets.valuation_sml(need)}
                             </div>
                         %endif
