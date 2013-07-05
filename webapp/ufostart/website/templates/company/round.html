@@ -187,7 +187,7 @@
 
                     <div class="box-content">
                         <a href="${url(ctxt, 'product')}" class="overflow"><strong>${company.product_name}</strong></a>
-                        <small>${html.nn(company.product_description) | html.trunc(90)}</small>
+                        <small>${html.nn(company.product_description) | html.clean,html.trunc(90)}</small>
                     </div>
                 </div>
                 <div class="box-content">
@@ -287,7 +287,7 @@
 
 
 <%def name="tasksSection(company)">
-    <div class="row mar-top-2" id="project-round-need-dashboard" data-entity-id="${ctxt.round.token}">
+    <div class="row" data-entity-id="${ctxt.round.token}">
 
         ${self.renderNeedColumns(ctxt.groupedNeeds(3, True))}
 
@@ -305,7 +305,7 @@
 
 <%def name="renderNeedColumns(needs)">
     %if needs:
-        <div class="col col-lg-12 mar-top-2">
+        <div class="col col-lg-12 mar-top-3">
             <div class="box-title">
                 ${'Tasks' if ctxt.round.published else 'Round Tasks'}
             </div>

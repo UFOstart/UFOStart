@@ -513,15 +513,18 @@ class CompanyModel(BaseCompanyModel):
 
     def isMember(self, userToken):
         if not userToken: return False
-        return bool(self.memberMap.get(userToken))
+        member = self.memberMap.get(userToken)
+        return member and not member.unconfirmed
+
     def isFounder(self, userToken):
         if not userToken: return False
         user = self.memberMap.get(userToken)
-        return user.isFounder
+        return user and user.isFounder and not user.unconfirmed
+
     def isMentor(self, userToken):
         if not userToken: return False
         user = self.memberMap.get(userToken)
-        return user.isMentor
+        return user and user.isMentor and not user.unconfirmed
 
     @property
     def no_users(self):

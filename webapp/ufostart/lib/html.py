@@ -2,6 +2,7 @@ import hashlib
 import logging
 import re
 from urlparse import urlparse, parse_qsl
+from BeautifulSoup import BeautifulSoup
 from babel import dates
 from hnc.apiclient import Mapping, TextField, IntegerField
 from hnc.tools.tools import word_truncate_by_letters
@@ -47,6 +48,13 @@ def nn(text, alt = ''):
 
 def coalesce(t1, t2):
     return t1 if t1 else t2 if t2 else ''
+
+def clean(txt):
+  soup = BeautifulSoup(txt)
+  for tag in soup.findAll(True):
+      tag.extract()
+  val = soup.renderContents()
+  return val.decode("utf-8")
 
 
 def format_date(date, format="short"):
