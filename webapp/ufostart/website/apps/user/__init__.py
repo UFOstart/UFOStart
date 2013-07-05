@@ -62,12 +62,12 @@ class BrowseTagContext(object):
 
     @property
     def site_title(self):
-        return [self.__name__, 'Browse', self.request.globals.project_name]
+        return [self.tag, 'Browse', self.request.globals.project_name]
 
     def __init__(self, parent, name):
         self.__parent__ = parent
         self.__name__ = name
-        self.tag = name
+        self.tag = urllib.unquote(name)
     def browse_url(self, tag): return self.__parent__.browse_url(tag)
     @reify
     def tasks(self):
