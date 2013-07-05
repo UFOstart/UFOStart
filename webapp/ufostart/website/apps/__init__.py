@@ -4,6 +4,9 @@ from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSO
 
 from . import contexts, index, auth, company, expert, user
 from pyramid.decorator import reify
+from pyramid.httpexceptions import HTTPInternalServerError
+from pyramid.response import Response
+from pyramid.view import view_config
 import simplejson
 from ufostart.website.apps.social import SocialLoginFailed, SocialLoginSuccessful
 
@@ -16,7 +19,6 @@ __author__ = 'Martin'
 ROUTE_LIST = [
     FunctionRoute    ("website_index"                      , "/", contexts.WebsiteRootContext                                                , index.index, "index.html")
 ]
-
 
 
 

@@ -75,7 +75,7 @@
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">${btn_label}</button>
-            <a href="${url(ctxt) if ctxt.need.added else url(ctxt.__parent__)}" class="btn btn-default">Cancel</a>
+            <a href="${url(ctxt) if hasattr(ctxt, 'need') and ctxt.need.added else url(ctxt.__parent__)}" class="btn btn-default">Cancel</a>
         </div>
     </form>
 </%def>

@@ -4,7 +4,6 @@ from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
 from pyramid.httpexceptions import HTTPInternalServerError
-from pyramid.interfaces import IAuthorizationPolicy
 from pyramid.mako_templating import renderer_factory
 from pyramid.renderers import JSON
 from pyramid.response import Response
@@ -39,11 +38,9 @@ class Security(SessionAuthenticationPolicy):
 
 
 
-@view_config(context=HTTPInternalServerError)
-def internalerror(request):
-    response =  Response('Something went awry: %s')
-    response.status_int = 500
-    return response
+
+
+
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
