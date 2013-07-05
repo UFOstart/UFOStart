@@ -69,7 +69,7 @@
 <%def name="inviteForm(form, values, errors)">
     %if form:
         <div class="mar-top-2 expander ${'expanded' if request.params.get('invite') else ''}">
-            <a class="btn btn-primary show-contracted" data-toggle-target=".expander" data-toggle-class="expanded">Invite to Task</a>
+            <a class="btn btn-primary show-contracted btn-block" data-toggle-target=".expander" data-toggle-class="expanded">Invite to Task</a>
             <form class="box-content box-dark show-expanded ${form.grid.form_classes}" id="${form.id}" method="POST">
                 ${baseform.prelims(form)}
                 ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
@@ -135,7 +135,6 @@
                 <img src="${service.logo_url}" name="${service.name}"/>
             </div>
             <a href="${service.url or '#'}" class="overflow"><strong>${service.name}</strong></a>
-            <p class="text-muted text-small">${service.description | html.trunc(50)}</p>
             <a href="${service.url or '#'}" target="_blank" class="btn btn-block btn-primary">See Details</a>
             <div class="mar-top-1"></div>
         </div>

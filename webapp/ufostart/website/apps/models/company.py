@@ -112,7 +112,7 @@ class ExpertModel(Mapping):
 
 class ServiceModel(Mapping):
     name = TextField()
-    description = TextField(default = 'this is a web service')
+    description = TextField()
     url = TextField()
     logo = TextField()
 

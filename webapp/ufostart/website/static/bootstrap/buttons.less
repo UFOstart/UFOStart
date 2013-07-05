@@ -11,6 +11,7 @@
   display: inline-block;
   position: relative;
   padding: 6px 20px;
+  margin-right:12px;
   margin-bottom: 0; // For input.btn
   font-size: @font-size-small;
   font-weight: 600;
@@ -55,8 +56,9 @@
   -webkit-appearance: none;
 }
 
-.btn + .btn {margin-left: 12px;}
 
+.pull-right > .btn {margin-right:0;}
+.pull-right.btn {margin-right:0;}
 // Alternate buttons
 // --------------------------------------------------
 
@@ -152,6 +154,7 @@ fieldset[disabled] .btn-link {
 .btn-block {
   display: block;
   width: 100%;
+  margin-right:0;
   padding-left: 0;
   padding-right: 0;
 }

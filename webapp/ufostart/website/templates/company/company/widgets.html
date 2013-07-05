@@ -16,7 +16,7 @@
 <%def name="invite_team_form(form, values, errors)">
     %if form:
         <div class="expander ${'expanded' if request.params.get('invite') else ''}">
-            <a class="btn btn-primary show-contracted mar-top-half" data-toggle-target=".expander" data-toggle-class="expanded">Invite Team Members</a>
+            <a class="btn btn-primary show-contracted btn-block mar-top-half" data-toggle-target=".expander" data-toggle-class="expanded">Invite Team Members</a>
             <form class="box-content box-buster box-dark show-expanded ${form.grid.form_classes}" id="${form.id}" method="POST">
                 ${baseform.prelims(form)}
                 ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
