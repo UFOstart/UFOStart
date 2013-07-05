@@ -15,7 +15,7 @@
                     <span class="name">${t.name}</span>
                 </a>
                 <p class="description">
-                    <strong>${t.name}</strong> is lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                    <strong>${t.name}</strong> ${ t.description | html.trunc(300),html.html,n }
                 </p>
             </div>
         </div>

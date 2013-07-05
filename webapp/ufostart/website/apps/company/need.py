@@ -9,7 +9,7 @@ from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, App
 
 
 class NeedIndexForm(BaseForm):
-    id="NeedIndex"
+    id="Needinvite"
     label = ""
     fields=[
         StringField("name", "Name", REQUIRED)
@@ -57,7 +57,7 @@ class ApplicationForm(BaseForm):
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class ApplicationHandler(FormHandler):
-    form = ApplicationForm
+    forms = [ApplicationForm, NeedIndexForm]
 
 
 

@@ -498,48 +498,49 @@
     <%
         active = wf.getActiveStage()
     %>
-    <div class="wtf-box company-dashboard">
-        <h2 class="wtf-title">
-            Welcome to your 1st round.
-        </h2>
-        <div class="wtf-content">
-            <p>Before you can launch your round you need to complete the steps below.</p>
-            <p>Completing these steps will mean everyone knows how they can help.</p>
-            <p>Start by adding your company's product so you can get early pledges to buy.</p>
+    <div class="company-dashboard">
+        <div class="wtf-box">
+            <h2 class="wtf-title">
+                Welcome to your 1st round.
+            </h2>
+            <div class="wtf-content">
+                <p>Before you can launch your round you need to complete the steps below.</p>
+                <p>Completing these steps will mean everyone knows how they can help.</p>
+                <p>Start by adding your company's product so you can get early pledges to buy.</p>
+            </div>
+        </div>
+        <ul class="list-unstyled">
+            %for i, stage in enumerate(wf.sortedStages):
+                <li>
+                    %if stage.completed:
+                        <span class="workflow-link done wtf-${i+1}">
+                            <span class="position">${i+1}</span>${stage.display_name}
+                        </span>
+                    %else:
+                        <a class="workflow-link${' active' if active and active.name == stage.name else ''} wtf-${i+1}" href="#target-${stage.slug}">
+                            <span class="position">${i+1}</span>${stage.display_name}
+                        </a>
+                    %endif
+                </li>
+            %endfor
+        </ul>
+
+        <div class="mar-top-2 highlight-target">
+            <div id="target-publish" class="highlight-anchor"></div>
+            <div id="target-sent-for-mentor-aprroval" class="highlight-anchor"></div>
+            %if ctxt.canEdit:
+                %if wf.canAskForApproval():
+                    <a href="${url(ctxt, 'askforapproval')}" class="btn btn-primary btn-block btn-large">Get Approval</a>
+                %endif
+            %elif ctxt.canApprove:
+                %if wf.canPublish():
+                    <a href="${url(ctxt, 'approve')}" class="btn btn-primary btn-block btn-large">Approve Round</a>
+                %else:
+                    <a class="btn btn-primary btn-block btn-large disabled">Approve Round</a>
+                %endif
+            %endif
         </div>
     </div>
-    <ul class="list-unstyled">
-        %for i, stage in enumerate(wf.sortedStages):
-            <li>
-                %if stage.completed:
-                    <span class="workflow-link done wtf-${i+1}">
-                        <span class="position">${i+1}</span>${stage.display_name}
-                    </span>
-                %else:
-                    <a class="workflow-link${' active' if active and active.name == stage.name else ''} wtf-${i+1}" href="#target-${stage.slug}">
-                        <span class="position">${i+1}</span>${stage.display_name}
-                    </a>
-                %endif
-            </li>
-        %endfor
-    </ul>
-
-    <div class="mar-top-2 highlight-target">
-        <div id="target-publish" class="highlight-anchor"></div>
-        <div id="target-sent-for-mentor-aprroval" class="highlight-anchor"></div>
-        %if ctxt.canEdit:
-            %if wf.canAskForApproval():
-                <a href="${url(ctxt, 'askforapproval')}" class="btn btn-primary btn-block btn-large">Get Approval</a>
-            %endif
-        %elif ctxt.canApprove:
-            %if wf.canPublish():
-                <a href="${url(ctxt, 'approve')}" class="btn btn-primary btn-block btn-large">Approve Round</a>
-            %else:
-                <a class="btn btn-primary btn-block btn-large disabled">Approve Round</a>
-            %endif
-        %endif
-    </div>
-    <div class="mar-top-2"></div>
 </%def>
 
 

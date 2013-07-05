@@ -13,7 +13,7 @@
         <div class="row mar-top-2">
             <div class="col col-lg-3">
                 ${self.needOverview(ctxt.need)}
-                ${self.build_form(view.form, values, errors)}
+                ${self.inviteForm(view.schemas['Needinvite'], values, errors)}
             </div>
             <div class="col col-lg-6">
                 ${self.needDetails(ctxt.canEdit, ctxt.company, ctxt.need)}
@@ -64,7 +64,7 @@
 
 
 
-<%def name="build_form(form, values, errors)">
+<%def name="inviteForm(form, values, errors)">
     %if form:
         <div class="mar-top-2 expander ${'expanded' if request.params.get('invite') else ''}">
             <a class="btn btn-primary show-contracted" data-toggle-target=".expander" data-toggle-class="expanded">Invite to Task</a>
@@ -296,12 +296,28 @@
 </%def>
 
 <%def name="otherTasks(round)">
-%for need in round.roundTasks:
-    %if need.slug != ctxt.need.slug:
-        <div class="box-title">${need.name}</div>
+    <div class="company-dashboard">
+    %if len(round.roundTasks) > 1:
+        <div class="box-shaded">
+            <div class="box-shaded">
+                <div class="box-title">Other tasks from ${ctxt.company.display_name}</div>
+                <div class="box-shaded box-content">
+                    %for need in round.roundTasks:
+                        %if need.slug != ctxt.need.slug:
+                            <div class="list-item">
+                                <a class="entity-link" href="${root.need_url(ctxt.company.slug, need.slug)}">${need.name}</a>
+                                ${widgets.valuation_sml(need)}
+                            </div>
+                        %endif
+                    %endfor
+                </div>
+            </div>
+        </div>
+
+
     %endif
-%endfor
-<div class="mar-top-2"></div>
+    </div>
+
 </%def>
 <%def name="wtfBox()">
     %if ctxt.need.summary:

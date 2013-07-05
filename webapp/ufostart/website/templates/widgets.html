@@ -152,7 +152,7 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
 <%def name="valuation(need)">
     <div class="number-widget">
         <div class="number total">
-            <strong class="text-small">Value</strong>
+            <strong class="text-small">Total</strong>
             <h2 class="no-margin">${need.display_total}</h2>
         </div>
         <div class="row mar-top-half">
@@ -171,14 +171,14 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
 <%def name="valuation_sml(need)">
     <div class="valuation small">
         <div class="thirds">
-            <strong class="text-small">VALUE</strong>
+            <strong class="text-small">Total</strong>
             <div class="brand-primary text-strong">${need.display_total}</div>
-        </div><div class="thirds">
-            <small>Equity</small>
-            <div class="brand-primary">${need.display_mix}</div>
         </div><div class="thirds">
             <small>Cash</small>
             <div class="brand-primary">${need.display_cash}</div>
+        </div><div class="thirds">
+            <small>Equity</small>
+            <div class="brand-primary">${need.display_equity}</div>
         </div>
     </div>
 </%def>

@@ -20,7 +20,7 @@ TEMPLATE_KEYS = {
     , 'STEVE_BLANK':{'key':'hitech', 'name':'Steve Blank'}
     , 'SCALE':{'key':'seed', 'name':'Looking to scale'}
     , 'LAUNCH':{'key':'started', 'name':'About to launch'}
-    , 'START':{'key':'seriesb', 'name':'Just starting out'}
+    , 'START':{'key':'seriesb', 'name':'Just getting started'}
 }
 
 
@@ -285,6 +285,7 @@ class NeedModel(Mapping):
 class TemplateModel(Mapping):
     _key = TextField(name="key")
     _name = TextField(name="name")
+    description = TextField()
     Need = ListField(DictField(NeedModel))
 
 
