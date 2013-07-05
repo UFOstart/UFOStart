@@ -99,6 +99,10 @@
     </div>
 </%def>
 
+
+
+
+
 <%def name="activityStream()">
     <div class="box-title">
         Recent Activity
@@ -461,7 +465,7 @@
                             <div class="progress">
                                 <div class="progress-bar" style="width: ${100.0 * currentRound.noFulfilledNeeds / currentRound.noTotalNeeds}%"></div>
                             </div>
-                            <h2 class="heading mar-top-3">
+                            <h2 class="heading dark mar-top-3">
                                 ${currentRound.noFulfilledNeeds}<small> ${pluralize("Task", "Tasks", currentRound.noFulfilledNeeds)}</small>
                             </h2>
                         </div>
@@ -469,7 +473,7 @@
                 </div>
                 <div class="box-content">
                     <h2 class="no-margin">${"You" if ctxt.canEdit else ctxt.company.display_name} received</h2>
-                    <h2 class="heading mar-top-2">
+                    <h2 class="heading text-center mar-top-2">
                         ${ctxt.company.no_pledges}<small> ${pluralize("Pledge", "Pledges", ctxt.company.no_pledges)}</small>
                     </h2>
                 </div>
@@ -480,7 +484,7 @@
                     <div class="progress">
                         <div class="progress-bar" style="width: ${currentRound.Funding.investment_progress}"></div>
                     </div>
-                    <h2 class="heading mar-top-3">
+                    <h2 class="heading dark mar-top-3">
                         ${currentRound.Funding.investment_progress}<small> Funding</small>
                     </h2>
                 </div>

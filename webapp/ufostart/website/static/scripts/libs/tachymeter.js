@@ -21,7 +21,7 @@ define([], function(){
             } else {
                 path = [["M", startx, starty - R], ["A", R, R, 0, +(alpha > 180), 1, x, y]];
             }
-            return {path: path, stroke: '#808080', 'stroke-width': strokeWidth+2};
+            return {path: path, stroke: '#686868', 'stroke-width': strokeWidth+2};
         };
         var circle = r.circle(w*.5, h*.5, R).attr(params);
         r.path().attr({'stroke-width': strokeWidth, arc: [w*.5,h*.5, value, total, R]});

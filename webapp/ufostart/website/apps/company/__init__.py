@@ -235,6 +235,13 @@ class InviteContext(RoundContext):
             raise HTTPFound(self.request.root.round_url(self.company.slug, '1'))
 
     @reify
+    def mockContext(self):
+        root = self.request.root
+        protoCtxt = ProtoCompanyContext(root,'c')
+        companyCtxt = CompanyContext(protoCtxt, self.company.slug)
+        return RoundContext(companyCtxt,'1', companyCtxt.__acl__, self.company.Round)
+
+    @reify
     def invite(self):
         invite = None
         try:
