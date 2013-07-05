@@ -64,7 +64,9 @@ class ProductEditForm(ProductCreateForm):
         data = {'token': request.context.round.token, 'Product': values}
 
         offers = values.pop('Offers')
+
         try:
+            round = CreateProductProc(request, data)
             SetProductOffersProc(request, {'Product': {'token': product.token, 'Offers':offers}})
         except DBNotification, e:
             return {'errors': {'name': e.message}, 'success':False}

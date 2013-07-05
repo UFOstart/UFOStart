@@ -8,7 +8,7 @@
 <%def name="bodyContent()">
 <div class="row">
     %for t in templates:
-        <div class="col col-lg-6 text-center">
+        <div class="col col-lg-4 col-offset-1 text-center">
             <div class="single-template">
                 <a href="${root.template_url(t.key)}" class="single-template-button ${t.getStyleKey()} no-btn">
                     <img src="${STATIC_URL}img/templates/${t.getStyleKey()}.png"/>

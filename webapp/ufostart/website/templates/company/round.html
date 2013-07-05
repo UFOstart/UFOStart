@@ -444,7 +444,7 @@
                 <div class="progress-step">
                     <div class="progress-step">
                         <div class="box-content">
-                            <h2 class="no-margin">
+                            <h2 class="no-margin heading">
                             ${"You've" if ctxt.canEdit else u"{} has".format(ctxt.company.display_name)}
                              got</h2>
                             <div class="tachymeter" id="tachymeter">
@@ -461,16 +461,16 @@
                             <div class="progress">
                                 <div class="progress-bar" style="width: ${100.0 * currentRound.noFulfilledNeeds / currentRound.noTotalNeeds}%"></div>
                             </div>
-                            <h2 class="offset">
-                                ${currentRound.noFulfilledNeeds}<small>${pluralize("Task", "Tasks", currentRound.noFulfilledNeeds)}</small>
+                            <h2 class="heading mar-top-4">
+                                ${currentRound.noFulfilledNeeds}<small> ${pluralize("Task", "Tasks", currentRound.noFulfilledNeeds)}</small>
                             </h2>
                         </div>
                     </div>
                 </div>
                 <div class="box-content">
                     <h2 class="no-margin">${"You" if ctxt.canEdit else ctxt.company.display_name} received</h2>
-                    <h2 class="heading">
-                        ${ctxt.company.no_pledges}<small>${pluralize("Pledge", "Pledges", ctxt.company.no_pledges)}</small>
+                    <h2 class="heading mar-top-2">
+                        ${ctxt.company.no_pledges}<small> ${pluralize("Pledge", "Pledges", ctxt.company.no_pledges)}</small>
                     </h2>
                 </div>
             </div>
@@ -480,8 +480,8 @@
                     <div class="progress">
                         <div class="progress-bar" style="width: ${currentRound.Funding.investment_progress}"></div>
                     </div>
-                    <h2 class="offset no-margin">
-                        ${currentRound.Funding.investment_progress}<small>Funding</small>
+                    <h2 class="heading mar-top-4">
+                        ${currentRound.Funding.investment_progress}<small> Funding</small>
                     </h2>
                 </div>
             </div>

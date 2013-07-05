@@ -205,9 +205,11 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
             <h3 class="no-margin"><a class="overflow" href="${need_url}">${need.name}</a></h3>
             <div class="mar-top-1 long-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
         </div>
+        <hr class="boxed"/>
         <div class="box-content">
             ${self.valuation_sml(need)}
         </div>
+        <hr class="boxed"/>
         <div class="label-list">
             %for tag in need.tags:
                 <span class="label label-info spaced text-small">${tag}</span>
