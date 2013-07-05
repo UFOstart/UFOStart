@@ -13,7 +13,9 @@
         <div class="row mar-top-2">
             <div class="col col-lg-3">
                 ${self.needOverview(ctxt.need)}
+                %if not ctxt.need.fulfilled:
                 ${self.inviteForm(view.schemas['Needinvite'], values, errors)}
+                %endif
             </div>
             <div class="col col-lg-6">
                 ${self.needDetails(ctxt.canEdit, ctxt.company, ctxt.need)}
@@ -51,7 +53,7 @@
     %if need.fulfilled:
         <div class="mar-top-2">
             <div class="box-title">Task Fulfilled by</div>
-            <div class="box-card compact mar-top-half">
+            <div class="box-card compact box-content box-dark-shaded">
                 ${companyWidgets.applicationCard(need.acceptedApplication)}
             </div>
         </div>
