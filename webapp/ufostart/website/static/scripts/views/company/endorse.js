@@ -17,7 +17,7 @@ define(["tools/ajax"], function(ajax){
     })
     , EndorsementView = Backbone.View.extend({
         initialize:function(opts){
-            this.$el.html(opts.template({model: this.model}))
+            this.setElement($(opts.template({model: this.model}).trim()));
         }
     })
     , View = Backbone.View.extend({
@@ -55,16 +55,14 @@ define(["tools/ajax"], function(ajax){
                         , endorseePicture: model.getPicture()
                     }
                 }
-                , success:function(data, status, xhr){
-                    console.log(data)
-                }
+                , success:function(data, status, xhr){}
                 , error: function(err){
                     view.model.get(model.id).destroy();
                 }
             })
         }
         , addOne: function(model){
-            this.$results.append(new EndorsementView({model:model, template: this.template}).$el);
+            this.$results.trigger("newnodes", (new EndorsementView({model:model, template: this.template}).$el).appendTo(this.$results));
         }
     });
     return View;

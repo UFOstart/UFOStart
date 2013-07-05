@@ -56,16 +56,22 @@ define(["tools/hash"
             }
             return this.contactDef;
         }
+        , setupWidgets: function(el){
+            var _t = this;
+            $(el).find(".linkedin-widget").each(function(idx, el){
+                var $el = $(el), module = _t.widgets[$el.data('widget')];
+                require([module], function(init){
+                    init(_.extend({$el:$el, auth : _t}, _t.options));
+                });
+            });
+        }
         , initialize: function(options){
             var _t = this;
             this.options = options;
             this.profiles = {};
-            $(".linkedin-widget").each(function(idx, el){
-                var $el = $(el), module = _t.widgets[$el.data('widget')];
-                require([module], function(init){
-                    init(_.extend({$el:$el, auth : _t}, options));
-                });
-            });
+            this.setupWidgets("body");
+            $("body").on("newnodes", function(e){_t.setupWidgets(e.target)})
+
         }
     });
     return {AuthHandler: AuthHandler};
