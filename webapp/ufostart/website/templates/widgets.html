@@ -193,10 +193,10 @@ ${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name,
         <div class="cut-corner box-header-muted">
             <div class="box-card extra-compact box-content">
                 <div class="picture">
-                    <a href="${root.company_url(need.Company.slug)}"><img src="${need.Company.logo}"></a>
+                    <a href="${root.round_url(need.Company.slug)}"><img src="${need.Company.logo}"></a>
                 </div>
                 <div class="right-box">
-                    <a href="${root.company_url(need.Company.slug)}" class="overflow entity-link"><strong>${need.Company.display_name}</strong></a>
+                    <a href="${root.round_url(need.Company.slug)}" class="overflow entity-link"><strong>${need.Company.display_name}</strong></a>
                     <div class="description">${need.Company.description | html.trunc(50)}</div>
                 </div>
             </div>

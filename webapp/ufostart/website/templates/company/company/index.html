@@ -77,24 +77,26 @@
     <div class="box-title">
         Rounds
     </div>
-    %for i, round in enumerate(rounds):
-    <div class="box-card compact mar-top-1">
-        ${widgets.round_logo(company, round)}
-        <div class="right-box">
-            <a href="${root.round_url(company.slug, company.round_no(round))}" class="overflow"><strong>${round.display_name}</strong></a>
-            <small class="text-muted">${html.format_date(round.start, 'short')}</small>
-            <div class="number-widget small mar-top-1">
-                <div class="halves">
-                    <div class="heading">Time left</div>
-                    <div class="small-value">${round.expiry_days} Days</div>
-                </div><div class="halves">
-                    <div class="heading">Tasks</div>
-                    <div class="small-value">${round.noFulfilledNeeds}/${round.noTotalNeeds}</div>
+    <div class="box-content box-dark-shaded">
+        %for i, round in enumerate(rounds):
+        <div class="box-card compact">
+            ${widgets.round_logo(company, round)}
+            <div class="right-box">
+                <a href="${root.round_url(company.slug, company.round_no(round))}" class="overflow"><strong>${round.display_name}</strong></a>
+                <small class="text-muted">${html.format_date(round.start, 'short')}</small>
+                <div class="number-widget small mar-top-1">
+                    <div class="halves">
+                        <div class="heading">Time left</div>
+                        <div class="small-value">${round.expiry_days} Days</div>
+                    </div><div class="halves">
+                        <div class="heading">Tasks</div>
+                        <div class="small-value">${round.noFulfilledNeeds}/${round.noTotalNeeds}</div>
+                    </div>
                 </div>
             </div>
         </div>
+        %endfor
     </div>
-    %endfor
 </%def>
 
 
@@ -156,60 +158,61 @@
     <div class="box-title">
         Team Members
     </div>
-    %for member in members:
-        ${buildMember(member)}
-    %endfor
-    %if ctxt.canEdit and hasattr(view, 'schemas'):
-        <div class="box-content">
-            ${companyWidgets.invite_team_form(view.schemas.get('InviteCompany'), values, errors)}
-        </div>
-    %endif
-
-    <div class="mar-top-4">
-        <div class="box-title">Mentors</div>
-        %for member in mentors:
+    <div class="box-hor-content box-dark-shaded">
+        %for member in members:
             ${buildMember(member)}
         %endfor
         %if ctxt.canEdit and hasattr(view, 'schemas'):
-            <div class="box-content">
-                <a href="${url(ctxt, '1', 'mentor')}" class="btn btn-primary btn-block">Invite Mentor</a>
+            <div class="box-bottom">
+                ${companyWidgets.invite_team_form(view.schemas.get('InviteCompany'), values, errors)}
             </div>
         %endif
+    </div>
+
+    <div class="mar-top-4">
+        <div class="box-title">Mentors</div>
+        <div class="box-hor-content box-dark-shaded">
+            %for member in mentors:
+                ${buildMember(member)}
+            %endfor
+            %if ctxt.canEdit and hasattr(view, 'schemas'):
+                <div class="box-bottom">
+                    <a href="${url(ctxt, '1', 'mentor')}" class="btn btn-primary btn-block">Invite Mentor</a>
+                </div>
+            %endif
+        </div>
     </div>
 </%def>
 
 
 <%def name="sidebarMedia(pictures, slideshare)">
     %if pictures or slideshare:
-        <div class="progress-wrapper">
-            <div class="progress-step">
-            <div class="progress-step">
-                %if pictures:
+        <div class="progress-wrapper company-dashboard">
+            %if pictures:
+                <div class="box-dark">
+                    <div class="box-content picture-gallery-preview">
+                    ${widgets.gallery("Picture Gallery", "Play Slideshow", pictures)}
+                    </div>
+                </div>
+            %endif
+            <% meta = html.getSlideshareMeta(request, slideshare) %>
+            %if meta:
                 <div class="progress-step">
-                    <div class="progress-step">
-                        <div class="box-content picture-gallery-preview">
-                        ${widgets.gallery("Picture Gallery", "Play Slideshow", pictures)}
+                <div class="progress-step">
+                <div class="slideshare box-content">
+                    <div class="box-title major">Slideshare</div>
+                    <div class="box-card extra-compact">
+                        <div class="picture"><img src="${meta.thumbnail}"/></div>
+                        <div class="right-box">
+                            <a class="entity-link" href="${slideshare}"><strong>${ meta.title }</strong></a>
+                            <small class="headline">${meta.author_name}</small>
                         </div>
                     </div>
                 </div>
-                %endif
-                <% meta = html.getSlideshareMeta(request, slideshare) %>
-                %if meta:
-                    <div class="slideshare box-content">
-                        <div class="box-title major">Slideshare</div>
-                        <div class="box-card extra-compact">
-                            <div class="picture"><img src="${meta.thumbnail}"/></div>
-                            <div class="right-box">
-                                <a class="entity-link" href="${slideshare}"><strong>${ meta.title }</strong></a>
-                                <small class="headline">${meta.author_name}</small>
-                            </div>
-                        </div>
-                    </div>
-                %endif
-            </div>
-            </div>
+                </div>
+                </div>
+            %endif
         </div>
-        <div class="mar-top-2"></div>
     %endif
 </%def>
 
