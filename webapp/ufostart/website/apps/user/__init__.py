@@ -1,6 +1,8 @@
 from . import index
+import urllib
 from pyramid.decorator import reify
 from pyramid.security import Authenticated, Allow, Deny, Everyone
+from pyramid.traversal import quote_path_segment
 from ufostart.website.apps.models.procs import RefreshProfileProc, GetProfileProc, GetTopTags, FindPublicNeeds
 
 
@@ -65,10 +67,12 @@ class BrowseTagContext(object):
     def __init__(self, parent, name):
         self.__parent__ = parent
         self.__name__ = name
-        self.tasks = FindPublicNeeds(self.request, {'Search': {'tags': [name]}})
         self.tag = name
-    def browse_url(self, tag):
-        return self.request.resource_url(self.__parent__, tag)
+    def browse_url(self, tag): return self.__parent__.browse_url(tag)
+    @reify
+    def tasks(self):
+        return FindPublicNeeds(self.request, {'Search': {'tags': [{'url':self.tag}]}})
+
 
 class BrowseContext(object):
     @property
@@ -86,14 +90,14 @@ class BrowseContext(object):
 
 
     def browse_url(self, tag):
-        return self.request.resource_url(self, tag)
+        return self.request.resource_url(self, quote_path_segment(tag))
 
     def __getitem__(self, item):
         return BrowseTagContext(self, item)
 
     @reify
     def tasks(self):
-        return FindPublicNeeds(self.request, {'Search': {'tags': [self.tag]}})
+        return FindPublicNeeds(self.request, {'Search': {'tags': [{'url':self.tag}]}})
 
 
 
