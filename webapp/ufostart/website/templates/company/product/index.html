@@ -161,9 +161,9 @@
 <%def name="sidebarMedia(pictures)">
     %if pictures:
         <div class="company-dashboard box-dark">
-        <div class="picture-gallery-preview">
-            ${widgets.gallery("Picture Gallery", "Play Slideshow", pictures)}
-        </div>
+            <div class="box-content picture-gallery-preview">
+                ${widgets.gallery("Picture Gallery", "Play Slideshow", pictures)}
+            </div>
         </div>
     %endif
 </%def>
@@ -182,7 +182,7 @@
             });
             new PView({el: $("#product-page")})
         });
-        $('a.slide-show-starter').colorbox({rel:'picture', photo:true});
+        $('a.slide-show-starter').colorbox({rel:'picture', photo:true, scalePhotos:true, maxWidth:"100%", maxHeight:"100%"});
         $('div.play').on("click", function(){ $('a.slide-show-starter').colorbox({open:true}) });
     </script>
 </%def>

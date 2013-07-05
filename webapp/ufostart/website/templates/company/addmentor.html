@@ -44,11 +44,11 @@
                         <div class="single-mentor">
                             <div class="box-card extra-compact">
 
-                                ${widgets.profile_pic(mentor.picture, mentor.slug)}
+                                ${widgets.profile_pic(mentor.picture, mentor.token)}
                                 <div class="right-box">
                                     <div class="row">
                                         <div class="col col-lg-6">
-                                            <a href="${root.profile_url(mentor.slug)}" class="entity-link">${mentor.name}</a>
+                                            <a href="${root.profile_url(mentor.token)}" class="entity-link">${mentor.name}</a>
                                             <p class="text-small">${mentor.headline}</p>
                                             %if mentor.token in ctxt.company.mentorTokens:
                                                 <a class="btn btn-primary disabled">Already Invited</a>

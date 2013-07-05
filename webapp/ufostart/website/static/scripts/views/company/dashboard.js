@@ -3,6 +3,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
 
 
     userLink = function(slug, name){return '<a href="/u/'+slug+'">' + name + '</a>'}
+    , userPic = function(url){return url || "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm";}
     , companyLink = function(slug, name){return '<a href="/c/'+slug+'">' + name + '</a>'}
     , productLink = function(slug, name){return '<a href="/c/'+slug+'/1/product">' + name + '</a>'}
     , needLink = function(cSlug, nSlug, name){return '<a href="/c/'+cSlug+'/1/'+nSlug+'">' + name + '</a>'}
@@ -10,7 +11,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
     , getPledgeModel = function(model){
         var key = "Pledge", actor = model.get(key);
         return {
-            picture: actor.picture
+            picture: userPic(actor.picture)
             , link: "#"
             , name: actor.name
             , subTitle : actor.name+" pledged to buy " + productLink(actor.companySlug, actor.offerName) +'.'
@@ -34,7 +35,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
             , actor = model.get(key)
             , actorLink = "/u/"+actor.endorserToken;
         return {
-            picture: actor.endorserPicture
+            picture: userPic(actor.endorserPicture)
             , link: actorLink
             , name: actor.endorserName
             , subTitle : userLink(actor.endorserToken, actor.endorserName) + " endorsed <strong>"+actor.endorseeName + '</strong> for ' + needLink(actor.companySlug, actor.needSlug, actor.needName)+'.'
@@ -78,7 +79,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
         return function(model){
             var actor = model.get("Invitor"), user = model.get("User"), uLink = user.token?userLink(user.token, user.name):'<strong>' + user.name + '</strong>';
             return {
-                picture: actor.picture
+                picture: userPic(actor.picture)
                 , link: '/u/'+actor.token
                 , uLink: uLink
                 , name: actor.name
@@ -92,7 +93,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
         return function(model){
             var actor = model.get("User");
             return {
-                picture: actor.picture
+                picture: userPic(actor.picture)
                 , link: '/u/'+actor.token
                 , name: actor.name
                 , subTitle: userLink(actor.token, actor.name) + ' is now a '+role+' of this company.'
