@@ -91,7 +91,7 @@
             <div class="single-company box-card compact">
                 ${widgets.company_logo(company)}
                 <div class="right-box">
-                    <div class="overflow"><a href="${request.root.company_url(company.slug)}"><strong>${company.name}</strong></a></div>
+                    <div class="overflow"><a href="${request.root.round_url(company.slug)}"><strong>${company.name}</strong></a></div>
                     %if company.currentRound.published:
                         <div><strong>${company.currentRound.getExpiryDays()}</strong></div>
                     %elif company.currentRound.pendingApproval:
@@ -115,7 +115,7 @@
                 <div class="right-box">
                     <div class="row">
                         <div class="col col-lg-6">
-                            <div class="overflow"><a href="${root.company_url(company.slug)}"><strong>${company.name}</strong></a></div>
+                            <div class="overflow"><a href="${root.round_url(company.slug)}"><strong>${company.name}</strong></a></div>
                             <small class="text-muted">Round 1</small>
                             %if company.currentRound and company.currentRound.published:
                                 <div class="text-small">${company.currentRound.getExpiryDays()}</div>
@@ -173,7 +173,7 @@
                     <p class="overflow text-small text-muted">${endorsement.endorserHeadline}</p>
                     <small>Endorsed ${ctxt.profile.name} for
                         <a class="brand-teal text-strong" href="${root.need_url(endorsement.companySlug, endorsement.needSlug)}">${endorsement.needName}</a> at
-                        <a class="brand-teal text-strong" href="${root.company_url(endorsement.companySlug)}">${endorsement.companyName}</a>.
+                        <a class="brand-teal text-strong" href="${root.round_url(endorsement.companySlug)}">${endorsement.companyName}</a>.
                     </small>
                 </div>
             </div>
