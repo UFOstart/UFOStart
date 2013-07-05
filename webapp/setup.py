@@ -31,6 +31,7 @@ requires = [
     "httplib2",
     "markdown",
     "smartypants",
+    "weberror",
     'hnc>=0.0.9dev'
     ]
 
