@@ -7,7 +7,7 @@ from ufostart.lib.baseviews import RootContext
 from ufostart.website.apps.auth import SocialContext
 from ufostart.website.apps.company import ProtoCompanyContext, TemplatesRootContext, ProtoInviteContext
 from ufostart.website.apps.models.auth import AnonUser
-from ufostart.website.apps.user import UserHomeContext, UserStubContext
+from ufostart.website.apps.user import UserHomeContext, UserStubContext, BrowseContext
 
 USER_SESSION_KEY = 'WEBSITE_USER'
 
@@ -67,7 +67,9 @@ class WebsiteRootContext(RootContext):
         elif item in ['login']:
             return SocialContext(self, item)
         elif item == 'invite':
-            return ProtoInviteContext(self, 'invite')
+            return ProtoInviteContext(self, item)
+        elif item == 'browse':
+            return BrowseContext(self, item)
         elif item in self.settings.networks:
             settings = self.settings.networks[item]
             return settings.module(self, item, settings)
@@ -80,7 +82,9 @@ class WebsiteRootContext(RootContext):
         return self.request.resource_url(self, 'login', **kwargs)
     def logout_url(self, **kwargs):
         return self.request.resource_url(self, 'logout', **kwargs)
-
+    @property
+    def browse_url(self, *args, **kwargs):
+        return self.request.resource_url(self, 'browse', *args, **kwargs)
 
     @property
     def home_url(self):

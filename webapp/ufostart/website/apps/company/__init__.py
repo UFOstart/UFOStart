@@ -180,8 +180,8 @@ class CompanyContext(BaseProjectContext):
 
     @reify
     def __acl__(self):
-        mentors = [(Allow, 'u:%s' % u.token, 'approve') for u in self.company.Users if u.role == 'MENTOR']
-        founders = [(Allow, 'u:%s' % u.token, 'edit') for u in self.company.Users if u.role == 'FOUNDER']
+        mentors = [(Allow, 'u:%s' % u.token, 'approve') for u in self.company.Users if u.isMentor]
+        founders = [(Allow, 'u:%s' % u.token, 'edit') for u in self.company.Users]
         return [(Allow, Authenticated, 'view')] + mentors + founders
 
     def __init__(self, parent, name):

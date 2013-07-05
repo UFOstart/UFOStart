@@ -50,8 +50,23 @@ class UserStubContext(object):
         return UserProfileContext(self, item, GetProfileProc(self.request, {'token': item}))
 
 
+
+
+class BrowseContext(object):
+    @property
+    def request(self):
+        return self.__parent__.request
+
+    def __init__(self, parent, name):
+        self.__parent__ = parent
+        self.__name__ = name
+
+
+
+
 def includeme(config):
     config.add_view(index.home      , context = UserHomeContext, renderer = "ufostart:website/templates/user/home.html",permission='view')
     config.add_view(index.user      , context = UserProfileContext, renderer = "ufostart:website/templates/user/home.html")
+    config.add_view(index.browse    , context = BrowseContext, renderer = "ufostart:website/templates/user/browse.html")
 
 

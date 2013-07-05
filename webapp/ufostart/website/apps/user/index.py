@@ -20,3 +20,6 @@ def user(context, request):
     location = FindPublicNeedsByLocation(request)
     best_match = FindPublicNeeds(request, {'Search': {'tags': profile.display_skills}})
     return {'best_match':best_match, 'isMyProfile': False, 'location_needs':location}
+
+def browse(context, request):
+    return {}

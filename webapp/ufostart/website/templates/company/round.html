@@ -431,7 +431,7 @@
 <%def name="sideBar(round_, canEdit)">
     %if round_.published:
         ${self.timerBox(round_, canEdit)}
-    %elif canEdit:
+    %else:
         ${self.workflowBox(round_.Workflow, canEdit)}
     %endif
 </%def>

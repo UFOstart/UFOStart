@@ -15,11 +15,12 @@
 .home-band {
   background-color:black;
   color: white;
-  padding: 15px 0;
+  padding: 0;
   margin-top: -20px;
   .site-slogan {
     color: white;
   }
+  .brand-teal { margin-top:30px; }
 }
 
 
@@ -27,5 +28,55 @@
   .picture.maxi {margin-top:10px;}
 }
 .long-description {
-  height: 220px;
+  min-height: 220px;
+}
+
+.slide-pic {
+  width:70%;
+  float:left;
+  margin-right:12px;
+}
+.press-partners {
+  margin-right:-50px;
+  max-width:auto;
+  width:auto;
+}
+
+.homepage-need-header {
+  height:100px;
+  overflow:hidden;
+}
+
+.carousel.fade
+{
+    opacity: 1;
+
+    .item
+    {
+        -moz-transition: opacity ease-in-out 1s;
+        -o-transition: opacity ease-in-out 1s;
+        -webkit-transition: opacity ease-in-out 1s;
+        transition: opacity ease-in-out 1s;
+        left: 0 !important;
+        opacity: 0;
+        top:0;
+        position:absolute;
+        width: 100%;
+        display:block !important;
+        z-index:1;
+        &:first-child{
+            top:auto;
+            position:relative;
+        }
+
+        &.active
+        {
+            opacity: 1;
+            -moz-transition: opacity ease-in-out 1s;
+            -o-transition: opacity ease-in-out 1s;
+            -webkit-transition: opacity ease-in-out 1s;
+            transition: opacity ease-in-out 1s;
+            z-index:2;
+        }
+    }
 }

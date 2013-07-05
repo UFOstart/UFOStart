@@ -1,0 +1,16 @@
+<%inherit file="../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="../widgets.html" name="widgets"/>
+
+<%def name="content()">
+    <div class="container">
+        <%widgets:pageHeader>
+            Browse
+        </%widgets:pageHeader>
+        ${self.bodyContent()}
+    </div>
+</%def>
+
+<%def name="bodyContent()">
+    something
+</%def>
