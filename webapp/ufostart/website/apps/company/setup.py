@@ -63,7 +63,7 @@ class CreateProjectHandler(FormHandler):
                         , 'description': al_company.product_desc
                         , 'logo': al_company.logo_url
                         , 'video': al_company.video_url
-                        , 'Pictures': map(unicode, al_company.screenshots)
+                        , 'Pictures': [{'url':unicode(scr)} for scr in al_company.screenshots]
                     }
         return super(CreateProjectHandler, self).pre_fill_values(request, result)
 
