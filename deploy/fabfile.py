@@ -24,6 +24,7 @@ CLEAN_SESSIONS = False
 
 CREATE_CMDS = {
     'dev':"git clone git@github.com:HarryMcCarney/UFOStart.git ."
+    , 'live':"git clone git@github.com:HarryMcCarney/UFOStart.git ."
 }
 
 
