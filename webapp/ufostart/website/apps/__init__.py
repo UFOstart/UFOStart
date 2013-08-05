@@ -1,4 +1,5 @@
 from importlib import import_module
+from formencode.validators import StringBool
 from hnc.tools.oauth import Consumer
 from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSON_FORM_ATTRS, OAuthClassRoute, OAuthLoginRoute, TraversalRoute
 
@@ -43,6 +44,8 @@ class WebsiteSettings(object):
 
     def __init__(self, settings):
         self.clientToken = settings['apiToken']
+        self.trackUsers = StringBool().to_python(settings['trackUsers'])
+        self.gaCode = settings['gaCode']
 
         networks = settings['network']
         for network, params in networks.items():

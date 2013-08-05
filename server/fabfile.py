@@ -4,30 +4,31 @@ from fabric.contrib import files
 from fabric.operations import put
 
 SYSTEM_PACKAGES = ["sudo"
-                    , "build-essential"
-                    , "libjpeg62-dev"
-                    , "libxml2-dev"
-                    , "libxslt1-dev"
-                    , "unzip"
-                    , "libpng12-dev"
-                    , "libfreetype6-dev"
-                    , "libpcre3-dev"
-                    , "libpcre3-dev"
-                    , "libssl-dev"
-                    , "apache2-utils"
-                    , "lib32bz2-dev"
-                    , "curl"
-                    , "libreadline6"
-                    , "libreadline6-dev"
-                    , "libmhash2"
-                    , "libmhash-dev"
-                    , "libmcrypt4"
-                    , "libtomcrypt-dev"
-                    , "libssl-dev"]
+                  , "build-essential"
+                  , "libjpeg62-dev"
+                  , "libxml2-dev"
+                  , "libxslt1-dev"
+                  , "unzip"
+                  , "libpng12-dev"
+                  , "libfreetype6-dev"
+                  , "libpcre3-dev"
+                  , "libpcre3-dev"
+                  , "libssl-dev"
+                  , "apache2-utils"
+                  , "lib32bz2-dev"
+                  , "curl"
+                  , "libreadline6"
+                  , "libreadline6-dev"
+                  , "libmhash2"
+                  , "libmhash-dev"
+                  , "libmcrypt4"
+                  , "libtomcrypt-dev"
+                  , "libssl-dev"
+                  , "git"]
 
 VERSIONS = {
     "PYTHON":"2.7.5"
-    , "NGINX":"1.4.1"
+    , "NGINX":"1.4.2"
 }
 
 def set_resolv():
