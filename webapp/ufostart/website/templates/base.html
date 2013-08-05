@@ -12,10 +12,6 @@
     <meta itemprop="name" content="${g.project_name}">
     <meta itemprop="description" content="${g.site_slogan}">
 
-
-
-
-
     %if root.settings.trackUsers:
         <script type="text/javascript" id="inspectletjs">
             window.__insp = window.__insp || [];
@@ -104,4 +100,21 @@
     <script data-main="site"  src="${ROOT_STATIC_URL}scripts/dev/require.js" type="text/javascript"></script>
     ${self.layout_scripts()}
     ${self.post_scripts()}
+
+
+    <script>(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/5ZxfP8NZuwlSy1Tauj538w.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})()</script>
+    <script>
+    UserVoice = window.UserVoice || [];
+    UserVoice.push(['showTab', 'classic_widget', {
+      mode: 'feedback',
+      primary_color: '#cc6d00',
+      link_color: '#007dbf',
+      forum_id: 217590,
+      tab_label: 'Feedback',
+      tab_color: '#cc6d00',
+      tab_position: 'middle-right',
+      tab_inverted: false
+    }]);
+    </script>
+
 </%def>
