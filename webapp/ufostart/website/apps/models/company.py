@@ -288,8 +288,8 @@ class NeedModel(Mapping):
 
 
 
-    currency = 'USD'
-    currency_symbol = get_currency_symbol('USD', locale = 'en')
+    currency = 'EUR'
+    currency_symbol = get_currency_symbol('EUR', locale = 'en')
 
     _inUse = BooleanField()
 
@@ -362,7 +362,7 @@ class OfferModel(Mapping):
     price = IntegerField()
     @reify
     def display_price(self):
-        return format_currency(self.price, 'USD')
+        return format_currency(self.price, 'EUR')
 
 
 class InvestmentModel(Mapping):
@@ -372,7 +372,7 @@ class InvestmentModel(Mapping):
 
     @property
     def display_amount(self):
-        return format_currency(self.amount, 'USD')
+        return format_currency(self.amount, 'EUR')
 
 
 class FundingModel(Mapping):
@@ -390,10 +390,10 @@ class FundingModel(Mapping):
         return sum(map(attrgetter('amount'), self.Investments))
     @property
     def display_invested_amount(self):
-        return format_currency(self.invested_amount, 'USD')
+        return format_currency(self.invested_amount, 'EUR')
     @property
     def display_amount(self):
-        return format_currency(self.amount, 'USD')
+        return format_currency(self.amount, 'EUR')
     @property
     def investment_progress(self):
         return "{}%".format(int(100.0 * self.invested_amount / self.amount)) if self.amount else '0%'
@@ -571,8 +571,8 @@ class CompanyModel(BaseCompanyModel):
         return self.Round.Product.name if self.product_is_setup else ''
 
 
-    currency = 'USD'
-    currency_symbol = get_currency_symbol('USD', locale = 'en')
+    currency = 'EUR'
+    currency_symbol = get_currency_symbol('EUR', locale = 'en')
 
     def product_picture(self, request):
         product = self.Round.Product

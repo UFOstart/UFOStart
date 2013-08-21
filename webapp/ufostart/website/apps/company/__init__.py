@@ -290,7 +290,7 @@ def includeme(config):
     config.add_view(setup.EditProjectHandler    , context = CompanyContext    , name='edit'             , renderer = "ufostart:website/templates/company/company/edit.html", permission = 'edit')
 
 
-    config.add_view(general.RoundDashboardHandler, context = RoundContext                                , renderer = "ufostart:website/templates/company/round.html")
+    config.add_view(general.RoundDashboardHandler, context = RoundContext                               , renderer = "ufostart:website/templates/company/round.html")
     config.add_view(general.AddMentorHandler    , context = RoundContext      , name='mentor'           , renderer = "ufostart:website/templates/company/addmentor.html")
     config.add_view(general.add_top_mentor      , context = RoundContext      , name='topmentor'        , permission='edit')
     config.add_view(general.publish_round       , context = RoundContext      , name='approve'          , permission='approve')
@@ -309,7 +309,7 @@ def includeme(config):
     config.add_view(funding.FundingEditHandler  , context = FundingContext    , name='edit'             , renderer = "ufostart:website/templates/company/funding/edit.html", permission='edit')
 
 
-    config.add_view(need.NeedCreateHandler      , context = RoundContext      , name='new'          , renderer = "ufostart:website/templates/company/need/create.html", permission='edit')
+    config.add_view(need.NeedCreateHandler      , context = RoundContext      , name='new'              , renderer = "ufostart:website/templates/company/need/create.html", permission='edit')
     config.add_view(need.NeedIndexHandler       , context = NeedContext                                 , renderer = "ufostart:website/templates/company/need/index.html")
     config.add_view(need.ApplicationHandler     , context = NeedContext       , name = 'apply'          , renderer = "ufostart:website/templates/company/need/apply.html", permission='apply')
     config.add_view(need.accept_application     , context = ApplicationContext, name = 'accept')

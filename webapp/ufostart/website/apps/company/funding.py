@@ -1,3 +1,4 @@
+# coding=utf-8
 from hnc.forms.formfields import BaseForm, REQUIRED, IntField, HtmlAttrs
 from hnc.forms.handlers import FormHandler
 from ufostart.website.apps.forms.controls import SanitizedHtmlField, FileUploadField, CurrencyIntField
@@ -11,7 +12,7 @@ class InvestmentForm(BaseForm):
     id="Investment"
     label = ""
     fields=[
-        CurrencyIntField('amount', "Investment Amount", REQUIRED, input_classes='data-input amount', maxlength=7, currency='$')
+        CurrencyIntField('amount', "Investment Amount", REQUIRED, input_classes='data-input amount', maxlength=7, currency=u'€')
     ]
     @classmethod
     def on_success(cls, request, values):
@@ -33,8 +34,8 @@ class FundingCreateForm(BaseForm):
     label = ""
     fields=[
      SanitizedHtmlField("description", "Deal Description", REQUIRED, input_classes='x-high')
-     , CurrencyIntField('amount', "Funding Amount", REQUIRED, input_classes='data-input amount', maxlength=7, currency='$')
-     , CurrencyIntField('valuation', "Company Valuation", REQUIRED, input_classes='data-input valuation', maxlength=7, currency='$')
+     , CurrencyIntField('amount', "Funding Amount", REQUIRED, input_classes='data-input amount', maxlength=7, currency= u'€')
+     , CurrencyIntField('valuation', "Company Valuation", REQUIRED, input_classes='data-input valuation', maxlength=7, currency= u'€')
      , FileUploadField("contract", "Contract")
     ]
     @classmethod

@@ -20,7 +20,11 @@
         <div class="row mar-top-2">
             <div class="col col-lg-9">
                 <div class="box-content box-dark">
-                    ${self.build_form(ctxt.need, "Save Changes" if ctxt.need.added else "Add to Round", view.form, values.get(view.form.id), errors.get(view.form.id))}
+                    <%self:build_form need="${ctxt.need}" btn_label="${'Save Changes' if ctxt.need.added else 'Add to Round'}" form="${view.form}" values="${values.get(view.form.id)}" errors="${errors.get(view.form.id)}">
+                        <%def name="cancel_button(form)">
+                            <a href="${url(ctxt) if hasattr(ctxt, 'need') and ctxt.need.added else url(ctxt.__parent__)}" class="btn btn-default">Cancel</a>
+                        </%def>
+                    </%self:build_form>
                 </div>
             </div>
             <div class="col col-lg-3">
@@ -76,7 +80,7 @@
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">${btn_label}</button>
-            <a href="${url(ctxt) if hasattr(ctxt, 'need') and ctxt.need.added else url(ctxt.__parent__)}" class="btn btn-default">Cancel</a>
+            ${caller.cancel_button(form)|n}
         </div>
     </form>
 </%def>
