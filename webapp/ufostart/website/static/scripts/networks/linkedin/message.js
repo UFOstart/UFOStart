@@ -18,39 +18,39 @@ define(["tools/form", "tools/messaging", "tools/ajax", "text!networks/linkedin/m
             opts.$el.on({"click": _.bind(this.onClick, this)});
         }
 
-        , show : function(data, contact){
+        , show : function(widgetData, contact){
             var view = this
-                , isIntro = !!data.expertName
+                , isIntro = !!widgetData.expertName
                 , params = {
                     sender: window.__options__.user.name
                     , text: isIntro?
-                                "I've seen this task on http://"+window.location.host+" and thought "+data.expertName+" can help out. Can you introduce me to "+data.expertName+" so I can let him know of this task at "+window.location.href+"."
+                                "I've seen this task on http://"+window.location.host+" and thought "+widgetData.expertName+" can help out. Can you introduce me to "+widgetData.expertName+" so I can let him know of this task at "+window.location.href+"."
                                 :"I've seen this task on http://"+window.location.host+" and thought you can help out. Your skills match perfectly, so checkout this task at "+window.location.href+"."
-                    , name: data.entityName
+                    , name: widgetData.entityName
                     , direct: !!contact
                     , company: this.entity.companyName
                     , need:this.entity.name
                 }
-                , def = contact?null:this.options.auth.getContact(data.entityId);
+                , fetchContact = contact?null:this.options.auth.getContact(widgetData.entityId);
 
             this.$el.find(".form-validated").off();
             this.$el.html(this.template(params)).find(".modal").modal('show');
             return formlib.validate({root: this.$el.find(".form-validated")
                 , submitHandler : function(form){
-                  var $form = $(form), data = ajax.serializeJSON($form)
+                  var $form = $(form), msgData = ajax.serializeJSON($form)
                   , msg = {
                       "recipients": {
                          "values": [{
                            "person": {
-                                "_path": "/people/"+data.entityId
+                                "_path": "/people/"+widgetData.entityId
                              }
                            }]
                          },
-                       "subject": data.subject,
-                       "body": data.message
+                       "subject": msgData.subject,
+                       "body": msgData.message
                      };
-                     if(def){
-                        def.done(function(data){
+                     if(fetchContact){
+                        fetchContact.done(function(data){
                             var headers = hnc.getRecursive(data, 'apiStandardProfileRequest.headers.values', []);
                             if(!headers.length){
                                 messaging.addError({'message': "A Linkedin error occured, you cannot contact this person."})
@@ -87,11 +87,6 @@ define(["tools/form", "tools/messaging", "tools/ajax", "text!networks/linkedin/m
                    $form.find("button.btn,a.btn").button("reset");
                 }
               }
-              , complete: function(){
-                  messaging.addError({'message': "A Linkedin error occured, you cannot contact this person."})
-                  $form.find("button.btn,a.btn").button("reset");
-              }
-
               , dataType: "json"
               , contentType: "application/json; charset=utf-8"
             });
