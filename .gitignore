@@ -6,5 +6,6 @@ tmp
 .DS_Store
 
 node_modules
+bower_components
 /deploy/node_modules
 /resources/Homepage
