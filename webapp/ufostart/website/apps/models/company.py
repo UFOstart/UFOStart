@@ -213,11 +213,6 @@ class NeedModel(Mapping):
     token = TextField()
     slug = TextField()
     name = TextField()
-<<<<<<< HEAD
-    isExpert = BooleanField()
-    Service = DictField(ServiceModel)
-    Expert = DictField(ExpertModel)
-=======
     summary = TextField()
     status = TextField()
     category = TextField()
@@ -232,8 +227,6 @@ class NeedModel(Mapping):
 
     Services = ListField(DictField(ServiceModel))
     Experts = ListField(DictField(ExpertModel))
->>>>>>> LIVE
-
 
     @reify
     def applicationMap(self):

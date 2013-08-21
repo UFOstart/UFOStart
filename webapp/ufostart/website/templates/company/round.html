@@ -322,12 +322,6 @@
                 %endfor
                 </div>
             </div>
-<<<<<<< HEAD
-            <div class="col col-lg-6 text-center">
-                %if need.isExpert:
-                    <div class="row round-need-setup expert loading" data-need="${need.key}">
-                        <img class="show-loading" src="${ROOT_STATIC_URL}img/ajax-loader.gif"/>
-=======
         %endfor
     %endif
 </%def>
@@ -374,7 +368,6 @@
                             </div>
                         %endfor
                         </div>
->>>>>>> LIVE
                     </div>
                 %else:
                     <div class="empty">No Endorsements yet</div>
@@ -554,29 +547,6 @@
     %endif
 </%def>
 <%def name="post_scripts()">
-<<<<<<< HEAD
-    <script type="text/template" id="expert-template">
-        <div class="col col-sm-5 need-expert-box">
-            <img src="{{ model.getIntroPicture() }}" class="img-thumbnail mini"/>
-            <div class="expert-title">Introducer</div>
-            <p class="expert-name">{{ model.getIntroName() }}</p>
-        </div>
-        <span class="linking-arrow"></span>
-        <div class="col col-sm-5 need-expert-box">
-            <img src="{{ model.getExpertPicture() }}" class="img-thumbnail mini"/>
-            <div class="expert-title">Expert</div>
-            <p class="expert-name">{{ model.getExpertName() }}</p>
-        </div>
-        <div class="col col-sm-2"><a class="envelop-btn need-expert-btn">Go</a></div>
-    </script>
-
-    <script>
-        require(["views/company/round/configure"], function(View){
-            var view = new View({el: $(".round-need-setup-page")});
-            view.render('${companyRound.token}');
-        })
-    </script>
-=======
 <script>
     require(["views/company/dashboard", "libs/tachymeter"], function(View, Tacho){
         var view =new View({
@@ -607,5 +577,4 @@ ${self.templates()}
         </div>
     </div>
 </script>
->>>>>>> LIVE
 </%def>
