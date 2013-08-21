@@ -1,81 +1,560 @@
 <%inherit file="../layout.html"/>
-<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
-
-<%def name="pageTitle()"><div class="page-header">Round 1</div></%def>
-
+<%namespace file="../widgets.html" name="widgets"/>
+<%namespace file="company/widgets.html" name="companyWidgets"/>
+<%namespace file="setup/details.html" name="taskTemplate"/>
 
 <%def name="content()">
-    <div class="container container-constricted round-need-setup-page">
-        <div class="row">
-            <div class="col col-lg-12">
-                <div class="needs-list in-use">
-                %for need in companyRound.Needs:
-                    ${self.renderNeed(need)}
-                %endfor
+    <div class="container" id="project-round-need-dashboard">
+        %if ctxt.round.pendingApproval:
+            %if ctxt.canApprove:
+
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="notice notice-wtf">
+                            <div class="sidecrumb"></div>
+                            <div class="sidecrumb"></div>
+                            <div class="sidecrumb"></div>
+                            <div class="content">
+                                <h2>Hello ${root.user.name}</h2>
+                                <h4>
+                                    <a href="${root.company_url(ctxt.company.slug)}">${ctxt.company.display_name}'s</a>
+                                    <a href="${root.round_url(ctxt.company.slug, 1)}">${ctxt.round.display_name} Round</a> is waiting for approval.
+                                </h4>
+                                <div class="mar-top-2">
+                                    <a href="${url(ctxt, 'approve')}" class="btn btn-primary">Approve</a>
+                                    <a href="${url(ctxt, 'reject')}" class="btn btn-default">Reject</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+            %elif ctxt.canEdit:
+
+                <div class="row">
+                    <div class="col col-lg-12">
+                        <div class="notice notice-info">
+                            <div class="sidecrumb"></div>
+                            <div class="sidecrumb"></div>
+                            <div class="sidecrumb"></div>
+                            <div class="content">
+                                Round is waiting for approval by a mentor.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            %endif
+        %endif
+
+        <%widgets:pageHeader>
+            ${ctxt.round.Template.name} <span class="sub-title">Round Dashboard</span>
+        </%widgets:pageHeader>
+
+        <div class="row mar-top-1">
+            %if ctxt.round.published:
+
+                <div class="col col-lg-3 pull-right">
+                    ${self.sideBar(ctxt.round, ctxt.canEdit)}
+                    ${widgets.sharebtns()}
+                </div>
+                <div class="col col-lg-9">
+                    <div class="row">
+                        <div class="col col-lg-4">
+                            ${self.companyBox(ctxt.company)}
+                            <div class="mar-top-2">${self.productBox(ctxt.company)}</div>
+                            <div class="mar-top-2">${self.investmentBox(ctxt.round.Funding)}</div>
+                        </div>
+                        <div class="col col-lg-8">
+                            ${self.activityStream()}
+                        </div>
+                    </div>
+                    ${self.tasksSection(ctxt.company)}
+                </div>
+
+            %else:
+
+                <div class="col col-lg-3 pull-right">
+                    ${self.sideBar(ctxt.round, ctxt.canEdit)}
+                    ${self.activityStream()}
+                </div>
+                <div class="col col-lg-9">
+                    <div class="row">
+                        <div class="col col-lg-4">
+                            ${self.companyBox(ctxt.company)}
+                        </div>
+                        <div class="col col-lg-4">
+                            ${self.productBox(ctxt.company)}
+                        </div>
+                        <div class="col col-lg-4">
+                            ${self.investmentBox(ctxt.round.Funding)}
+                        </div>
+                    </div>
+                    ${self.tasksSection(ctxt.company)}
+                </div>
+
+            %endif
+
         </div>
     </div>
 </%def>
 
-<%def name="renderNeed(need)">
-<div class="single-need">
-    <div class="single-need-inner round-need-setup-outer">
-        <div class="row">
-            <div class="col col-lg-6">
-                <div class="need-title">${need.name}</div>
-                <div class="need-description">Dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore.</div>
-                <div class="need-details">
-                    <div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-                    Detail 1</div><div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-                    Detail 2</div><div class="need-detail link-pointer" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">
-                    Detail 3
+
+
+
+
+<%def name="activityStream()">
+    <div class="box-title">
+        Recent Activity
+    </div>
+    <div class="text-center empty activity-stream" data-entity-id="${ctxt.round.token}">
+        <div class="show-loading"><img src="${ROOT_STATIC_URL}/img/ajax-loader-light.gif"/></div>
+    </div>
+</%def>
+
+<%def name="companyBox(company)">
+    <div class="box-title">Company</div>
+    <div class="box-shaded">
+        <div class="box-shaded">
+            <div class="box-shaded">
+                <div class="box-card box-header">
+                    ${widgets.company_logo(company)}
+                    <div class="box-content">
+                        <a class="entity-link" href="${url(ctxt.__parent__)}">${ctxt.company.name}</a>
+                        <div class="pitch">${html.nn(company.pitch)}</div>
+                        <div class="mar-top-1"></div>
+                    </div>
+                </div>
+
+                <div class="number-widget box-content">
+                    <h6>Startup Value</h6>
+                    <div class="value light">${company.displayStartupValue}</div>
+                </div>
+
+            </div>
+
+            <div class="box-content highlight-target">
+                <span id="target-invite-team" class="highlight-anchor"></span>
+                <strong class="text-small">Team members</strong>
+                <div class="picture-pile">
+                %for user in company.members[:8]:
+                    ${widgets.member_pic(user, classes='mini')}
+                %endfor
+                </div>
+                %if ctxt.canEdit:
+                    ${companyWidgets.invite_team_form(view.form, values, errors)}
+                %endif
+            </div>
+
+        </div>
+
+        <div class="box-content highlight-target">
+            <span id="target-add-mentor" class="highlight-anchor"></span>
+            <strong class="text-small">Mentors</strong>
+            <div class="picture-pile">
+                %for user in company.mentors[:8]:
+                    ${widgets.member_pic(user, classes='mini')}
+                %endfor
+            </div>
+            %if ctxt.canEdit:
+                <a class="btn btn-primary btn-block mar-top-half" href="${url(ctxt, 'mentor')}">Add Mentor</a>
+            %endif
+
+        </div>
+
+    </div>
+</%def>
+
+<%def name="productBox(company)">
+    <div class="highlight-target box-shaded">
+        <div id="target-create-product" class="highlight-anchor"></div>
+        <div class="box-title">Product</div>
+        %if not company.product_is_setup:
+            <div class="box-shaded">
+                <div class="box-content box-shaded text-center">
+                    %if ctxt.canEdit:
+                        <a href="${url(ctxt, 'productsetup')}" class="btn btn-primary btn-block mar-top-half">Set up now</a>
+                    %else:
+                        Product not set up
+                    %endif
+                </div>
+            </div>
+        %else:
+            <div class="box-shaded">
+                <div class="box-shaded">
+                    <% ppic = company.product_picture(request) %>
+                    %if ppic:
+                        <div class="box-header">
+                            <img src="${ppic}"/>
+                        </div>
+                    %endif
+
+                    <div class="box-content">
+                        <a href="${url(ctxt, 'product')}" class="overflow"><strong>${company.product_name}</strong></a>
+                        <small>${html.nn(company.product_description) | html.clean,html.trunc(90)}</small>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <div class="number-widget">
+                        <strong class="text-small">Pledges</strong>
+                        <div class="value light">${company.no_pledges}</div>
+                    </div>
+                    %if len(company.pledgees):
+                        <div class="picture-pile">
+                            %for pledge in company.pledgees[:4]:
+                                ${widgets.member_pic(pledge, classes='mini')}
+                            %endfor
+                        </div>
+                    %endif
+                    <a href="${url(ctxt, 'product')}" class="btn btn-primary btn-block mar-top-half">Pledge</a>
+                </div>
+            </div>
+        %endif
+    </div>
+</%def>
+
+
+
+<%def name="investmentBox(funding)">
+    <div class="highlight-target box-shaded">
+        <div class="highlight-anchor" id="target-funding"></div>
+        <div class="box-title">Funding</div>
+
+        %if not funding.amount:
+            <div class="box-shaded">
+                <div class="box-shaded box-content text-center">
+                %if ctxt.canEdit:
+                    <a class="btn btn-primary btn-block mar-top-half" href="${url(ctxt, 'fundingsetup')}">Set up now</a>
+                %else:
+                    Funding not set up
+                %endif
+                </div>
+            </div>
+        %else:
+            <div class="box-shaded">
+                <div class="box-shaded">
+                    <div class="box-header">
+                        <div class="box-content">
+                            <div class="row">
+                                <div class="col col-lg-6">
+                                    <div class="number-widget mar-top-half">
+                                        <h6>Target</h6>
+                                        <div class="small-value">${funding.display_amount}</div>
+                                    </div>
+                                </div>
+                                <div class="col col-lg-6">
+                                    <div class="number-widget mar-top-half">
+                                        <h6>Total Equity</h6>
+                                        <div class="small-value">${funding.display_equity}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="number-widget mar-top-half">
+                                <h6>Invested</h6>
+                                <h2 class="no-margin">${funding.display_invested_amount}</h2>
+                            </div>
+
+
+                            <div class="progress-container mar-top-1">
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: ${funding.investment_progress}"></div>
+                                </div>
+                                <h2 class="offset dark no-margin">
+                                    ${funding.investment_progress}
+                                </h2>
+                            </div>
+                            <div class="mar-top-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="box-content">
+                        <div class="number-widget">
+                            <strong class="text-small">Investors</strong>
+                            <div class="value light">${len(funding.Investments)}</div>
+                        </div>
+
+                        %if len(funding.Investments):
+                            <div class="picture-pile mar-top-half">
+                                %for invest in funding.Investments:
+                                ${widgets.member_pic(invest.User, classes='mini')}
+                                %endfor
+                            </div>
+                        %endif
+                        <a href="${url(ctxt, 'funding')}" class="btn btn-primary btn-block mar-top-half">Invest</a>
                     </div>
                 </div>
             </div>
+        %endif
+    </div>
+</%def>
+
+
+<%def name="tasksSection(company)">
+    <div class="row" data-entity-id="${ctxt.round.token}">
+
+        ${self.renderNeedColumns(ctxt.groupedNeeds(3, True))}
+
+        %if not ctxt.round.published and ctxt.canEdit:
+            <div class="col col-lg-12 mar-top-3">
+                <div class="box-title highlight-target"><div id="target-customise-needs" class="highlight-anchor"></div>
+                    Suggested Tasks
+                </div>
+            </div>
+            ${taskTemplate.buildNeedCols(ctxt.groupedNeeds(3, False))}
+        %endif
+    </div>
+</%def>
+
+
+<%def name="renderNeedColumns(needs)">
+    %if needs:
+        <div class="col col-lg-12 mar-top-3">
+            <div class="box-title">
+                ${'Tasks' if ctxt.round.published else 'Round Tasks'}
+            </div>
+        </div>
+        %for i, col in enumerate(needs):
+            <div class="col col-lg-4 need-card-list">
+                <div class="js-need-card-list">
+                %for need in col:
+                    ${self.buildNeed(need, ctxt.round.published)}
+                %endfor
+                </div>
+            </div>
+<<<<<<< HEAD
             <div class="col col-lg-6 text-center">
                 %if need.isExpert:
                     <div class="row round-need-setup expert loading" data-need="${need.key}">
                         <img class="show-loading" src="${ROOT_STATIC_URL}img/ajax-loader.gif"/>
+=======
+        %endfor
+    %endif
+</%def>
+
+<%def name="buildNeed(need, published)">
+    <div class="need-card ${need.status}" data-entity-id="${need.token}">
+        %if need.fulfilled:
+            <a class="customize success" href="#"><span class="glyphicon glyphicon-ok-sign"></span> Task Fulfilled</a>
+        %endif
+        <div class="need-card-inner">
+            <div class="cut-corner box-header-muted box-content no-link">
+                %if not published and ctxt.canEdit:
+                    <span class="remove" data-target=".need-card">×</span>
+                %endif
+                <h3 class="no-margin">
+                    <a href="${url(ctxt, need.slug, 'edit') if not need.customized and ctxt.canEdit else url(ctxt, need.slug)}">
+                        ${need.name}
+                    </a>
+                </h3>
+                <p class="mar-top-1">${ html.coalesce(need.customText, need.summary) | html.trunc(300) }</p>
+            </div>
+
+            %if need.customized:
+                <div class="box-content">
+                    ${widgets.valuation_sml(need)}
+               </div>
+               <hr class="boxed"/>
+            %endif
+
+            %if need.fulfilled:
+                <div class="box-content">
+                <div class="box-card extra-compact">
+                    ${companyWidgets.applicationCard(need.acceptedApplication)}
+                </div>
+                </div>
+            %elif published:
+                %if len(need.Endorsements):
+                    <div class="box-content">
+                        <h6>Endorsed Experts</h6>
+                        <div class="picture-pile">
+                        %for endorse in need.Endorsements[:4]:
+                            <div class="picture small">
+                                <img src="${endorse.endorseePicture}" alt="${endorse.endorseeName}"/>
+                            </div>
+                        %endfor
+                        </div>
+>>>>>>> LIVE
+                    </div>
+                %else:
+                    <div class="empty">No Endorsements yet</div>
+                %endif
+
+                <hr class="boxed"/>
+
+                %if len(need.Applications):
+                    <div class="box-content">
+                        <h6>Recent Applications</h6>
+                        %for application in need.getRecentApplications(4):
+                            <div class="box-card extra-compact box-card-separated">
+                                ${companyWidgets.applicationCard(application)}
+                            </div>
+                        %endfor
+                    </div>
+                %else:
+                    <div class="empty">No Applications yet</div>
+                %endif
+
+            %else:
+                <div class="box-content">
+                    %for tag in need.tags:
+                        <span class="label label-info spaced text-small">${tag}</span>
+                    %endfor
+                </div>
+                %if need.experts:
+                    <hr class="boxed"/>
+                    <div class="box-content">
+                        <div class="experts">
+                            <h6>Recommended Experts</h6>
+                            <div class="picture-pile">
+                            %for expert in need.experts[:4]:
+                                <div class="picture small">
+                                    <img src="${expert.picture}" alt="${expert.name}"/>
+                                </div>
+                            %endfor
+                            </div>
+                        </div>
                     </div>
                 %endif
-                %if need.Service:
-                    <div class="row round-need-setup services">
-                        ${self.renderService(need.Service)}
+                %if need.services:
+                    <hr class="boxed"/>
+                    <div class="box-content">
+                    <div class="services">
+                        <h6>Recomended Cloud Services</h6>
+                        <div class="picture-pile">
+                        %for service in need.services[:4]:
+                            <div class="picture small">
+                                <img src="${service.logo_url}" name="${service.name}"/>
+                            </div>
+                        %endfor
+                        </div>
+                    </div>
                     </div>
                 %endif
-                %if not need.Expert and not need.Service:
-                    <a class="btn btn-info btn-small information-btn" data-description="Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.">Info</a>
-                %endif
+            %endif
+        </div>
+    </div>
+</%def>
+
+
+<%def name="sideBar(round_, canEdit)">
+    %if round_.published:
+        ${self.timerBox(round_, canEdit)}
+    %else:
+        ${self.workflowBox(round_.Workflow, canEdit)}
+    %endif
+</%def>
+
+<%def name="timerBox(currentRound, canEdit)">
+    <div class="company-dashboard progress-wrapper">
+        <div class="progress-step">
+            <div class="progress-step">
+                <div class="progress-step">
+                    <div class="progress-step">
+                        <div class="box-content">
+                            <h2 class="no-margin">
+                            ${"You've" if ctxt.canEdit else u"{} has".format(ctxt.company.display_name)}
+                             got</h2>
+                            <div class="tachymeter" id="tachymeter">
+                                <h1>${currentRound.getExpiryDays(singular = "{}<small>Day Left</small>", plural="{}<small>Days Left</small>")|n}</h1>
+                            </div>
+                            <h2>to fulfill
+                                ${u"your" if ctxt.canEdit else "their"}
+                             tasks.</h2>
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        <h2 class="no-margin">${"You" if ctxt.canEdit else ctxt.company.display_name} successfully fulfilled</h2>
+                        <div class="progress-container">
+                            <div class="progress">
+                                <div class="progress-bar" style="width: ${100.0 * currentRound.noFulfilledNeeds / currentRound.noTotalNeeds}%"></div>
+                            </div>
+                            <h2 class="heading dark mar-top-3">
+                                ${currentRound.noFulfilledNeeds}<small> ${pluralize("Task", "Tasks", currentRound.noFulfilledNeeds)}</small>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-content">
+                    <h2 class="no-margin">${"You" if ctxt.canEdit else ctxt.company.display_name} received</h2>
+                    <h2 class="heading text-center mar-top-2">
+                        ${ctxt.company.no_pledges}<small> ${pluralize("Pledge", "Pledges", ctxt.company.no_pledges)}</small>
+                    </h2>
+                </div>
+            </div>
+            <div class="box-content">
+                <h2 class="no-margin">${"You" if ctxt.canEdit else ctxt.company.display_name} reached</h2>
+                <div class="progress-container mar-top-1">
+                    <div class="progress">
+                        <div class="progress-bar" style="width: ${currentRound.Funding.investment_progress}"></div>
+                    </div>
+                    <h2 class="heading dark mar-top-3">
+                        ${currentRound.Funding.investment_progress}<small> Funding</small>
+                    </h2>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </%def>
 
 
-<%def name="renderService(service)">
-    <div class="col col-sm-5">
-        <img src="${service.getWorkerPicture()}" class="img-thumbnail mini"/>
-        <div class="expert-title">Crowd worker</div>
-        <p class="expert-name">${service.getWorkerName()}</p>
-    </div>
-    <span class="linking-arrow"></span>
-    <div class="col col-sm-5">
-        <img src="${STATIC_URL}img/cloudservices.png" class=""/>
-        <div class="expert-title">Services</div>
-        <div class="service-url" >${service.name}</div>
-    </div>
-    <div class="col col-sm-2">
-        <a href="${service.url}" target="_blank" class="btn btn-primary btn-small use-service-btn">Go</a>
+<%def name="workflowBox(wf, canEdit)">
+    <%
+        active = wf.getActiveStage()
+    %>
+    <div class="company-dashboard">
+        <div class="wtf-box">
+            <h2 class="wtf-title">
+                Welcome to your 1st round.
+            </h2>
+            <div class="wtf-content">
+                <p>Before you can launch your round you need to complete the steps below.</p>
+                <p>Completing these steps will mean everyone knows how they can help.</p>
+                <p>Start by adding your company's product so you can get early pledges to buy.</p>
+            </div>
+        </div>
+        <ul class="list-unstyled">
+            %for i, stage in enumerate(wf.sortedStages):
+                <li>
+                    %if stage.completed:
+                        <span class="workflow-link done wtf-${i+1}">
+                            <span class="position">${i+1}</span>${stage.display_name}
+                        </span>
+                    %else:
+                        <a class="workflow-link${' active' if active and active.name == stage.name else ''} wtf-${i+1}" href="#target-${stage.slug}">
+                            <span class="position">${i+1}</span>${stage.display_name}
+                        </a>
+                    %endif
+                </li>
+            %endfor
+        </ul>
+
+        <div class="mar-top-2 highlight-target">
+            <div id="target-publish" class="highlight-anchor"></div>
+            <div id="target-sent-for-mentor-aprroval" class="highlight-anchor"></div>
+            %if ctxt.canEdit:
+                %if wf.canAskForApproval():
+                    <a href="${url(ctxt, 'askforapproval')}" class="btn btn-primary btn-block btn-large">Get Approval</a>
+                %endif
+            %elif ctxt.canApprove:
+                %if wf.canPublish():
+                    <a href="${url(ctxt, 'approve')}" class="btn btn-primary btn-block btn-large">Approve Round</a>
+                %else:
+                    <a class="btn btn-primary btn-block btn-large disabled">Approve Round</a>
+                %endif
+            %endif
+        </div>
     </div>
 </%def>
 
 
-<%def name="pre_scripts()">
-    <script src="${ROOT_STATIC_URL}scripts/dist/jquery.qtip.min.js"></script>
+<%def name="extra_head()">
+    %if ctxt.round.published:
+        <script type="text/javascript" src="${ROOT_STATIC_URL}scripts/dist/raphael-min.js"></script>
+    %endif
 </%def>
 <%def name="post_scripts()">
+<<<<<<< HEAD
     <script type="text/template" id="expert-template">
         <div class="col col-sm-5 need-expert-box">
             <img src="{{ model.getIntroPicture() }}" class="img-thumbnail mini"/>
@@ -97,4 +576,36 @@
             view.render('${companyRound.token}');
         })
     </script>
+=======
+<script>
+    require(["views/company/dashboard", "libs/tachymeter"], function(View, Tacho){
+        var view =new View({
+            el: $("#project-round-need-dashboard")
+        });
+        %if ctxt.round.published:
+            new Tacho({el: document.getElementById('tachymeter'), fillRatio: ${ctxt.round.getExpiryPercentage()}});
+        %endif
+    });
+</script>
+
+${self.templates()}
+
+</%def>
+
+<%def name="templates()">
+<script type="text/template" id="template-activity">
+    <div class="box-card extra-compact">
+        <div class="picture">
+            <a href="{{ activity.link }}">
+                <img src="{{ activity.picture }}" alt="{{ activity.name }}"/>
+            </a>
+        </div>
+        <div class="right-box">
+            <div class="pull-right text-small text-muted">{{ model.getDate() }}</div>
+            <a class="entity-link" href="{{ activity.link }}">{{ activity.name }}</a>
+            <p class="activity-line">{{ activity.subTitle }}</p>
+        </div>
+    </div>
+</script>
+>>>>>>> LIVE
 </%def>

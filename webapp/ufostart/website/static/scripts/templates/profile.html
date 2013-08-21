@@ -1,0 +1,21 @@
+<div class="hover-card">
+    <div class="box-card extra-compact">
+        <div class="picture">
+            <img src="{{ user.picture }}"/>
+        </div>
+        <div class="right-box">
+            <a href="{{ link }}">{{ user.name }}</a>
+            <div class="text-small text-muted">{{ user.headline }}</div>
+            <h6>Startup Value</h6>
+            <strong class="text-small brand-primary">{{ startupValue }}</strong>
+            <h6>Mentor to</h6>
+            <div class="face-pile-mini">
+                {% _.each(user.Companies, function(c){ %}
+                    <div class="picture micro">
+                        <a href="/c/{{ c.slug }}"><img src="{{ c.logo }}"/></a>
+                    </div>
+                {% }) %}
+            </div>
+        </div>
+    </div>
+</div>

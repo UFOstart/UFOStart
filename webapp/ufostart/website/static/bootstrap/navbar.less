@@ -10,8 +10,8 @@
   padding-right: 15px;
   background-color: @navbar-bg;
   #gradient > .vertical(@navbar-bg-highlight, @navbar-bg);
-  border-radius: @border-radius-base;
-  border-bottom:1px solid #666666;
+  border-bottom:1px solid #cacaca;
+  border-top:1px solid @corp-color;
   overflow:hidden;
   // Prevent floats from breaking the navbar
   .clearfix();
@@ -93,15 +93,14 @@
 // Brand/project name
 .navbar-brand {
   display: block;
-  max-width: 200px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 15px;
+  padding: 0;
   font-size: @font-size-large;
   font-weight: 500;
   line-height: @line-height-computed;
   color: @navbar-brand-color;
-  text-align: center;
+  text-align: left;
   &:hover,
   &:focus {
     color: @navbar-brand-hover-color;
@@ -284,8 +283,6 @@
 
   .navbar-brand {
     float: left;
-    margin-left: -5px;
-    margin-right: 5px;
   }
   .navbar .nav {
     float: left;

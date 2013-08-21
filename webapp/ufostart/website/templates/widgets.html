@@ -1,0 +1,269 @@
+<%def name="sharebtns()">
+    <div class="box-title">
+        Spread the word
+    </div>
+    <div class="box-shaded">
+        <div class="box-shaded">
+            <div class="box-hor-content box-shaded">
+                <div class="row">
+                    <div class="col col-lg-4 mar-top-3 overflow-hidden">
+                        <div id="fb-root"></div>
+                        <script>(function(d, s, id) {
+                          var js, fjs = d.getElementsByTagName(s)[0];
+                          if (d.getElementById(id)) return;
+                          js = d.createElement(s); js.id = id;
+                          js.src = "//connect.facebook.net/de_DE/all.js#xfbml=1";
+                          fjs.parentNode.insertBefore(js, fjs);
+                        }(document, 'script', 'facebook-jssdk'));</script>
+                        <div class="fb-send" data-href="${request.url}"></div>
+                    </div>
+                    <div class="col col-lg-4 mar-top-3 overflow-hidden">
+                        <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                    </div>
+                    <div class="col col-lg-4 mar-top-half overflow-hidden">
+                          <script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+                        <script type="IN/Share" data-counter="top"></script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>
+
+
+<%def name="round_logo(company, round, classes = '')"><% t = round.Template %>
+${self.logo("{}img/templates/{}.png".format(STATIC_URL, t.getStyleKey(), t.name, link = root.round_url(company.slug, company.round_no(round))), classes = classes)}
+</%def>
+<%def name="company_logo(company, classes = '')">${self.logo(company.logo_url, company.name, link = root.company_url(company.slug), classes = classes)}</%def>
+<%def name="app_company_logo(application, url, classes = '')">${self.logo(application.comapnyLogo, application.companyName, link = url, classes = classes)}</%def>
+<%def name="product_logo(company, classes = '')">${self.logo(company.product_picture(request), company.product_name, link = root.product_url(company.slug), classes = classes)}</%def>
+
+<%def name="logo(url, alt='', classes='', link = '')">
+%if url and link:
+<div class="picture ${classes}"><a href="${link}"><img src="${url}" alt="${alt}"/></a></div>\
+%elif url:
+<div class="picture ${classes}"><img src="${url}" alt="${alt}"/></div>\
+%else:
+<div class="picture empty ${classes}"></div>\
+%endif
+</%def>
+
+<%def name="member_pic(member, classes='')">${self.profile_pic(member.picture_url, member.token, member.confirmed, classes)}</%def>
+<%def name="profile_pic(picture, token, confirmed = True, classes='')">
+    %if confirmed:
+        <div class="picture hover-container ${classes}" data-entity-id="${token}">
+            <a href="${root.profile_url(token)}"><img class="image" src="${picture}"/></a>
+        </div>
+    %else:
+        <div class="picture ${classes}">
+            <img class="image" src="${picture}"/>
+            <span title="unconfirmed" class="unconfirmed">unconfirmed</span>
+        </div>
+    %endif
+</%def>
+
+
+
+<%def name="pageHeader(canEdit = False)">
+<div class="row">
+    <div class="col col-lg-12">
+        <h1 class="section-title">
+            %if canEdit:
+                <span class="btn-wrapper"><a title="Edit" class="glyphicon glyphicon-pencil" href="${url(ctxt, 'edit')}"></a></span>
+            %endif
+            <span class="brand-primary">${caller.body()}</span>
+        </h1>
+    </div>
+</div>
+</%def>
+
+
+<%def name="gallery(title, play_btn_text, pictures)">
+    <div class="box-title major">
+        ${title|n}
+    </div>
+    <div class="play">
+        <div class="picture slide-show-starter"></div>
+        <div class="btn-label">${play_btn_text}</div>
+    </div>
+    %for i, picture in enumerate(pictures):
+        <a class="picture slide-show-starter" href="${picture}" title="Screenshot ${i+1}"><img src="${picture}"/></a>
+    %endfor
+</%def>
+
+
+<%def name="mainMedia(title, video_url = None, slideshare_url = None, picture_url = None)" filter="trim">
+    <div class="media-container">
+        <div class="box-title major">${title|n}</div>
+        ${self.media(video_url, slideshare_url, picture_url)}
+    </div>
+</%def>
+
+<%def name="media(video_url = None, slideshare_url = None, picture_url = None)" filter="trim">
+    <%
+        youtube_id = html.getYoutubeVideoId(video_url)
+        vimeo_id = html.getVimeoVideoId(video_url)
+    %>
+    %if youtube_id:
+        <div class="iframe-container">
+            <iframe src="//www.youtube.com/embed/${youtube_id}" width="847" height="400" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameborder="0"></iframe>
+        </div>
+    %elif vimeo_id:
+        <div class="iframe-container">
+            <iframe src="//player.vimeo.com/video/${vimeo_id}" width="847" height="400" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameborder="0"></iframe>
+        </div>
+    %elif slideshare_url:
+        <% meta = html.getSlideshareMeta(request, slideshare_url) %>
+        %if meta:
+            <div class="iframe-container">
+                <iframe src="//www.slideshare.net/slideshow/embed_code/${meta.slideshow_id}" width="847" height="400" webkitAllowFullScreen mozallowfullscreen allowFullScreen frameborder="0"></iframe>
+            </div>
+        %else:
+            <div class="empty">Invalid slideshare URL: <a href="${slideshare_url}">${slideshare_url}</a>
+            </div>
+        %endif
+    %elif video_url:
+        <div class="empty">
+            <a href="${video_url}">${video_url}</a>
+        </div>
+    %elif picture_url:
+        %if isinstance(picture_url, list):
+            %if len(picture_url):
+                <div class="picture">
+                    <img src="${picture_url[0]}"/>
+                </div>
+            %endif
+        %else:
+            <div class="picture">
+                <img src="${picture_url}"/>
+            </div>
+        %endif
+    %endif
+</%def>
+
+
+
+<%def name="login_btn(name)">
+<a href="${root.auth_url('linkedin')}" class="btn btn-primary btn-linkedin">Log in with ${name.title()}</a>
+</%def>
+
+
+<%def name="valuation(need)">
+    <div class="number-widget">
+        <div class="number total">
+            <strong class="text-small">Total</strong>
+            <h2 class="no-margin">${need.display_total}</h2>
+        </div>
+        <div class="row mar-top-half">
+            <div class="col col-lg-6">
+                <small>Cash</small>
+                <h2 class="no-margin">${need.display_cash}</h2>
+            </div>
+            <div class="col col-lg-6">
+                <small>Equity</small>
+                <h2 class="no-margin">${need.display_equity}</h2>
+            </div>
+        </div>
+    </div>
+</%def>
+
+<%def name="valuation_sml(need)">
+    <div class="valuation small">
+        <div class="thirds">
+            <strong class="text-small">Total</strong>
+            <div class="brand-primary text-strong">${need.display_total}</div>
+        </div><div class="thirds">
+            <small>Cash</small>
+            <div class="brand-primary">${need.display_cash}</div>
+        </div><div class="thirds">
+            <small>Equity</small>
+            <div class="brand-primary">${need.display_equity}</div>
+        </div>
+    </div>
+</%def>
+
+
+<%def name="publicNeedCard(need, descr_len = 50)">
+<%
+    need_url = root.need_url(need.Company.slug, need.slug)
+%>
+<div class="need-card home">
+    <div class="need-card-inner">
+        <div class="cut-corner box-header-muted">
+            <div class="box-card compact box-content homepage-need-header">
+                <div class="picture">
+                    <a href="${root.round_url(need.Company.slug)}"><img src="${need.Company.logo}"></a>
+                </div>
+                <div class="right-box">
+                    <a href="${root.round_url(need.Company.slug)}" class="overflow entity-link"><strong>${need.Company.display_name}</strong></a>
+                    <div class="description">${need.Company.description | html.trunc(50)}</div>
+                </div>
+            </div>
+        </div>
+        <div class="box-content">
+            <h3 class="no-margin"><a class="overflow" href="${need_url}">${need.name}</a></h3>
+            <div class="mar-top-1 long-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
+        </div>
+        <hr class="boxed"/>
+        <div class="box-content">
+            ${self.valuation_sml(need)}
+        </div>
+        <hr class="boxed"/>
+        <div class="label-list">
+            %for tag in need.tags:
+                <span class="label label-info spaced text-small">${tag}</span>
+            %endfor
+        </div>
+    </div>
+</div>
+</%def>
+
+
+
+<%def name="publicProductCard(company, descr_len = 50)">
+    <%
+        product_url = root.product_url(company.slug)
+    %>
+    <div class="need-card home product">
+    <div class="need-card-inner">
+        <div class="cut-corner">
+            <img src="${company.product_picture(request)}"/>
+        </div>
+        <div class="box-content">
+            <h3 class="no-margin"><a href="${product_url}" class="overflow">${company.product_name}</a></h3>
+            <div class="box-card extra-compact mar-top-1">
+                ${self.company_logo(company)}
+                <div class="right-box">
+                    <a href="${root.round_url(company.slug, '1')}" class="entity-link">${company.display_name}</a>
+                </div>
+            </div>
+            <div class="mar-top-1 long-description">${company.product_description | html.trunc(descr_len)}</div>
+        </div>
+        <div class="box-content">
+            <div class="valuation small">
+                <div class="number total">
+                    <strong class="text-small text-muted">Pledges</strong>
+                    <h2 class="no-margin">${company.no_pledges or '0'}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</%def>
+
+
+<%def name="companyInfo(company, withValue = True, picclasses='')">
+    ${self.company_logo(company, classes=picclasses)}
+    <div class="right-box">
+        <a href="${root.company_url(company.slug)}" class="overflow"><strong>${company.display_name}</strong></a>
+        <small class="description">${html.nn(company.pitch)}</small>
+        %if withValue:
+        <div class="number-widget mar-top-1">
+            <h6>Startup Value</h6>
+            <div class="small-value">${company.displayStartupValue}</div>
+        </div>
+        %endif
+    </div>
+</%def>
+

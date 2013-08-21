@@ -21,16 +21,22 @@ p {
 // -------------------------
 
 // Ex: 14px base font * 85% = about 12px
-small   { font-size: 85%; }
+small   { font-size: 85%; line-height:1.2em; display: inline-block;}
 
 strong  { font-weight: bold; }
 em      { font-style: italic; }
 cite    { font-style: normal; }
 
 // Utility classes
-.text-muted          { color: @gray-light; }
+.text-small          { font-size: @font-size-small; }
+.text-large          { font-size: @font-size-xlarge; }
+.text-light          { font-weight: 300; }
+.text-muted          { color: @text-muted; }
+.text-strong         { font-weight: @font-weight-bold; }
+
+a.text-muted         { color: darken(@text-muted, 10%); }
 a.text-muted:hover,
-a.text-muted:focus   { color: darken(@gray-light, 10%); }
+a.text-muted:focus   { color: darken(@text-muted, 15%); }
 
 .text-warning        { color: @state-warning-text; }
 a.text-warning:hover,
@@ -57,9 +63,7 @@ h1, h2, h3, h4, h5, h6,
   font-weight: @headings-font-weight;
   line-height: @headings-line-height;
   small {
-    font-weight: normal;
     line-height: 1;
-    color: @gray-light;
   }
 }
 
@@ -70,24 +74,30 @@ h3 {
   margin-bottom: (@line-height-computed / 2);
 }
 h4,
-h5,
-h6 {
+h5 {
   margin-top: (@line-height-computed / 2);
   margin-bottom: (@line-height-computed / 2);
 }
+h6 {
+  margin-top: (@line-height-computed / 4);
+  margin-bottom: (@line-height-computed / 4);
+}
 
-h1, .h1 { font-size: ceil(@font-size-base * 2.43);font-weight:600;color:#000; } // ~34px
-h2, .h2 { font-size: ceil(@font-size-base * 2.43);color:@corp-color; } // ~34px
-h3, .h3 { font-size: ceil(@font-size-base * 1.70); } // ~24px
+h1, .h1 { font-size: 24px;font-weight:@font-weight-bold;color:#000; } // ~34px
+h2, .h2 { font-size: 24px;color:@corp-color;} // ~34px
+h3, .h3 { font-size: 24px;display: block;} // ~24px
 h4, .h4 { font-size: ceil(@font-size-base * 1.25); } // ~18px
-h5, .h5 { font-size:  @font-size-base; font-weight: 600; color:@corp-color;}
-h6, .h6 { font-size:  @font-size-large; font-weight: 600; } // ~12px
+h5, .h5 { font-size:  @font-size-base; font-weight: @font-weight-bold;}
+h6, .h6 { font-size:  @font-size-small; font-weight: @font-weight-bold;color:@text-muted;} // ~12px
 
 h1 small, .h1 small { font-size: ceil(@font-size-base * 1.70); } // ~24px
 h2 small, .h2 small { font-size: ceil(@font-size-base * 1.25); } // ~18px
 h3 small, .h3 small,
 h4 small, .h4 small { font-size: @font-size-base; }
 
+
+.upper {text-transform: uppercase;}
+.no-margin {margin:0;}
 
 // Lists
 // --------------------------------------------------
@@ -159,11 +169,19 @@ dd {
 
 // Horizontal rules
 hr {
-  margin: @line-height-computed 0;
+  margin: @line-height-computed/2 0;
   border: 0;
-  border-top: 1px solid @hr-border;
-  border-bottom: 1px solid #fff;
-  border-bottom: 1px solid rgba(255,255,255,.5);
+
+  border-bottom: 1px solid #b2b2b2;
+  border-top: 1px solid #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  &.corp-color {
+    border-top: 1px solid @corp-color;
+    border-bottom: none;
+  }
+  &.boxed {
+    margin: 0 12px;
+  }
 }
 
 // Abbreviations and acronyms
@@ -236,4 +254,21 @@ address {
   margin-bottom: @line-height-computed;
   font-style: normal;
   line-height: @line-height-base;
+}
+
+
+.brand-teal {
+  color: @corp-color-teal;
+}
+.brand-primary {
+  color: @brand-primary;
+}
+
+//combined heading style
+h5 + h2 {margin-top:-3px;font-weight:@font-weight-bold;}
+h1.super {
+  font-size: 40px;
+  font-weight:300;
+  color:@brand-primary;
+  margin:0 0;
 }

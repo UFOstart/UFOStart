@@ -1,0 +1,164 @@
+<%inherit file="../../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="../../widgets.html" name="widgets"/>
+
+
+<%def name="content()">
+    <div class="container">
+
+        <%widgets:pageHeader canEdit="${ctxt.canEdit}">
+            Funding
+        </%widgets:pageHeader>
+
+        <div class="row mar-top-1">
+            <div class="col col-lg-3">
+                ${self.infoSideBar(ctxt.funding)}
+            </div>
+            <div class="col col-lg-6">
+                ${self.mainBody(ctxt.funding)}
+            </div>
+            <div class="col col-lg-3">
+                ${widgets.sharebtns()}
+            </div>
+        </div>
+    </div>
+</%def>
+
+
+<%def name="infoSideBar(funding)">
+    ${widgets.company_logo(ctxt.company, classes='medium')}
+    <a class="entity-link  mar-top-half" href="${root.company_url(ctxt.company.slug)}">${ctxt.company.name}</a>
+    <div class="pitch">${html.nn(ctxt.company.pitch)}</div>
+
+    <div class="box-shaded mar-top-3">
+    <div class="box-shaded">
+        <div class="box-shaded">
+            <div class="box-title">Funding Details</div>
+            <div class="box-content">
+                <div class="row">
+                    <div class="col col-lg-6 number-widget">
+                        <strong class="text-muted text-small">Target</strong>
+                        <div class="small-value">${funding.display_amount}</div>
+                    </div>
+                    <div class="col col-lg-6 number-widget">
+                        <strong class="text-muted text-small">Total Equity</strong>
+                        <div class="small-value">${funding.display_equity}</div>
+                    </div>
+                </div>
+                <div class="number-widget mar-top-1">
+                    <h6>Invested</h6>
+                    <div class="value light">
+                        ${funding.display_invested_amount}
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress">
+                        <div class="progress-bar" style="width: ${funding.investment_progress}"></div>
+                    </div>
+                    <h2 class="offset dark">
+                        ${funding.investment_progress}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        %if len(funding.Investments):
+            <div class="box-content">
+                <strong class="text-small">Investors</strong>
+                <div class="face-pile-mini clearfix">
+                %for investor in funding.Investments:
+                    ${widgets.profile_pic(investor.User.picture, investor.User.token, classes='mini')}
+                %endfor
+                </div>
+            </div>
+        %else:
+            <div class="empty">
+                No Investments yet
+            </div>
+        %endif
+    </div>
+    </div>
+</%def>
+
+
+<%def name="mainBody(funding)">
+    ${funding.description | html.html,n}
+
+    %if funding.contract:
+        <div class="mar-top-2">
+            <a href="${funding.contract}">Download Contract</a>
+        </div>
+    %endif
+
+
+
+    ${self.investForm(funding, view.form, values, errors)}
+</%def>
+
+<%def name="investForm(funding, form, values, errors)">
+    %if root.user.isAnon():
+
+        <div class="mar-top-2">
+            <a href="${root.auth_url('linkedin')}" class="btn btn-primary">Login to Invest</a>
+        </div>
+
+    %else:
+
+        <h2>Would you like to invest?</h2>
+        <div class="box-dark">
+            <div class="box-content">
+                <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+                    ${baseform.prelims(form)}
+                    <div class="row">
+                        <div class="col col-lg-5">
+                            %for field in form.fields:
+                                ${field.render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                            %endfor
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-5">
+                            <button type="submit" class="btn btn-primary btn-block">Submit Investment Offer</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    %endif
+    %if funding.Investments:
+        <div class="mar-top-2">
+            <div class="box-title">
+                Investments
+            </div>
+            %for investment in funding.Investments:
+                <div class="box-card single-update extra-compact">
+                    ${widgets.profile_pic(investment.User.picture, investment.User.token)}
+                    <div class="right-box">
+                        <div class="pull-right"><small>${html.format_datetime(investment.created, 'medium')}</small></div>
+                        <a class="entity-link" href="${root.profile_url(investment.User.token)}">${investment.User.name}</a>
+                        %if investment.User.headline:
+                            <small class="text-muted">${investment.User.headline}</small>
+                        %endif
+
+
+                        <div class="number-widget mar-top-half">
+                            <h6>Invested</h6>
+                            <div class="value light">${investment.display_amount}</div>
+                        </div>
+                    </div>
+                </div>
+            %endfor
+        </div>
+    %endif
+</%def>
+
+<%def name="post_scripts()">
+    <script>
+        require(["tools/ajax"], function(ajax){
+            $(".form-validated").each(function(idx, form){
+                ajax.ifyForm({form:form});
+            });
+        });
+    </script>
+</%def>

@@ -1,23 +1,156 @@
-.company-single-round {
-  color: @btn-default-color;
-  background-color: @btn-default-bg;
-  border-radius: @border-radius-large;
-  .box-shadow(0 3px 4px rgba(0,0,0,.4));
-  padding: 8px 15px 15px;
-  margin-bottom:20px;
+.company-dashboard {
+  margin-bottom: 2 * @line-height-computed;
+}
+
+.single-team-member {
+  padding: 12px 0;
+  + .single-team-member{border-top:1px solid #b2b2b2;}
+}
+
+.face-pile-mini {
+  > .picture {
+    float:left;margin: 5px 5px 0 0;
+  }
+}
+
+.picture-pile {
+  .clearfix;
+  > .picture {
+    float:left;
+    width:25%;
+    margin: 0 5px 5px 0;
+    &.mini {max-width:34px;}
+    &.small {max-width:50px;}
+    &.medium {max-width:75px;}
+    position: relative;
+  }
+}
+
+.pitch {
+  font-size: @font-size-small;
+}
+
+// UPDATES
+
+.box-card.single-update {
+  padding: 12px;
+  + .single-update {border-top: 1px solid #b2b2b2;}
+}
+.slideshare.progress-step {
+  padding: 20px 0 0 0;
+  > .box-card { padding: 0 12px 12px;}
+}
+
+
+.PENDING > .need-card-inner > .description {color:@text-muted;}
+
+
+// APPLICATIONS
+
+.single-application + .single-application {
+  border-top:1px solid @text-muted;
+  padding-top:@line-height-computed;
+}
+
+.tachymeter {
   position: relative;
+  margin: 25px;
+  > h1 {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    line-height: 50px;
+    text-align: center;
+    color: white;
+    font-weight: 300;
+    font-size: 50px;
+    margin-top: -30px;
+    width: 100%;
+    > small {
+      font-size:18px;
+      color:white;
+    }
+  }
 }
-.company-round-link {
-  color:white;
-  font-size:ceil(@font-size-base * 1.70);
-  padding-top:6px;
+
+.progress-container {
+  position: relative;
+  > .progress {
+    position: absolute;
+    border:none;
+    bottom:0;
+    height:20px;
+    width:100%;
+    margin:0;
+  }
+  h2 {font-size:48px;line-height: 36px;color:white;position: relative;}
+  > .dark {color: @box-title; text-align: center;}
+}
+.progress-step {
+  background-color: fadeout(#080808, 80%);
+  .box-shadow(0 4px 6px rgba(0,0,0,.4));
+  h2 {color:white;}
+  .heading {
+    display: block;
+    position: relative;
+    z-index:2;font-size:48px;line-height:48px;color:white;
+  }
+  h2  > small {color:white;font-size:24px;display: inline-block;margin-left: 6px;}
+}
+
+
+.workflow-link {
   display: block;
-  > .template-icon{margin-top:-6px;}
-  &:before {margin-right:10px;top:3px;position: relative;border-width:10px;}
+  padding: 58px 15px 10px 62px;
+  font-weight: @font-weight-bold;
+  font-size:@font-size-small;
+  position: relative;
+  .box-shadow(0 4px 6px rgba(0,0,0,.4) inset);
+  .position {
+    display: block;
+    position: absolute;
+    bottom: 12px;
+    left:0;
+    width:50px;
+    line-height:50px;
+    font-size: 60px;
+    text-align: right;
+    font-weight: 300;
+  }
+  &.active {
+    background-color: @wtf-color;
+    color:white;
+    font-size:40px;
+    line-height:40px;
+    font-weight: 300;
+    padding-top:30px;
+    > .position{
+      border-color: white;
+      color:white;
+    }
+  }
 }
-.round-time-display {
-  float:right;
-  text-align: right;
-  > h3 {margin: 0;line-height: 1.428571429;padding-top:6px;color:@corp-color;}
-  > p {font-size: @font-size-small;}
+
+.progress-wrapper {
+  overflow: hidden;
+}
+
+
+
+.highlight-target {
+  .transition(~"box-shadow .1s ease-in-out, background-color .1s ease-in-out, padding .1s ease-in-out, margin .1s ease-in-out");
+  &.highlighted {
+    .box-shadow(0 0 15px navy);
+    background-color: fadeout(@wtf-color, 70%);
+  }
+}
+.highlight-anchor {
+  float:left;margin-top:-100px;
+}
+
+.single-product-offer {
+  position: relative;
+
+  &.progress-step{ .box-shadow(none); margin-top:20px;}
+  .remove {top:5px;right:5px;}
 }

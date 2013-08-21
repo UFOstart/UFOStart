@@ -1,4 +1,177 @@
-.control-group {margin-bottom:@line-height-base * @font-size-base;}
-.box-title {font-weight:600;}
+.labels-capitalized .control-label {text-transform: uppercase;}
+.control-group {
+  margin-bottom:ceil(@line-height-base * @font-size-base);
+  .info {font-size: @font-size-small;}
+  &.required {
+    > .control-label {font-weight: @font-weight-bold;}
+  }
+}
+
+.form-compacted {
+  > .control-group {margin-bottom: 5px;
+    > .control-label {margin:0;}
+  }
+}
+
+.pseudo-controls {
+  font-size:20px;
+}
+
+.pseudo-input{
+  color:@text-color;
+  background-color: @input-bg;
+  .box-shadow(inset -1px 1px 3px rgba(0,0,0,.15));
+}
+
 .form-horizontal .row + .row.form-actions {margin-top:30px;}
 .forgot-password-link {margin-bottom:0;}
+
+
+textarea.x-high {height: 8 * @line-height-computed;}
+.box-dark .has-error {
+  .control-label, .help-inline {
+    color:pink;
+  }
+}
+.btn.glyphicon-plus:before {
+  content: "\002b";
+  font-size: 2em;
+  line-height: .5em;
+  margin: 0px 10px -1px 0;
+  display: inline-block;
+}
+
+.remove-link.close {position: absolute;top:0;right:-20px;}
+.form-embedded-wrapper {
+  position: relative;
+  + .form-embedded-wrapper{
+    margin-top:0;
+    padding-top:@line-height-computed;
+    border-top: 1px solid #ccc;
+  }
+}
+
+.btn + .actions-link {margin-left:15px;}
+
+ul.styled {
+  list-style-type: square;
+  > li {color:@corp-color;
+    > span {color:@text-color;}
+  }
+}
+
+.file-upload-control {
+  @width: 120px;
+  .file-picker-upload {
+    min-height:@width;
+    max-width: @width;
+    padding-bottom: 0;
+    position: relative;
+    overflow:hidden;
+    .pseudo-input();
+    > .info {color:@text-color;}
+    &.empty:before {content: "\e060";
+      font-family: 'Glyphicons Halflings';
+      font-style: normal;
+      font-weight: normal;
+      font-size: 3em;
+      -webkit-font-smoothing: antialiased;
+
+      color:@wtf-color;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      line-height: 0;
+      margin-left: -.5em;
+    }
+    &.empty.drop-target:before {content: "\e025";}
+    &.document{
+      min-height:@width * 2 / 3;
+      max-width: @width * 2 / 3;
+      &.empty:before {content: "\e142";}
+      > .file-download {
+        line-height:@width / 6;
+        text-align: center;
+        padding-top:@width / 6;
+        padding-bottom:@width / 6;
+      }
+    }
+  }
+  .file-upload-wrap {
+    position: relative;
+    >.btn{width:@width;}
+    >.file-upload-btn{.opacity(0);position:absolute;width:@width;height: 100%;left: 0;top:0;}
+
+
+  }
+  .info {font-size: @font-size-small;}
+}
+
+.js-form-widget {
+  position: relative;
+  > .file-upload-btn {.opacity(0); position: relative;width:1px;height:1px;position: absolute;top:0;left:0;}
+}
+
+.multi-file-upload-control {
+  .file-picker-upload {
+    min-height:95px;
+    padding: 7px;
+    width:100%;
+    position: relative;
+    overflow:hidden;
+    .pseudo-input();
+    &:before {
+      font-family: 'Glyphicons Halflings';
+      font-style: normal;
+      font-weight: normal;
+      font-size: 3em;
+      -webkit-font-smoothing: antialiased;
+      content: "\e060 \e060 \e060";
+      letter-spacing: 10px;
+      color:@wtf-color;
+      position: absolute;
+      right:0;
+      bottom:10px;
+      line-height: 1em;
+    }
+    &.drop-target:before {
+      content: "\e025 \e025 \e025";
+    }
+  }
+  .picture {
+    float: left;
+    width: 75px;
+    height: 75px;
+    overflow: hidden;
+    background: gray;
+    margin: 10px;
+  }
+}
+
+.remove {
+        display: block;
+        cursor:pointer;
+        background: @text-muted;
+        color: white;
+        text-shadow: none;
+        border-radius: 100%;
+        height: 18px;
+        width: 18px;
+        text-align: center;
+        line-height: 20px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 20px;
+        text-indent: -1px;
+}
+
+.tagsearch-container {
+  .search-field{ background-color: @input-bg; .clearfix;}
+  .query {width:auto;border:none;}
+  .current-tags {
+    padding:6px 10px 0px;
+    float:left;
+    >.label {margin-right:5px;}
+  }
+}

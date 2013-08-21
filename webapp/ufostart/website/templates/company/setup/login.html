@@ -1,0 +1,14 @@
+<%inherit file="layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+
+<%def name="slogan()">
+    ${self.crumbs(3)}
+</%def>
+<%def name="bodyContent()">
+    <h1 class="site-slogan">Sign Up now</h1>
+
+    <p class="btn-social-wrapper">
+        <a href="${root.auth_url('linkedin')}" class="btn btn-primary btn-linkedin">Sign Up with Linkedin</a>
+    </p><small><strong class="text-muted">If you don't have a Linkedin account yet, please <a href="http://www.linkedin.com">create one</a>.</strong></small>
+</%def>

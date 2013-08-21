@@ -9,18 +9,19 @@
 // Core styles
 .btn {
   display: inline-block;
-  padding: @padding-base-vertical @padding-base-horizontal;
+  position: relative;
+  padding: 6px 20px;
+  margin-right:12px;
   margin-bottom: 0; // For input.btn
-  font-size: @font-size-large;
+  font-size: @font-size-small;
   font-weight: 600;
   line-height: @line-height-base;
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  border: 1px solid transparent;
-  border-radius: @border-radius-large;
   white-space: nowrap;
-  .box-shadow(1px 3px 4px rgba(0,0,0,.4));
+  border: 1px solid @btn-default-border;
+  .box-shadow(0 2px 0 lighten(@btn-default-border, 30%));
 
   &:focus {
     .tab-focus();
@@ -55,16 +56,9 @@
   -webkit-appearance: none;
 }
 
-.envelop-btn {
-  display: inline-block;
-  width:38px;
-  height:24px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  .background-image("../img/envelop.png");
-  color:transparent;
-}
 
+.pull-right > .btn {margin-right:0;}
+.pull-right.btn {margin-right:0;}
 // Alternate buttons
 // --------------------------------------------------
 
@@ -137,15 +131,20 @@ fieldset[disabled] .btn-link {
 // --------------------------------------------------
 
 .btn-large {
-  padding: @padding-large-vertical @padding-large-horizontal;
-  font-size: @font-size-large;
-  border-radius: @border-radius-large;
+  padding: (@padding-large-vertical - 2px) @padding-large-horizontal (@padding-large-vertical + 2px) @padding-large-horizontal;
+  font-size: 22px;
+  line-height:26px;
+  font-weight:500;
 }
 .btn-small {
   padding: @padding-small-vertical @padding-small-horizontal;
   font-size: @font-size-small;
   line-height: 1.5; // ensure proper height of button next to small input
-  border-radius: @border-radius-small;
+}
+
+.btn-form-field {
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 
@@ -155,6 +154,7 @@ fieldset[disabled] .btn-link {
 .btn-block {
   display: block;
   width: 100%;
+  margin-right:0;
   padding-left: 0;
   padding-right: 0;
 }
@@ -172,3 +172,28 @@ input[type="button"] {
     width: 100%;
   }
 }
+
+
+.envelop-btn {
+  display: inline-block;
+  width:38px;
+  height:24px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  .background-image("../img/envelop.png");
+  color:transparent;
+}
+
+.btn > span {
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 300;
+  display: block;
+}
+.btn-humonguous {
+  padding: 20px 20px 25px;
+  border-radius: ceil(1.6 * @border-radius-large);
+}
+
+
+

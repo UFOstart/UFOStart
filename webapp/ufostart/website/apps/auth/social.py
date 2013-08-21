@@ -1,89 +1,91 @@
-import base64, logging
-from hnc.apiclient.backend import DBNotification, DBException
+import logging
+from hnc.apiclient.backend import DBNotification
 from hnc.forms.messages import GenericErrorMessage
-from ufostart.website.apps.auth.network_settings import InvalidSignatureException, UserRejectedNotice, SocialNetworkException
-from ufostart.website.apps.models.auth import RefreshAccessTokenProc, SocialConnectProc, SOCIAL_NETWORK_TYPES_REVERSE
+from hnc.tools.request import JsonAwareRedirect
+from pyramid.renderers import render_to_response
+from pyramid.response import Response
+from ufostart.website.apps.models.auth import SOCIAL_NETWORK_TYPES, SOCIAL_NETWORK_TYPES_REVERSE
+
+from ufostart.website.apps.models.procs import SocialConnectProc
+from ufostart.website.apps.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 
+def login_user(context, request, profile):
+    if isinstance(profile, SocialNetworkProfileModel):
+        profile = profile.unwrap(sparse = True)
+        if profile.get('network') and not profile.get('type'):
+            profile['type'] = SOCIAL_NETWORK_TYPES_REVERSE[profile['network']]
+        elif not profile.get('network') and profile.get('type'):
+            profile['network'] = SOCIAL_NETWORK_TYPES[profile['type']]
 
 
 
-
-def fb_accept_requests(context, request):
-    # this needs to be client initiated, as we cant decide serverside if user has accepted facebook login, only javascript really knows
-    request.session.pop_flash("fb_requests")
-    return {'success': True}
-
-
-
-def fb_token_refresh(context, request):
-    json_body = request.json_body
-    isLogin = request.user.facebookId != json_body.get("facebookId")
-    request.user.accessToken = json_body.get('accessToken')
-    if not request.user.isAnon():
-        try:
-            RefreshAccessTokenProc(request, {'token':request.user.token, 'accessToken':json_body.get('accessToken')})
-        except (DBNotification, DBException), e:
-            pass
-    return {"success":True, "isLogin": isLogin}
-
-
-def base64_url_decode(inp):
-    padding_factor = (4 - len(inp) % 4) % 4
-    inp += "="*padding_factor
-    return base64.b64decode(unicode(inp).translate(dict(zip(map(ord, u'-_'), u'+/'))))
-
-def social_login(context, request):
-    result = {'success': False}
-    profile = request.json_body['profile']
-    network = profile.pop('type')
-    networkSettings = context.settings.networks.get(network)
-    if networkSettings and networkSettings.requiresAction():
-        try:
-            profile = networkSettings.action(request, profile)
-        except InvalidSignatureException, e:
-            return {'success':False, 'message':"Invalid Signature!"}
-
-    if not profile: return result
-    profile['type'] = SOCIAL_NETWORK_TYPES_REVERSE[network]
+    params = {'Profile': [profile]}
+    if not request.root.user.isAnon():
+        params['token'] = request.root.user.token
     try:
-        user = SocialConnectProc(request, {'Profile': [profile]})
+        user = SocialConnectProc(request, params)
     except DBNotification, e:
         log.error("UNHANDLED DB MESSAGE: %s", e.message)
-        return {'success':False, 'message': e.message}
-    result['success'] = True
-    result['user'] = user.toJSON()
-
-    route, args, kwargs = request.root.getPostLoginUrlParams()
-    result['redirect'] = request.fwd_url(route, *args, **kwargs)
-    return result
-
-
-
-
-
-
-def social_login_start(context, request):
-    network = request.matchdict['network']
-    networkSettings = context.settings.networks.get(network)
-    return networkSettings.loginStart(request)
-
-def social_login_callback(context, request):
-    network = request.matchdict['network']
-    networkSettings = context.settings.networks.get(network)
-    try:
-        user = networkSettings.loginCallback(request)
-    except UserRejectedNotice, e:
-        request.session.flash(GenericErrorMessage("You need to accept {} permissions to use {}.".format(network.title(), request.globals.project_name)), "generic_messages")
-        request.fwd("website_index")
-    except SocialNetworkException, e:
-        request.session.flash(GenericErrorMessage("{} login failed.".format(network.title())), "generic_messages")
-        request.fwd("website_index")
+        request.session.flash(GenericErrorMessage(e.message), "generic_messages")
+        return None
     else:
-        if not user:
-            request.session.flash(GenericErrorMessage("{} login failed. It seems the request expired. Please try again".format(network.title())), "generic_messages")
-            request.fwd("website_index")
-        else:
-            route, args, kwargs = request.root.getPostLoginUrlParams()
-            request.fwd(route, *args, **kwargs)
+        return user.toJSON()
+
+class RequiresLoginException(Exception):
+    def __init__(self, template):
+        self.template = template
+
+
+# AUTH DECORATORS
+
+def require_login(template):
+    def require_login_real(fn):
+        def require_login_inner(context, request):
+            if request.root.user.isAnon():
+                raise RequiresLoginException(template)
+            else:
+                return fn(context, request)
+        return require_login_inner
+    return require_login_real
+
+
+def require_login_cls(template):
+    def require_login_cls_inner(cls):
+        backup = cls.__init__
+        def __init__(self, context=None, request=None):
+            if request.root.user.isAnon():
+                raise RequiresLoginException(template)
+            else:
+                backup(self, context, request)
+        cls.__init__ = __init__
+        return cls
+    return require_login_cls_inner
+
+
+
+# AUTH VIEWS
+
+def auth_required_view(exc, request):
+    if isinstance(exc, RequiresLoginException):
+        template = exc.template
+    else:
+        template = request.context.__auth_template__
+    return render_to_response(template, {}, request)
+
+
+def login_success(exc, request):
+    login_user(request.root, request, exc.profile)
+    route = exc.get_redirection(request)
+    return Response("Resource Found!", 302, headerlist = [('location', route)])
+
+
+def login_failure(exc, request):
+    request.session.flash(GenericErrorMessage(exc.message), "generic_messages")
+    route = exc.get_redirection(request)
+    return Response("Resource Found!", 302, headerlist = [('location', route)])
+
+
+def login(context, request):
+    raise JsonAwareRedirect(request.root.profile_url(request.root.user.token))

@@ -29,7 +29,10 @@ requires = [
     "dogpile.cache>=0.4.1",
     "redis",
     "httplib2",
-    'hnc>=0.0.3dev'
+    "markdown",
+    "smartypants",
+    "weberror",
+    'hnc>=0.0.9dev'
     ]
 
 setup(name='ufostart',

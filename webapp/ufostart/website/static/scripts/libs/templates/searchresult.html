@@ -1,0 +1,7 @@
+<ul class="entity-search" >
+{% _(models).each(function(item, idx){ %}
+    <li data-entity-id="{{ item.id }}" class="search-result-item" shortcut="{{ idx+1 }}">
+        {{ item.getSearchLabel() }}
+    </li>
+{% }); %}
+</ul>

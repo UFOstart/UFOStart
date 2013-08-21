@@ -1,4 +1,4 @@
-define([], function(){
+define(["tools/ajax"], function(ajax){
 
     // Bootstrap Touch Devices DropDown Fix START
     $('body')
@@ -41,5 +41,37 @@ define([], function(){
         $('input[placeholder], textarea[placeholder]').placeholder();
     }
 
+    $(document).on({
+        click: function(e){
+            var data = $(e.target).data();
+            require([data.module], function(v){
+                v.init(data, $(e.target));
+            });
+        }
+    },  ".js-link");
+
+    var tLoaded = $.Deferred();
+    $(".hover-container").one({
+        mouseover : function(e){
+            var data = $(e.currentTarget).data();
+            if(tLoaded.state() != 'resolved')require(["text!templates/profile.html"], function(templ){tLoaded.resolve(_.template(templ))});
+            ajax.submitPrefixed({
+                url:"/web/user/mini"
+                , data: {token: data.entityId}
+                , success: function(resp, status, xhr){
+                    var user = resp.User;
+                    tLoaded.done(function(templ){
+                        $(e.currentTarget).append(
+                            templ({
+                                link: '/u/'+ user.token
+                                , startupValue: '$' + hnc.formatNum(user.startupValue)
+                                , user: user
+                            })
+                        )
+                    });
+                }
+            });
+        }
+    }).find("a").prop('href', null);
     return {NATIVE_PLACEHOLDER:NATIVE_PLACEHOLDER}
 });

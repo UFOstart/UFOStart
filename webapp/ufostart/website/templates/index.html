@@ -1,34 +1,123 @@
 <%inherit file="layout.html"/>
+<%namespace file="widgets.html" name="widgets"/>
+
+
+<%def name="slideShow()">
+    <div id="landing-carousel" class="carousel fade splashslide">
+        <div class="carousel-inner">
+            <div class="active item clearfix">
+                <img class="slide-pic" src="${STATIC_URL}img/landing/slide1.png?${VERSION_TOKEN}"/>
+                <h2 class="brand-teal">Got big ideas and no clue where to start?</h2>
+                <strong class="brand-primary">Select a template we prepared for you and start the round.</strong>
+            </div>
+            <div class="item clearfix">
+                <img class="slide-pic" src="${STATIC_URL}img/landing/slide2.png?${VERSION_TOKEN}"/>
+                <h2 class="brand-teal">Create a company and add a Project</h2>
+                <strong class="brand-primary">Gather your team members and invite a mentor.</strong>
+            </div>
+            <div class="item clearfix">
+                <img class="slide-pic" src="${STATIC_URL}img/landing/slide3.png?${VERSION_TOKEN}"/>
+                <h2 class="brand-teal">Connect with people</h2>
+                <div class="text-strong brand-primary">
+                    <p>UFOstart is well connected to all major social networks.</p>
+                        Find an expert for your needs.
+                </div>
+            </div>
+            <div class="item clearfix">
+                <img class="slide-pic" src="${STATIC_URL}img/landing/slide4.png?${VERSION_TOKEN}"/>
+                <h2 class="brand-teal">Browse published needs and projects</h2>
+                <strong class="brand-primary">You will be rewarded with cash and equity</strong>
+            </div>
+        </div>
+    </div>
+</%def>
+
 
 <%def name="content()">
-    %if vctxt.user.isAnon():
+    <div class="home-band">
         <div class="container homepage">
-            <div class="row">
-                <div class="col col-lg-10 col-offset-2">
-                    <h1 class="site-slogan">Get early access & equity,<br/>
-                    calculate your startup <br/>
-                    value now!</h1>
-                    <h2 class="corp-colors">Looking for ownership<br/>
-                    in the next HOT Startup?</h2>
-
-                    <div class="homepage-signup-bar">
-                        <p class="intro">Sign Up now, start your engines and may the best woman win</p>
-                        <p class="btn-social-wrapper">
-                            <a href="${request.fwd_url("website_social_login_start", network = 'facebook')}?furl=${request.furl}" class="btn-social btn-facebook">Sign Up with Facebook</a>
-                            <a href="${request.fwd_url("website_social_login_start", network = 'linkedin')}?furl=${request.furl}" class="btn-social btn-linkedin">Sign Up with Linkedin</a>
-                        </p>
-                        <small><strong class="text-muted">or use your e-mail address to <a href="${url("website_signup")}" class="text-muted">Sign Up / Log In</a></strong></small>
+            <div class="row  mar-top-1">
+                <div class="col col-lg-5">
+                    <h1 class="site-slogan">The first market place<br/>
+                    giving equity for expertise</h1>
+                    <h2>Create a project or contribute<br/>
+                    to existing companies</h2>
+                    <div class="row">
+                        <div class="col col-lg-8 mar-top-2">
+                            <a class="btn btn-primary btn-large btn-block" href="${root.template_select_url}">Create Project</a>
+                        </div>
+                        <div class="col col-lg-8 mar-top-1">
+                            <a class="btn btn-default btn-large btn-block" href="${root.browse_url}">Browse Projects</a>
+                        </div>
+                    </div>
+                    <div class="mar-top-3">
+                        <img class="press-partners" src="${STATIC_URL}img/press.png"/>
                     </div>
                 </div>
-            </div>
-        </div>
-    %else:
-        <div class="container">
-            <div class="row">
-                <div class="col col-lg-12 text-center">
-                    <h1>Welcome ${vctxt.user.name}</h1>
+                <div class="col col-lg-7">
+                    ${self.slideShow()}
                 </div>
             </div>
         </div>
-    %endif
+    </div>
+
+    <div class="container">
+        <div class="row mar-top-2">
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    <span class="brand-primary">Opportunities near by</span>
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-12">
+                %if len(needs_close_by):
+                    <div class="row">
+                        %for need in needs_close_by:
+                            <div class="col col-lg-3">
+                                ${widgets.publicNeedCard(need, descr_len = 300)}
+                            </div>
+                        %endfor
+                    </div>
+                %else:
+                    <div class="empty">No Tasks matching your location</div>
+                %endif
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-12">
+            <h1 class="section-title">
+                <span>Most Popular</span>
+            </h1>
+            </div>
+        </div>
+        <div class="row">
+            %for need in popular_needs:
+                <div class="col col-lg-3">
+                    ${widgets.publicNeedCard(need, descr_len = 300)}
+                </div>
+            %endfor
+        </div>
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    <span class="brand-primary">Newest Projects</span>
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            %for company in products:
+                <div class="col col-lg-3">
+                    ${widgets.publicProductCard(company, descr_len = 300)}
+                </div>
+            %endfor
+        </div>
+    </div>
+</%def>
+
+
+<%def name="post_scripts()">
+<script>
+    var carousel = $('.carousel').carousel({interval: 8000, pause:"hover"});
+</script>
 </%def>

@@ -1,0 +1,108 @@
+<%inherit file="layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="slogan()">${self.crumbs(2)}</%def>
+<%def name="sectionTitle()">${template.name}</%def>
+
+<%def name="bodyContent()">
+        <div class="row">
+            <div class="col col-lg-4 template-details">
+                <div class="box-title">
+                    Template Details
+                </div>
+                <div class="cut-corner">
+                    <img src="${STATIC_URL}img/templates/${template.getStyleKey()}.png"/>
+                </div>
+                <div class="number-widget mar-top-1">
+                    <div class="thirds">
+                        <div class="heading">Tasks</div>
+                        <div class="value light">${len(template.Need)}</div>
+                    </div><div class="thirds">
+                        <div class="heading">Time Limit</div>
+                        <div class="value light">30 <strong class="text-small">Days</strong></div>
+                    </div>
+                    <hr class="mar-top-half"/>
+                </div>
+            </div>
+            <div class="col col-lg-8">
+                ${ template.description | html.html,n }
+
+                <div class="mar-top-3">
+                    <a href="${url(ctxt, 'startcompany')}" class="btn btn-primary btn-large">Use this Template</a>
+                    <a href="${root.template_select_url}" class="btn btn-default btn-large">Back to Template List</a>
+                </div>
+            </div>
+        </div>
+    <div class="row mar-top-3">
+        <div class="col col-lg-12">
+            <div class="box-title">Tasks</div>
+        </div>
+    </div>
+    <div class="row">
+        ${self.buildNeedCols(template.groupedNeeds(3))}
+    </div>
+</%def>
+
+
+<%def name="buildNeedCols(cols)">
+    %for i, col in enumerate(cols):
+        <div class="col col-lg-4">
+            <div class="js-need-card-list">
+            %for need in col:
+                ${self.buildNeed(need)}
+            %endfor
+            </div>
+            %if  hasattr(ctxt, 'round') and not i and ctxt.canEdit and not ctxt.round.published:
+                <a href="${url(ctxt, 'new')}" class="need-card-inner add-card">
+                    <img src="${STATIC_URL}img/addneed.png"/>
+                    <h4>Create a new Task</h4>
+                </a>
+            %endif
+        </div>
+    %endfor
+</%def>
+
+
+<%def name="buildNeed(need)">
+    <div class="need-card">
+    <div class="need-card-inner">
+        <div class="cut-corner box-header-muted box-content">
+            <h3 class="no-margin">
+                %if hasattr(ctxt, 'round'):
+                    <a href="${request.root.need_url(ctxt.company.slug, need.slug, 'edit')}">${need.name}</a>
+                %else:
+                    ${need.name}
+                %endif
+            </h3>
+            <p class="mar-top-1">
+                ${need.summary | html.trunc(200)}
+            </p>
+        </div>
+        <div class="box-content">
+            %for tag in need.tags:
+                <span class="label label-info spaced text-small">${tag}</span>
+            %endfor
+        </div>
+        %if hasattr(ctxt, 'round'):
+            <div class="box-content">
+                <a href="${request.root.need_url(ctxt.company.slug, need.slug, 'edit')}" class="btn btn-primary btn-block">Add Task</a>
+            </div>
+        %endif
+
+    </div>
+    </div>
+</%def>
+
+
+<%def name="wtfBox()">
+    <div class="wtf-box active">
+        <h2 class="wtf-title">
+            OK, So what’s next?
+        </h2>
+        <div class="wtf-content mar-top-1">
+            <p>UFO Start structures your company's growth in 'rounds'. Each round lasts 30 days and has a series of tasks that should be fulfilled in the round.</p>
+            <p>A task can be anything from getting a company logo to the production of a complete app. </p>
+            <p>We suggest some tasks below based on your template but these can be added or removed later.</p>
+        </div>
+    </div>
+</%def>

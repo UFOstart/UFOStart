@@ -1,53 +1,7 @@
-.link-pointer {
-  cursor:pointer;
+.ufo-icon {
   &:before {
-    content: ".";
-    color: transparent;
-    border-left: .4em solid #ef6c26;
-    border-top: .4em solid transparent;
-    border-bottom: .4em solid transparent;
-    width: 0;
-    height: 0;
-    display: inline-block;
+    .background-image("../img/icons.png");
+    background-position: center center;
+    background-repeat: no-repeat;
   }
-}
-
-
-.template-icon{
-  .background-image("../img/templates/breadcrumbs.png");
-  background-repeat: no-repeat;
-  display: inline-block;
-  height:@navbar-height;
-  line-height:@navbar-height;
-  width:58px;
-  vertical-align: top;
-  &.started {background-position: 0 0;}
-  &.ecommerce {background-position: -58px 0;}
-  &.hitech {background-position: -118px 0;}
-  &.seriesb {background-position: -174px 0;}
-  &.internat {background-position: -232px 0;}
-  &.seed {background-position: -290px 0;}
-}
-
-
-
-.linking-arrow {
-  height:52px;
-  width:40px;
-  margin: 0 -20px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  .background-image("../img/arrow.png");
-  display: block;
-  float:left;
-}
-.cloud-services {
-  width:58px;
-  height:51px;
-  margin: 0 auto;
-  background-position: center center;
-  background-repeat: no-repeat;
-  .background-image("../img/cloudservices.png");
-  display: block;
-  float:left;
 }

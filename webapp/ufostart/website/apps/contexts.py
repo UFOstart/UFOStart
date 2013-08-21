@@ -1,34 +1,31 @@
+import logging
+import urllib
 from pyramid.decorator import reify
+from pyramid.security import Allow, Everyone, Authenticated
+import simplejson
 from ufostart.lib.baseviews import RootContext
-from ufostart.website.apps.auth import LoginForm
+from ufostart.website.apps.auth import SocialContext
+from ufostart.website.apps.company import ProtoCompanyContext, TemplatesRootContext, ProtoInviteContext
 from ufostart.website.apps.models.auth import AnonUser
-from ufostart.website.apps.models.company import GetCompanyProc
+from ufostart.website.apps.user import UserHomeContext, UserStubContext, BrowseContext
 
 USER_SESSION_KEY = 'WEBSITE_USER'
 
-class logged_in(object):
-    def __init__(self, auth_route):
-        self.auth_route = auth_route
-    def __call__(self, wrapped):
-        try:
-            self.__doc__ = wrapped.__doc__
-        except: # pragma: no cover
-            pass
-        def wrapped_f(obj):
-            if obj.context.user.isAnon():
-                obj.request.fwd_raw(self.auth_route(obj.request))
-            else:
-                return wrapped(obj, obj.context, obj.request)
-        return wrapped_f
+log = logging.getLogger(__name__)
+
+
 
 
 class WebsiteRootContext(RootContext):
+    __name__ = None
+    __parent__ = None
+    __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'apply'), (Allow, Authenticated, 'join')]
+    @property
+    def site_title(self):
+        return [self.request.globals.project_name]
+
     static_prefix = "/web/static/"
     app_label = 'website'
-
-    @reify
-    def loginFormWithValues(self):
-        return LoginForm, {}, {}
 
     @reify
     def user(self):
@@ -43,34 +40,76 @@ class WebsiteRootContext(RootContext):
             del self.request.session[USER_SESSION_KEY]
         self.user = AnonUser()
 
-    def getPostLoginUrlParams(self):
-        if self.user.isAnon():
-            return "website_index", [], {}
-        elif self.user.Company and self.user.Company.Rounds:
-            return "website_company", [], {}
+    @reify
+    def location(self):
+        cache = self.request.globals.cache
+        ip = self.request.client_addr
+        location = cache.get('HOSTIP_{}'.format(ip))
+        if not location:
+            try:
+                response = urllib.urlopen('http://api.hostip.info/get_json.php?ip={}&position=true'.format(ip)).read()
+                result = simplejson.loads(response)
+                location = '{city}, {country_name}'.format(**result)
+                cache.set('HOSTIP_{}'.format(self.request.client_addr), location)
+            except:
+                pass
+        return location
+
+    def __getitem__(self, item):
+        if item == 'c':
+            return ProtoCompanyContext(self, item)
+        elif item == 'u':
+            return UserStubContext(self, item)
+        elif item == 'template':
+            return TemplatesRootContext(self, item)
+        elif item == 'home':
+            return UserHomeContext(self, item, self.user.token)
+        elif item in ['login']:
+            return SocialContext(self, item)
+        elif item == 'invite':
+            return ProtoInviteContext(self, item)
+        elif item == 'browse':
+            return BrowseContext(self, item)
+        elif item in self.settings.networks:
+            settings = self.settings.networks[item]
+            return settings.module(self, item, settings)
         else:
-            return "website_company_setup_basic", [], {}
+            raise KeyError()
 
 
 
-stdRequireLogin = logged_in(lambda req: req.fwd_url("website_signup", _query=[("furl", req.url)]))
-fwdRequireLogin = lambda route: logged_in(lambda req: req.fwd_url("website_signup", _query=[("furl", route(req))]))
+    def login_url(self, **kwargs):
+        return self.request.resource_url(self, 'login', **kwargs)
+    def logout_url(self, **kwargs):
+        return self.request.resource_url(self, 'logout', **kwargs)
+    @property
+    def browse_url(self, *args, **kwargs):
+        return self.request.resource_url(self, 'browse', *args, **kwargs)
 
-class WebsiteAuthContext(WebsiteRootContext):
-    def is_allowed(self, request):
-        if not self.user.isAnon():
-            request.fwd_raw(request.furl)
-
-
-
-class WebsiteAuthedContext(WebsiteRootContext):
-    def is_allowed(self, request):
-        if self.user.isAnon():
-            request.fwd("website_signup", _query=[('furl', request.url)])
-        li_profile = self.user.profileMap.get('linkedin')
-        if not li_profile or not li_profile.id:
-            request.fwd("website_require_li", _query=[('furl', request.url)])
-
-
-
-
+    @property
+    def home_url(self):
+        return self.request.resource_url(self)
+    @property
+    def template_select_url(self):
+        return self.request.resource_url(self, 'template')
+    def template_url(self, slug, *args, **kwargs):
+        return self.request.resource_url(self, 'template', slug, *args, **kwargs)
+    def company_url(self, slug, *args, **kwargs):
+        return self.request.resource_url(self, 'c', slug, *args, **kwargs)
+    def round_url(self, slug, round_no = '1', *args, **kwargs):
+        return self.request.resource_url(self, 'c', slug, round_no, *args, **kwargs)
+    def need_url(self, company_slug, need_slug, *args, **kwargs):
+        return self.request.resource_url(self, 'c', company_slug, 1, need_slug, *args, **kwargs)
+    def product_url(self, slug, *args, **kwargs):
+        return self.request.resource_url(self, 'c', slug, 1, 'product', *args, **kwargs)
+    def auth_url(self, network):
+        return self.request.resource_url(self, 'login', network, query = [('furl', self.request.url)])
+    @property
+    def angellist_url(self):
+        return self.request.resource_url(self, 'angellist', query = [('furl', self.request.url)])
+    def profile_url(self, token):
+        request = self.request
+        if token == self.user.token:
+            return request.resource_url(self, 'home')
+        else:
+            return request.resource_url(self, 'u', token)

@@ -1,0 +1,82 @@
+<%inherit file="../../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="../../widgets.html" name="widgets"/>
+
+<%def name="content()">
+    <div class="container">
+
+        <%widgets:pageHeader canEdit="${ctxt.canEdit}">
+            Funding Setup
+        </%widgets:pageHeader>
+
+        <div class="row mar-top-2">
+            <div class="col col-lg-7">
+                <div class="box-dark">
+                    <div class="box-content">
+                        ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-3 col-offset-2">
+                ${self.wtfBox()}
+            </div>
+        </div>
+    </div>
+</%def>
+
+
+<%def name="build_form(form, values, errors)">
+    <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+        ${baseform.prelims(form)}
+        <div class="row">
+            <div class="col col-lg-3">
+                ${form.fieldMap['amount'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+            </div>
+            <div class="col col-lg-3">
+                ${form.fieldMap['valuation'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+            </div>
+            <div class="col col-lg-2">
+                <div class="control-group">
+                    <label class="control-label">
+                        Equity Value
+                    </label>
+                    <div class="pseudo-controls data-target equity overflow" data-currency-symbol="${ctxt.company.currency_symbol}">---</div>
+                </div>
+            </div>
+            <div class="col col-lg-4">
+                ${form.fieldMap['contract'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+            </div>
+        </div>
+
+        ${form.fieldMap['description'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+
+
+       <button type="submit" class="btn btn-primary">Setup Funding</button>
+       <a href="${url(ctxt)}" class="btn btn-default">Cancel</a>
+    </form>
+</%def>
+
+<%def name="wtfBox()">
+<div class="wtf-box">
+    <h2 class="wtf-title">Before you go on</h2>
+    <div class="wtf-content mar-top-1">
+Please describe your funding target and your company's post funding valuation. You can also upload a contract which potential investors can then see.
+    </div>
+</div>
+</%def>
+
+
+
+<%def name="post_scripts()">
+    <script type="text/javascript">
+        (function(a){if(window.filepicker){return}var b=a.createElement("script");b.type="text/javascript";b.async=!0;b.src=("https:"===a.location.protocol?"https:":"http:")+"//api.filepicker.io/v1/filepicker.js";var c=a.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c);var d={};d._queue=[];var e="pick,pickMultiple,pickAndStore,read,write,writeUrl,export,convert,store,storeUrl,remove,stat,setKey,constructWidget,makeDropPane".split(",");var f=function(a,b){return function(){b.push([a,arguments])}};for(var g=0;g<e.length;g++){d[e[g]]=f(e[g],d._queue)}window.filepicker=d})(document);
+    </script>
+    <script>
+        require(["views/company/funding_edit"], function(View){
+            filepicker.setKey('A0Me4BRKSLSnOkrY6Jb2xz');
+            $(".form-validated").each(function(idx, form){
+                new View({el:form})
+            });
+        });
+    </script>
+</%def>

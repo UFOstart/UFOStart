@@ -1,0 +1,74 @@
+<%inherit file="../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="round.html" name="compView"/>
+
+<%def name="content()">
+    <div class="container">
+        %if root.user.isAnon():
+            <div class="row">
+                <div class="col col-lg-12">
+                    <div class="notice notice-wtf">
+                        <div class="sidecrumb"></div>
+                        <div class="sidecrumb"></div>
+                        <div class="sidecrumb"></div>
+                        <div class="content">
+                            <h2>Hello ${ctxt.invite.name}</h2>
+                            <h4>
+                                You have been invited to be a ${ctxt.invite.position} for
+                                <a href="${root.company_url(ctxt.invite.companySlug)}">${ctxt.company.display_name}'s</a>
+                                <a href="${root.round_url(ctxt.invite.companySlug, 1)}">${ctxt.round.display_name} Round</a>.
+                            </h4>
+                            <h4>Please login to confirm.</h4>
+                            <div class="mar-top-2">
+                                <a href="${root.auth_url("linkedin")}" class="btn btn-primary btn-linkedin">Log in with Linkedin</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        %else:
+            <div class="row">
+                <div class="col col-lg-12">
+                    <div class="notice notice-wtf">
+                        <div class="sidecrumb"></div>
+                        <div class="sidecrumb"></div>
+                        <div class="sidecrumb"></div>
+                        <div class="content">
+                            <h2>Hello ${root.user.name}</h2>
+                            <h4>
+                                You have been invited to be a ${ctxt.invite.position} for
+                                <a href="${root.company_url(ctxt.invite.companySlug)}">${ctxt.company.display_name}'s</a>
+                                <a href="${root.round_url(ctxt.invite.companySlug, 1)}">${ctxt.round.display_name} Round</a>.
+                            </h4>
+                            <div class="mar-top-2">
+                                <a href="${url(ctxt, 'confirm')}" class="btn btn-primary">Confirm</a>
+                                <a href="${url(ctxt, 'reject')}" class="btn btn-default">Reject</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        %endif
+        ${compView.content()}
+    </div>
+</%def>
+
+
+<%def name="extra_head()">
+    %if ctxt.round.published:
+        <script type="text/javascript" src="${ROOT_STATIC_URL}scripts/dist/raphael-min.js"></script>
+    %endif
+</%def>
+<%def name="post_scripts()">
+<script>
+    require(["views/company/dashboard", "libs/tachymeter"], function(View, Tacho){
+        var view =new View({
+            el: $("#project-round-need-dashboard")
+        });
+        %if ctxt.round.published:
+            new Tacho({el: document.getElementById('tachymeter'), fillRatio: ${ctxt.round.getExpiryPercentage()}});
+        %endif
+    });
+</script>
+${compView.templates()}
+</%def>

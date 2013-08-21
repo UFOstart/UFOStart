@@ -1,0 +1,101 @@
+<%inherit file="../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="../widgets.html" name="widgets"/>
+
+
+<%def name="content()">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    <span class="brand-primary">Add a Mentor</span>
+                </h1>
+            </div>
+        </div>
+        <div class="row mar-top-1">
+            <div class="col col-lg-7">
+                ${self.build_form(mentors, view.form, values, errors)}
+            </div>
+            <div class="col col-lg-3 col-offset-2">
+                <div class="wtf-box">
+                    <h2 class="wtf-title">
+                        How can I get a great Mentor?
+                    </h2>
+                    <div class="wtf-content">
+                        <p>At UFO we have some of the best Mentors in the business who are key players in global startups.</p>
+                        <p>We have selected the top 5 mentor based on their 'startup value'.</p>
+                        <p>You can also invite your own by entering their email.</p>
+                        <p>Once your round is setup your mentor will review it, advise you and then publish it for you.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>
+
+<%def name="build_form(mentors, form, values, errors)">
+    <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+        ${baseform.prelims(form)}
+        <div class="box-dark">
+            <div class="box-content">
+
+                <div class="mentor-list">
+                    %for mentor in mentors:
+                        <div class="single-mentor">
+                            <div class="box-card extra-compact">
+
+                                ${widgets.profile_pic(mentor.picture, mentor.token)}
+                                <div class="right-box">
+                                    <div class="row">
+                                        <div class="col col-lg-6">
+                                            <a href="${root.profile_url(mentor.token)}" class="entity-link">${mentor.name}</a>
+                                            <p class="text-small">${mentor.headline}</p>
+                                            %if mentor.token in ctxt.company.mentorTokens:
+                                                <a class="btn btn-primary disabled">Already Invited</a>
+                                            %else:
+                                                <a href="${url(ctxt, 'topmentor')}?m=${mentor.token}" class="btn btn-primary">Invite as Mentor</a>
+                                            %endif
+                                        </div>
+                                        <div class="col col-lg-6">
+                                            %if mentor.Companies:
+                                            <h6>Mentor for these Startups</h6>
+                                            <div class="face-pile-mini">
+                                                %for company in mentor.Companies:
+                                                    <div class="picture micro">
+                                                        <a href="${root.company_url(company.slug)}"><img src="${company.logo}"/></a>
+                                                    </div>
+                                                %endfor
+                                            </div>
+                                            %endif
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    %endfor
+                </div>
+                <hr class="mar-top-2" style="margin-bottom:0;"/>
+                <strong class="text-small">Or invite by name and email:</strong>
+                <div class="mar-top-2">
+                ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                <div class="mar-top-1">
+                    <button type="submit" class="btn btn-primary">Invite Mentor</button>
+                    <a href="${url(ctxt)}" class="btn btn-default">Cancel</a>
+                </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</%def>
+
+<%def name="post_scripts()">
+    <script>
+        require(["tools/ajax"], function(ajax){
+            $(".form-validated").each(function(idx, form){
+                ajax.ifyForm({root: $(form)});
+            })
+        });
+    </script>
+</%def>

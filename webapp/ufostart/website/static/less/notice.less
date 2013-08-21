@@ -1,0 +1,63 @@
+// Small grid columns
+.generate-crumb-colors(@base-color, @lines) {
+  .crumb-X (@index) when (@index > 0) {
+    .crumb-@{index} { .crumb-(@index); }
+    .crumb-X((@index - 1));
+  }
+  .crumb-X (0) {}
+  // Generate columns
+  .crumb-X(@lines);
+  // Apply the styles
+  .crumb-(@num) {
+    @bg : desaturate(lighten(@base-color, 10% * (@lines - @num)), 10% * (@lines - @num));
+    background-color: @bg;
+    color: contrast(@bg, darken(@base-color, 15%), lighten(@base-color, 50%));
+  }
+  @bg : desaturate(lighten(@base-color, 10% * @lines), 10% * @lines);
+  background-color: @bg;
+}
+
+.notice {
+  overflow:hidden;
+  position: relative;
+  > .content {
+    padding: 24px 12px;
+    z-index:4;
+    position: relative;
+    margin-right: 11%;
+    > h2, > h4 {color:white;font-weight: 300;margin:6px 0;}
+  }
+  .sidecrumb {
+    width: 89%;
+    height:100%;
+    position: absolute;
+    top:0;
+    left:0;
+    z-index:1;
+    + .sidecrumb {
+      width: 78%;
+      z-index:2;
+      + .sidecrumb {
+        width: 67%;
+        z-index:3;
+      }
+    }
+  }
+}
+
+.notice-info {
+  background-color:fadeout(@brand-info-muted, 90%);
+  color: rgba(0,0,0,.4);
+  font-size:20px;
+  > .sidecrumb {
+    background-color:fadeout(@brand-info-muted, 90%);
+  }
+}
+
+.notice-wtf{
+  background-color:fadeout(@wtf-color, 40%);
+  > .sidecrumb {
+    background-color:fadeout(@wtf-color, 40%);
+  }
+}
+

@@ -1,66 +1,62 @@
 <%inherit file="base.html"/>
 
 <%block name="layoutscripts"></%block>
+<%def name="footer_classes()">mar-top-2</%def>
 
 <div id="global-frame" class="${self.page_class()}">
     <%block name="header">
-        ${self.menu(vctxt.user)}
+        ${self.menu(root.user)}
         <div class="navbar navbar-static-top">
             <div class="container">
                 <div class="row">
                     <div class="col col-lg-12">
-                        <a class="navbar-brand col col-lg-4" href="${url("website_index")}"><img src="${ROOT_STATIC_URL}img/logo.png?${VERSION_TOKEN}" alt="${g.project_name}"/></a>
-                        <div class="page-header tag-line">${g.site_slogan}</div>
-                        ${self.pageTitle()}
+                        <a class="navbar-brand col col-lg-4" href="${request.root.home_url}"><img src="${ROOT_STATIC_URL}img/logo.png?${VERSION_TOKEN}" alt="${g.project_name}"/></a>
                     </div>
                 </div>
            </div>
        </div>
     </%block>
+
+    ${self.header_messages(request.session.pop_flash("generic_messages"))}
+    ${self.bcrumbs()}
+
     <%block name="contentwrapper">
-        ${self.header_messages()}
         <div class="page-wrapper">
-            ${next.content()}
+            ${self.content()}
         </div>
     </%block>
     <%block name="footer">
-    <footer class="footer">
+    <footer class="footer ${self.footer_classes()}">
     <div class="container">
         <div class="row">
             <div class="col col-lg-3 footer-link">
                 <h5 class="footer-links-title">About ${g.project_name}</h5>
                 <ul class="list-unstyled">
-                    <li><a class="footer-link" href="#">Company</a></li>
-                    <li><a class="footer-link" href="#">Founders</a></li>
-                    <li><a class="footer-link" href="#">Contact</a></li>
+                    <li><a class="footer-link" href="http://ufostart.com/about/us">Company</a></li>
+                    <li><a class="footer-link" href="http://ufostart.com/about/us">Founders</a></li>
+                    <li><a class="footer-link" href="http://ufostart.com/feedback">Contact</a></li>
                 </ul>
             </div>
             <div class="col col-lg-3 footer-link">
                 <h5 class="footer-links-title">Learn More</h5>
                 <ul class="list-unstyled">
-                    <li><a class="footer-link" href="#">Homepage</a></li>
-                    <li><a class="footer-link" href="#">Startups</a></li>
-                    <li><a class="footer-link" href="#">Investors</a></li>
-                    <li><a class="footer-link" href="#">Experts</a></li>
+                    <li><a class="footer-link" href="/">Homepage</a></li>
+                    <li><a class="footer-link" href="http://ufostart.com/for/startups">Startups</a></li>
+                    <li><a class="footer-link" href="http://ufostart.com/for/investors">Investors</a></li>
+                    <li><a class="footer-link" href="http://ufostart.com/for/experts">Experts</a></li>
                 </ul>
             </div>
             <div class="col col-lg-3 footer-link">
                 <h5 class="footer-links-title">Get Started</h5>
                 <ul class="list-unstyled">
-                    %if vctxt.user.isAnon():
-                        <li><a class="footer-link" href="${request.fwd_url("website_social_login_start", network = 'facebook')}?furl=${request.furl}"   >Connect with Facebook</a></li>
-                        <li><a class="footer-link" href="${request.fwd_url("website_social_login_start", network = 'linkedin')}?furl=${request.furl}"   >Connect with Linkedin</a></li>
-                        <li><a class="footer-link" href="${url("website_signup")}">Sign In</a></li>
-                    %endif
-                    <li><a class="footer-link" href="#">Help</a></li>
+                    <li><a class="footer-link" href="http://ufostart.com/feedback">Help</a></li>
                 </ul>
             </div>
             <div class="col col-lg-3 footer-link">
                 <h5 class="footer-links-title">Connect</h5>
                 <ul class="list-unstyled">
-                    <li><a class="footer-link logo-prefixed facebook" href="#">Like us on Facebook</a></li>
-                    <li><a class="footer-link logo-prefixed twitter" href="#">Follow us on Twitter</a></li>
-                    <li><a class="footer-link logo-prefixed rss" href="#">Subscribe to our Blog</a></li>
+                    <li><a class="footer-link logo-prefixed facebook" href="https://www.facebook.com/UFOstart">Like us on Facebook</a></li>
+                    <li><a class="footer-link logo-prefixed twitter" href="https://twitter.com/UFOstart">Follow us on Twitter</a></li>
                 </ul>
             </div>
         </div>
@@ -70,23 +66,85 @@
 </div>
 
 
-<%def name="pageTitle()"></%def>
 <%def name="menu(user)">
-    %if not user.isAnon():
-        <div class="page-header-bar">
+    %if user.isAnon():
+        <div class="page-header-bar anon">
         <div class="container">
             <div class="row">
                 <div class="col col-sm 12">
                     <ul class="page-header-bar-menu">
-                        <li><span>Welcome ${user.name}</span></li>
-                        %if user.Company.Rounds:
-                            <li><a href="${url("website_company")}">Company</a></li>
+                        <li><a href="${request.root.login_url(query=[('furl', request.furl)])}">Log in</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+    %else:
+        <div class="page-header-bar logged-in">
+        <div class="container">
+            <div class="row">
+                <div class="col col-sm 12">
+                    <ul class="page-header-bar-menu">
+                        <li><span>${user.name}</span></li>
+                        <li><a href="${root.profile_url(root.user.token)}">Home</a></li>
+                        %if len(user.Companies) > 1:
+                             <li class="dropdown">
+                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                  Companies
+                                  <span class="caret"></span>
+                                 </a>
+                                 <ul class="dropdown-menu">
+                                    %for company in user.Companies:
+                                        <li>
+                                            <a href="${root.round_url(company.slug, '1')}">${company.name}</a></li>
+                                    %endfor
+                                 </ul>
+                             </li>
+                        %elif len(user.Companies) == 1:
+                            <li><a href="${root.round_url(user.getDefaultCompanySlug(), '1')}">${user.getDefaultCompanyName()}</a></li>
                         %endif
-                        <li><a href="${url("website_logout")}">Logout</a></li>
+                        <li><a href="${request.root.logout_url()}">Log out</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         </div>
     %endif
+</%def>
+
+
+<%def name="bc(res, link = False)">
+    %if hasattr(res, 'displayType'):
+        ${self.bc(res.__parent__, True)}
+        %if link:
+            <a class="crumb" href="${url(res)}"><span class="title">${res.displayType}</span><br/>${res.displayName}</a>
+        %else:
+            <span class="crumb"><span class="title">${res.displayType}</span><br/>${res.displayName}</span>
+        %endif
+    %endif
+</%def>
+
+<%def name="header_messages(msgs)">
+    <div id="message-container" class="container message-container ${'show' if len(msgs) > 0 else ''}">
+        %for msg in msgs:
+            <div class="alert alert-${msg.type}">
+                <a class="close" data-dismiss="alert">×</a>
+                %if msg.heading:
+                    <h4 class="alert-heading">${msg.heading|n}</h4>
+                %endif
+            ${msg.body|n}
+            </div>
+        %endfor
+    </div>
+</%def>
+
+
+<%def name="bcrumbs()">
+    <div class="container breadcrumbs">
+        <div class="row">
+            <div class="col col-lg-12 crumbs-inner">
+                ${self.bc(ctxt)}
+            </div>
+        </div>
+    </div>
 </%def>

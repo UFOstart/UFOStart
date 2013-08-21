@@ -1,0 +1,235 @@
+<%inherit file="../../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="../../widgets.html" name="widgets"/>
+<%namespace file="widgets.html" name="companyWidgets"/>
+
+<%def name="bcrumbs()">
+    <div class="container breadcrumbs">
+        <div class="row">
+            <div class="col col-lg-12 crumbs-inner">
+                <div class="current-round-container pull-right">
+                    <div class="box-card extra-compact">
+                        ${widgets.round_logo(ctxt.company, ctxt.company.Round)}
+                        <div class="right-box">
+                            <div class="text-small text-muted text-strong">Current Round</div>
+                            <a href="${url(ctxt, 1)}">${ctxt.company.Round.display_name}</a>
+                        </div>
+                    </div>
+                </div>
+                ${self.bc(ctxt)}
+            </div>
+        </div>
+    </div>
+</%def>
+
+<%def name="content()">
+    <div class="container">
+        <%widgets:pageHeader canEdit="${ctxt.canEdit}">
+            <span class="sub-title">Company Profile</span> ${ctxt.company.name}
+        </%widgets:pageHeader>
+        ${self.bodyContent(ctxt.company)}
+    </div>
+</%def>
+
+
+<%def name="bodyContent(company)">
+    <div class="row mar-top-1">
+        <div class="col col-lg-3">
+            ${self.companyMainInfo(company)}
+        </div>
+        <div class="col col-lg-6">
+            ${widgets.mainMedia("Company Introduction", company.video, company.slideShare)}
+            <div class="main-description mar-top-2">
+                ${company.description | html.html,n}
+            </div>
+            <div class="updates mar-top-3">
+                ${self.updates(company, view.schemas.get('PostUpdate'), values, errors)}
+            </div>
+        </div>
+
+        <div class="col col-lg-3">
+            ${self.sidebarMedia(company.Pictures, company.slideShare)}
+            ${widgets.sharebtns()}
+        </div>
+    </div>
+</%def>
+
+<%def name="companyMainInfo(company)">
+    ${widgets.company_logo(company, classes="large")}
+    <a class="entity-link mar-top-half" href="${url(ctxt)}">${ctxt.company.name}</a>
+    <div class="pitch">${html.nn(company.pitch)}</div>
+    <div class="number-widget mar-top-1">
+        <h6>Startup Value</h6>
+        <div class="value light">
+            ${company.displayStartupValue}
+        </div>
+    </div>
+    <div class="mar-top-3">
+        ${self.teamMembers(company.mentors, company.members)}
+    </div>
+
+    <div class="mar-top-3">
+        ${self.rounds(company, company.rounds)}
+    </div>
+</%def>
+
+<%def name="rounds(company, rounds)">
+    <div class="box-title">
+        Rounds
+    </div>
+    <div class="box-content box-dark-shaded">
+        %for i, round in enumerate(rounds):
+        <div class="box-card compact">
+            ${widgets.round_logo(company, round)}
+            <div class="right-box">
+                <a href="${root.round_url(company.slug, company.round_no(round))}" class="overflow"><strong>${round.display_name}</strong></a>
+                <small class="text-muted">${html.format_date(round.start, 'short')}</small>
+                <div class="number-widget small mar-top-1">
+                    <div class="halves">
+                        <div class="heading">Time left</div>
+                        <div class="small-value">${round.expiry_days} Days</div>
+                    </div><div class="halves">
+                        <div class="heading">Tasks</div>
+                        <div class="small-value">${round.noFulfilledNeeds}/${round.noTotalNeeds}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        %endfor
+    </div>
+</%def>
+
+
+<%def name="updates(company, form, values, errors)">
+    <div class="box-title">
+        Updates
+    </div>
+    %if ctxt.canEdit and form:
+        <div class="box-dark">
+            <div class="box-content">
+                <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+                    ${baseform.prelims(form)}
+                    %for field in form.fields:
+                        ${field.render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                    %endfor
+                    <button type="submit" class="btn btn-primary">Post Update</button>
+                </form>
+            </div>
+        </div>
+    %endif
+    %for update in company.getUpdates():
+        <div class="box-card single-update extra-compact">
+            ${widgets.profile_pic(update.userPicture, update.userToken)}
+            <div class="right-box">
+                <div class="pull-right"><small>${html.format_datetime(update.created, 'medium')}</small></div>
+                <a class="entity-link" href="${root.profile_url(update.userToken)}">${update.userName}</a>
+                %if update.userHeadline:
+                    <small class="text-muted">${update.userHeadline}</small>
+                %endif
+                <div class="mar-top-2">${html.html(update.text)|n}</div>
+            </div>
+        </div>
+    %endfor
+</%def>
+
+<%def name="teamMembers(mentors, members)">
+    <%def name="buildMember(member)">
+        <div class="single-team-member box-card extra-compact">
+            ${widgets.member_pic(member)}
+            <div class="right-box">
+                <div class="position">${html.nn(member.position)}</div>
+                %if member.token:
+                    <a class="entity-link" href="${root.profile_url(member.token)}"><strong>${ member.name }</strong></a>
+                %else:
+                    <p><strong>${ member.name }</strong></p>
+                %endif
+                %if member.headline:
+                    <small class="headline">${html.nn(member.headline)}</small>
+                %endif
+                %if member.confirmed:
+                <div class="text-small">
+                    <strong class="text-muted">Startup Value</strong> <span class="brand-primary">${member.displayStartupValue}</span>
+                </div>
+                %endif
+            </div>
+        </div>
+    </%def>
+
+    <div class="box-title">
+        Team Members
+    </div>
+    <div class="box-hor-content box-dark-shaded">
+        %for member in members:
+            ${buildMember(member)}
+        %endfor
+        %if ctxt.canEdit and hasattr(view, 'schemas'):
+            <div class="box-bottom">
+                ${companyWidgets.invite_team_form(view.schemas.get('InviteCompany'), values, errors)}
+            </div>
+        %endif
+    </div>
+
+    <div class="mar-top-3">
+        <div class="box-title">Mentors</div>
+        <div class="box-hor-content box-dark-shaded">
+            %for member in mentors:
+                ${buildMember(member)}
+            %endfor
+            %if ctxt.canEdit and hasattr(view, 'schemas'):
+                <div class="box-bottom">
+                    <a href="${url(ctxt, '1', 'mentor')}" class="btn btn-primary btn-block">Invite Mentor</a>
+                </div>
+            %endif
+        </div>
+    </div>
+</%def>
+
+
+<%def name="sidebarMedia(pictures, slideshare)">
+    %if pictures or slideshare:
+        <div class="progress-wrapper company-dashboard">
+            %if pictures:
+                <div class="box-dark">
+                    <div class="box-content picture-gallery-preview">
+                    ${widgets.gallery("Picture Gallery", "Play Slideshow", pictures)}
+                    </div>
+                </div>
+            %endif
+            <% meta = html.getSlideshareMeta(request, slideshare) %>
+            %if meta:
+                <div class="progress-step">
+                <div class="progress-step">
+                <div class="slideshare box-content">
+                    <div class="box-title major">Slideshare</div>
+                    <div class="box-card extra-compact">
+                        <div class="picture"><img src="${meta.thumbnail}"/></div>
+                        <div class="right-box">
+                            <a class="entity-link" href="${slideshare}"><strong>${ meta.title }</strong></a>
+                            <small class="headline">${meta.author_name}</small>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                </div>
+            %endif
+        </div>
+    %endif
+</%def>
+
+
+
+<%def name="extra_head()">
+    <link href='${STATIC_URL}scripts/colorbox/colorbox.css' rel='stylesheet' type='text/css'>
+</%def>
+<%def name="post_scripts()">
+    <script src="${STATIC_URL}scripts/colorbox/jquery.colorbox-min.js"></script>
+    <script>
+        require(["tools/ajax"], function(ajax){
+            $(".form-validated").each(function(idx, form){
+                ajax.ifyForm({root: $(form)});
+            });
+        });
+        $('a.slide-show-starter').colorbox({rel:'picture', photo:true, scalePhotos:true, maxWidth:"100%", maxHeight:"100%"});
+        $('div.play').on("click", function(){ $('a.slide-show-starter').colorbox({open:true}) });
+    </script>
+</%def>

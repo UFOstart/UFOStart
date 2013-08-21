@@ -12,7 +12,7 @@ define([], function(){
                 }
                 , unhighlight: function (element, errorClass, validClass) {
                     var name = $(element).attr("name");
-                    if(name && $(element).closest(".controls").find('[for='+name.replace(/\./g,"\\.")+']').filter("[generated]").remove().length)
+                    if(name && $(element).closest(".controls").find('[for='+name.replace(/\./g,"\\.")+']').remove().length)
                         $(element).closest(".control-group").removeClass("has-error").addClass(validClass);
                 }
                 , errorPlacement: function(error, element) {
@@ -41,6 +41,7 @@ define([], function(){
             $elem.rules("add", {remote: $elem.data("validationUrl")});
         });
 
+
         if(params.focus){
             form.find("input,select,textarea").filter(":visible").first().focus();
         }
@@ -67,5 +68,8 @@ define([], function(){
         $form.find(".error-hidden").hide(); // show any additional hints/elems
         $form.find(".error-shown").fadeIn(); // show any additional hints/elems
     }
+
+
+
   return {validate: validate, resetForm: resetForm, showFormEncodeErrors: showFormEncodeErrors};
 });

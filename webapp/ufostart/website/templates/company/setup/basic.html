@@ -1,0 +1,36 @@
+<%inherit file="layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="slogan()">${self.crumbs(1)}</%def>
+<%def name="sectionTitle()">Choose a Template</%def>
+
+
+<%def name="bodyContent()">
+<div class="row">
+    %for t in templates:
+        <div class="col col-lg-4 col-offset-1 text-center">
+            <div class="single-template">
+                <a href="${root.template_url(t.key)}" class="single-template-button ${t.getStyleKey()} no-btn">
+                    <img src="${STATIC_URL}img/templates/${t.getStyleKey()}.png"/>
+                    <span class="name">${t.name}</span>
+                </a>
+                <p class="description">
+                    <strong>${t.name}</strong> ${ t.description | html.trunc(300),html.html,n }
+                </p>
+            </div>
+        </div>
+    %endfor
+</div>
+</%def>
+
+<%def name="wtfBox()">
+    <div class="wtf-box active">
+        <h2 class="wtf-title">
+            Whats happening here?
+        </h2>
+        <div class="wtf-content mar-top-1">
+            <p>UFO Start is here to help you start a company or take an existing one to the next stage.</p>
+            <p>We help you structure your next step by asking you to choose the template which best describes your current situation.</p>
+        </div>
+    </div>
+</%def>

@@ -1,0 +1,21 @@
+<%inherit file="edit.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="content()">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-12">
+                <h1 class="section-title">
+                    <span class="brand-primary">Add a new task</span>
+                </h1>
+            </div>
+        </div>
+        <div class="row mar-top-2">
+            <div class="col col-lg-12">
+                <div class="box-content box-dark">
+                    ${self.build_form(need, "Create Task", view.form, values.get(view.form.id), errors.get(view.form.id))}
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>

@@ -1,0 +1,42 @@
+<%inherit file="../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="content()">
+    <div class="container">
+    <div class="row">
+        <div class="col col-lg-8">
+          ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
+        </div>
+    </div>
+    </div>
+</%def>
+
+
+<%def name="build_form(form, values, errors)">
+    <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+        ${baseform.prelims(form)}
+        <div class="row">
+            <div class="col col-sm-9 col-offset-3">
+                <legend>Please enter your email address.</legend>
+            </div>
+        </div>
+
+        %for field in view.form.fields:
+            ${field.render(form.id, request, values, errors, view)|n}
+        %endfor
+        <div class="row">
+            <div class="col col-sm-9 col-offset-3">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a class="actions-link" href="${request.rld_url(traverse = '').strip("/")}">Cancel</a>
+            </div>
+        </div>
+    </form>
+</%def>
+
+<%def name="post_scripts()">
+    <script>
+        require(["tools/ajax"], function(ajax){
+            ajax.ifyForm({root: $("#${view.form.id}")});
+        });
+    </script>
+</%def>

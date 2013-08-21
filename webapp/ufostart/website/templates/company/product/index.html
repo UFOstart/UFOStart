@@ -1,0 +1,163 @@
+<%inherit file="../../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="../../widgets.html" name="widgets"/>
+
+
+<%def name="content()">
+    <div class="container" id="product-page">
+
+        <%widgets:pageHeader canEdit="${ctxt.canEdit}">
+            ${product.name}
+        </%widgets:pageHeader>
+
+        <div class="row mar-top-1">
+            <div class="col col-lg-9">
+                ${widgets.mainMedia("Product Presentation", product.video, picture_url = product.Pictures)}
+            </div>
+            <div class="col col-lg-3">
+                ${self.sidebarMedia(product.Pictures)}
+            </div>
+        </div>
+
+        <div class="row mar-top-2">
+            <div class="col col-lg-3">
+                <div class="box-card">
+                    ${widgets.companyInfo(ctxt.company, picclasses='medium')}
+                </div>
+                <div class="mar-top-3">
+                    <div class="box-title">Customers</div>
+                    ${self.customerFacepile(company.Round.Pledges)}
+                </div>
+            </div>
+            <div class="col col-lg-6">
+                <div class="main-description">
+                    ${product.description | html.html,n}
+                </div>
+                <div class="mar-top-3">
+                    <div class="box-title">Pledges</div>
+                    ${self.pledgeList(company.Round.Pledges)}
+                </div>
+            </div>
+            <div class="col col-lg-3">
+                ${self.offerSection(company, company.Round.Product)}
+                <div class="mar-top-3">
+                    ${widgets.sharebtns()}
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>
+
+<%def name="customerFacepile(customers)">
+    <div class="mar-top-half">
+    %if len(customers):
+        <div class="face-pile-mini">
+        %for pledge in customers:
+            ${widgets.profile_pic(pledge.picture, pledge.networkId, classes='mini')}
+        %endfor
+        </div>
+    %else:
+        <div class="empty">
+            No Customers yet
+        </div>
+    %endif
+    </div>
+</%def>
+
+
+<%def name="offerSection(company, product)">
+    <h2 class="no-margin">Offers</h2>
+    <% form = view.schemas['ProductPledge'] %>
+    ${self.displayOffer(product.offers, form)}
+</%def>
+
+<%def name="displayOffer(offers, form)">
+    <form class="${form.grid.form_classes} js-product-offer-form" id="${form.id}" method="POST">
+    ${baseform.prelims(form)}
+    %for idx, offer in enumerate(offers):
+        <div class="single-product-offer progress-step progress-${idx+1}" data-entity-id="${offer.token}">
+            <div class="box-content">
+                <p><strong class="dark">${offer.name}</strong></p>
+                <p class="text-small">${offer.description}</p>
+                <div class="row">
+                    <div class="col col-lg-6">
+                        <strong><small class="dark">Price</small></strong>
+                        <div class="text-large text-light">${offer.price}</div>
+                    </div>
+                    <div class="col col-lg-6">
+                        <strong><small class="dark">Stock</small></strong>
+                        <div class="text-large text-light">${offer.stock}</div>
+                    </div>
+                </div>
+                <div class="mar-top-1">
+                    %if offer.stock:
+                        %if root.user.isAnon():
+                            <a href="${root.auth_url('linkedin')}" class="btn btn-primary btn-block">Login to Pledge</a>
+                        %else:
+                            <div class="control-group show-expanded">
+                                <label class="control-label">Message</label>
+                                <div class="controls">
+                                    <textarea class="x-high" name="ProductPledge.${offer.token}"></textarea>
+                                </div>
+                            </div>
+                            <a class="btn btn-primary show-contracted btn-block" data-toggle-target=".single-product-offer" data-toggle-class="expanded">Pledge</a>
+                            <button class="btn btn-primary show-expanded inline" name="ProductPledge.offer" value="${offer.token}">Pledge Now</button>
+                            <a class="btn btn-default show-expanded inline" data-toggle-target=".single-product-offer" data-toggle-class="expanded">Cancel</a>
+                        %endif
+                    %endif
+                </div>
+            </div>
+        </div>
+    %endfor
+    </form>
+</%def>
+
+
+<%def name="pledgeList(pledges)">
+%if len(pledges):
+    %for pledge in pledges:
+        <div class="box-card compact single-update">
+            ${widgets.profile_pic(pledge.picture, pledge.networkId)}
+            <div class="right-box">
+                <div class="pull-right"><small class="text-muted">${html.format_datetime(pledge.created, 'medium')}</small></div>
+                <a class="entity-link" href="${root.profile_url(pledge.networkId)}">${pledge.name}</a>
+                <p class="text-small">Pledged to buy <strong>${pledge.offerName}</strong></p>
+                <div>${html.nn(pledge.comment)}</div>
+            </div>
+        </div>
+    %endfor
+%else:
+    <div class="empty">
+        No Customers yet
+    </div>
+%endif
+</%def>
+
+<%def name="sidebarMedia(pictures)">
+    %if pictures:
+        <div class="company-dashboard box-dark">
+            <div class="box-content picture-gallery-preview">
+                ${widgets.gallery("Picture Gallery", "Play Slideshow", pictures)}
+            </div>
+        </div>
+    %endif
+</%def>
+
+
+
+<%def name="extra_head()">
+    <link href='${STATIC_URL}scripts/colorbox/colorbox.css' rel='stylesheet' type='text/css'>
+</%def>
+<%def name="post_scripts()">
+    <script src="${STATIC_URL}scripts/colorbox/jquery.colorbox-min.js"></script>
+    <script>
+        require(["form", "views/company/product"], function(View, PView){
+            $("form.form-validated").each(function(idx, elem){
+                new View({el: $(elem)});
+            });
+            new PView({el: $("#product-page")})
+        });
+        $('a.slide-show-starter').colorbox({rel:'picture', photo:true, scalePhotos:true, maxWidth:"100%", maxHeight:"100%"});
+        $('div.play').on("click", function(){ $('a.slide-show-starter').colorbox({open:true}) });
+    </script>
+</%def>

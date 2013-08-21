@@ -40,6 +40,11 @@ require(["tools/ajax", "misc"], function(ajax, misc){
         initialize: function(options){
             this.LOCALE = options.LOCALE || LOCALE
         }
+
+        , getUserToken: function(){
+            return this.options.user.token;
+        }
+
         , rld: function(){
             window.location.href = "//" + window.location.host + window.location.pathname + '?' + window.location.search;
         }
@@ -82,16 +87,22 @@ require(["tools/ajax", "misc"], function(ajax, misc){
             format.replace(/(yyyy|dd|mm|HH|MM|SS)/g, function(part) { fmt[part] = i++; });
             return new Date(parts[fmt.yyyy], parts[fmt.mm]-1, parts[fmt.dd], parts[fmt.HH]||0, parts[fmt.MM]||0, parts[fmt.SS]||0);
         }
+        , months: ['January', 'February', "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        , formatDate: function(d){
+            return this.months[d.getUTCMonth()] +' '+ d.getUTCDay()+ ', '+d.getUTCFullYear()
+        }
+        , formatNum: function(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
     });
 
     if(_.isEmpty(root.hnc)){
         var hnc = new HNC(options);
 
-
         var socials = _.keys(options.socials), i= 0;
         if(socials.length){
             hnc.socials = {};
-            require(_.map(socials, function(e){return "networks/"+e}), function(){
+            require(_.map(socials, function(e){return "networks/"+e+"/handler"}), function(){
                 var name, lib;
                 for(i;i<socials.length;i++){
                     name = socials[i];
@@ -105,7 +116,6 @@ require(["tools/ajax", "misc"], function(ajax, misc){
         if(!options.user.token && form.length){
             ajax.ifyForm({root:form});
         }
-
         root.hnc = hnc;
     }
     return root.hnc;

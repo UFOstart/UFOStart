@@ -1,35 +1,109 @@
+from hnc.apiclient.backend import DBNotification
+from hnc.forms.formfields import BaseForm, REQUIRED, StringField
 from hnc.forms.handlers import FormHandler
-from ufostart.lib.tools import group_by_n
-from ufostart.website.apps.company.forms import RoundSetupForm, CompanyTemplateForm
-from ufostart.website.apps.models.company import GetAllCompanyTemplatesProc, GetTemplateDetailsProc, SetCompanyTemplateProc, GetCompanyProc, GetAllNeedsProc, GetRoundProc
+from ufostart.lib.html import getSlideshareMeta
+from ufostart.website.apps.auth.imp import SESSION_SAVE_TOKEN
+from ufostart.website.apps.models.procs import CreateCompanyProc, EditCompanyProc
+from ufostart.website.apps.forms.controls import PictureUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField, SlideshareField, VideoUrlField
 
 
-class BasicHandler(FormHandler):
-    form = CompanyTemplateForm
+def basics(context, request):
+    return {'templates': context.templates}
 
-    def __init__(self, context=None, request=None):
-        # if context.user.Company.Template: request.fwd("website_company_setup_round")
-        super(BasicHandler, self).__init__(context, request)
+def details(context, request):
+    return {'template': context.template}
+
+
+class CompanyCreateForm(BaseForm):
+    id="CompanyCreate"
+    label = ""
+    fields=[
+        PictureUploadField('logo', 'Logo', REQUIRED)
+        , StringField('name', 'Name', REQUIRED)
+        , CleanHtmlField('pitch', 'Slogan', REQUIRED, max = 90)
+        , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
+        , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')
+        , StringField("video", "Paste a Vimeo or Youtube Url")
+        , StringField("slideShare", "Paste a Slideshare Url")
+    ]
+
+    @classmethod
+    def on_success(cls, request, values):
+        templateKey = request.context.__name__
+        if isinstance(values.get('pictures'), basestring):values['Pictures'] = [values['Pictures']]
+        values['Pictures'] = [{'url':url} for url in values['Pictures']]
+        values['Template'] = {'key': templateKey}
+
+        al_company = request.session.get(SESSION_SAVE_TOKEN)
+        if al_company:
+            values['angelListId'] = al_company.id
+            values['angelListToken'] = al_company.token
+            del request.session[SESSION_SAVE_TOKEN]
+
+        try:
+            company = CreateCompanyProc(request, {'token':request.root.user.token, 'Company':values})
+        except DBNotification, e:
+            if e.message == 'Company_Already_Exists':
+                return {'success':False, 'errors': {'name': "Already exists"}}
+            else:
+                return {'success':False, 'message': 'Something went wrong: {}'.format(e.message)}
+        else:
+            return {'success':True, 'redirect': request.root.round_url(request.root.user.getDefaultCompanySlug(), '1')}
+
+
+class CreateProjectHandler(FormHandler):
+    form = CompanyCreateForm
 
     def pre_fill_values(self, request, result):
-        templates = GetAllCompanyTemplatesProc(request)
-        result['templates'] = group_by_n(templates)
-        return super(BasicHandler, self).pre_fill_values(request, result)
+        al_company = request.session.get(SESSION_SAVE_TOKEN)
+        if al_company:
+            result['values'][self.form.id] = {
+                        'name': al_company.name
+                        , 'pitch': al_company.high_concept
+                        , 'description': al_company.product_desc
+                        , 'logo': al_company.logo_url
+                        , 'video': al_company.video_url
+                        , 'Pictures': [{'url':unicode(scr)} for scr in al_company.screenshots]
+                    }
+        return super(CreateProjectHandler, self).pre_fill_values(request, result)
 
-class RoundHandler(FormHandler):
-    form = RoundSetupForm
+
+
+class CompanyEditForm(BaseForm):
+    id="CompanyEdit"
+    label = ""
+    fields=[
+        PictureUploadField('logo', 'Project Logo', REQUIRED)
+        , StringField('name', 'Project Name', REQUIRED)
+        , CleanHtmlField('pitch', 'Elevator Pitch', REQUIRED, max = 90)
+        , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
+        , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')
+        , VideoUrlField("video", "Paste a Vimeo or Youtube Url")
+        , SlideshareField("slideShare", "Paste a Slideshare Url")
+    ]
+
+    @classmethod
+    def on_success(cls, request, values):
+        company = request.context.company
+
+        if isinstance(values.get('Pictures'), basestring):values['Pictures'] = [values['Pictures']]
+        values['Pictures'] = [{'url':url} for url in values['Pictures']]
+        values['token'] = company.token
+
+        try:
+            company = EditCompanyProc(request, {'token':request.root.user.token, 'Company':values})
+        except DBNotification, e:
+            if e.message == 'Company_Already_Exists':
+                return {'success':False, 'errors': {'name': "Already exists"}}
+            else:
+                return {'success':False, 'message': 'Something went wrong: {}'.format(e.message)}
+        else:
+            return {'success':True, 'redirect': request.resource_url(request.context)}
+
+
+class EditProjectHandler(FormHandler):
+    form = CompanyEditForm
+
     def pre_fill_values(self, request, result):
-        templateName = self.context.user.Company.Template.name
-        template = GetTemplateDetailsProc(request, {'name': templateName})
-        needs = GetAllNeedsProc(request)
-
-        templateNeeds = {t.name:True for t in template.Need}
-        needs_library = [t for t in needs if t.name not in templateNeeds]
-
-        result.update({'template': template, 'needs':needs_library})
-        return super(RoundHandler, self).pre_fill_values(request, result)
-
-
-def show_latest_round(context, request):
-    companyRound = GetRoundProc(request, {'token':request.matchdict['token']})
-    return {'companyRound': companyRound}
+        result['values'][self.form.id] = request.context.company.unwrap(sparse = True)
+        return super(EditProjectHandler, self).pre_fill_values(request, result)
