@@ -47,8 +47,11 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
                 if(e.keyCode == 8 && !this.$searchBox.val()){
                     this.trigger("delKey");
                     return false;
-                }
-                else return true;
+                } else if (e.keyCode == 188 && this.$searchBox.val()){
+                    this.$searchBox.val(this.$searchBox.val().replace(",", ""));
+                    this.trigger("unknownterm:selected", this.$searchBox.val().trim());
+                    return false;
+                } else return true;
             }
         })
         , TagSearchView = Backbone.View.extend({

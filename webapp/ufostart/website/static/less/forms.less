@@ -168,7 +168,12 @@ ul.styled {
 
 .tagsearch-container {
   .search-field{ background-color: @input-bg; .clearfix;}
-  .query {width:auto;border:none;}
+  .query, .query:active, .query:focus {
+    width:auto;border:none;
+    border-color: transparent;
+    outline: 0;
+    .box-shadow(none);
+  }
   .current-tags {
     padding:6px 10px 0px;
     float:left;
