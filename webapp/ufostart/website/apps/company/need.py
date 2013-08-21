@@ -1,3 +1,4 @@
+# coding=utf-8
 from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, IntField, HtmlAttrs, HORIZONTAL_GRID, DecimalField, EmailField
 from hnc.forms.handlers import FormHandler
@@ -67,8 +68,8 @@ class NeedCreateForm(BaseForm):
     fields = [
         PictureUploadField("picture", 'Picture', group_classes='file-upload-control')
         , StringField('name', "Title", REQUIRED)
-        , CurrencyIntField('cash', "Cash Value", REQUIRED, input_classes='data-input cash', maxlength=9, currency='$')
-        , CurrencyIntField('equity', "Equity Value", REQUIRED, input_classes='data-input equity', maxlength=9, currency='$')
+        , CurrencyIntField('cash', "Cash Value", REQUIRED, input_classes='data-input cash', maxlength=9, currency= u'€')
+        , CurrencyIntField('equity', "Equity Value", REQUIRED, input_classes='data-input equity', maxlength=9, currency= u'€')
         , TextareaField("customText", "Description", REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
     ]
