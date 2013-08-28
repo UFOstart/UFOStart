@@ -110,7 +110,7 @@
                 <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
                     ${baseform.prelims(form)}
                     %for field in form.fields:
-                        ${field.render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                        ${field.render(form.id, request, values.get(form.id), errors.get(form.id), view, grid = form.grid)|n}
                     %endfor
                     <button type="submit" class="btn btn-primary">Post Update</button>
                 </form>

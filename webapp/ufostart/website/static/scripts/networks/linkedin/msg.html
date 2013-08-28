@@ -4,20 +4,20 @@
              <h2>Send a Message to {{ name }}</h2>
 
              <form class="form-validated" id="send-invite-form">
-                 <div class="control-group required">
+                 <div class="form-group required">
                      <label class="control-label">
                          Subject
                      </label>
                      <div class="controls">
-                         <input type="text" class="required" name="subject" value="{{ company }} could use your help in {{ need }}"/>
+                         <input type="text" class="form-control required" name="subject" value="{{ company }} could use your help in {{ need }}"/>
                      </div>
                  </div>
-                 <div class="control-group required">
+                 <div class="form-group required">
                      <label class="control-label">
                          Message
                      </label>
                      <div class="controls">
-                         <textarea class="required x-high" name="message">Hey {{ name }},
+                         <textarea class="form-control required x-high" name="message">Hey {{ name }},
 
 {{ text }}
 
@@ -29,7 +29,7 @@ Regards, {{ sender }}
                  <p>This is not a direct contact of you. The recipient will get Connection Invitation in his inbox.</p>
                  {% } %}
 
-                 <div class="control-group">
+                 <div class="form-group">
                      <button type="submit" class="btn btn-primary">Send Message</button>
                      <a class="btn btn-default cancel">Cancel</a>
                  </div>

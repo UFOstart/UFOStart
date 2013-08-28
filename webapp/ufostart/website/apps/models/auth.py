@@ -65,6 +65,7 @@ class UserEndorsementsModel(Mapping):
         return format_date(self.created, format='medium')
 
 class UserModel(Mapping):
+    UserGroups = ['WebUser']
     token = TextField()
     slug = TextField()
     name = TextField()

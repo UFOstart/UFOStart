@@ -1,26 +1,20 @@
 from . import social
 from pyramid.httpexceptions import HTTPForbidden
 from pyramid.security import Everyone, Allow, Authenticated, NO_PERMISSION_REQUIRED
+from ufostart.lib.baseviews import BaseContextMixin
 from ufostart.website.apps.social import angellist, SocialLoginFailed, SocialLoginSuccessful
 
 
-class SocialContext(object):
-    __name__ = None
-    __parent__ = None
+class SocialContext(BaseContextMixin):
     __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'proceed')]
     __auth_template__ = "ufostart:website/templates/auth/login.html"
 
-    @property
-    def request(self):
-        return self.__parent__.request
 
     @property
     def site_title(self):
         return [self.__name__.title(), self.request.globals.project_name]
 
-    def __init__(self, parent, name):
-        self.__parent__ = parent
-        self.__name__ = name
+
     def __getitem__(self, item):
         if item in self.__parent__.settings.networks:
             settings = self.__parent__.settings.networks[item]

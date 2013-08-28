@@ -72,8 +72,8 @@
             <a class="btn btn-primary show-contracted btn-block" data-toggle-target=".expander" data-toggle-class="expanded">Invite to Task</a>
             <form class="box-content box-dark show-expanded ${form.grid.form_classes}" id="${form.id}" method="POST">
                 ${baseform.prelims(form)}
-                ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
-                ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                ${form.fieldMap['name'].render(form.id, request, values.get(form.id), errors.get(form.id), view, grid = form.grid)|n}
+                ${form.fieldMap['email'].render(form.id, request, values.get(form.id), errors.get(form.id), view, grid = form.grid)|n}
                 <button type="submit" class="btn btn-primary">Invite member</button>
                 <a class="btn btn-default" data-toggle-target=".expander" data-toggle-class="expanded">Cancel</a>
             </form>
@@ -295,7 +295,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-8 control-group">
+                <div class="col-lg-8 form-group">
                     ${application.message}
                 </div>
             </div>

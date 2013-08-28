@@ -3,10 +3,13 @@ import urllib
 from pyramid.decorator import reify
 from pyramid.security import Authenticated, Allow, Deny, Everyone
 from pyramid.traversal import quote_path_segment
+from ufostart.lib.baseviews import BaseContextMixin
 from ufostart.website.apps.models.procs import RefreshProfileProc, GetProfileProc, GetTopTags, FindPublicNeeds
 
 
-class ProtoProfileContext(object):
+
+
+class ProtoProfileContext(BaseContextMixin):
     displayType = 'User Profile'
     @reify
     def displayName(self):
@@ -16,17 +19,15 @@ class ProtoProfileContext(object):
     def site_title(self):
         return [self.displayName, self.request.globals.project_name]
 
-    @property
-    def request(self):
-        return self.__parent__.request
+
 
 class UserHomeContext(ProtoProfileContext):
     __acl__ = [(Allow, Authenticated, 'view'), (Deny, Everyone, 'view')]
     __auth_template__ = "ufostart:website/templates/auth/login.html"
-    def __init__(self, parent, name, token):
+    def __init__(self, parent, name):
         self.__parent__ = parent
         self.__name__ = name
-        self.user_token = token
+        self.user_token = parent.user.token
     @reify
     def profile(self):
         return RefreshProfileProc(self.__parent__.request, {'token': self.user_token})
@@ -39,10 +40,7 @@ class UserProfileContext(ProtoProfileContext):
         self.profile = profile
 
 
-class UserStubContext(object):
-    @property
-    def request(self):
-        return self.__parent__.request
+class UserStubContext(BaseContextMixin):
 
     def __init__(self, parent, name):
         self.__parent__ = parent
@@ -52,10 +50,7 @@ class UserStubContext(object):
 
 
 
-class BrowseTagContext(object):
-    @property
-    def request(self):
-        return self.__parent__.request
+class BrowseTagContext(BaseContextMixin):
     @property
     def tags(self):
         return self.__parent__.tags
@@ -74,10 +69,8 @@ class BrowseTagContext(object):
         return FindPublicNeeds(self.request, {'Search': {'tags': [{'url':self.tag}]}})
 
 
-class BrowseContext(object):
-    @property
-    def request(self):
-        return self.__parent__.request
+class BrowseContext(BaseContextMixin):
+
     @property
     def site_title(self):
         return ['Browse', self.request.globals.project_name]

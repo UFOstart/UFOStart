@@ -1,0 +1,67 @@
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+
+<%def name="build_base_form(form, values, errors)">
+    <%
+        values_ = values.get(form.id, {})
+        errors_ = errors.get(form.id, {})
+    %>
+    <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
+        ${baseform.prelims(form)}
+        %for field in form.fields:
+            ${field.render(form.id, request, values_, errors_, view, grid = form.grid)|n}
+        %endfor
+        ${caller.body()}
+    </form>
+</%def>
+
+
+
+
+
+
+
+
+
+<%def name="card(title)">
+    <div class="candidate-details-card">
+        <h4 class="card-title">${title}</h4>
+        <div class="card-content">${caller.body()}</div>
+    </div>
+</%def>
+
+<%def name="line(label, value = None, classes='')">
+    <div class="line ${classes}">
+        <small class="heading key">
+            ${label}:
+        </small>
+        <div class="value">
+            ${value or caller.body()}
+        </div>
+    </div>
+</%def>
+
+<%def name="simpleLink(label, value, classes='', extra_attrs = [])">
+    %if value is not None:
+        <div class="line ${classes}">
+            <small class="heading key">
+                ${label}:
+            </small>
+            <div class="value">
+                <a class="text-overflow" href="${value}" ${u' '.join(extra_attrs)|n}>${value}</a>
+            </div>
+        </div>
+    %endif
+</%def>
+
+<%def name="simpleLine(label, value, classes='')">
+    %if value:
+        <div class="line ${classes}">
+            <small class="heading key">
+                ${label}:
+            </small>
+            <div class="value">
+                ${html.nn(value)|n}
+            </div>
+        </div>
+    %endif
+</%def>

@@ -4,6 +4,7 @@ from pyramid.decorator import reify
 from pyramid.security import Allow, Everyone, Authenticated
 import simplejson
 from ufostart.lib.baseviews import RootContext
+from ufostart.website.admin import AdminContext
 from ufostart.website.apps.auth import SocialContext
 from ufostart.website.apps.company import ProtoCompanyContext, TemplatesRootContext, ProtoInviteContext
 from ufostart.website.apps.models.auth import AnonUser
@@ -55,21 +56,21 @@ class WebsiteRootContext(RootContext):
                 pass
         return location
 
+
+    children = {
+        'c':ProtoCompanyContext
+        , 'u':UserStubContext
+        , 'template':TemplatesRootContext
+        , 'home':UserHomeContext
+        , 'login': SocialContext
+        , 'invite': ProtoInviteContext
+        , 'browse': BrowseContext
+        , 'admin': AdminContext
+    }
+
     def __getitem__(self, item):
-        if item == 'c':
-            return ProtoCompanyContext(self, item)
-        elif item == 'u':
-            return UserStubContext(self, item)
-        elif item == 'template':
-            return TemplatesRootContext(self, item)
-        elif item == 'home':
-            return UserHomeContext(self, item, self.user.token)
-        elif item in ['login']:
-            return SocialContext(self, item)
-        elif item == 'invite':
-            return ProtoInviteContext(self, item)
-        elif item == 'browse':
-            return BrowseContext(self, item)
+        if item in self.children:
+            return self.children[item](self, item)
         elif item in self.settings.networks:
             settings = self.settings.networks[item]
             return settings.module(self, item, settings)
@@ -78,10 +79,13 @@ class WebsiteRootContext(RootContext):
 
 
 
-    def login_url(self, **kwargs):
-        return self.request.resource_url(self, 'login', **kwargs)
-    def logout_url(self, **kwargs):
-        return self.request.resource_url(self, 'logout', **kwargs)
+    def admin_url(self, *args, **kwargs):
+        return self.request.resource_url(self, 'admin', *args, **kwargs)
+
+    def login_url(self, *args, **kwargs):
+        return self.request.resource_url(self, 'login', *args, **kwargs)
+    def logout_url(self, *args, **kwargs):
+        return self.request.resource_url(self, 'logout', *args, **kwargs)
     @property
     def browse_url(self, *args, **kwargs):
         return self.request.resource_url(self, 'browse', *args, **kwargs)

@@ -1,0 +1,32 @@
+<%inherit file="layout.html"/>
+<%namespace file="ufostart:website/templates/common/widgets.html" name="widgets"/>
+<%namespace file="ufostart:website/templates/common/standard_form.html" name="standard_form"/>
+
+<%def name="bcrumbs()"></%def>
+
+
+<%def name="content()">
+    <div class="padded-body mar-top-1">
+        ${self.forms(view.form)}
+    </div>
+</%def>
+
+
+<%def name="forms(form)">
+    <div class="col-lg-8">
+        <legend>${form.label}</legend>
+        <%widgets:build_base_form form="${form}" values="${values}" errors="${errors}">
+            <button type="sumbit" class="btn btn-primary">${getattr(form, 'submit_label', 'Submit')}</button>
+            <a href="${form.cancel_url(request)}" class="btn btn-default">${getattr(form, 'cancel_label', 'Cancel')}</a>
+        </%widgets:build_base_form>
+    </div>
+    <div class="col-lg-4">
+        %if hasattr(form, 'description'):
+            ${form.description}
+        %endif
+    </div>
+</%def>
+
+
+<%def name="extra_head()">${parent.extra_head()}${standard_form.css()}</%def>
+<%def name="post_scripts()">${standard_form.scripts()}</%def>

@@ -95,10 +95,10 @@
                         %if root.user.isAnon():
                             <a href="${root.auth_url('linkedin')}" class="btn btn-primary btn-block">Login to Pledge</a>
                         %else:
-                            <div class="control-group show-expanded">
+                            <div class="form-group show-expanded">
                                 <label class="control-label">Message</label>
                                 <div class="controls">
-                                    <textarea class="x-high" name="ProductPledge.${offer.token}"></textarea>
+                                    <textarea class="form-control x-high" name="ProductPledge.${offer.token}"></textarea>
                                 </div>
                             </div>
                             <a class="btn btn-primary show-contracted btn-block" data-toggle-target=".single-product-offer" data-toggle-class="expanded">Pledge</a>

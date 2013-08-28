@@ -3,12 +3,9 @@ import logging
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
-from pyramid.httpexceptions import HTTPInternalServerError
 from pyramid.mako_templating import renderer_factory
 from pyramid.renderers import JSON
-from pyramid.response import Response
 from pyramid.security import Authenticated, Everyone
-from pyramid.view import view_config
 from pyramid_beaker import session_factory_from_settings
 
 from hnc.tools import request
@@ -27,13 +24,13 @@ jsonRenderer.add_adapter(date, format_date)
 
 class Security(SessionAuthenticationPolicy):
     def authenticated_userid(self, request):
-        return request.root.user.token
+        return request.context.user.token
 
     def effective_principals(self, request, *args, **kwargs):
         principals = [Everyone]
-        user = request.root.user
+        user = request.context.user
         if not user.isAnon():
-            principals += [Authenticated, 'u:%s' % user.token]
+            principals += [Authenticated, 'u:%s' % user.token] + user.UserGroups
         return principals
 
 
@@ -69,5 +66,6 @@ def main(global_config, **settings):
     config.add_subscriber(add_renderer_variables, 'pyramid.events.BeforeRender')
 
     config.include("ufostart.website.apps")
+    config.include("ufostart.website.admin")
     config.scan()
     return config.make_wsgi_app()

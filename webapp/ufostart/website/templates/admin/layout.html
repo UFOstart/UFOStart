@@ -1,0 +1,81 @@
+<%inherit file="../base.html"/>
+
+
+<%block name="html_tags">ng-app="expawayadmin"</%block>
+<%def name="extra_head()">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+</%def>
+
+<%def name="layout_scripts()">
+    ${parent.layout_scripts()}
+    <script src="${STATIC_URL}admin/scripts/ngadmin.js"></script>
+</%def>
+
+
+
+
+<%block name="global_page">
+    <div class="navbar navbar-static-top">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="${request.root.admin_url()}">${g.project_name} - Admin Area</a>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav pull-right">
+            %if not ctxt.user.isAnon():
+                <li><a href="${request.root.admin_url('logout')}">Log out</a></li>
+            %endif
+            </ul>
+        </div>
+   </div>
+
+   <div id="global-frame" class="body-wrapper">
+        <%block name="outerContentBody">
+
+            <div class="content-status-wrapper">
+
+                <%block name="contentstatus">
+                %if ctxt.workflow:
+                    <div class="padded-status">
+                        <h5>Edit</h5>
+                        ${render_inst(ctxt.workflow)|n}
+                    </div>
+                %endif
+                </%block>
+
+            </div><div class="content-menu">
+
+                <%block name="contentmenu">${self.menu(ctxt.user, ctxt.sub_area)}</%block>
+
+            </div><div class="content-body ${'has-status' if ctxt.workflow else ''}">
+
+                <div class="reset-clearfix">
+                    ${self.header_messages(request.session.pop_flash("generic_messages"))}
+                    ${self.content()}
+                </div>
+
+            </div>
+        </%block>
+   </div>
+</%block>
+
+
+
+
+<%def name="menu(user, subarea)">
+    %if not user.isAnon():
+    <ul class="nav-list">
+        %for k,v in ctxt.main_menu:
+            %if v.menu_label:
+                <li class="${'active' if subarea and subarea.__name__ == k else ''}">
+                    <a class="nav-entry-link" href="${root.admin_url(k)}">${v.menu_label|n}</a>
+                </li>
+            %endif
+        %endfor
+    </ul>
+    %endif
+</%def>
+
+

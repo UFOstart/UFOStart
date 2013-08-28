@@ -115,3 +115,19 @@
     </script>
 
 </%def>
+
+
+
+<%def name="header_messages(msgs)">
+    <div id="message-container" class="container message-container ${'show' if len(msgs) > 0 else ''}">
+        %for msg in msgs:
+            <div class="alert alert-${msg.type}">
+                <a class="close" data-dismiss="alert">×</a>
+                %if msg.heading:
+                    <h4 class="alert-heading">${msg.heading|n}</h4>
+                %endif
+            ${msg.body|n}
+            </div>
+        %endfor
+    </div>
+</%def>

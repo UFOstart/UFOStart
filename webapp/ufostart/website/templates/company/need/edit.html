@@ -53,30 +53,30 @@
     <form class="${form.grid.form_classes} labels-capitalized" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
 
-        ${form.fieldMap['name'].render(form.id, request, values, errors, view)|n}
+        ${form.fieldMap['name'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         <div class="row">
             <div class="col-lg-3">
-                ${form.fieldMap['picture'].render(form.id, request, values, errors, view)|n}
+                ${form.fieldMap['picture'].render(form.id, request, values, errors, view, grid = form.grid)|n}
             </div>
             <div class="col-lg-4 col-lg-offset-1">
-                ${form.fieldMap['cash'].render(form.id, request, values, errors, view)|n}
-                <div class="control-group">
-                    <div class="control-label">
+                ${form.fieldMap['cash'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                <div class="form-group">
+                    <label class="control-label">
                         Total Value
-                    </div>
+                    </label>
                     <div class="pseudo-controls data-target total" data-currency-symbol="${need.currency_symbol}">
                         ${need.display_total}
                     </div>
                 </div>
             </div>
             <div class="col-lg-4">
-                ${form.fieldMap['equity'].render(form.id, request, values, errors, view)|n}
+                ${form.fieldMap['equity'].render(form.id, request, values, errors, view, grid = form.grid)|n}
             </div>
         </div>
 
-        ${form.fieldMap['customText'].render(form.id, request, values, errors, view)|n}
+        ${form.fieldMap['customText'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         <div class="label-list">
-            ${form.fieldMap['Tags'].render(form.id, request, values, errors, view)|n}
+            ${form.fieldMap['Tags'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">${btn_label}</button>

@@ -309,6 +309,7 @@
 
 <%def name="renderNeedColumns(needs)">
     %if needs:
+        <div class="row">
         <div class="col-lg-12 mar-top-3">
             <div class="box-title">
                 ${'Tasks' if ctxt.round.published else 'Round Tasks'}
@@ -323,6 +324,7 @@
                 </div>
             </div>
         %endfor
+        </div>
     %endif
 </%def>
 

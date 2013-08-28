@@ -5,6 +5,7 @@ from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound
 from pyramid.security import Allow, Everyone, Authenticated, has_permission
 import product, general, need, setup, funding
+from ufostart.lib.baseviews import BaseContextMixin
 from ufostart.website.apps.models.procs import GetCompanyProc, GetTemplateDetailsProc, GetAllCompanyTemplatesProc, GetInviteDetailsProc
 
 
@@ -12,7 +13,7 @@ def canEdit(self): return has_permission('edit', self, self.request)
 def canApprove(self): return has_permission('approve', self, self.request)
 
 
-class BaseProjectContext(object):
+class BaseProjectContext(BaseContextMixin):
     __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'create')]
     __auth_template__ = "ufostart:website/templates/auth/login.html"
     canEdit = reify(canEdit)
@@ -20,9 +21,7 @@ class BaseProjectContext(object):
     @property
     def site_title(self):
         return [self.displayName, self.company.display_name, self.request.globals.project_name]
-    @property
-    def request(self):
-        return self.__parent__.request
+
 
 class TemplateContext(BaseProjectContext):
     @property
@@ -184,10 +183,6 @@ class CompanyContext(BaseProjectContext):
         founders = [(Allow, 'u:%s' % u.token, 'edit') for u in self.company.Users]
         return [(Allow, Authenticated, 'view')] + mentors + founders
 
-    def __init__(self, parent, name):
-        self.__name__ = name
-        self.__parent__ = parent
-        self.user = self.request.root.user
 
     def __getitem__(self, item):
         try:
@@ -202,9 +197,6 @@ class CompanyContext(BaseProjectContext):
         else: return company
 
 class ProtoCompanyContext(BaseProjectContext):
-    def __init__(self, parent, name):
-        self.__name__ = name
-        self.__parent__ = parent
 
     def __getitem__(self, item):
         return CompanyContext(self, item)
