@@ -58,7 +58,6 @@
                     ${self.companies(profile.Companies)}
                 </div>
 
-
                 %if profile.Applications or profile.Endorsements:
                     <div class="col col-lg-6">
                         ${self.applications(profile.Applications)}
@@ -66,18 +65,6 @@
                     </div>
                 %endif
             </div>
-        </div>
-    </div>
-
-    <div class="row mar-top-3">
-        <div class="col col-lg-12">
-            ${self.bestMatchNeeds(isMyProfile, best_match)}
-        </div>
-    </div>
-
-    <div class="row mar-top-2">
-        <div class="col col-lg-12">
-            ${self.bestMatchNeeds(isMyProfile, location_needs)}
         </div>
     </div>
 </%def>
@@ -182,35 +169,3 @@
     %endif
 </%def>
 
-
-
-<%def name="bestMatchNeeds(isMyProfile, needs)">
-    <div class="box-title">Tasks that best match ${'your' if isMyProfile else u"{}'s".format(ctxt.profile.name)} skills</div>
-    %if len(needs):
-        <div class="row">
-            %for need in needs:
-                <div class="col col-lg-3">
-                    ${widgets.publicNeedCard(need)}
-                </div>
-            %endfor
-        </div>
-    %else:
-        <div class="empty">No Tasks matching ${'your' if isMyProfile else u"{}'s".format(ctxt.profile.name)} skill set found</div>
-    %endif
-</%def>
-
-<%def name="closeByNeeds(isMyProfile, needs)">
-    <div class="box-title">Current Tasks close by</div>
-    %if len(needs):
-        <div class="row">
-            %for need in needs:
-                <div class="col col-lg-3">
-                    ${widgets.publicNeedCard(need)}
-                </div>
-            %endfor
-        </div>
-    %else:
-        <div class="empty">No Tasks matching ${'your' if isMyProfile else u"{}'s".format(ctxt.profile.name)} skill set found</div>
-    %endif
-
-</%def>

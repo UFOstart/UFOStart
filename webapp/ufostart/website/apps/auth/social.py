@@ -19,8 +19,6 @@ def login_user(context, request, profile):
         elif not profile.get('network') and profile.get('type'):
             profile['network'] = SOCIAL_NETWORK_TYPES[profile['type']]
 
-
-
     params = {'Profile': [profile]}
     if not request.root.user.isAnon():
         params['token'] = request.root.user.token
