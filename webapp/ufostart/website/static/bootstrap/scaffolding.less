@@ -90,11 +90,21 @@ img {
 // -------------------------
 
 hr {
-  margin-top:    @line-height-computed;
-  margin-bottom: @line-height-computed;
+  margin: @line-height-computed/2 0;
   border: 0;
-  border-top: 1px solid @hr-border;
+
+  border-bottom: 1px solid @hr-border;
+  border-top: 1px solid #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  &.corp-color {
+    border-top: 1px solid @corp-color;
+    border-bottom: none;
+  }
+  &.boxed {
+    margin: 0 12px;
+  }
 }
+
 
 // Only display content to screen readers
 // See: http://a11yproject.com/posts/how-to-hide-content/

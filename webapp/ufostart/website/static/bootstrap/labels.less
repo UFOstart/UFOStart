@@ -6,13 +6,26 @@
   display: inline;
   padding: .25em .6em;
   font-size: 75%;
-  font-weight: bold;
+  font-weight: 500;
   line-height: 1;
   color: @label-color;
   text-align: center;
   white-space: nowrap;
-  vertical-align: baseline;
+  vertical-align: middle;
+  background-color: @gray-light;
   border-radius: .25em;
+  &.spaced {
+    margin-bottom: .5em;
+    display: inline-block;
+    padding: 0 .6em;
+    line-height:@line-height-computed;
+    border-radius: .5em;
+  }
+  >.close {
+    line-height:@line-height-computed;
+    font-size: @font-size-large;
+    margin-left:5px;
+  }
 
   // Add hover effects, but only for links
   &[href] {

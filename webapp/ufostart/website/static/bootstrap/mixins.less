@@ -432,10 +432,11 @@
 // -------------------------
 .label-variant(@color) {
   background-color: @color;
+  color: darken(@label-info-bg, 60%);
   &[href] {
     &:hover,
     &:focus {
-      background-color: darken(@color, 10%);
+      background-color: darken(@label-info-bg, 15%);
     }
   }
 }
