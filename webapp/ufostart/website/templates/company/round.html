@@ -527,13 +527,13 @@
             <div id="target-sent-for-mentor-aprroval" class="highlight-anchor"></div>
             %if ctxt.canEdit:
                 %if wf.canAskForApproval():
-                    <a href="${url(ctxt, 'askforapproval')}" class="btn btn-primary btn-block btn-large">Get Approval</a>
+                    <a href="${url(ctxt, 'askforapproval')}" class="btn btn-primary btn-block btn-lg">Get Approval</a>
                 %endif
             %elif ctxt.canApprove:
                 %if wf.canPublish():
-                    <a href="${url(ctxt, 'approve')}" class="btn btn-primary btn-block btn-large">Approve Round</a>
+                    <a href="${url(ctxt, 'approve')}" class="btn btn-primary btn-block btn-lg">Approve Round</a>
                 %else:
-                    <a class="btn btn-primary btn-block btn-large disabled">Approve Round</a>
+                    <a class="btn btn-primary btn-block btn-lg disabled">Approve Round</a>
                 %endif
             %endif
         </div>

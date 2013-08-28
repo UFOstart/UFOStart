@@ -92,7 +92,7 @@
         </div>
         <div class="right-box">
                 %if expert.introducers:
-                    <a class="expander btn btn-default btn-large pull-right" data-toggle-target=".single-team-member" data-toggle-class="expanded" data-toggle-text="▼">◀</a>
+                    <a class="expander btn btn-default btn-lg pull-right" data-toggle-target=".single-team-member" data-toggle-class="expanded" data-toggle-text="▼">◀</a>
                 %elif not root.user.isMe('linkedin', expert.linkedinId):
                     <div class="pull-right linkedin-widget" data-widget="SendMessage" data-entity-id="${expert.linkedinId}" data-entity-name="${expert.name}">
                         <a class="btn btn-primary">Send Message</a>
