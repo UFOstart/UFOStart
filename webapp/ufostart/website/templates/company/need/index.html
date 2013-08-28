@@ -11,16 +11,16 @@
         </%widgets:pageHeader>
 
         <div class="row mar-top-1">
-            <div class="col col-lg-3">
+            <div class="col-lg-3">
                 ${self.needOverview(ctxt.need)}
                 %if not ctxt.need.fulfilled:
                 ${self.inviteForm(view.schemas['Needinvite'], values, errors)}
                 %endif
             </div>
-            <div class="col col-lg-6">
+            <div class="col-lg-6">
                 ${self.needDetails(ctxt.canEdit, ctxt.company, ctxt.need)}
             </div>
-            <div class="col col-lg-3">
+            <div class="col-lg-3">
                 ${self.wtfBox()}
                 ${self.otherTasks(ctxt.round)}
                 ${widgets.sharebtns()}
@@ -130,7 +130,7 @@
 
 <%def name="recommendedServices(company, need)">
     %for service in need.services:
-        <div class="col col-lg-4 service-briefing mar-top-1">
+        <div class="col-lg-4 service-briefing mar-top-1">
             <div class="picture medium">
                 <img src="${service.logo_url}" name="${service.name}"/>
             </div>
@@ -172,7 +172,7 @@
 
         %if need.services:
             <div class="service-list row  mar-top-2">
-                <div class="col col-lg-12">
+                <div class="col-lg-12">
                     <div class="box-title">
                         Recommended Cloud Services
                     </div>
@@ -274,7 +274,7 @@
         %if application.approved or not need.fulfilled:
         <div class="mar-top-2 single-application">
             <div class="row">
-                <div class="col col-lg-4">
+                <div class="col-lg-4">
                     <div class="row">
                         <div class="col col-sm-3">
                             <div class="picture">
@@ -295,7 +295,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col col-lg-8 control-group">
+                <div class="col-lg-8 control-group">
                     ${application.message}
                 </div>
             </div>

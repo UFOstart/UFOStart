@@ -1,10 +1,11 @@
 # coding=utf-8
 from operator import methodcaller
 from hnc.apiclient.backend import DBNotification, DBException
-from hnc.forms.formfields import BaseForm, REQUIRED, StringField, TextareaField, HORIZONTAL_GRID, DecimalField, IntField, MultipleFormField
+from hnc.forms.formfields import REQUIRED, StringField, TextareaField, HORIZONTAL_GRID, DecimalField, IntField, MultipleFormField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.httpexceptions import HTTPForbidden, HTTPFound
+from ufostart.lib.baseviews import BaseForm
 from ufostart.website.apps.models.procs import SetProductOffersProc, PledgeCompanyProc, CreateProductProc, RemoveProductOfferProc
 from ufostart.website.apps.forms.controls import PictureGalleryUploadField, SanitizedHtmlField, CleanHtmlField, VideoUrlField, CurrencyIntField
 

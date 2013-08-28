@@ -13,7 +13,7 @@
 
 <%def name="bodyContent(profile)">
     <div class="row mar-top-1">
-        <div class="col col-lg-3">
+        <div class="col-lg-3">
             <div class="box-card">
                 ${widgets.logo(profile.picture, alt=profile.name, classes="large")}
             </div>
@@ -36,11 +36,11 @@
                         <div class="small-value">${len(profile.Companies)}</div>
                     </div>
                     <div class="row mar-top-1">
-                        <div class="col col-lg-6 number-widget">
+                        <div class="col-lg-6 number-widget">
                             <strong class="text-muted text-small">Mentoring</strong>
                             <div class="small-value">${len(profile.mentoredStartups)}</div>
                         </div>
-                        <div class="col col-lg-6 number-widget">
+                        <div class="col-lg-6 number-widget">
                             <strong class="text-muted text-small">Endorsements</strong>
                             <div class="small-value">${len(profile.getEndorsements())}</div>
                         </div>
@@ -51,15 +51,15 @@
                 ${widgets.sharebtns()}
             </div>
         </div>
-        <div class="col col-lg-9">
+        <div class="col-lg-9">
             <div class="row">
-                <div class="col col-lg-${'6' if profile.Applications or profile.Endorsements else '12'}">
+                <div class="col-lg-${'6' if profile.Applications or profile.Endorsements else '12'}">
                     ${self.mentoredCompanies(profile.mentoredStartups)}
                     ${self.companies(profile.Companies)}
                 </div>
 
                 %if profile.Applications or profile.Endorsements:
-                    <div class="col col-lg-6">
+                    <div class="col-lg-6">
                         ${self.applications(profile.Applications)}
                         ${self.displayEndorsements(profile.getEndorsements())}
                     </div>
@@ -101,7 +101,7 @@
                 ${widgets.company_logo(company)}
                 <div class="right-box">
                     <div class="row">
-                        <div class="col col-lg-6">
+                        <div class="col-lg-6">
                             <div class="overflow"><a href="${root.round_url(company.slug)}"><strong>${company.name}</strong></a></div>
                             <small class="text-muted">Round 1</small>
                             %if company.currentRound and company.currentRound.published:
@@ -109,7 +109,7 @@
                             %else:
                                 <div class="text-small text-muted">Round not published</div>
                             %endif
-                        </div><div class="col col-lg-6">
+                        </div><div class="col-lg-6">
                             <div class="member-pile face-pile-mini">
                                 %for member in company.Users:
                                     ${widgets.member_pic(member, 'micro')}

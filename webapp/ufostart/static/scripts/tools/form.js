@@ -7,20 +7,22 @@ define([], function(){
                 , errorElement: "span"
                 , validClass:"valid"
                 , onkeyup: false
+                , ignore: ".ignore"
                 , highlight: function (element, errorClass, validClass) {
-                    $(element).closest(".control-group").addClass("has-error").removeClass(validClass).removeClass(validClass);
+                    $(element).closest(".form-group").addClass("has-error").removeClass(validClass).removeClass(validClass);
                 }
                 , unhighlight: function (element, errorClass, validClass) {
                     var name = $(element).attr("name");
-                    if(name && $(element).closest(".controls").find('[for='+name.replace(/\./g,"\\.")+']').remove().length)
-                        $(element).closest(".control-group").removeClass("has-error").addClass(validClass);
+                    if(name && $(element).closest(".controls").find('[for='+name.replace(/\./g,"\\.")+']').filter("[generated]").remove().length)
+                        $(element).closest(".form-group").removeClass("has-error").addClass(validClass);
                 }
                 , errorPlacement: function(error, element) {
                     if(element.parent().find("."+this.errorClass+"[generated=true]").length)return;
+                    error.attr("generated", true);
                     if (element.parent().is(".input-append"))
                         error.insertAfter(element.parent());
                     else
-                        error.appendTo(element.closest(".controls,.control-group"));
+                        error.appendTo(element.closest(".controls,.form-group"));
                 }
             }, params)
             , validator = $(form).validate(opts)

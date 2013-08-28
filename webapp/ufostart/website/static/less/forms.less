@@ -1,5 +1,5 @@
 .labels-capitalized .control-label {text-transform: uppercase;}
-.control-group {
+.form-group {
   margin-bottom:ceil(@line-height-base * @font-size-base);
   .info {font-size: @font-size-small;}
   &.required {
@@ -8,7 +8,7 @@
 }
 
 .form-compacted {
-  > .control-group {margin-bottom: 5px;
+  > .form-group {margin-bottom: 5px;
     > .control-label {margin:0;}
   }
 }
@@ -31,6 +31,7 @@ textarea.x-high {height: 8 * @line-height-computed;}
 .box-dark .has-error {
   .control-label, .help-inline {
     color:pink;
+    font-size:@font-size-small;
   }
 }
 .btn.glyphicon-plus:before {

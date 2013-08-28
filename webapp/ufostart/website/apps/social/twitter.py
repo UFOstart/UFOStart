@@ -1,7 +1,7 @@
 import logging
 import urllib
 from urlparse import parse_qsl
-from hnc.forms.formfields import BaseForm, REQUIRED, EmailField, HORIZONTAL_GRID
+from hnc.forms.formfields import REQUIRED, EmailField, HORIZONTAL_GRID
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from hnc.tools.oauth import Consumer, Client, Token
@@ -9,6 +9,7 @@ from pyramid.decorator import reify
 from pyramid.renderers import render_to_response
 from pyramid.view import view_config, view_defaults
 import simplejson
+from ufostart.lib.baseviews import BaseForm
 from ufostart.website.apps.social import AbstractSocialResource, SocialNetworkException, assemble_profile_procs, SocialLoginSuccessful
 from ufostart.website.apps.models.auth import SocialNetworkProfileModel
 

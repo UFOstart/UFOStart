@@ -6,17 +6,17 @@
 <%def name="content()">
     <div class="container">
         <div class="row">
-            <div class="col col-lg-12">
+            <div class="col-lg-12">
                 <h1 class="section-title">
                     <span class="brand-primary">Add a Mentor</span>
                 </h1>
             </div>
         </div>
         <div class="row mar-top-1">
-            <div class="col col-lg-7">
+            <div class="col-lg-7">
                 ${self.build_form(mentors, view.form, values, errors)}
             </div>
-            <div class="col col-lg-3 col-offset-2">
+            <div class="col-lg-3 col-lg-offset-2">
                 <div class="wtf-box">
                     <h2 class="wtf-title">
                         How can I get a great Mentor?
@@ -47,7 +47,7 @@
                                 ${widgets.profile_pic(mentor.picture, mentor.token)}
                                 <div class="right-box">
                                     <div class="row">
-                                        <div class="col col-lg-6">
+                                        <div class="col-lg-6">
                                             <a href="${root.profile_url(mentor.token)}" class="entity-link">${mentor.name}</a>
                                             <p class="text-small">${mentor.headline}</p>
                                             %if mentor.token in ctxt.company.mentorTokens:
@@ -56,7 +56,7 @@
                                                 <a href="${url(ctxt, 'topmentor')}?m=${mentor.token}" class="btn btn-primary">Invite as Mentor</a>
                                             %endif
                                         </div>
-                                        <div class="col col-lg-6">
+                                        <div class="col-lg-6">
                                             %if mentor.Companies:
                                             <h6>Mentor for these Startups</h6>
                                             <div class="face-pile-mini">

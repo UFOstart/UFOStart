@@ -9,7 +9,7 @@
             %if ctxt.canApprove:
 
                 <div class="row">
-                    <div class="col col-lg-12">
+                    <div class="col-lg-12">
                         <div class="notice notice-wtf">
                             <div class="sidecrumb"></div>
                             <div class="sidecrumb"></div>
@@ -32,7 +32,7 @@
             %elif ctxt.canEdit:
 
                 <div class="row">
-                    <div class="col col-lg-12">
+                    <div class="col-lg-12">
                         <div class="notice notice-info">
                             <div class="sidecrumb"></div>
                             <div class="sidecrumb"></div>
@@ -54,18 +54,18 @@
         <div class="row mar-top-1">
             %if ctxt.round.published:
 
-                <div class="col col-lg-3 pull-right">
+                <div class="col-lg-3 pull-right">
                     ${self.sideBar(ctxt.round, ctxt.canEdit)}
                     ${widgets.sharebtns()}
                 </div>
-                <div class="col col-lg-9">
+                <div class="col-lg-9">
                     <div class="row">
-                        <div class="col col-lg-4">
+                        <div class="col-lg-4">
                             ${self.companyBox(ctxt.company)}
                             <div class="mar-top-2">${self.productBox(ctxt.company)}</div>
                             <div class="mar-top-2">${self.investmentBox(ctxt.round.Funding)}</div>
                         </div>
-                        <div class="col col-lg-8">
+                        <div class="col-lg-8">
                             ${self.activityStream()}
                         </div>
                     </div>
@@ -74,19 +74,19 @@
 
             %else:
 
-                <div class="col col-lg-3 pull-right">
+                <div class="col-lg-3 pull-right">
                     ${self.sideBar(ctxt.round, ctxt.canEdit)}
                     ${self.activityStream()}
                 </div>
-                <div class="col col-lg-9">
+                <div class="col-lg-9">
                     <div class="row">
-                        <div class="col col-lg-4">
+                        <div class="col-lg-4">
                             ${self.companyBox(ctxt.company)}
                         </div>
-                        <div class="col col-lg-4">
+                        <div class="col-lg-4">
                             ${self.productBox(ctxt.company)}
                         </div>
-                        <div class="col col-lg-4">
+                        <div class="col-lg-4">
                             ${self.investmentBox(ctxt.round.Funding)}
                         </div>
                     </div>
@@ -236,13 +236,13 @@
                     <div class="box-header">
                         <div class="box-content">
                             <div class="row">
-                                <div class="col col-lg-6">
+                                <div class="col-lg-6">
                                     <div class="number-widget mar-top-half">
                                         <h6>Target</h6>
                                         <div class="small-value">${funding.display_amount}</div>
                                     </div>
                                 </div>
-                                <div class="col col-lg-6">
+                                <div class="col-lg-6">
                                     <div class="number-widget mar-top-half">
                                         <h6>Total Equity</h6>
                                         <div class="small-value">${funding.display_equity}</div>
@@ -296,7 +296,7 @@
         ${self.renderNeedColumns(ctxt.groupedNeeds(3, True))}
 
         %if not ctxt.round.published and ctxt.canEdit:
-            <div class="col col-lg-12 mar-top-3">
+            <div class="col-lg-12 mar-top-3">
                 <div class="box-title highlight-target"><div id="target-customise-needs" class="highlight-anchor"></div>
                     Suggested Tasks
                 </div>
@@ -309,13 +309,13 @@
 
 <%def name="renderNeedColumns(needs)">
     %if needs:
-        <div class="col col-lg-12 mar-top-3">
+        <div class="col-lg-12 mar-top-3">
             <div class="box-title">
                 ${'Tasks' if ctxt.round.published else 'Round Tasks'}
             </div>
         </div>
         %for i, col in enumerate(needs):
-            <div class="col col-lg-4 need-card-list">
+            <div class="col-lg-4 need-card-list">
                 <div class="js-need-card-list">
                 %for need in col:
                     ${self.buildNeed(need, ctxt.round.published)}

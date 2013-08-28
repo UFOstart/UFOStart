@@ -16,26 +16,26 @@
     <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
         <div class="row mar-top-1" id="application-form">
-            <div class="col col-lg-4">
+            <div class="col-lg-4">
                 <div class="row">
-                    <div class="col col-sm-3">
+                    <div class="col-xs-3">
                         <div class="picture">
                             <img src="${root.user.picture}"/>
                         </div>
                     </div>
-                    <div class="col col-sm-9">
+                    <div class="col-xs-9">
                         <div class="name">${root.user.name}</div>
                         <p class="text-small">${html.nn(root.user.position)}</p>
                     </div>
                 </div>
                 <div class="row mar-top-1">
-                    <div class="col col-lg-12">
+                    <div class="col-lg-12">
                         <button type="submit" class="btn btn-primary">Submit Application</button>
                         <a href="${url(ctxt)}" class="btn btn-default">Cancel</a>
                     </div>
                 </div>
             </div>
-            <div class="col col-lg-8 control-group">
+            <div class="col-lg-8 control-group">
                 <textarea class="x-high" name="${form.fieldMap['message'].getName(form.id)}" required></textarea>
             </div>
         </div>

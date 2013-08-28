@@ -54,7 +54,7 @@ def main(global_config, **settings):
         , default_permission='view'
         )
 
-    request.extend_request(config)
+    request.extend_request_traversal(config)
 
     config.add_renderer(".html", renderer_factory)
     config.add_renderer(".xml", renderer_factory)

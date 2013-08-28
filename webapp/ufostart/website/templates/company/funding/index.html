@@ -11,13 +11,13 @@
         </%widgets:pageHeader>
 
         <div class="row mar-top-1">
-            <div class="col col-lg-3">
+            <div class="col-lg-3">
                 ${self.infoSideBar(ctxt.funding)}
             </div>
-            <div class="col col-lg-6">
+            <div class="col-lg-6">
                 ${self.mainBody(ctxt.funding)}
             </div>
-            <div class="col col-lg-3">
+            <div class="col-lg-3">
                 ${widgets.sharebtns()}
             </div>
         </div>
@@ -36,12 +36,12 @@
             <div class="box-title">Funding Details</div>
             <div class="box-content">
                 <div class="row">
-                    <div class="col col-lg-6 number-widget">
-                        <strong class="text-muted text-small">Target</strong>
+                    <div class="col-lg-6 number-widget">
+                        <h6>Target</h6>
                         <div class="small-value">${funding.display_amount}</div>
                     </div>
-                    <div class="col col-lg-6 number-widget">
-                        <strong class="text-muted text-small">Total Equity</strong>
+                    <div class="col-lg-6 number-widget">
+                        <h6>Total Equity</h6>
                         <div class="small-value">${funding.display_equity}</div>
                     </div>
                 </div>
@@ -110,14 +110,14 @@
                 <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
                     ${baseform.prelims(form)}
                     <div class="row">
-                        <div class="col col-lg-5">
+                        <div class="col-lg-5">
                             %for field in form.fields:
-                                ${field.render(form.id, request, values.get(form.id), errors.get(form.id), view)|n}
+                                ${field.render(form.id, request, values.get(form.id), errors.get(form.id), view, grid = form.grid)|n}
                             %endfor
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col col-lg-5">
+                        <div class="col-lg-5">
                             <button type="submit" class="btn btn-primary btn-block">Submit Investment Offer</button>
                         </div>
                     </div>

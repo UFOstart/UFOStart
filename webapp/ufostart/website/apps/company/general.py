@@ -1,8 +1,8 @@
-from hnc.forms.formfields import BaseForm, StringField, EmailField, REQUIRED, HiddenField, ChoiceField
+from hnc.forms.formfields import StringField, EmailField, REQUIRED, HiddenField, ChoiceField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage, GenericErrorMessage
 from pyramid.httpexceptions import HTTPFound
-from ufostart.lib import html
+from ufostart.lib.baseviews import BaseForm
 from ufostart.models.tasks import RoleModel
 from ufostart.website.apps.forms.controls import SanitizedHtmlField
 from ufostart.website.apps.models.procs import InviteToCompanyProc, AcceptInviteProc, RefreshProfileProc, AddUpdateCompanyProc, GetTopMentorsProc, GetProfileProc, PublishRoundProc, AskForApprovalProc

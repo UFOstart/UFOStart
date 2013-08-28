@@ -11,16 +11,17 @@
         </%widgets:pageHeader>
 
         <div class="row mar-top-1">
-            <div class="col col-lg-9">
+            <div class="
+            9">
                 ${widgets.mainMedia("Product Presentation", product.video, picture_url = product.Pictures)}
             </div>
-            <div class="col col-lg-3">
+            <div class="col-lg-3">
                 ${self.sidebarMedia(product.Pictures)}
             </div>
         </div>
 
         <div class="row mar-top-2">
-            <div class="col col-lg-3">
+            <div class="col-lg-3">
                 <div class="box-card">
                     ${widgets.companyInfo(ctxt.company, picclasses='medium')}
                 </div>
@@ -29,7 +30,7 @@
                     ${self.customerFacepile(company.Round.Pledges)}
                 </div>
             </div>
-            <div class="col col-lg-6">
+            <div class="col-lg-6">
                 <div class="main-description">
                     ${product.description | html.html,n}
                 </div>
@@ -38,7 +39,7 @@
                     ${self.pledgeList(company.Round.Pledges)}
                 </div>
             </div>
-            <div class="col col-lg-3">
+            <div class="col-lg-3">
                 ${self.offerSection(company, company.Round.Product)}
                 <div class="mar-top-3">
                     ${widgets.sharebtns()}
@@ -80,11 +81,11 @@
                 <p><strong class="dark">${offer.name}</strong></p>
                 <p class="text-small">${offer.description}</p>
                 <div class="row">
-                    <div class="col col-lg-6">
+                    <div class="col-lg-6">
                         <strong><small class="dark">Price</small></strong>
                         <div class="text-large text-light">${offer.price}</div>
                     </div>
-                    <div class="col col-lg-6">
+                    <div class="col-lg-6">
                         <strong><small class="dark">Stock</small></strong>
                         <div class="text-large text-light">${offer.stock}</div>
                     </div>

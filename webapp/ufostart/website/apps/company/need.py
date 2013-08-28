@@ -1,9 +1,10 @@
 # coding=utf-8
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import BaseForm, StringField, REQUIRED, TextareaField, IntField, HtmlAttrs, HORIZONTAL_GRID, DecimalField, EmailField
+from hnc.forms.formfields import StringField, REQUIRED, TextareaField, IntField, HtmlAttrs, HORIZONTAL_GRID, DecimalField, EmailField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
+from ufostart.lib.baseviews import BaseForm
 from ufostart.website.apps.forms.controls import PictureUploadField, TagSearchField, CurrencyIntField
 from ufostart.website.apps.models.company import NeedModel
 from ufostart.website.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc, InviteToNeedProc, AddNeedToRound

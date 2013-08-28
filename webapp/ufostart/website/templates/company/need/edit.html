@@ -6,19 +6,19 @@
 <%def name="content()">
     <div class="container">
         <div class="row">
-            <div class="col col-lg-12">
+            <div class="col-lg-12">
                 <h1 class="section-title">
                     <span class="brand-primary">${ctxt.need.name}</span>
                 </h1>
             </div>
         </div>
         <div class="row">
-            <div class="col col-lg-9">
+            <div class="col-lg-9">
               <p>${ctxt.need.summary}</p>
             </div>
         </div>
         <div class="row mar-top-2">
-            <div class="col col-lg-9">
+            <div class="col-lg-9">
                 <div class="box-content box-dark">
                     <%self:build_form need="${ctxt.need}" btn_label="${'Save Changes' if ctxt.need.added else 'Add to Round'}" form="${view.form}" values="${values.get(view.form.id)}" errors="${errors.get(view.form.id)}">
                         <%def name="cancel_button(form)">
@@ -27,7 +27,7 @@
                     </%self:build_form>
                 </div>
             </div>
-            <div class="col col-lg-3">
+            <div class="col-lg-3">
                 %if ctxt.need.summary:
                     <div class="wtf-box active">
                         <h2 class="wtf-title">
@@ -55,10 +55,10 @@
 
         ${form.fieldMap['name'].render(form.id, request, values, errors, view)|n}
         <div class="row">
-            <div class="col col-lg-3">
+            <div class="col-lg-3">
                 ${form.fieldMap['picture'].render(form.id, request, values, errors, view)|n}
             </div>
-            <div class="col col-lg-4 col-offset-1">
+            <div class="col-lg-4 col-lg-offset-1">
                 ${form.fieldMap['cash'].render(form.id, request, values, errors, view)|n}
                 <div class="control-group">
                     <div class="control-label">
@@ -69,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col col-lg-4">
+            <div class="col-lg-4">
                 ${form.fieldMap['equity'].render(form.id, request, values, errors, view)|n}
             </div>
         </div>

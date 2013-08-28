@@ -6,7 +6,7 @@
 <%def name="bcrumbs()">
     <div class="container breadcrumbs">
         <div class="row">
-            <div class="col col-lg-12 crumbs-inner">
+            <div class="col-lg-12 crumbs-inner">
                 <div class="current-round-container pull-right">
                     <div class="box-card extra-compact">
                         ${widgets.round_logo(ctxt.company, ctxt.company.Round)}
@@ -34,10 +34,10 @@
 
 <%def name="bodyContent(company)">
     <div class="row mar-top-1">
-        <div class="col col-lg-3">
+        <div class="col-lg-3">
             ${self.companyMainInfo(company)}
         </div>
-        <div class="col col-lg-6">
+        <div class="col-lg-6">
             ${widgets.mainMedia("Company Introduction", company.video, company.slideShare)}
             <div class="main-description mar-top-2">
                 ${company.description | html.html,n}
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div class="col col-lg-3">
+        <div class="col-lg-3">
             ${self.sidebarMedia(company.Pictures, company.slideShare)}
             ${widgets.sharebtns()}
         </div>

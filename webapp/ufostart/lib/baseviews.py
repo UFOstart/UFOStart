@@ -1,4 +1,6 @@
 from pyramid.decorator import reify
+from hnc.forms.formfields import BaseForm as BF, GRID_BS3
+
 
 class BaseHandler(object):
     def __init__(self, context, request):
@@ -18,3 +20,9 @@ class RootContext(object):
     @reify
     def settings(self):
         return getattr(self.request.globals, self.app_label)
+
+
+
+class BaseForm(BF):
+    grid = GRID_BS3
+

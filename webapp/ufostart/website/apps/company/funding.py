@@ -1,6 +1,7 @@
 # coding=utf-8
-from hnc.forms.formfields import BaseForm, REQUIRED, IntField, HtmlAttrs
+from hnc.forms.formfields import REQUIRED, IntField, HtmlAttrs
 from hnc.forms.handlers import FormHandler
+from ufostart.lib.baseviews import BaseForm
 from ufostart.website.apps.forms.controls import SanitizedHtmlField, FileUploadField, CurrencyIntField
 from ufostart.website.apps.models.procs import CreateFundingProc, InvestInCompanyProc
 
@@ -16,10 +17,6 @@ class InvestmentForm(BaseForm):
     ]
     @classmethod
     def on_success(cls, request, values):
-        # funding = request.context.funding
-        # if values['amount'] > funding.amount - funding.invested_amount:
-        #     return {'success':False, 'errors': {'amount': 'Amount needs to be lower than valuation!'}}
-
         values['User'] = {'token': request.root.user.token}
         data = {"token": request.context.round.token, "Funding": {"Investment": values}}
         InvestInCompanyProc(request, data)

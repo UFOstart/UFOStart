@@ -7,21 +7,21 @@
 <%def name="content()">
     <div class="container">
     <div class="row">
-        <div class="col col-lg-12">
+        <div class="col-lg-12">
           <h1 class="section-title">
               <span class="brand-primary">Edit Your Company</span>
           </h1>
         </div>
     </div>
     <div class="row mar-top-1">
-        <div class="col col-lg-8">
+        <div class="col-lg-8">
             <div class="box-dark">
                 <div class="box-content">
                     ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
                 </div>
             </div>
         </div>
-        <div class="col col-lg-3 col-offset-1">
+        <div class="col-lg-3 col-lg-offset-1">
             ${create.wtfBox()}
         </div>
     </div>
@@ -33,10 +33,10 @@
     <form class="${form.grid.form_classes}" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
         <div class="row">
-            <div class="col col-lg-4">
+            <div class="col-lg-4">
                 ${form.fieldMap['logo'].render(form.id, request, values, errors, view, grid = form.grid)|n}
             </div>
-            <div class="col col-lg-8">
+            <div class="col-lg-8">
                 ${form.fieldMap['name'].render(form.id, request, values, errors, view, grid = form.grid)|n}
                 ${form.fieldMap['pitch'].render(form.id, request, values, errors, view, grid = form.grid)|n}
             </div>
