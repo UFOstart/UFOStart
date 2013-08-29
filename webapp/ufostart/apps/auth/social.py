@@ -4,10 +4,10 @@ from hnc.forms.messages import GenericErrorMessage
 from hnc.tools.request import JsonAwareRedirect
 from pyramid.renderers import render_to_response
 from pyramid.response import Response
-from ufostart.apps.models.auth import SOCIAL_NETWORK_TYPES, SOCIAL_NETWORK_TYPES_REVERSE
+from ufostart.models.auth import SOCIAL_NETWORK_TYPES, SOCIAL_NETWORK_TYPES_REVERSE
 
-from ufostart.apps.models.procs import SocialConnectProc
-from ufostart.apps.models.auth import SocialNetworkProfileModel
+from ufostart.models.procs import SocialConnectProc
+from ufostart.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 

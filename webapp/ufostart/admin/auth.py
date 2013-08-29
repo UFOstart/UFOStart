@@ -2,7 +2,7 @@ from hnc.forms.formfields import EmailField, REQUIRED, PasswordField, GRID_BS3
 from pyramid.security import has_permission
 from ufostart.lib.baseviews import BaseForm
 from hnc.forms.handlers import FormHandler
-from ufostart.apps.models.auth import UserModel
+from ufostart.models.auth import UserModel
 
 
 USER_TOKEN = "ADMIN_USER_TOKEN"
@@ -13,6 +13,8 @@ def getUser(self):
 def setUserF(self, user):
     self.request.session[USER_TOKEN] = user
     self.user = user
+
+
 
 class AdminUserModel(UserModel):
     UserGroups = ["AdminUser"]

@@ -1,6 +1,8 @@
 from . import social
+from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPForbidden
 from pyramid.security import Everyone, Allow, Authenticated, NO_PERMISSION_REQUIRED
+from ufostart.models.auth import setUserF, getUser
 from ufostart.lib.baseviews import BaseContextMixin
 from ufostart.apps.social import angellist, SocialLoginFailed, SocialLoginSuccessful
 
@@ -9,6 +11,8 @@ class SocialContext(BaseContextMixin):
     __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'proceed')]
     __auth_template__ = "ufostart:templates/auth/login.html"
 
+    user = reify(getUser)
+    setUser = setUserF
 
     @property
     def site_title(self):

@@ -6,7 +6,7 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPFound
 from pyramid.security import Allow, Everyone, Authenticated, has_permission
 import product, general, need, setup, funding
 from ufostart.lib.baseviews import BaseContextMixin
-from ufostart.apps.models.procs import GetCompanyProc, GetTemplateDetailsProc, GetAllCompanyTemplatesProc, GetInviteDetailsProc
+from ufostart.models.procs import GetCompanyProc, GetTemplateDetailsProc, GetAllCompanyTemplatesProc, GetInviteDetailsProc
 
 
 def canEdit(self): return has_permission('edit', self, self.request)

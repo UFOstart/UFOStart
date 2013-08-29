@@ -15,16 +15,4 @@ class RoleModel(NamedModel):
     def getLabel(self, request):return self.label
 
 
-
-class TaskCategoriesModel(NamedModel):
-    name = TextField()
-
-
-
-
-TASK_CATEGORIES = [
-    TaskCategoriesModel(name = 'OPERATIONS')
-    , TaskCategoriesModel(name = 'MARKETING')
-    , TaskCategoriesModel(name = 'SALES')
-    , TaskCategoriesModel(name = 'TECH')
-]
+ROLES = [RoleModel(key = "FOUNDER", label = "Founder"), RoleModel(key = "TEAM_MEMBER", label = "Team Member")]

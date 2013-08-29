@@ -39,6 +39,9 @@ class BaseContextMixin(object):
         self.__name__ = name
 
     @property
+    def settings(self):
+        return self.__parent__.settings
+    @property
     def request(self):
         return self.__parent__.request
     @property

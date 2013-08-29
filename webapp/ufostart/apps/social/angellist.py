@@ -6,7 +6,7 @@ from httplib2 import Http
 import simplejson
 from ufostart.lib.html import getYoutubeVideoId, getVimeoVideoId
 from ufostart.apps.social import AbstractSocialResource, SocialNetworkException, UserRejectedNotice
-from ufostart.apps.models.auth import SocialNetworkProfileModel
+from ufostart.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 

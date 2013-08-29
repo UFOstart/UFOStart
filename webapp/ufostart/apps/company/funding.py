@@ -3,7 +3,7 @@ from hnc.forms.formfields import REQUIRED, IntField, HtmlAttrs
 from hnc.forms.handlers import FormHandler
 from ufostart.lib.baseviews import BaseForm
 from ufostart.apps.forms.controls import SanitizedHtmlField, FileUploadField, CurrencyIntField
-from ufostart.apps.models.procs import CreateFundingProc, InvestInCompanyProc
+from ufostart.models.procs import CreateFundingProc, InvestInCompanyProc
 
 
 def index(context, request):

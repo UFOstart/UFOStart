@@ -31,14 +31,14 @@ class SocialLoginSuccessful(SocialResult):
         self.profile = profile
 
 
-
-
-
 class AbstractSocialResource(object):
     __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'import')]
     @property
     def request(self):
         return self.__parent__.request
+
+    @property
+    def user(self): return self.__parent__.user
 
     def __init__(self, parent, name, settings):
         self.__parent__ = parent
@@ -53,7 +53,6 @@ class AbstractSocialResource(object):
         furl = request.params.get('furl')
         if furl:
             request.session.flash(furl, 'redirections')
-
 
 
 def assemble_profile_procs(token_func, profile_func, parse_profile_func):

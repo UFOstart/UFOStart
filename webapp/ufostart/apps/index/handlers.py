@@ -1,4 +1,4 @@
-from ufostart.apps.models.procs import FindPublicNeeds, GetPopularNeeds, GetNewProductsProc, FindPublicNeedsByLocation
+from ufostart.models.procs import FindPublicNeeds, GetPopularNeeds, GetNewProductsProc, FindPublicNeedsByLocation
 
 
 def index(context, request):

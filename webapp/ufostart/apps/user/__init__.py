@@ -4,7 +4,7 @@ from pyramid.decorator import reify
 from pyramid.security import Authenticated, Allow, Deny, Everyone
 from pyramid.traversal import quote_path_segment
 from ufostart.lib.baseviews import BaseContextMixin
-from ufostart.apps.models.procs import RefreshProfileProc, GetProfileProc, GetTopTags, FindPublicNeeds
+from ufostart.models.procs import RefreshProfileProc, GetProfileProc, GetTopTags, FindPublicNeeds
 
 
 

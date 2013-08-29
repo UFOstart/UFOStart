@@ -6,8 +6,8 @@ from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
 from ufostart.lib.baseviews import BaseForm
 from ufostart.apps.forms.controls import PictureUploadField, TagSearchField, CurrencyIntField
-from ufostart.apps.models.company import NeedModel
-from ufostart.apps.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc, InviteToNeedProc, AddNeedToRound
+from ufostart.models.company import NeedModel
+from ufostart.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc, InviteToNeedProc, AddNeedToRound
 
 
 class NeedIndexForm(BaseForm):

@@ -3,9 +3,10 @@ from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage, GenericErrorMessage
 from pyramid.httpexceptions import HTTPFound
 from ufostart.lib.baseviews import BaseForm
-from ufostart.models.tasks import RoleModel
+
 from ufostart.apps.forms.controls import SanitizedHtmlField
-from ufostart.apps.models.procs import InviteToCompanyProc, AcceptInviteProc, RefreshProfileProc, AddUpdateCompanyProc, GetTopMentorsProc, GetProfileProc, PublishRoundProc, AskForApprovalProc
+from ufostart.models.tasks import ROLES
+from ufostart.models.procs import InviteToCompanyProc, AcceptInviteProc, RefreshProfileProc, AddUpdateCompanyProc, GetTopMentorsProc, GetProfileProc, PublishRoundProc, AskForApprovalProc
 
 
 
@@ -54,9 +55,7 @@ class MentorInviteForm(BaseInviteForm):
         return BaseInviteForm.on_success(request, values)
 
 
-ROLES = [RoleModel(key = "FOUNDER", label = "Founder"), RoleModel(key = "TEAM_MEMBER", label = "Team Member")]
-def get_roles(request):
-    return ROLES
+def get_roles(request): return ROLES
 class InviteTeamForm(BaseInviteForm):
     fields = BaseInviteForm.fields + [ChoiceField("role", "Invitee is", get_roles)]
 
@@ -77,9 +76,6 @@ class PostUpdateForm(BaseForm):
 
 class CompanyIndexHandler(FormHandler):
     forms = [InviteTeamForm, PostUpdateForm]
-
-
-
 
 class AddMentorHandler(FormHandler):
     form = MentorInviteForm
@@ -103,8 +99,6 @@ def add_top_mentor(context, request):
 
     request.session.flash(GenericSuccessMessage(u"You successfully invited {name} to your company!".format(**values)), "generic_messages")
     raise HTTPFound(request.resource_url(request.context))
-
-
 
 
 def invite_landing(context, request):

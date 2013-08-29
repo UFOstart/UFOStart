@@ -6,7 +6,7 @@ from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.httpexceptions import HTTPForbidden, HTTPFound
 from ufostart.lib.baseviews import BaseForm
-from ufostart.apps.models.procs import SetProductOffersProc, PledgeCompanyProc, CreateProductProc, RemoveProductOfferProc
+from ufostart.models.procs import SetProductOffersProc, PledgeCompanyProc, CreateProductProc, RemoveProductOfferProc
 from ufostart.apps.forms.controls import PictureGalleryUploadField, SanitizedHtmlField, CleanHtmlField, VideoUrlField, CurrencyIntField
 
 

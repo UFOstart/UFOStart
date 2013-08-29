@@ -1,0 +1,23 @@
+<%inherit file="layout.html"/>
+
+<%def name="bcrumbs()"></%def>
+
+<%def name="content()">
+    <div class="padded-body">
+        <a href="${url(ctxt, 'create')}" class="pull-right btn btn-primary">Create Need</a>
+        <h3>All Needs</h3>
+        <div ng-controller="NeedListCtrl">
+            <div class="list-group">
+                <div class="row list-group-item">
+                    <div class="col-lg-3"><input type="text" ng-model="queryName" class="search-query form-control" placeholder="Search by Name"></div>
+                </div>
+                <div class="row list-group-item" ng-repeat="need in needs | filter:query | orderBy:'name'">
+                    <div class="col-lg-3">{{need.name}}</div>
+                    <div class="col-lg-2">
+                        <a href="need/{{need.slug}}" class="btn btn-default edit-link">view</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>

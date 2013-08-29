@@ -9,7 +9,7 @@ from pyramid.decorator import reify
 from ufostart.lib.html import getYoutubeVideoId, getVimeoVideoId, getVimeoMeta
 from ufostart.lib.tools import format_currency
 from ufostart.models.tasks import NamedModel
-from ufostart.apps.models.workflow import WorkflowModel
+from ufostart.models.workflow import WorkflowModel
 
 TEMPLATE_KEYS = {
     'E-COMMERCE':{'key':'ecommerce', 'name':'E-Commerce'}
@@ -483,6 +483,7 @@ class RoundModel(Mapping):
     @property
     def roundTasks(self):
         return filter(attrgetter("customized"), self.Needs)
+
 class CompanyModel(BaseCompanyModel):
     tagString = TextField()
 

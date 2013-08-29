@@ -7,10 +7,8 @@ from ufostart.lib.baseviews import RootContext
 from ufostart.admin import AdminContext
 from ufostart.apps.auth import SocialContext
 from ufostart.apps.company import ProtoCompanyContext, TemplatesRootContext, ProtoInviteContext
-from ufostart.apps.models.auth import AnonUser
 from ufostart.apps.user import UserHomeContext, UserStubContext, BrowseContext
-
-USER_SESSION_KEY = 'WEBSITE_USER'
+from ufostart.models.auth import AnonUser, getUser, setUserF, USER_TOKEN
 
 log = logging.getLogger(__name__)
 
@@ -26,19 +24,14 @@ class WebsiteRootContext(RootContext):
         return [self.request.globals.project_name]
 
     app_label = 'website'
-
-    @reify
-    def user(self):
-        return self.request.session.get(USER_SESSION_KEY) or AnonUser()
-
-    def setUser(self, user):
-        self.request.session[USER_SESSION_KEY] = self.user = user
-        return user
+    user = reify(getUser)
+    setUser = setUserF
 
     def logout(self):
-        if USER_SESSION_KEY in self.request.session:
-            del self.request.session[USER_SESSION_KEY]
+        if USER_TOKEN in self.request.session:
+            del self.request.session[USER_TOKEN]
         self.user = AnonUser()
+
 
     @reify
     def location(self):
@@ -81,6 +74,7 @@ class WebsiteRootContext(RootContext):
     def admin_url(self, *args, **kwargs):
         return self.request.resource_url(self, 'admin', *args, **kwargs)
 
+
     def login_url(self, *args, **kwargs):
         return self.request.resource_url(self, 'login', *args, **kwargs)
     def logout_url(self, *args, **kwargs):
@@ -88,7 +82,6 @@ class WebsiteRootContext(RootContext):
     @property
     def browse_url(self, *args, **kwargs):
         return self.request.resource_url(self, 'browse', *args, **kwargs)
-
     @property
     def home_url(self):
         return self.request.resource_url(self)

@@ -4,7 +4,7 @@ from urlparse import parse_qsl
 from hnc.tools.oauth import Client, Token
 import simplejson
 from ufostart.apps.social import AbstractSocialResource, SocialNetworkException, assemble_profile_procs, SocialLoginSuccessful
-from ufostart.apps.models.auth import SocialNetworkProfileModel
+from ufostart.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 

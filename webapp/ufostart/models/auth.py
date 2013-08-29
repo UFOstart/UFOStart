@@ -2,11 +2,12 @@ from datetime import datetime
 from operator import attrgetter
 from hnc.apiclient import Mapping, TextField, IntegerField, ListField, DictField, DateTimeField
 from pyramid.decorator import reify
+from pyramid.security import has_permission
 import simplejson
 from ufostart.lib.html import format_date
 from ufostart.lib.tools import format_currency
 from ufostart.models.tasks import NamedModel
-from ufostart.apps.models.company import CompanyModel, ApplicationModel
+from ufostart.models.company import CompanyModel, ApplicationModel
 
 
 
@@ -146,3 +147,13 @@ class UserModel(Mapping):
 def AnonUser():
     return UserModel()
 
+
+
+USER_TOKEN = "USER_TOKEN"
+
+def canEdit(self): return has_permission('edit', self, self.request)
+def getUser(self):
+    return self.request.session.get(USER_TOKEN) or UserModel()
+def setUserF(self, user):
+    self.request.session[USER_TOKEN] = user
+    self.user = user
