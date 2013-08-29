@@ -16,3 +16,14 @@ class RoleModel(NamedModel):
 
 
 ROLES = [RoleModel(key = "FOUNDER", label = "Founder"), RoleModel(key = "TEAM_MEMBER", label = "Team Member")]
+
+
+class TaskCategoriesModel(NamedModel):
+    name = TextField()
+
+TASK_CATEGORIES = [
+    TaskCategoriesModel(name = 'OPERATION')
+    , TaskCategoriesModel(name = 'MARKETING')
+    , TaskCategoriesModel(name = 'SALES')
+    , TaskCategoriesModel(name = 'TECHNOLOGY')
+]

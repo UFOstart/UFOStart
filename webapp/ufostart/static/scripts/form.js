@@ -1,4 +1,12 @@
 define(['tools/ajax'], function(ajax){
+    jQuery.validator.addMethod("greaterThan",
+    function(value, element, params) {
+        if (!/Invalid|NaN/.test(new Date(value))) {
+            return new Date(value) > new Date($(params).val());
+        }
+        return isNaN(value) && isNaN($(params).val())
+            || (Number(value) > Number($(params).val()));
+    },'Must be greater than {0}.');
     var View = Backbone.View.extend({
         events: {
             "click .remove-link": "removeRow"
@@ -22,7 +30,7 @@ define(['tools/ajax'], function(ajax){
             this.$el.find(this.wrapperSelector).each(function(idx, elem){
                 var required = $(elem).data("required") === true;
                 $(elem).find(view.templateSelector).each(function(idx, elem){
-                    if(idx>0)$(elem).prepend(view.removeLink);
+                    if(idx>0)$(elem).append(view.removeLink);
                 });
             });
         }

@@ -73,7 +73,7 @@ Please describe your funding target and your company's post funding valuation. Y
     </script>
     <script>
         require(["views/company/funding_edit"], function(View){
-            filepicker.setKey('A0Me4BRKSLSnOkrY6Jb2xz');
+            filepicker.setKey('${settings.filepickerKey}');
             $(".form-validated").each(function(idx, form){
                 new View({el:form})
             });

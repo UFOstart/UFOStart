@@ -13,8 +13,11 @@
                 </div>
                 <div class="row list-group-item" ng-repeat="service in services | filter:query | orderBy:'name'">
                     <div class="col-lg-3">{{service.name}}</div>
+                    <div class="col-lg-3">
+                    <a href="{{service.url}}"><img class="thumbnail" style="width:50px;" src="{{service.logo}}"></a>
+                    </div>
                     <div class="col-lg-2">
-                        <a href="service/{{service.slug}}" class="btn btn-default edit-link">view</a>
+                        <a href="${url(ctxt)}{{service.name}}/edit" class="btn btn-default edit-link">edit</a>
                     </div>
                 </div>
             </div>

@@ -11,7 +11,7 @@
                 %for i, tag in enumerate(value):
 ${self.tagTempl(widget, str(i), tag['name'], tag['name'])}\
                 %endfor
-            </div><input type="text" class="query ${widget.getClasses()}" autocomplete="off" ${widget.attrs.getInputAttrs(request)|n}/>
+            </div><input type="text" class="form-control query ${widget.getClasses()}" autocomplete="off" ${widget.attrs.getInputAttrs(request)|n}/>
         </div>
     </div>
 </%block>

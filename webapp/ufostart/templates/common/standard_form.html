@@ -78,7 +78,7 @@
     </script>
     <script>
         require(["form"], function(Form){
-            filepicker.setKey('Aq1qiwAtYTKmwQiTf7xHdz');
+            filepicker.setKey('${settings.filepickerKey}');
             $(".form-validated").each(function(idx, form){
                 new Form({el: $(form)
                     , error: function(resp, status, xhr){

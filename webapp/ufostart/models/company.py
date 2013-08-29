@@ -208,7 +208,9 @@ class EndorsementModel(Mapping):
 class NeedModel(Mapping):
     token = TextField()
     slug = TextField()
+    key = TextField()
     name = TextField()
+
     summary = TextField()
     status = TextField()
     category = TextField()

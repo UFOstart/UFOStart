@@ -7,21 +7,20 @@ var module = angular.module('adminapp', [])
 });
 
 (function(module){
-    function addFactory(module, key, url){
+    function addFactory(module, key, getURL, createURL){
         module.factory(key, function($http, $q) {
             return {
               getAllItems: function(){
                 var deferred = $q.defer();
-                $http.post(url, {}
+                $http.post(getURL, {}
                 ).success(function(data){
                   deferred.resolve(data[key]);
                 }).error(function(){
                   deferred.reject("An error occured while fetching items");
                 });
               return deferred.promise;
-            }
-          }
-      });
+            }}
+        });
     }
 
     addFactory(module, "Templates", "/api/0.0.1/admin/template/all");
@@ -42,11 +41,11 @@ function TemplateListCtrl($scope, Templates) {
   };
 }
 
-function NeedListCtrl($scope, Needs) {
-  $scope.needs = [];
+function TaskListCtrl($scope, Needs) {
+  $scope.tasks = [];
 
   Needs.getAllItems().then(function(data){
-      $scope.needs = data
+      $scope.tasks = data
   });
   $scope.query = function (item){
         return    (!$scope.queryName || !!~item.name.toLowerCase().indexOf($scope.queryName.toLowerCase()));

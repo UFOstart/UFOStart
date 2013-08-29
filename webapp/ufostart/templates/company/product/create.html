@@ -53,7 +53,7 @@
     </script>
     <script>
         require(["form"], function(View){
-            filepicker.setKey('A0Me4BRKSLSnOkrY6Jb2xz');
+            filepicker.setKey('${settings.filepickerKey}');
             $(".form-validated").each(function(idx, form){
                 new View({el:form,validatorOpts: {ignore: ".super-valid"}})
             });

@@ -4,17 +4,17 @@
 
 <%def name="content()">
     <div class="padded-body">
-        <a href="${url(ctxt, 'create')}" class="pull-right btn btn-primary">Create Need</a>
-        <h3>All Needs</h3>
-        <div ng-controller="NeedListCtrl">
+        <a href="${url(ctxt, 'create')}" class="pull-right btn btn-primary">Create Task</a>
+        <h3>All Tasks</h3>
+        <div ng-controller="TaskListCtrl">
             <div class="list-group">
                 <div class="row list-group-item">
                     <div class="col-lg-3"><input type="text" ng-model="queryName" class="search-query form-control" placeholder="Search by Name"></div>
                 </div>
-                <div class="row list-group-item" ng-repeat="need in needs | filter:query | orderBy:'name'">
-                    <div class="col-lg-3">{{need.name}}</div>
+                <div class="row list-group-item" ng-repeat="task in tasks | filter:query | orderBy:'name'">
+                    <div class="col-lg-3">{{task.name}}</div>
                     <div class="col-lg-2">
-                        <a href="need/{{need.slug}}" class="btn btn-default edit-link">view</a>
+                        <a href="${url(ctxt)}{{task.key}}/edit" class="btn btn-default edit-link">edit</a>
                     </div>
                 </div>
             </div>

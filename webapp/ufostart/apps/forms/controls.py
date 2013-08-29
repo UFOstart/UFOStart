@@ -33,7 +33,6 @@ class PictureGalleryUploadField(formfields.StringField):
         return {self.name: formencode.ForEach(url = formencode.validators.String(required=True))}
 
 
-
 class TagSearchField(formfields.TagSearchField):
     template = "ufostart:templates/company/controls/tagsearch.html"
 
@@ -65,16 +64,11 @@ class RemoveHtmlString(formencode.validators.String):
               result+=tag.extract()
       return result
 
-
 class SanitizedHtmlField(TextareaField):
     _validator = HTMLString
 
 class CleanHtmlField(StringField):
     _validator = RemoveHtmlString
-
-
-
-
 
 class SlideShareUrl(formencode.validators.String):
     messages = dict(

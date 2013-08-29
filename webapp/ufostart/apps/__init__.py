@@ -38,6 +38,7 @@ class WebsiteSettings(object):
         self.clientToken = settings['apiToken']
         self.trackUsers = StringBool().to_python(settings['trackUsers'])
         self.gaCode = settings['gaCode']
+        self.filepickerKey = settings['filepickerKey']
 
         networks = settings['network']
         for network, params in networks.items():

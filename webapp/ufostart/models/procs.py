@@ -2,7 +2,7 @@ from hnc.apiclient import Mapping, ListField, DictField
 from hnc.apiclient.backend import ClientTokenProc, DBNotification
 from ufostart.models.tasks import NamedModel
 from ufostart.models.auth import UserModel
-from ufostart.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel, InviteModel
+from ufostart.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel, InviteModel, ServiceModel
 
 
 class NewUserMsg(DBNotification): pass
@@ -112,3 +112,14 @@ AcceptInviteProc = ClientTokenProc("/web/company/acceptInvite")
 PublishRoundProc = ClientTokenProc("/web/round/publish")
 AskForApprovalProc = ClientTokenProc("/web/round/sendmentor")
 
+
+
+
+#=================================================== Admin tool ==========================================================
+AdminCreateNeedProc = ClientTokenProc("/admin/need/create", result_cls=NeedModel, root_key="Need")
+AdminEditNeedProc = ClientTokenProc("/admin/need/edit", result_cls=NeedModel, root_key="Need")
+AdminAllNeedProc = ClientTokenProc("/admin/need/all", result_cls=NeedModel, root_key="Needs", result_list=True)
+
+AdminServiceCreateProc = ClientTokenProc("/admin/service/create", result_cls=ServiceModel, root_key="Service")
+AdminServiceEditProc = ClientTokenProc("/admin/service/edit", result_cls=ServiceModel, root_key="Service")
+AdminServiceAllProc = ClientTokenProc("/admin/service/all", result_cls=ServiceModel, root_key="Services", result_list=True)
