@@ -22,8 +22,9 @@ class TaskCategoriesModel(NamedModel):
     name = TextField()
 
 TASK_CATEGORIES = [
-    TaskCategoriesModel(name = 'OPERATION')
+    TaskCategoriesModel(name = 'OPERATIONS')
     , TaskCategoriesModel(name = 'MARKETING')
     , TaskCategoriesModel(name = 'SALES')
-    , TaskCategoriesModel(name = 'TECHNOLOGY')
+    , TaskCategoriesModel(name = 'TECH')
+    , TaskCategoriesModel(name = 'MISC')
 ]

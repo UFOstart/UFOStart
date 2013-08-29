@@ -22,7 +22,7 @@
                     <div class="col-lg-3">{{template.name}}</div>
                     <div class="col-lg-2">{{template.active|filter_active}}</div>
                     <div class="col-lg-2">
-                        <a href="template/{{template.key}}" class="btn btn-default edit-link">view</a>
+                        <a href="${url(ctxt)}{{template.key}}/edit" class="btn btn-default edit-link">edit</a>
                     </div>
                 </div>
             </div>
