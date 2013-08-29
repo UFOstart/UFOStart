@@ -1,0 +1,17 @@
+.workflow {
+  margin:15px;
+  .list-unstyled;
+}
+
+.workflow-stage {
+
+  > span.stage-link {color:@text-muted;}
+  &.active {
+    font-weight:900;
+    color: darken(@link-color, 20%);
+  }
+  &:before {content:"☐";}
+  &.done:before {
+    content:"☑"
+  }
+}

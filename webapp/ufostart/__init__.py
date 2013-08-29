@@ -9,7 +9,7 @@ from pyramid.security import Authenticated, Everyone
 from pyramid_beaker import session_factory_from_settings
 
 from hnc.tools import request
-from .lib.subscribers import context_authorization, add_renderer_variables
+from .lib.subscribers import add_renderer_variables
 from .lib.globals import Globals
 from .website.apps.contexts import WebsiteRootContext
 
@@ -61,8 +61,6 @@ def main(global_config, **settings):
         return string
     config.add_request_method(_, '_')
 
-
-    config.add_subscriber(context_authorization, 'pyramid.events.ContextFound')
     config.add_subscriber(add_renderer_variables, 'pyramid.events.BeforeRender')
 
     config.include("ufostart.website.apps")

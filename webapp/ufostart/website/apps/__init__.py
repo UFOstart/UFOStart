@@ -1,21 +1,16 @@
 from importlib import import_module
+
 from formencode.validators import StringBool
 from hnc.tools.oauth import Consumer
-from hnc.tools.routing import ClassRoute, FunctionRoute, route_factory, App, JSON_FORM_ATTRS, OAuthClassRoute, OAuthLoginRoute, TraversalRoute
+from hnc.tools.routing import FunctionRoute, route_factory, App
+from pyramid.decorator import reify
+import simplejson
 
 from . import contexts, index, auth, company, expert, user
-from pyramid.decorator import reify
-from pyramid.httpexceptions import HTTPInternalServerError
-from pyramid.response import Response
-from pyramid.view import view_config
-import simplejson
 from ufostart.website.apps.social import SocialLoginFailed, SocialLoginSuccessful
 
 
 __author__ = 'Martin'
-
-
-
 
 ROUTE_LIST = [
     FunctionRoute    ("website_index"                      , "/", contexts.WebsiteRootContext                                                , index.index, "index.html")
@@ -40,6 +35,7 @@ class SocialNetworkSettings(object):
 
 class WebsiteSettings(object):
     key = "website"
+    css_name = 'site'
     networks = {}
 
     def __init__(self, settings):

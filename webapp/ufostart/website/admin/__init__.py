@@ -9,6 +9,7 @@ from ufostart.website.admin.auth import AuthenticationHandler, AdminUserModel, U
 
 class AdminSettings(object):
     key = "admin"
+    css_name = 'site_admin'
     def __init__(self, settings):
         self.login = settings['login']
 
