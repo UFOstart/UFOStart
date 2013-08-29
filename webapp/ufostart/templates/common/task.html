@@ -1,0 +1,49 @@
+
+<%def name="public_task_cols(cols)">
+    %for i, col in enumerate(cols):
+        <div class="col-lg-4">
+            <div class="js-need-card-list">
+            %for need in col:
+                ${self.public_html(need)}
+            %endfor
+            </div>
+            %if  hasattr(ctxt, 'round') and not i and ctxt.canEdit and not ctxt.round.published:
+                <a href="${url(ctxt, 'new')}" class="need-card-inner add-card">
+                    <img src="${STATIC_URL}img/addneed.png"/>
+                    <h4>Create a new Task</h4>
+                </a>
+            %endif
+        </div>
+    %endfor
+</%def>
+
+
+<%def name="public_html(need)">
+    <div class="need-card">
+    <div class="need-card-inner">
+        <div class="cut-corner box-header-muted box-content">
+            <h3 class="no-margin">
+                %if hasattr(ctxt, 'round'):
+                    <a href="${request.root.need_url(ctxt.company.slug, need.slug, 'edit')}">${need.name}</a>
+                %else:
+                    ${need.name}
+                %endif
+            </h3>
+            <p class="mar-top-1">
+                ${need.summary | html.trunc(200)}
+            </p>
+        </div>
+        <div class="box-content">
+            %for tag in need.tags:
+                <span class="label label-info spaced text-small">${tag}</span>
+            %endfor
+        </div>
+        %if hasattr(ctxt, 'round'):
+            <div class="box-content">
+                <a href="${request.root.need_url(ctxt.company.slug, need.slug, 'edit')}" class="btn btn-primary btn-block">Add Task</a>
+            </div>
+        %endif
+
+    </div>
+    </div>
+</%def>

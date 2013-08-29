@@ -1,7 +1,7 @@
 <%inherit file="../layout.html"/>
 <%namespace file="../widgets.html" name="widgets"/>
 <%namespace file="company/widgets.html" name="companyWidgets"/>
-<%namespace file="setup/details.html" name="taskTemplate"/>
+<%namespace file="ufostart:templates/common/task.html" name="tasklib"/>
 
 <%def name="content()">
     <div class="container" id="project-round-need-dashboard">
@@ -301,7 +301,7 @@
                     Suggested Tasks
                 </div>
             </div>
-            ${taskTemplate.buildNeedCols(ctxt.groupedNeeds(3, False))}
+            ${tasklib.public_task_cols(ctxt.groupedNeeds(3, False))}
         %endif
     </div>
 </%def>

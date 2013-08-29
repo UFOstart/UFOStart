@@ -1,10 +1,12 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import TextareaField, REQUIRED, StringField, HtmlAttrs, ChoiceField, URLField
+from hnc.forms.formfields import TextareaField, REQUIRED, StringField, HtmlAttrs, ChoiceField, URLField, CheckboxField, CheckboxPostField, Field
 from hnc.forms.handlers import FormHandler
+from hnc.forms.layout import BS3_NCOL, Sequence
 from hnc.forms.messages import GenericSuccessMessage
+from hnc.tools.tools import deep_get
 from ufostart.lib.baseviews import BaseForm
 from ufostart.apps.forms.controls import TagSearchField, PictureUploadField
-from ufostart.models.procs import AdminCreateNeedProc, AdminEditNeedProc, AdminServiceCreateProc, AdminServiceEditProc
+from ufostart.models.procs import AdminNeedCreateProc, AdminNeedEditProc, AdminServiceCreateProc, AdminServiceEditProc, AdminTemplatesEditProc, AdminTemplatesCreateProc, AdminNeedAllProc
 from ufostart.models.tasks import TASK_CATEGORIES
 
 
@@ -25,7 +27,7 @@ class TaskCreateForm(BaseForm):
     @classmethod
     def on_success(cls, request, values):
         try:
-            need = AdminCreateNeedProc(request, values)
+            need = AdminNeedCreateProc(request, values)
         except DBNotification, e:
             if e.message == 'Need_Already_Exists':
                 return {'success':False, 'errors': {'name': "This task already exists, please change the name to a unique name."}}
@@ -44,7 +46,7 @@ class TaskEditForm(TaskCreateForm):
     @classmethod
     def on_success(cls, request, values):
         values['key'] = request.context.task.key
-        need = AdminEditNeedProc(request, values)
+        need = AdminNeedEditProc(request, values)
         request.session.flash(GenericSuccessMessage("Task updated successfully!"), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
 
@@ -106,5 +108,68 @@ class ServiceEditHandler(FormHandler):
     def pre_fill_values(self, request, result):
         result['values'][self.form.id] = request.context.service.unwrap()
         return super(ServiceEditHandler, self).pre_fill_values(request, result)
+
+
+
+
+class NeedSelector(Field):
+    template = "ufostart:templates/admin/controls/needselect.html"
+    def allNeeds(self, request):
+        return AdminNeedAllProc(request)
+    def getValidator(self, request):
+        return {}
+    def getValues(self, name, request, values, errors, view):
+        return {'value': filter(None, [v.get('name') for v in values.get('Need', [])])}
+
+
+
+class TemplateCreateForm(BaseForm):
+    label = "Create Template"
+    fields = [
+        BS3_NCOL(
+            Sequence(
+                StringField('name', "Name", REQUIRED)
+                , TextareaField('description', "Description", REQUIRED)
+                , PictureUploadField("picture", "Picture")
+                , PictureUploadField("logo", "Template Icon")
+                , CheckboxPostField('active', "Active?")
+            )
+            , NeedSelector('Need', "NeedList")
+        )
+    ]
+
+    @classmethod
+    def on_success(cls, request, values):
+        try:
+            need = AdminTemplatesCreateProc(request, values)
+        except DBNotification, e:
+            if e.message == 'Template_Already_Exists':
+                return {'success':False, 'errors': {'name': "This template already exists, please change the name to a unique name."}}
+            else:
+                raise e
+        request.session.flash(GenericSuccessMessage("Template created successfully!"), "generic_messages")
+        return {'success':True, 'redirect': request.resource_url(request.context)}
+
+class TemplateCreateHandler(FormHandler):
+    form = TemplateCreateForm
+
+
+
+
+class TemplateEditForm(TemplateCreateForm):
+    label = "Edit Template"
+    @classmethod
+    def on_success(cls, request, values):
+        values['key'] = request.context.__name__
+        values['Need'] = [{'name':n} for n in values.pop('Need', [])]
+        need = AdminTemplatesEditProc(request, values)
+        request.session.flash(GenericSuccessMessage("Service updated successfully!"), "generic_messages")
+        return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
+
+class TemplateEditHandler(FormHandler):
+    form = TemplateEditForm
+    def pre_fill_values(self, request, result):
+        result['values'][self.form.id] = request.context.template.unwrap()
+        return super(TemplateEditHandler, self).pre_fill_values(request, result)
 
 

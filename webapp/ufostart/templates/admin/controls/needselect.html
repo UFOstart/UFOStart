@@ -1,0 +1,11 @@
+<%inherit file="hnc.forms:templates/basefield.html"/>
+<%namespace name="lib" file="hnc.forms:templates/lib.html"/>
+<%namespace file="ufostart:templates/common/task.html" name="tasklib"/>
+
+<%block name="controls">
+    <select class="js-selectmenu" multiple name="${widget.getName(prefix)}">
+    %for need in widget.allNeeds(request):
+        <option ${'selected' if need.name in value else ''} value="${need.name}">${need.name}</option>
+    %endfor
+    </select>
+</%block>

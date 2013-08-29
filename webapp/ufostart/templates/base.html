@@ -109,15 +109,19 @@
     ${self.post_scripts()}
 
 
+    ${self.gsfn()}
+
+</%def>
+
+
+
+<%def name="gsfn()">
     <div id="getsat-widget-6542"></div>
     <script type="text/javascript" src="https://loader.engage.gsfn.us/loader.js"></script>
     <script type="text/javascript">
     if (typeof GSFN !== "undefined") { GSFN.loadWidget(6542,{"containerId":"getsat-widget-6542"}); }
     </script>
-
 </%def>
-
-
 
 <%def name="header_messages(msgs)">
     <div id="message-container" class="container message-container ${'show' if len(msgs) > 0 else ''}">

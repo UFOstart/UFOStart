@@ -116,10 +116,18 @@ AskForApprovalProc = ClientTokenProc("/web/round/sendmentor")
 
 
 #=================================================== Admin tool ==========================================================
-AdminCreateNeedProc = ClientTokenProc("/admin/need/create", result_cls=NeedModel, root_key="Need")
-AdminEditNeedProc = ClientTokenProc("/admin/need/edit", result_cls=NeedModel, root_key="Need")
-AdminAllNeedProc = ClientTokenProc("/admin/need/all", result_cls=NeedModel, root_key="Needs", result_list=True)
+
+AdminNeedCreateProc = ClientTokenProc("/admin/need/create", result_cls=NeedModel, root_key="Need")
+AdminNeedEditProc = ClientTokenProc("/admin/need/edit", result_cls=NeedModel, root_key="Need")
+AdminNeedGetProc = ClientTokenProc("/admin/need", result_cls=NeedModel, root_key="Need")
+AdminNeedAllProc = ClientTokenProc("/admin/need/all", result_cls=NeedModel, root_key="Needs", result_list=True)
 
 AdminServiceCreateProc = ClientTokenProc("/admin/service/create", result_cls=ServiceModel, root_key="Service")
 AdminServiceEditProc = ClientTokenProc("/admin/service/edit", result_cls=ServiceModel, root_key="Service")
+AdminServiceGetProc = ClientTokenProc("/admin/service", result_cls=ServiceModel, root_key="Service")
 AdminServiceAllProc = ClientTokenProc("/admin/service/all", result_cls=ServiceModel, root_key="Services", result_list=True)
+
+AdminTemplatesCreateProc = ClientTokenProc("/admin/template/create", result_cls=TemplateModel, root_key="Template")
+AdminTemplatesEditProc = ClientTokenProc("/admin/template/edit", result_cls=TemplateModel, root_key="Template")
+AdminTemplatesGetProc = ClientTokenProc("/admin/template", result_cls=TemplateModel, root_key="Template")
+AdminTemplatesAllProc = ClientTokenProc("/admin/template/all", result_cls=TemplateModel, root_key="Templates", result_list=True)

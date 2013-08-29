@@ -8,11 +8,11 @@ from ufostart.lib.html import getSlideshareMeta, getVimeoMeta, getYoutubeMeta
 _ = lambda s:s
 
 class CurrencyIntField(IntField):
-    template = "ufostart:templates/company/controls/currencyint.html"
+    template = "ufostart:templates/common/controls/currencyint.html"
 
 
 class PictureUploadField(formfields.StringField):
-    template = "ufostart:templates/company/controls/pictureupload.html"
+    template = "ufostart:templates/common/controls/pictureupload.html"
     group_classes='file-upload-control'
 
     def getInputAttrs(self, request):
@@ -24,17 +24,17 @@ class PictureUploadField(formfields.StringField):
         return attrs
 
 class FileUploadField(PictureUploadField):
-    template = "ufostart:templates/company/controls/fileupload.html"
+    template = "ufostart:templates/common/controls/fileupload.html"
 
 class PictureGalleryUploadField(formfields.StringField):
-    template = "ufostart:templates/company/controls/multifileupload.html"
+    template = "ufostart:templates/common/controls/multifileupload.html"
     group_classes='multi-file-upload-control'
     def getValidator(self, request):
         return {self.name: formencode.ForEach(url = formencode.validators.String(required=True))}
 
 
 class TagSearchField(formfields.TagSearchField):
-    template = "ufostart:templates/company/controls/tagsearch.html"
+    template = "ufostart:templates/common/controls/tagsearch.html"
 
 
 class HTMLString(formencode.validators.String):

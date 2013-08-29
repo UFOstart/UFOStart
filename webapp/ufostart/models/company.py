@@ -11,14 +11,6 @@ from ufostart.lib.tools import format_currency
 from ufostart.models.tasks import NamedModel
 from ufostart.models.workflow import WorkflowModel
 
-TEMPLATE_KEYS = {
-    'E-COMMERCE':{'key':'ecommerce', 'name':'E-Commerce'}
-    , 'STEVE_BLANK':{'key':'hitech', 'name':'Steve Blank'}
-    , 'SCALE':{'key':'seed', 'name':'Looking to scale'}
-    , 'LAUNCH':{'key':'started', 'name':'About to launch'}
-    , 'START':{'key':'seriesb', 'name':'Just getting started'}
-}
-
 
 STANDARD_RUN_TIME = 30
 
@@ -292,20 +284,14 @@ class NeedModel(Mapping):
 
 class TemplateModel(Mapping):
     _key = TextField(name="key")
-    _name = TextField(name="name")
+    name = TextField()
     description = TextField()
     Need = ListField(DictField(NeedModel))
 
 
-    def getStyleKey(self):
-        return TEMPLATE_KEYS[self.key]['key']
-
     @property
     def key(self):
         return self._name.replace(" ", "_").upper()
-    @property
-    def name(self):
-        return TEMPLATE_KEYS[self.key]['name']
 
     @reify
     def display_tags(self):

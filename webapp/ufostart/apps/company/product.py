@@ -11,7 +11,7 @@ from ufostart.apps.forms.controls import PictureGalleryUploadField, SanitizedHtm
 
 
 class OfferField(MultipleFormField):
-    template = 'ufostart:templates/company/controls/offers.html'
+    template = 'ufostart:templates/common/controls/offers.html'
     fields = [
         CleanHtmlField("name", "Title", REQUIRED)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
