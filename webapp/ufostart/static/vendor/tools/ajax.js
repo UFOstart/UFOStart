@@ -8,7 +8,8 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
                   type: "POST"
                   , dataType: "json"
                   , contentType: "application/json; charset=utf-8"
-              }, options || {});
+                  }, options || {})
+              , errorF = params.error;
               params.success = function (resp, status, xhr) {
                   if (resp.redirect) {
                     xhr.redirection = resp.redirect;
@@ -25,7 +26,11 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
                     messaging[resp.success?'addSuccess':'addError']({message:resp.message})
                   }
               };
-              params.error = params.error || function(xhr, status, msg){messaging.addError({message:msg});};
+              params.error = function(xhr, status, msg){
+                var err = xhr.getResponseHeader("X-Debug-Url");
+                  messaging.addError({message:err?'Error at:<a href="'+err+'">'+err+'</a>':msg});
+                  if(errorF)errorF(xhr, status, msg);
+              };
               if (typeof params.data != 'string') { params.data = JSON.stringify(params.data) }
               $.ajax(params);
       }

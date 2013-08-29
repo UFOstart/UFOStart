@@ -1,4 +1,4 @@
-from hnc.apiclient.backend import DBNotification
+from hnc.apiclient.backend import DBNotification, DBException
 from hnc.forms.formfields import TextareaField, REQUIRED, StringField, HtmlAttrs, ChoiceField, URLField, CheckboxField, CheckboxPostField, Field
 from hnc.forms.handlers import FormHandler
 from hnc.forms.layout import BS3_NCOL, Sequence
@@ -32,7 +32,9 @@ class TaskCreateForm(BaseForm):
             if e.message == 'Need_Already_Exists':
                 return {'success':False, 'errors': {'name': "This task already exists, please change the name to a unique name."}}
             else:
-                raise e
+                return {'success':False, 'message':e.message}
+        except DBException, e:
+            return {'success':False, 'message':e.message}
         request.session.flash(GenericSuccessMessage("Task created successfully!"), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
@@ -46,7 +48,10 @@ class TaskEditForm(TaskCreateForm):
     @classmethod
     def on_success(cls, request, values):
         values['key'] = request.context.task.key
-        need = AdminNeedEditProc(request, values)
+        try:
+            need = AdminNeedEditProc(request, values)
+        except (DBNotification, DBException), e:
+            return {'success':False, 'message':e.message}
         request.session.flash(GenericSuccessMessage("Task updated successfully!"), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
 
@@ -129,7 +134,7 @@ class TemplateCreateForm(BaseForm):
         BS3_NCOL(
             Sequence(
                 StringField('name', "Name", REQUIRED)
-                , TextareaField('description', "Description", REQUIRED)
+                , TextareaField('description', "Description", REQUIRED, input_classes='x-high')
                 , PictureUploadField("picture", "Picture")
                 , PictureUploadField("logo", "Template Icon")
                 , CheckboxPostField('active', "Active?")

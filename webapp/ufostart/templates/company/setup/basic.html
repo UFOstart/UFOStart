@@ -10,8 +10,8 @@
     %for t in templates:
         <div class="col-lg-4 col-lg-offset-1 text-center">
             <div class="single-template">
-                <a href="${root.template_url(t.key)}" class="single-template-button ${t.getStyleKey()} no-btn">
-                    <img src="${STATIC_URL}img/templates/${t.getStyleKey()}.png"/>
+                <a href="${root.template_url(t.key)}" class="single-template-button no-btn">
+                    <img src="${t.picture}"/>
                     <span class="name">${t.name}</span>
                 </a>
                 <p class="description">
