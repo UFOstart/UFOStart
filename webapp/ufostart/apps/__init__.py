@@ -2,7 +2,6 @@ from importlib import import_module
 
 from formencode.validators import StringBool
 from hnc.tools.oauth import Consumer
-from hnc.tools.routing import FunctionRoute, route_factory, App
 from pyramid.decorator import reify
 import simplejson
 
@@ -11,10 +10,6 @@ from ufostart.apps.social import SocialLoginFailed, SocialLoginSuccessful
 
 
 __author__ = 'Martin'
-
-ROUTE_LIST = [
-    FunctionRoute    ("website_index"                      , "/", contexts.WebsiteRootContext                                                , index.index, "index.html")
-]
 
 
 
@@ -57,13 +52,12 @@ class WebsiteSettings(object):
         return simplejson.dumps(result) if stringify else result
 
 
-ROUTE_MAP = {r.name:r for r in ROUTE_LIST}
-
 def includeme(config):
     settings = config.registry.settings
     settings['g'].setSettings(WebsiteSettings, settings)
-    route_factory('ufostart', ROUTE_LIST, App("website"), config, template_path_prefix = 'website')
 
+
+    config.add_view(index.index       , context = contexts.WebsiteRootContext                , renderer = "ufostart:templates/index.html")
     config.add_view(auth.social.login , context = contexts.WebsiteRootContext, name = 'login', renderer = "ufostart:templates/auth/login.html")
     config.add_view(index.logout      , context = contexts.WebsiteRootContext, name = 'logout')
 
