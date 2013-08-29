@@ -15,7 +15,6 @@ def add_renderer_variables(event):
             , 'root'            : request.root
             , 'ctxt'            : request.context
             , 'url'             : request.resource_url
-            , 'ROOT_STATIC_URL' : request.root.root_statics
             , 'STATIC_URL'      : request.root.static_prefix
             , 'VERSION_TOKEN'   : app_globals.VERSION_TOKEN
             , 'dumps'           : simplejson.dumps

@@ -108,7 +108,7 @@
         Recent Activity
     </div>
     <div class="text-center empty activity-stream" data-entity-id="${ctxt.round.token}">
-        <div class="show-loading"><img src="${ROOT_STATIC_URL}/img/ajax-loader-light.gif"/></div>
+        <div class="show-loading"><img src="${STATIC_URL}/img/ajax-loader-light.gif"/></div>
     </div>
 </%def>
 
@@ -545,7 +545,7 @@
 
 <%def name="extra_head()">
     %if ctxt.round.published:
-        <script type="text/javascript" src="${ROOT_STATIC_URL}scripts/dist/raphael-min.js"></script>
+        <script type="text/javascript" src="${STATIC_URL}vendor/dist/raphael-min.js"></script>
     %endif
 </%def>
 <%def name="post_scripts()">

@@ -17,8 +17,8 @@ class BaseHandler(object):
 
 class RootContext(object):
     app_label = 'root'
-    root_statics = '/static/'
     static_prefix = '/static/'
+
     def __init__(self, request):
         self.request = request
 
