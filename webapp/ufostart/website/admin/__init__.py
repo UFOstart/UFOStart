@@ -1,5 +1,6 @@
+from hnc.tools.generic_views import logout_func
 from pyramid.decorator import reify
-from pyramid.security import DENY_ALL, ALL_PERMISSIONS, Allow
+from pyramid.security import DENY_ALL, ALL_PERMISSIONS, Allow, NO_PERMISSION_REQUIRED
 from ufostart.lib.baseviews import BaseContextMixin
 from ufostart.website.admin import handlers
 from ufostart.website.admin.auth import AuthenticationHandler, AdminUserModel, USER_TOKEN, getUser, setUserF, canEdit
@@ -45,3 +46,4 @@ def includeme(config):
 
     config.add_view(handlers.index                           , context = AdminContext                        , renderer = "ufostart:website/templates/admin/index.html")
     config.add_forbidden_view(AuthenticationHandler          , containment = AdminContext                    , renderer = "ufostart:website/templates/admin/form.html")
+    config.add_view(logout_func(USER_TOKEN, AdminUserModel), name = 'logout', context = AdminContext)

@@ -1,14 +1,16 @@
 <%inherit file="../base.html"/>
 
+<%def name="html_tags()">ng-app="adminapp"</%def>
 
-<%block name="html_tags">ng-app="expawayadmin"</%block>
 <%def name="extra_head()">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
 </%def>
 
 <%def name="layout_scripts()">
     ${parent.layout_scripts()}
+<%doc>
     <script src="${STATIC_URL}admin/scripts/ngadmin.js"></script>
+</%doc>
 </%def>
 
 

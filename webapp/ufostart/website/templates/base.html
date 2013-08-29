@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en" class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" class="lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<!--[if lt IE 7]>      <html lang="en" class="lt-ie9 lt-ie8 lt-ie7" ${self.html_tags()}> <![endif]-->
+<!--[if IE 7]>         <html lang="en" class="lt-ie9 lt-ie8" ${self.html_tags()}> <![endif]-->
+<!--[if IE 8]>         <html lang="en" class="lt-ie9" ${self.html_tags()}> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ${self.html_tags()}> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <title><%block name="title">${u' | '.join(ctxt.site_title)}</%block></title>
@@ -63,6 +63,7 @@
 </body>
 </html>
 
+<%def name="html_tags()"></%def>
 <%def name="subtitle()"></%def>
 <%def name="styles_live()"></%def>
 <%def name="styles_debug()"></%def>
