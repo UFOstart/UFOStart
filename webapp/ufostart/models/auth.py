@@ -107,7 +107,7 @@ class UserModel(Mapping):
 
     @property
     def displayStartupValue(self):
-        return format_currency(self.startupValue)
+        return format_currency(self.startupValue, 'EUR')
     def getPicture(self):
         if self.picture:
             return self.picture
@@ -142,7 +142,7 @@ class UserModel(Mapping):
             return ''
     @property
     def displayStartupValue(self):
-        return format_currency(self.startupValue)
+        return format_currency(self.startupValue, 'EUR')
 
 def AnonUser():
     return UserModel()

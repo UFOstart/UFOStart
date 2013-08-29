@@ -13,7 +13,7 @@ class InvestmentForm(BaseForm):
     id="Investment"
     label = ""
     fields=[
-        CurrencyIntField('amount', "Investment Amount", REQUIRED, input_classes='data-input amount', maxlength=7, currency=u'€')
+        CurrencyIntField('amount', "Investment Amount", REQUIRED, input_classes='data-input amount', maxlength=7)
     ]
     @classmethod
     def on_success(cls, request, values):
@@ -31,8 +31,8 @@ class FundingCreateForm(BaseForm):
     label = ""
     fields=[
      SanitizedHtmlField("description", "Deal Description", REQUIRED, input_classes='x-high')
-     , CurrencyIntField('amount', "Funding Amount", REQUIRED, input_classes='data-input amount', maxlength=7, currency= u'€')
-     , CurrencyIntField('valuation', "Company Valuation", REQUIRED, input_classes='data-input valuation', maxlength=7, currency= u'€')
+     , CurrencyIntField('amount', "Funding Amount", REQUIRED, input_classes='data-input amount', maxlength=7)
+     , CurrencyIntField('valuation', "Company Valuation", REQUIRED, input_classes='data-input valuation', maxlength=7)
      , FileUploadField("contract", "Contract")
     ]
     @classmethod

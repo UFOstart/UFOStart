@@ -19,7 +19,7 @@ class TaskCreateForm(BaseForm):
     fields = [
         StringField('name', "Title", REQUIRED)
         , ChoiceField("category", "Category", lambda s: TASK_CATEGORIES)
-        , TextareaField("description", "Description", REQUIRED, input_classes='x-high')
+        , TextareaField("summary", "Summary", REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
         , TagSearchField("Services", "Related Web Services", '/web/service/search', 'Services', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Services"))
     ]

@@ -38,7 +38,7 @@
                 <div class="row">
                     <div class="col-lg-6 number-widget">
                         <h6>Target</h6>
-                        <div class="small-value">${funding.display_amount}</div>
+                        <div class="small-value">${funding.display_amount(ctxt.company.currency)}</div>
                     </div>
                     <div class="col-lg-6 number-widget">
                         <h6>Total Equity</h6>
@@ -48,7 +48,7 @@
                 <div class="number-widget mar-top-1">
                     <h6>Invested</h6>
                     <div class="value light">
-                        ${funding.display_invested_amount}
+                        ${funding.display_invested_amount(ctxt.company.currency)}
                     </div>
                 </div>
                 <div class="progress-container">
@@ -144,7 +144,7 @@
 
                         <div class="number-widget mar-top-half">
                             <h6>Invested</h6>
-                            <div class="value light">${investment.display_amount}</div>
+                            <div class="value light">${investment.display_amount(ctxt.company.currency)}</div>
                         </div>
                     </div>
                 </div>

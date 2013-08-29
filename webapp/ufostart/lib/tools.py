@@ -17,7 +17,7 @@ def format_int_amount(number, locale = 'en'):
     return fdec(fnumber, format='#,##0', locale=locale)
 
 
-def format_currency(number, currency = 'EUR', locale = 'en'):
+def format_currency(number, currency, locale = 'en'):
     if number is None: number = 0
     if round(number) == number:
         return u'{}{}'.format(get_currency_symbol(currency, locale = locale), format_int_amount(number, locale))

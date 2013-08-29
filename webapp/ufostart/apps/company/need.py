@@ -69,8 +69,8 @@ class NeedCreateForm(BaseForm):
     fields = [
         PictureUploadField("picture", 'Picture', group_classes='file-upload-control')
         , StringField('name', "Title", REQUIRED)
-        , CurrencyIntField('cash', "Cash Value", REQUIRED, input_classes='data-input cash', maxlength=9, currency= u'€')
-        , CurrencyIntField('equity', "Equity Value", REQUIRED, input_classes='data-input equity', maxlength=9, currency= u'€')
+        , CurrencyIntField('cash', "Cash Value", REQUIRED, input_classes='data-input cash', maxlength=9)
+        , CurrencyIntField('equity', "Equity Value", REQUIRED, input_classes='data-input equity', maxlength=9)
         , TextareaField("customText", "Description", REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
     ]

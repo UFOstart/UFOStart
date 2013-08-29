@@ -239,7 +239,7 @@
                                 <div class="col-lg-6">
                                     <div class="number-widget mar-top-half">
                                         <h6>Target</h6>
-                                        <div class="small-value">${funding.display_amount}</div>
+                                        <div class="small-value">${funding.display_amount(ctxt.company.currency)}</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -252,7 +252,7 @@
 
                             <div class="number-widget mar-top-half">
                                 <h6>Invested</h6>
-                                <h2 class="no-margin">${funding.display_invested_amount}</h2>
+                                <h2 class="no-margin">${funding.display_invested_amount(ctxt.company.currency)}</h2>
                             </div>
 
 
@@ -291,17 +291,19 @@
 
 
 <%def name="tasksSection(company)">
-    <div class="row" data-entity-id="${ctxt.round.token}">
+    <div data-entity-id="${ctxt.round.token}">
 
         ${self.renderNeedColumns(ctxt.groupedNeeds(3, True))}
 
         %if not ctxt.round.published and ctxt.canEdit:
-            <div class="col-lg-12 mar-top-3">
-                <div class="box-title highlight-target"><div id="target-customise-needs" class="highlight-anchor"></div>
-                    Suggested Tasks
+            <div class="row">
+                <div class="col-lg-12 mar-top-3">
+                    <div class="box-title highlight-target"><div id="target-customise-needs" class="highlight-anchor"></div>
+                        Suggested Tasks
+                    </div>
                 </div>
+                ${tasklib.public_task_cols(ctxt.groupedNeeds(3, False))}
             </div>
-            ${tasklib.public_task_cols(ctxt.groupedNeeds(3, False))}
         %endif
     </div>
 </%def>

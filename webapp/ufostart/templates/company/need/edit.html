@@ -20,7 +20,7 @@
         <div class="row mar-top-2">
             <div class="col-lg-9">
                 <div class="box-content box-dark">
-                    <%self:build_form need="${ctxt.need}" btn_label="${'Save Changes' if ctxt.need.added else 'Add to Round'}" form="${view.form}" values="${values.get(view.form.id)}" errors="${errors.get(view.form.id)}">
+                    <%self:build_form need="${ctxt.need}" btn_label="${'Save Changes' if ctxt.need.added else 'Add to Round'}" form="${view.form}" values="${values.get(view.form.id)}" errors="${errors.get(view.form.id)}" company="${ctxt.company}">
                         <%def name="cancel_button(form)">
                             <a href="${url(ctxt) if hasattr(ctxt, 'need') and ctxt.need.added else url(ctxt.__parent__)}" class="btn btn-default">Cancel</a>
                         </%def>
@@ -49,7 +49,7 @@
 
 
 
-<%def name="build_form(need, btn_label, form, values, errors)">
+<%def name="build_form(need, btn_label, form, values, errors, company)">
     <form class="${form.grid.form_classes} labels-capitalized" id="${form.id}" method="POST">
         ${baseform.prelims(form)}
 
@@ -64,8 +64,8 @@
                     <label class="control-label">
                         Total Value
                     </label>
-                    <div class="pseudo-controls data-target total" data-currency-symbol="${need.currency_symbol}">
-                        ${need.display_total}
+                    <div class="pseudo-controls data-target total" data-currency-symbol="${company.currency_symbol}">
+                        ${need.display_total(company.currency)}
                     </div>
                 </div>
             </div>

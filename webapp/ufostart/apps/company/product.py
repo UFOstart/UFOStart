@@ -15,7 +15,7 @@ class OfferField(MultipleFormField):
     fields = [
         CleanHtmlField("name", "Title", REQUIRED)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
-        , CurrencyIntField("price", "Price", REQUIRED, input_classes='data-input amount', maxlength=7, currency=u'€')
+        , CurrencyIntField("price", "Price", REQUIRED, input_classes='data-input amount', maxlength=7)
         , IntField("stock", "Stock", REQUIRED)
     ]
 

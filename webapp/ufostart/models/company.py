@@ -60,7 +60,7 @@ class CompanyUserModel(Mapping):
         return getRoleName(self.role) if self.role else self.headline
     @property
     def displayStartupValue(self):
-        return format_currency(self.startupValue)
+        return format_currency(self.startupValue, 'EUR')
 
 class IntroducerModel(Mapping):
     linkedinId = TextField()
@@ -211,6 +211,7 @@ class NeedModel(Mapping):
     key = TextField()
     name = TextField()
 
+    _inUse = BooleanField()
     summary = TextField()
     status = TextField()
     category = TextField()
@@ -259,15 +260,13 @@ class NeedModel(Mapping):
     def equity_ratio(self):
         return int(100.0 * (self.equity or 0) / (self.total or 1))
 
-    @property
-    def display_total(self):
-        return format_currency(self.total, self.currency)
-    @property
-    def display_cash(self):
-        return format_currency(self.cash, self.currency)
-    @property
-    def display_equity(self):
-        return format_currency(self.equity, self.currency)
+
+    def display_total(self, currency):
+        return format_currency(self.total, currency)
+    def display_cash(self, currency):
+        return format_currency(self.cash, currency)
+    def display_equity_value(self, currency):
+        return format_currency(self.equity, currency)
     @property
     def display_mix(self):
         return '{}%'.format(self.equity_ratio)
@@ -281,14 +280,6 @@ class NeedModel(Mapping):
     def services(self):
         return self.Services
 
-    # TODO: actual implementation
-
-
-
-    currency = 'EUR'
-    currency_symbol = get_currency_symbol('EUR', locale = 'en')
-
-    _inUse = BooleanField()
 
 class TemplateModel(Mapping):
     key = TextField()
@@ -349,9 +340,6 @@ class OfferModel(Mapping):
     description = TextField()
     stock = IntegerField()
     price = IntegerField()
-    @reify
-    def display_price(self):
-        return format_currency(self.price, 'EUR')
 
 
 class InvestmentModel(Mapping):
@@ -359,9 +347,8 @@ class InvestmentModel(Mapping):
     amount = IntegerField()
     User = DictField(CompanyUserModel)
 
-    @property
-    def display_amount(self):
-        return format_currency(self.amount, 'EUR')
+    def display_amount(self, currency):
+        return format_currency(self.amount, currency)
 
 
 class FundingModel(Mapping):
@@ -377,12 +364,12 @@ class FundingModel(Mapping):
     @reify
     def invested_amount(self):
         return sum(map(attrgetter('amount'), self.Investments))
-    @property
-    def display_invested_amount(self):
-        return format_currency(self.invested_amount, 'EUR')
-    @property
-    def display_amount(self):
-        return format_currency(self.amount, 'EUR')
+
+    def display_invested_amount(self, currency):
+        return format_currency(self.invested_amount, currency)
+    def display_amount(self, currency):
+        return format_currency(self.amount, currency)
+
     @property
     def investment_progress(self):
         return "{}%".format(int(100.0 * self.invested_amount / self.amount)) if self.amount else '0%'
@@ -483,7 +470,7 @@ class CompanyModel(BaseCompanyModel):
 
     angelListId = TextField()
     angelListToken = TextField()
-
+    currency = TextField()
     Template = DictField(TemplateModel)
     Round = DictField(RoundModel)
     Rounds = ListField(DictField(RoundModel))
@@ -494,12 +481,14 @@ class CompanyModel(BaseCompanyModel):
         return sum(map(attrgetter('startupValue'), self.Users))
     @property
     def displayStartupValue(self):
-        return format_currency(self.startupValue)
+        return format_currency(self.startupValue, 'EUR')
     @reify
     def memberMap(self):
         return {u.token:u for u in self.Users}
 
-
+    @property
+    def currency_symbol(self):
+        return get_currency_symbol(self.currency, 'en')
 
     def isMember(self, userToken):
         if not userToken: return False
@@ -561,8 +550,6 @@ class CompanyModel(BaseCompanyModel):
         return self.Round.Product.name if self.product_is_setup else ''
 
 
-    currency = 'EUR'
-    currency_symbol = get_currency_symbol('EUR', locale = 'en')
 
     def product_picture(self, request):
         product = self.Round.Product

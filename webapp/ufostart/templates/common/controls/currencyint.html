@@ -3,7 +3,7 @@
 
 <%block name="controls">
     <div class="input-group">
-        <div class="input-group-addon">${widget.currency}</div>
+        <div class="input-group-addon">${widget.getCurrencySymbol(request)}</div>
         <input type="${widget.type}" class="${grid.input_classes} ${widget.getClasses()}" name="${widget.getName(prefix)}" id="${widget.getName(prefix)}" value="${widget.valueToForm(value)}" ${widget.getInputAttrs(request)|n}/>
     </div>
 </%block>

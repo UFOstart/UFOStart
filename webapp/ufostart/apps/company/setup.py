@@ -1,10 +1,11 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import  REQUIRED, StringField
+from hnc.forms.formfields import  REQUIRED, StringField, ChoiceField
 from hnc.forms.handlers import FormHandler
 from ufostart.lib.baseviews import BaseForm
 from ufostart.apps.auth.imp import SESSION_SAVE_TOKEN
 from ufostart.models.procs import CreateCompanyProc, EditCompanyProc
 from ufostart.apps.forms.controls import PictureUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField, SlideshareField, VideoUrlField
+from ufostart.models.tasks import NamedModel
 
 
 def basics(context, request):
@@ -25,6 +26,7 @@ class CompanyCreateForm(BaseForm):
         , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')
         , StringField("video", "Paste a Vimeo or Youtube Url")
         , StringField("slideShare", "Paste a Slideshare Url")
+        , ChoiceField("currency", "Company Currency", optionGetter=lambda s: [NamedModel(name = 'EUR'), NamedModel(name = 'USD')])
     ]
 
     @classmethod

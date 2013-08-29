@@ -151,16 +151,16 @@
     <div class="number-widget">
         <div class="number total">
             <strong class="text-small">Total</strong>
-            <h2 class="no-margin">${need.display_total}</h2>
+            <h2 class="no-margin">${need.display_total(ctxt.company.currency)}</h2>
         </div>
         <div class="row mar-top-half">
             <div class="col-lg-6">
                 <small>Cash</small>
-                <h2 class="no-margin">${need.display_cash}</h2>
+                <h2 class="no-margin">${need.display_cash(ctxt.company.currency)}</h2>
             </div>
             <div class="col-lg-6">
                 <small>Equity</small>
-                <h2 class="no-margin">${need.display_equity}</h2>
+                <h2 class="no-margin">${need.display_equity_value(ctxt.company.currency)}</h2>
             </div>
         </div>
     </div>
@@ -170,13 +170,13 @@
     <div class="valuation small">
         <div class="thirds">
             <strong class="text-small">Total</strong>
-            <div class="brand-primary text-strong">${need.display_total}</div>
+            <div class="brand-primary text-strong">${need.display_total(ctxt.company.currency)}</div>
         </div><div class="thirds">
             <small>Cash</small>
-            <div class="brand-primary">${need.display_cash}</div>
+            <div class="brand-primary">${need.display_cash(ctxt.company.currency)}</div>
         </div><div class="thirds">
             <small>Equity</small>
-            <div class="brand-primary">${need.display_equity}</div>
+            <div class="brand-primary">${need.display_equity_value(ctxt.company.currency)}</div>
         </div>
     </div>
 </%def>

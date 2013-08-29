@@ -1,4 +1,6 @@
 from BeautifulSoup import BeautifulSoup
+import babel
+from babel.numbers import get_currency_symbol
 import formencode
 from hnc.forms import formfields
 from hnc.forms.formfields import StringField, TextareaField, IntField
@@ -9,7 +11,11 @@ _ = lambda s:s
 
 class CurrencyIntField(IntField):
     template = "ufostart:templates/common/controls/currencyint.html"
+    def getCurrency(self, request):
+        return request.context.company.currency
 
+    def getCurrencySymbol(self, request):
+        return get_currency_symbol(self.getCurrency(request), locale='en_US')
 
 class PictureUploadField(formfields.StringField):
     template = "ufostart:templates/common/controls/pictureupload.html"
