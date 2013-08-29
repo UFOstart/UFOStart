@@ -11,7 +11,7 @@ from pyramid_beaker import session_factory_from_settings
 from hnc.tools import request
 from .lib.subscribers import add_renderer_variables
 from .lib.globals import Globals
-from .website.apps.contexts import WebsiteRootContext
+from .apps.contexts import WebsiteRootContext
 
 log = logging.getLogger(__name__)
 
@@ -63,7 +63,7 @@ def main(global_config, **settings):
 
     config.add_subscriber(add_renderer_variables, 'pyramid.events.BeforeRender')
 
-    config.include("ufostart.website.apps")
-    config.include("ufostart.website.admin")
+    config.include("ufostart.apps")
+    config.include("ufostart.admin")
     config.scan()
     return config.make_wsgi_app()

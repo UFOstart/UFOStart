@@ -15,10 +15,10 @@ def add_renderer_variables(event):
             , 'root'            : request.root
             , 'ctxt'            : request.context
             , 'url'             : request.resource_url
-            , 'STATIC_URL'      : request.root.static_prefix
             , 'VERSION_TOKEN'   : app_globals.VERSION_TOKEN
             , 'dumps'           : simplejson.dumps
             , 'pluralize'       : pluralize
             , 'settings'        : settings
+            , 'STATIC_URL'      : settings.static_prefix
         })
     return event
