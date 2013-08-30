@@ -9,7 +9,6 @@ from ufostart.handlers.social import angellist, SocialLoginFailed, SocialLoginSu
 
 class SocialContext(BaseContextMixin):
     __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'proceed')]
-    __auth_template__ = "ufostart:templates/auth/login.html"
 
     user = reify(getUser)
     setUser = setUserF
@@ -41,35 +40,37 @@ class UserNameContext(BaseContextMixin):
 
 class SignupContext(BaseContextMixin):
     has_username = False
+    __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'proceed')]
+
     @property
     def site_title(self):
         return ['Pick a username', self.request.globals.project_name]
 
     def __getitem__(self, item):
-        if item == 'isavailable': raise KeyError()
+        if item in ['isavailable', 'getstarted']: raise KeyError()
         return UserNameContext(self, item)
 
 
 def includeme(config):
 
-    config.add_view(signup.UserNameHandler                  , context = SignupContext, renderer="ufostart:templates/auth/username.html", permission = NO_PERMISSION_REQUIRED)
-    config.add_view(signup.UserNameHandler                  , context = UserNameContext, renderer="ufostart:templates/auth/username.html", permission = NO_PERMISSION_REQUIRED)
-    config.add_view(signup.isavailable, name = "isavailable", context = SignupContext, renderer = "json", permission = NO_PERMISSION_REQUIRED)
+    config.add_view(signup.UserNameHandler                   , context = SignupContext, renderer="ufostart:templates/auth/username.html", permission = NO_PERMISSION_REQUIRED)
+    config.add_view(signup.UserNameHandler                   , context = UserNameContext, renderer="ufostart:templates/auth/username.html", permission = NO_PERMISSION_REQUIRED)
+    config.add_view(signup.isavailable, name = "isavailable" , context = SignupContext, renderer = "json", permission = NO_PERMISSION_REQUIRED)
 
 
-    config.add_view(signup.login_success                    , containment = UserNameContext, context = SocialLoginSuccessful, permission = NO_PERMISSION_REQUIRED)
-    config.add_view(signup.login_failure                    , containment = UserNameContext, context = SocialLoginFailed, permission = NO_PERMISSION_REQUIRED)
+    config.add_view(signup.login_success                     , containment = UserNameContext, context = SocialLoginSuccessful, permission = NO_PERMISSION_REQUIRED)
+    config.add_view(signup.login_failure                     , containment = UserNameContext, context = SocialLoginFailed, permission = NO_PERMISSION_REQUIRED)
+    config.add_view(signup.UserRoleHandler, name="getstarted", context = SignupContext, renderer = "ufostart:templates/auth/roleselect.html", permission = 'proceed')
 
 
+    config.add_view(social.login                             , context = SocialContext, permission='proceed')
+    config.add_view(social.login_success                     , context = SocialLoginSuccessful, permission = NO_PERMISSION_REQUIRED)
+    config.add_view(social.login_failure                     , context = SocialLoginFailed, permission = NO_PERMISSION_REQUIRED)
 
-    config.add_view(social.login                            , context = SocialContext, permission='proceed')
-    config.add_view(social.login_success                    , context = SocialLoginSuccessful, permission = NO_PERMISSION_REQUIRED)
-    config.add_view(social.login_failure                    , context = SocialLoginFailed, permission = NO_PERMISSION_REQUIRED)
+    config.add_view(social.auth_required_view                , context = social.RequiresLoginException, permission = NO_PERMISSION_REQUIRED)
+    config.add_view(social.auth_required_view                , context = HTTPForbidden, permission = NO_PERMISSION_REQUIRED)
 
-    config.add_view(social.auth_required_view               , context = social.RequiresLoginException, permission = NO_PERMISSION_REQUIRED)
-    config.add_view(social.auth_required_view               , context = HTTPForbidden, permission = NO_PERMISSION_REQUIRED)
-
-    config.add_view(imp.company_import_start                , context = angellist.SocialResource, permission='import')
-    config.add_view(imp.company_import                      , context = angellist.SocialResource, name = 'import'   , permission='import')
-    config.add_view(imp.company_import_list                 , context = angellist.SocialResource, name = 'list'     , renderer = "ufostart:templates/company/import/list.html", permission='import')
-    config.add_view(imp.company_import_confirm              , context = angellist.SocialResource, name = 'confirm'  , permission='import')
+    config.add_view(imp.company_import_start                 , context = angellist.SocialResource, permission='import')
+    config.add_view(imp.company_import                       , context = angellist.SocialResource, name = 'import'   , permission='import')
+    config.add_view(imp.company_import_list                  , context = angellist.SocialResource, name = 'list'     , renderer = "ufostart:templates/company/import/list.html", permission='import')
+    config.add_view(imp.company_import_confirm               , context = angellist.SocialResource, name = 'confirm'  , permission='import')

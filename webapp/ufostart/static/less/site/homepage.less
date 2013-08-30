@@ -32,3 +32,13 @@
   height: 2 * @headings-line-height * @font-size-xlarge;
   overflow:hidden;
 }
+
+
+.founder-form, .investor-form, .expert-form {display: none;}
+
+.role-toggle-target {
+  padding: 30px;
+  &.show-expert .expert-form {display: block;}
+  &.show-investor .investor-form {display: block;}
+  &.show-founder .founder-form {display: block;}
+}

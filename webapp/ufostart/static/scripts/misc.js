@@ -10,10 +10,12 @@ define(["tools/ajax"], function(ajax){
 
     // TOGGLEABLE FLY OUTS
     $(document).on({click: function(e){
-        var $t = $(e.currentTarget), data = $t.data(), target = data.toggleTarget, toggle = data.toggleClass
-            , on = (target?$t.closest(target):$t).toggleClass(toggle).hasClass(toggle);
+        var $t = $(e.currentTarget)
+            , data = $t.data()
+            , cls = data.toggleClass
+            , target = (data.toggleTarget?$t.closest(data.toggleTarget):$t).toggleClass(cls);
         if(data.toggleText){
-            if(on){
+            if(target.hasClass(cls)){
                 $t.data("backupText", $t.html());
                 $t.html(data.toggleText);
             } else {

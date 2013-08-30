@@ -31,10 +31,19 @@
                         <div class="value light">${profile.displayStartupValue}</div>
                     </div>
 
+                    %if len(profile.Companies):
                     <div class="number-widget mar-top-1">
                         <h6>Companies</h6>
                         <div class="small-value">${len(profile.Companies)}</div>
                     </div>
+                    %endif
+                    %if profile.investmentAmount:
+                        <div class="number-widget mar-top-1">
+                            <strong class="text-muted text-small">Annual Investment Amount</strong>
+                            <div class="small-value">${profile.displayInvestment}</div>
+                        </div>
+                    %endif
+
                     <div class="row mar-top-1">
                         <div class="col-lg-6 number-widget">
                             <strong class="text-muted text-small">Mentoring</strong>
@@ -45,6 +54,9 @@
                             <div class="small-value">${len(profile.getEndorsements())}</div>
                         </div>
                     </div>
+
+
+
                 </div>
             </div>
             <div class="mar-top-3">

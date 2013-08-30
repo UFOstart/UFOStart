@@ -76,6 +76,9 @@ class UserModel(Mapping):
     headline = TextField()
     picture = TextField()
     startupValue = IntegerField()
+    investmentAmount = IntegerField()
+    currency = TextField()
+
     Skills = ListField(DictField(NamedModel))
     Profile = ListField(DictField(WebUserNetworkProfile))
     Company = DictField(CompanyModel)
@@ -105,6 +108,11 @@ class UserModel(Mapping):
         map = {n.inferredNetwork():n.id for n in self.Profile if n.id}
         netId = map.get(network)
         return netId == id
+
+    @property
+    def displayInvestment(self):
+        return format_currency(self.investmentAmount, self.currency)
+
 
     @property
     def displayStartupValue(self):

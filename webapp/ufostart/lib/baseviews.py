@@ -33,6 +33,7 @@ class RootContext(object):
 class BaseContextMixin(object):
     __name__ = None
     __parent__ = None
+    __auth_template__ = "ufostart:templates/auth/login.html"
 
     def __init__(self, parent, name):
         self.__parent__ = parent

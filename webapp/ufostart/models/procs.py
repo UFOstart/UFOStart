@@ -58,7 +58,7 @@ GetProfileProc = ClientTokenProc("/web/user/profile", root_key = "User", result_
 LinkedinSignupProc = LoggingInProc('/web/user/liregister', db_messages={'NEWUSER':NewUserMsg, 'FB_USER_WITH_CHANGED_EMAIL': NewUserMsg})
 LinkedinLoginProc = LoggingInProc('/web/user/lilogin', db_messages={'NEWUSER':NewUserMsg, 'FB_USER_WITH_CHANGED_EMAIL': NewUserMsg})
 
-
+SetUserInfoProc = ClientTokenProc("/web/user/info", result_cls=SlugTypeModel, root_key='Slug')
 
 UsernameAvailableProc = ClientTokenProc("/web/user/slugavailable")
 CompanynameAvailableProc = ClientTokenProc("/web/company/slugavailable")
@@ -66,6 +66,7 @@ CompanynameAvailableProc = ClientTokenProc("/web/company/slugavailable")
 
 
 CheckSlugProc = ClientTokenProc("/web/slug", result_cls=SlugTypeModel, root_key='Slug')
+
 
 #
 ################# HOMEPAGE

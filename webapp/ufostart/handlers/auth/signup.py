@@ -1,15 +1,17 @@
 import logging
 import re
 from hnc.apiclient.backend import DBNotification, DBException
-from hnc.forms.formfields import StringField, REQUIRED, HtmlAttrs
+from hnc.forms.formfields import StringField, REQUIRED, HtmlAttrs, IntField, ChoiceField
 from hnc.forms.handlers import FormHandler
+from hnc.forms.layout import BS3_NCOL
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.response import Response
 from ufostart.handlers.auth.social import login_user
-from ufostart.handlers.forms.controls import UniqueNameField
+from ufostart.handlers.forms.controls import UniqueNameField, TagSearchField
 from ufostart.lib.baseviews import BaseForm
 from ufostart.models.auth import SocialNetworkProfileModel, SOCIAL_NETWORK_TYPES_REVERSE, SOCIAL_NETWORK_TYPES
-from ufostart.models.procs import LinkedinSignupProc, UsernameAvailableProc
+from ufostart.models.procs import LinkedinSignupProc, UsernameAvailableProc, SetUserInfoProc
+from ufostart.models.tasks import NamedModel
 
 log = logging.getLogger(__name__)
 
@@ -92,3 +94,44 @@ def login_failure(exc, request):
     ctxt = request.context.__parent__
     request.session.flash(GenericErrorMessage(exc.message), "generic_messages")
     return Response("Resource Found!", 302, headerlist = [('location', request.fwd_url(ctxt))])
+
+
+#=================================================== ROLE SELECT =======================================================
+
+def role_select_on_success(cls, request, values):
+    user = request.context.user
+    values['token'] = user.token
+    values['Roles'] = {'name':role for role in cls.ROLES}
+    SetUserInfoProc(request, values)
+    return {'success':True, 'redirect': request.root.profile_url(user.slug)}
+
+class ExpertForm(BaseForm):
+    id="expert"
+    ROLES = ['EXPERT']
+    fields=[
+        TagSearchField("Skills", "Add your Skills", '/web/tag/search', 'Tags', attrs = HtmlAttrs(placeholder = "Find Skills"))
+    ]
+    on_success = classmethod(role_select_on_success)
+
+class InvestorForm(BaseForm):
+    id="investor"
+    ROLES = ['INVESTOR']
+    fields=[
+        BS3_NCOL(
+            IntField("investmentAmount", "Enter Annual Investment Amount")
+            , ChoiceField("currency", "Investment Currency", optionGetter=lambda s: [NamedModel(name = 'EUR'), NamedModel(name = 'USD')], attrs = REQUIRED)
+        )
+    ]
+    on_success = classmethod(role_select_on_success)
+
+class FounderForm(BaseForm):
+    id="founder"
+    ROLES = ['FOUNDER']
+    fields=[]
+    on_success = classmethod(role_select_on_success)
+
+class UserRoleHandler(FormHandler):
+    @property
+    def site_title(self):
+        return ['What are you?', self.request.globals.project_name]
+    forms = [ExpertForm, InvestorForm, FounderForm]
