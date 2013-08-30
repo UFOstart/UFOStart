@@ -4,6 +4,7 @@ from hnc.forms.messages import GenericErrorMessage
 from hnc.tools.request import JsonAwareRedirect
 from pyramid.renderers import render_to_response
 from pyramid.response import Response
+from ufostart.lib.html import slugify
 from ufostart.models.auth import SOCIAL_NETWORK_TYPES, SOCIAL_NETWORK_TYPES_REVERSE
 
 from ufostart.models.procs import SocialConnectProc, LinkedinLoginProc
@@ -22,14 +23,7 @@ def login_user(context, request, profile):
     params = {'Profile': [profile]}
     if not request.root.user.isAnon():
         params['token'] = request.root.user.token
-    try:
-        user = LinkedinLoginProc(request, params)
-    except DBNotification, e:
-        log.error("UNHANDLED DB MESSAGE: %s", e.message)
-        request.session.flash(GenericErrorMessage(e.message), "generic_messages")
-        return None
-    else:
-        return user.toJSON()
+    return LinkedinLoginProc(request, params)
 
 class RequiresLoginException(Exception):
     def __init__(self, template):
@@ -74,7 +68,14 @@ def auth_required_view(exc, request):
 
 
 def login_success(exc, request):
-    login_user(request.root, request, exc.profile)
+    try:
+        user = login_user(request.root, request, exc.profile)
+    except DBNotification, e:
+        if e.message == 'NO_USER_WITH_THIS_ACCOUNT':
+            return Response("Resource Found!", 302, headerlist = [('location', request.root.signup_url(slugify(exc.profile['name'])))])
+        log.error("UNHANDLED DB MESSAGE: %s", e.message)
+        request.session.flash(GenericErrorMessage(e.message), "generic_messages")
+
     route = exc.get_redirection(request)
     return Response("Resource Found!", 302, headerlist = [('location', route)])
 

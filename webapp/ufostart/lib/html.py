@@ -10,8 +10,7 @@ from httplib2 import Http
 import markdown
 import simplejson
 import smartypants
-
-
+import unidecode
 
 
 log = logging.getLogger(__name__)
@@ -36,6 +35,11 @@ def html(text):
     converted_txt = re.sub("\n", "\n\n", converted_txt)
     html = markdown.markdown(converted_txt)
     return html
+
+
+def slugify(text):
+    str = unidecode.unidecode(text).lower()
+    return re.sub(r'\W+','.',str)
 
 def trunc(length):
     def f(text):

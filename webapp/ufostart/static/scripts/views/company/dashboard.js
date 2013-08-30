@@ -22,7 +22,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
             , actor = model.get(key)
             , actorLink = "/"+actor.companySlug+"/1/"+actor.needSlug
             , user = actor.User
-            , uLink = user?userLink(user.token, user.name):'<span>Someone</span>';
+            , uLink = user?userLink(user.slug, user.name):'<span>Someone</span>';
         return {
             picture: actor.comapnyLogo
             , link: actorLink
@@ -50,7 +50,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
             picture: actor.logo
             , link: actorLink
             , name: actor.name
-            , subTitle : user?'<a href="'+actorLink+'">'+actor.name + '</a> was setup by ' + userLink(user.token, user.name) + '.':''
+            , subTitle : user?'<a href="'+actorLink+'">'+actor.name + '</a> was setup by ' + userLink(user.slug, user.name) + '.':''
             , actor: actor
         }
     }
@@ -65,7 +65,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
             , actorLink = "/"+actor.slug
             , user = actor.Mentors, links = [];
         _.each(user, function(m){
-            links.push(userLink(m.token, m.name));
+            links.push(userLink(m.slug, m.name));
         });
         return {
             picture: actor.logo
@@ -77,13 +77,13 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
     }
     , getInviteModel = function(role){
         return function(model){
-            var actor = model.get("Invitor"), user = model.get("User"), uLink = user.token?userLink(user.token, user.name):'<strong>' + user.name + '</strong>';
+            var actor = model.get("Invitor"), user = model.get("User"), uLink = user.slug?userLink(user.slug, user.name):'<strong>' + user.name + '</strong>';
             return {
                 picture: userPic(actor.picture)
                 , link: '/'+actor.slug
                 , uLink: uLink
                 , name: actor.name
-                , subTitle: userLink(actor.token, actor.name) + ' invited '+uLink+' as a '+role+'.'
+                , subTitle: userLink(actor.slug, actor.name) + ' invited '+uLink+' as a '+role+'.'
                 , actor : actor
                 , user : user
             }
@@ -96,13 +96,13 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
                 picture: userPic(actor.picture)
                 , link: '/'+actor.slug
                 , name: actor.name
-                , subTitle: userLink(actor.token, actor.name) + ' is now a '+role+' of this company.'
+                , subTitle: userLink(actor.slug, actor.name) + ' is now a '+role+' of this company.'
             }
         }
     }
     , getMemberInviteModel = function(model){
         var result = getMentorInviteModel(model);
-        result.subTitle = userLink(result.actor.token, result.actor.name) + ' invited '+result.uLink+' as a team member.';
+        result.subTitle = userLink(result.actor.slug, result.actor.name) + ' invited '+result.uLink+' as a team member.';
         return result;
     }
     , TYPE_MAP = {

@@ -65,26 +65,27 @@ def signup_user(context, request, profile):
         elif not profile.get('network') and profile.get('type'):
             profile['network'] = SOCIAL_NETWORK_TYPES[profile['type']]
 
-    params = {'Profile': [profile], 'username': context.__name__}
+    params = {'Profile': [profile], 'slug': context.__name__}
     if not request.root.user.isAnon():
         params['token'] = request.root.user.token
-    user = LinkedinSignupProc(request, params)
-    return user.toJSON()
+    return LinkedinSignupProc(request, params)
 
 
 
 def login_success(exc, request):
     ctxt = request.context.__parent__
     try:
-        signup_user(ctxt, request, exc.profile)
+        user = signup_user(ctxt, request, exc.profile)
     except (DBNotification, DBException), e:
         if e.message == 'USER_ALREADY_REGISTERED':
             request.session.flash(GenericErrorMessage("This Linkedin user is already registered. You can just login to UFOStart with your Linkedin Account."), "generic_messages")
+        elif e.message == 'USER_SLUG_TAKEN':
+            request.session.flash(GenericErrorMessage("This username is already registered. Please choose another one."), "generic_messages")
         else:
             request.session.flash(GenericErrorMessage(e.message), "generic_messages")
         return Response("Resource Found!", 302, headerlist = [('location', request.fwd_url(ctxt))])
-    route = exc.get_redirection(request)
-    return Response("Resource Found!", 302, headerlist = [('location', route)])
+    else:
+        return Response("Resource Found!", 302, headerlist = [('location', request.root.profile_url(user.slug))])
 
 
 def login_failure(exc, request):
