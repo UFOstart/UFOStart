@@ -81,7 +81,6 @@ class WebsiteRootContext(RootContext):
         return self.request.resource_url(self, 'logout', *args, **kwargs)
 
 
-
     @property
     def home_url(self):
         return self.request.resource_url(self)
