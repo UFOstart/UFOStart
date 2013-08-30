@@ -1,5 +1,6 @@
 .site-slogan {
   font-weight:@font-weight-bold;
+  font-size:56px;
   margin:0;
   line-height:1.3em;
   text-align: center;
@@ -21,59 +22,13 @@
 }
 
 
-.product > .need-card-inner {
-  .picture.maxi {margin-top:10px;}
-}
-.long-description {
-  min-height: 220px;
-}
-
-.slide-pic {
-  width:70%;
-  float:left;
-  margin-right:12px;
-}
 .press-partners {
-  margin-right:-50px;
+  margin-bottom:30px;
   max-width:auto;
   width:auto;
 }
 
-.homepage-need-header {
-  height:100px;
+.home-page-section {
+  height: 2 * @headings-line-height * @font-size-xlarge;
   overflow:hidden;
-}
-
-.carousel.fade
-{
-    opacity: 1;
-
-    .item
-    {
-        -moz-transition: opacity ease-in-out 1s;
-        -o-transition: opacity ease-in-out 1s;
-        -webkit-transition: opacity ease-in-out 1s;
-        transition: opacity ease-in-out 1s;
-        left: 0 !important;
-        opacity: 0;
-        top:0;
-        position:absolute;
-        width: 100%;
-        display:block !important;
-        z-index:1;
-        &:first-child{
-            top:auto;
-            position:relative;
-        }
-
-        &.active
-        {
-            opacity: 1;
-            -moz-transition: opacity ease-in-out 1s;
-            -o-transition: opacity ease-in-out 1s;
-            -webkit-transition: opacity ease-in-out 1s;
-            transition: opacity ease-in-out 1s;
-            z-index:2;
-        }
-    }
 }
