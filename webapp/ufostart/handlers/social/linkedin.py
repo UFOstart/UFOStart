@@ -3,7 +3,7 @@ import urllib
 from httplib2 import Http
 import simplejson
 from ufostart.models.auth import SocialNetworkProfileModel
-from ufostart.apps.social import AbstractSocialResource, SocialLoginSuccessful, assemble_profile_procs
+from ufostart.handlers.social import AbstractSocialResource, SocialLoginSuccessful, assemble_profile_procs
 
 log = logging.getLogger(__name__)
 

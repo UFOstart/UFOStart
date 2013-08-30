@@ -2,58 +2,26 @@
 <%namespace file="widgets.html" name="widgets"/>
 
 
-<%def name="slideShow()">
-    <div id="landing-carousel" class="carousel fade splashslide">
-        <div class="carousel-inner">
-            <div class="active item clearfix">
-                <img class="slide-pic" src="${STATIC_URL}img/landing/slide1.png?${VERSION_TOKEN}"/>
-                <h2 class="brand-teal">Got big ideas and no clue where to start?</h2>
-                <strong class="brand-primary">Select a template we prepared for you and start the round.</strong>
-            </div>
-            <div class="item clearfix">
-                <img class="slide-pic" src="${STATIC_URL}img/landing/slide2.png?${VERSION_TOKEN}"/>
-                <h2 class="brand-teal">Create a company and add a Project</h2>
-                <strong class="brand-primary">Gather your team members and invite a mentor.</strong>
-            </div>
-            <div class="item clearfix">
-                <img class="slide-pic" src="${STATIC_URL}img/landing/slide3.png?${VERSION_TOKEN}"/>
-                <h2 class="brand-teal">Connect with people</h2>
-                <div class="text-strong brand-primary">
-                    <p>UFOstart is well connected to all major social networks.</p>
-                        Find an expert for your needs.
-                </div>
-            </div>
-            <div class="item clearfix">
-                <img class="slide-pic" src="${STATIC_URL}img/landing/slide4.png?${VERSION_TOKEN}"/>
-                <h2 class="brand-teal">Browse published needs and projects</h2>
-                <strong class="brand-primary">You will be rewarded with cash and equity</strong>
-            </div>
-        </div>
-    </div>
-</%def>
-
-
 <%def name="content()">
     <div class="home-band">
         <div class="container homepage">
-            <div class="row  mar-top-1">
-                <div class="col-lg-5">
-                    <h1 class="site-slogan">The first market place<br/>
-                    giving equity for expertise</h1>
-                    <h2>Create a project or contribute<br/>
-                    to existing companies</h2>
-                    <div class="row">
-                        <div class="col-lg-8 mar-top-2">
-                            <a class="btn btn-primary btn-lg btn-block" href="${root.template_select_url}">Create Project</a>
-                        </div>
+            <div class="row mar-top-3">
+                <div class="col-lg-12">
+                    <h1 class="site-slogan">
+                        The first market place<br/>
+                        giving equity for expertise
+                    </h1>
+                    <div class="mar-top-1">
+                        <a class="btn btn-primary btn-lg btn-block" href="${root.signup_url}">
+                            Sign Up
+                        </a>
                     </div>
+
                     <div class="mar-top-3">
                         <img class="press-partners" src="${STATIC_URL}img/press.png"/>
                     </div>
                 </div>
-                <div class="col-lg-7">
-                    ${self.slideShow()}
-                </div>
+
             </div>
         </div>
     </div>

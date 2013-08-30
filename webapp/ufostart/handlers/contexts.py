@@ -5,14 +5,12 @@ from pyramid.security import Allow, Everyone, Authenticated
 import simplejson
 from ufostart.lib.baseviews import RootContext
 from ufostart.admin import AdminContext
-from ufostart.apps.auth import SocialContext
-from ufostart.apps.company import ProtoCompanyContext, TemplatesRootContext, ProtoInviteContext
-from ufostart.apps.user import UserHomeContext, UserStubContext
+from ufostart.handlers.auth import SocialContext, SignupContext
+from ufostart.handlers.company import ProtoCompanyContext, TemplatesRootContext, ProtoInviteContext
+from ufostart.handlers.user import UserHomeContext, UserStubContext
 from ufostart.models.auth import AnonUser, getUser, setUserF, USER_TOKEN
 
 log = logging.getLogger(__name__)
-
-
 
 
 class WebsiteRootContext(RootContext):
@@ -54,6 +52,7 @@ class WebsiteRootContext(RootContext):
         , 'u':UserStubContext
         , 'template':TemplatesRootContext
         , 'home':UserHomeContext
+        , 'signup': SignupContext
         , 'login': SocialContext
         , 'invite': ProtoInviteContext
         , 'admin': AdminContext
@@ -76,8 +75,13 @@ class WebsiteRootContext(RootContext):
 
     def login_url(self, *args, **kwargs):
         return self.request.resource_url(self, 'login', *args, **kwargs)
+    def signup_url(self, *args, **kwargs):
+        return self.request.resource_url(self, 'signup', *args, **kwargs)
     def logout_url(self, *args, **kwargs):
         return self.request.resource_url(self, 'logout', *args, **kwargs)
+
+
+
     @property
     def home_url(self):
         return self.request.resource_url(self)

@@ -1,7 +1,7 @@
 import logging, simplejson, urllib
 from urlparse import parse_qsl
 from httplib2 import Http
-from ufostart.apps.social import AbstractSocialResource, SocialLoginSuccessful, assemble_profile_procs
+from ufostart.handlers.social import AbstractSocialResource, SocialLoginSuccessful, assemble_profile_procs
 from ufostart.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)

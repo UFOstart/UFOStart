@@ -48,6 +48,9 @@ class BaseContextMixin(object):
     def user(self):
         return self.__parent__.user
 
+    children = {}
+    def __getitem__(self, item):
+        return self.children[item](self, item)
 
     #=================================================== Hierarchy Helpers =============================================
 

@@ -6,7 +6,7 @@ from pyramid.decorator import reify
 import simplejson
 
 from . import contexts, index, auth, company, expert, user
-from ufostart.apps.social import SocialLoginFailed, SocialLoginSuccessful
+from ufostart.handlers.social import SocialLoginFailed, SocialLoginSuccessful
 
 
 __author__ = 'Martin'
@@ -62,7 +62,7 @@ def includeme(config):
     config.add_view(auth.social.login , context = contexts.WebsiteRootContext, name = 'login', renderer = "ufostart:templates/auth/login.html")
     config.add_view(index.logout      , context = contexts.WebsiteRootContext, name = 'logout')
 
-    config.include("ufostart.apps.company")
-    config.include("ufostart.apps.user")
-    config.include("ufostart.apps.auth")
-    config.include("ufostart.apps.social")
+    config.include("ufostart.handlers.company")
+    config.include("ufostart.handlers.user")
+    config.include("ufostart.handlers.auth")
+    config.include("ufostart.handlers.social")

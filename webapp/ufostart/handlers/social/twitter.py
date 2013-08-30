@@ -10,7 +10,7 @@ from pyramid.renderers import render_to_response
 from pyramid.view import view_config, view_defaults
 import simplejson
 from ufostart.lib.baseviews import BaseForm
-from ufostart.apps.social import AbstractSocialResource, SocialNetworkException, assemble_profile_procs, SocialLoginSuccessful
+from ufostart.handlers.social import AbstractSocialResource, SocialNetworkException, assemble_profile_procs, SocialLoginSuccessful
 from ufostart.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)

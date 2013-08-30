@@ -1,7 +1,7 @@
 # coding=utf-8
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.httpexceptions import HTTPFound
-from ufostart.apps.social import UserRejectedNotice, SocialNetworkException
+from ufostart.handlers.social import UserRejectedNotice, SocialNetworkException
 
 
 SESSION_FURL_TOKEN = 'ANGELLIST_FURL'

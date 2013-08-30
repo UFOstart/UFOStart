@@ -4,7 +4,7 @@ from hnc.forms.messages import GenericSuccessMessage, GenericErrorMessage
 from pyramid.httpexceptions import HTTPFound
 from ufostart.lib.baseviews import BaseForm
 
-from ufostart.apps.forms.controls import SanitizedHtmlField
+from ufostart.handlers.forms.controls import SanitizedHtmlField
 from ufostart.models.tasks import ROLES
 from ufostart.models.procs import InviteToCompanyProc, AcceptInviteProc, RefreshProfileProc, AddUpdateCompanyProc, GetTopMentorsProc, GetProfileProc, PublishRoundProc, AskForApprovalProc
 

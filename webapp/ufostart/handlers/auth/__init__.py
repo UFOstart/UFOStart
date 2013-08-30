@@ -1,10 +1,10 @@
-from . import social
+from . import social, imp
 from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPForbidden
 from pyramid.security import Everyone, Allow, Authenticated, NO_PERMISSION_REQUIRED
 from ufostart.models.auth import setUserF, getUser
 from ufostart.lib.baseviews import BaseContextMixin
-from ufostart.apps.social import angellist, SocialLoginFailed, SocialLoginSuccessful
+from ufostart.handlers.social import angellist, SocialLoginFailed, SocialLoginSuccessful
 
 
 class SocialContext(BaseContextMixin):
@@ -27,7 +27,16 @@ class SocialContext(BaseContextMixin):
             raise KeyError()
 
 
+
+class SignupContext(BaseContextMixin):
+    pass
+
+
 def includeme(config):
+
+    config.add_view(signup.index        , context = SignupContext, NO_PERMISSION_REQUIRED)
+
+
     config.add_view(social.login        , context = SocialContext, permission='proceed')
     config.add_view(social.login_success, context = SocialLoginSuccessful, permission = NO_PERMISSION_REQUIRED)
     config.add_view(social.login_failure, context = SocialLoginFailed, permission = NO_PERMISSION_REQUIRED)

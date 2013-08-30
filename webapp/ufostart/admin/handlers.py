@@ -5,7 +5,7 @@ from hnc.forms.layout import BS3_NCOL, Sequence
 from hnc.forms.messages import GenericSuccessMessage
 from hnc.tools.tools import deep_get
 from ufostart.lib.baseviews import BaseForm
-from ufostart.apps.forms.controls import TagSearchField, PictureUploadField
+from ufostart.handlers.forms.controls import TagSearchField, PictureUploadField
 from ufostart.models.procs import AdminNeedCreateProc, AdminNeedEditProc, AdminServiceCreateProc, AdminServiceEditProc, AdminTemplatesEditProc, AdminTemplatesCreateProc, AdminNeedAllProc
 from ufostart.models.tasks import TASK_CATEGORIES
 

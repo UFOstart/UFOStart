@@ -5,7 +5,7 @@ from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerFi
 from httplib2 import Http
 import simplejson
 from ufostart.lib.html import getYoutubeVideoId, getVimeoVideoId
-from ufostart.apps.social import AbstractSocialResource, SocialNetworkException, UserRejectedNotice
+from ufostart.handlers.social import AbstractSocialResource, SocialNetworkException, UserRejectedNotice
 from ufostart.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
