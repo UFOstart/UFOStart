@@ -71,12 +71,10 @@ ul.styled {
     overflow:hidden;
     .pseudo-input();
     > .info {color:@text-color;}
-    &.empty:before {content: "\e060";
-      font-family: 'Glyphicons Halflings';
-      font-style: normal;
-      font-weight: normal;
+    &.empty:before {
+      .glyphicon;
+      content: "\e060";
       font-size: 3em;
-      -webkit-font-smoothing: antialiased;
 
       color:@wtf-color;
       position: absolute;
@@ -179,5 +177,59 @@ ul.styled {
     padding:6px 10px 0px;
     float:left;
     >.label {margin-right:5px;}
+  }
+}
+
+
+
+
+.username-input {
+  position: relative;
+  .textaligned {
+    position: absolute;
+    top:0;
+    left:0;
+    width:150px;
+    text-align: right;
+    color:@text-color;
+    height:@input-height-base;
+    line-height:@input-height-base;
+    font-size:@font-size-base;
+  }
+  > .form-control {
+
+    color:@brand-primary;
+    font-weight:bold;
+    margin-right:50px;
+    padding-left: 155px;
+
+    &.input-lg {
+      padding-left: 205px;
+    }
+  }
+}
+
+.username-input-group.input-larger {
+  .textaligned {
+      height:@input-height-large;
+      line-height:@input-height-large;
+      font-size:@font-size-large;
+      width:200px;
+  }
+  .username-input {padding-right:60px;}
+  .help-inline {
+    color:red;
+    margin-top:5px;
+    font-size:@font-size-small;
+  }
+  &.valid .username-input {
+    .background-image("../img/validation.png");
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+  }
+  &.has-error .username-input {
+    .background-image("../img/validation.png");
+    background-position: 100% -44px;
+    background-repeat: no-repeat;
   }
 }

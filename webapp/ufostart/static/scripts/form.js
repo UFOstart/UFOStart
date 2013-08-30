@@ -39,7 +39,7 @@ define(['tools/ajax'], function(ajax){
                 var data = _.extend({el:elem}, $(elem).data());
                 require([data.module], function(V){V[data['moduleMethod']||'init'](data, validPromise)});
             });
-            el.find("select").each(function(idx, elem){
+            el.find(".js-selectmenu").each(function(idx, elem){
                 var $el = $(elem);
                 $el.on({
                         'chosen:ready': function(e, c){

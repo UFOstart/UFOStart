@@ -12,9 +12,15 @@
                         giving equity for expertise
                     </h1>
                     <div class="mar-top-3 text-center">
-                        <a class="btn btn-primary btn-xlg" href="${root.signup_url()}">
-                            Sign Up
-                        </a>
+                        %if request.context.user.isAnon():
+                            <a class="btn btn-primary btn-xlg" href="${root.signup_url()}">
+                                Sign Up
+                            </a>
+                        %else:
+                            <a class="btn btn-primary btn-xlg" href="${root.template_select_url}">
+                                Create a Project
+                            </a>
+                        %endif
                     </div>
                     <div class="mar-top-5 text-center">
                         <img class="press-partners" src="${STATIC_URL}img/press.png"/>

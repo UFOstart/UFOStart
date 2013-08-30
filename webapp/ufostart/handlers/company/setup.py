@@ -1,10 +1,10 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import  REQUIRED, StringField, ChoiceField
+from hnc.forms.formfields import  REQUIRED, StringField, ChoiceField, HtmlAttrs
 from hnc.forms.handlers import FormHandler
 from ufostart.lib.baseviews import BaseForm
 from ufostart.handlers.auth.imp import SESSION_SAVE_TOKEN
 from ufostart.models.procs import CreateCompanyProc, EditCompanyProc
-from ufostart.handlers.forms.controls import PictureUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField, SlideshareField, VideoUrlField
+from ufostart.handlers.forms.controls import PictureUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField, SlideshareField, VideoUrlField, UniqueNameField
 from ufostart.models.tasks import NamedModel
 
 
@@ -21,6 +21,7 @@ class CompanyCreateForm(BaseForm):
     fields=[
         PictureUploadField('logo', 'Logo', REQUIRED)
         , StringField('name', 'Name', REQUIRED)
+        , UniqueNameField("slug", "UFOStart URL")
         , CleanHtmlField('pitch', 'Slogan', REQUIRED, max = 90)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
         , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')

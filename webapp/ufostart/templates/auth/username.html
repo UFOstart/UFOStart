@@ -6,11 +6,20 @@
 
 <%def name="content()">
     <div class="container">
-        <div class="row mar-top-5">
+
+        <div class="row mar-top-2">
             <div class="col-lg-12">
                 <h2 class="section-title">
                     <span>Reserve your username</span>
                 </h2>
+            </div>
+        </div>
+
+        <div class="row mar-top-2">
+            <div class="col-lg-3 pull-right">
+                ${self.wtfBox()}
+            </div>
+            <div class="col-lg-9">
                 <%form:build_base_form form="${view.form}" values="${values}" errors="${errors}">
                     <button type=""submit" class="btn btn-primary btn-linkedin">Connect with Linkedin</button>
                 </%form:build_base_form>
@@ -19,6 +28,15 @@
     </div>
 </%def>
 
+<%def name="wtfBox()">
+    <div class="wtf-box">
+        <h2 class="wtf-title">Tell us a little more</h2>
+        <div class="wtf-content mar-top-1">
+            <p>Now we know your company's stage we need a little more information about what you're up to.</p>
+            <p>Then you can start setting up your round.</p>
+        </div>
+    </div>
+</%def>
 
 
 <%def name="post_scripts()">${standard_form.simple_scripts()}</%def>

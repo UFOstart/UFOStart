@@ -6,14 +6,15 @@ from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.response import Response
 from ufostart.handlers.auth.social import login_user
+from ufostart.handlers.forms.controls import UniqueNameField
 from ufostart.lib.baseviews import BaseForm
 from ufostart.models.auth import SocialNetworkProfileModel, SOCIAL_NETWORK_TYPES_REVERSE, SOCIAL_NETWORK_TYPES
-from ufostart.models.procs import LinkedinSignupProc
+from ufostart.models.procs import LinkedinSignupProc, UsernameAvailableProc
 
 log = logging.getLogger(__name__)
 
 
-uname_regex = re.compile('^[0-9a-z_-]+$')
+uname_regex = re.compile('^[0-9a-z_.-]+$')
 
 RESERVEDS = []
 
@@ -23,25 +24,23 @@ def isavailable(context, request):
 
     if not uname_regex.match(username):
         return "Username should only consist of letters, lowercase characters, underscores and hyphens"
-    elif username not in RESERVEDS and username[-1] in '01234567890':
-        return True
-    else:
+    elif username in RESERVEDS:
         return "Username already taken"
+    else:
+        try:
+            UsernameAvailableProc(request, {'slug': username})
+        except (DBNotification, DBException), e:
+            return "Username already taken"
+        else:
+            return True
 
 
-
-
-class UserNameField(StringField):
-    group_classes = "username-input-group valid"
-    template = "ufostart:templates/auth/controls/username.html"
-
-    def get_domain(self, request):
-        return request.context.settings.site_root_url
+group_classes = UniqueNameField.group_classes + " input-larger"
 
 class UserNameForm(BaseForm):
     id="UserName"
     fields=[
-        UserNameField("username", attrs = HtmlAttrs(required = True, data_rule_remote="/signup/isavailable"))
+        UniqueNameField("username", input_classes='input-lg', group_classes = group_classes)
     ]
     @classmethod
     def on_success(cls, request, values):
@@ -79,7 +78,7 @@ def login_success(exc, request):
     try:
         signup_user(ctxt, request, exc.profile)
     except (DBNotification, DBException), e:
-        if e.message == 'LinkedinSignupProc':
+        if e.message == 'USER_ALREADY_REGISTERED':
             request.session.flash(GenericErrorMessage("This Linkedin user is already registered. You can just login to UFOStart with your Linkedin Account."), "generic_messages")
         else:
             request.session.flash(GenericErrorMessage(e.message), "generic_messages")

@@ -59,6 +59,10 @@ LinkedinLoginProc = LoggingInProc('/web/user/lilogin', db_messages={'NEWUSER':Ne
 
 
 
+UsernameAvailableProc = ClientTokenProc("/web/user/slugavailable")
+CompanynameAvailableProc = ClientTokenProc("/web/company/slugavailable")
+
+
 #
 ################# HOMEPAGE
 #

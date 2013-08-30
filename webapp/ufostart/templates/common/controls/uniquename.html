@@ -3,9 +3,9 @@
 
 <%block name="controls">
     <div class="username-input">
+        <input type="${widget.type}" class="${grid.input_classes} ${widget.getClasses()}" name="${widget.getName(prefix)}" id="${widget.getName(prefix)}" value="${widget.valueToForm(value)}" ${widget.getInputAttrs(request)|n}/>
         <div class="textaligned">
             ${widget.get_domain(request)}/
         </div>
-        <input type="${widget.type}" class="input-lg ${grid.input_classes} ${widget.getClasses()}" name="${widget.getName(prefix)}" id="${widget.getName(prefix)}" value="${widget.valueToForm(value)}" ${widget.getInputAttrs(request)|n}/>
     </div>
 </%block>

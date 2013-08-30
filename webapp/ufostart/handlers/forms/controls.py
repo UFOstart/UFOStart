@@ -3,7 +3,7 @@ import babel
 from babel.numbers import get_currency_symbol
 import formencode
 from hnc.forms import formfields
-from hnc.forms.formfields import StringField, TextareaField, IntField
+from hnc.forms.formfields import StringField, TextareaField, IntField, HtmlAttrs
 from ufostart.lib.html import getSlideshareMeta, getVimeoMeta, getYoutubeMeta
 
 
@@ -111,3 +111,18 @@ class VideoUrl(formencode.validators.String):
 
 class VideoUrlField(StringField):
     _validator = VideoUrl
+
+
+
+
+
+class UniqueNameField(StringField):
+    group_classes = "username-input-group valid"
+    template = "ufostart:templates/common/controls/uniquename.html"
+    def get_domain(self, request):
+        return request.context.settings.site_root_url
+
+    def __init__(self, name, label=None, **kwargs):
+        attrs = HtmlAttrs(required = True, data_rule_remote="/signup/isavailable")
+        super(UniqueNameField, self).__init__(name, label, attrs, **kwargs)
+
