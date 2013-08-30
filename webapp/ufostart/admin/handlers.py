@@ -139,7 +139,7 @@ class TemplateCreateForm(BaseForm):
                 , PictureUploadField("logo", "Template Icon")
                 , CheckboxPostField('active', "Active?")
             )
-            , NeedSelector('Need', "NeedList")
+            , NeedSelector('Need', "Task List")
         )
     ]
 

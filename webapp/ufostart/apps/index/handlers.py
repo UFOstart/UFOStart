@@ -2,10 +2,7 @@ from ufostart.models.procs import FindPublicNeeds, GetPopularNeeds, GetNewProduc
 
 
 def index(context, request):
-    popular_needs = GetPopularNeeds(request)
-    location = FindPublicNeedsByLocation(request)
-    products = GetNewProductsProc(request)
-    return {'popular_needs':popular_needs, 'needs_close_by': location, 'products': products}
+    return {}
 
 
 def logout(context, request):

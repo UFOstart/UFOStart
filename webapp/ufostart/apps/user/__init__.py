@@ -50,54 +50,6 @@ class UserStubContext(BaseContextMixin):
 
 
 
-class BrowseTagContext(BaseContextMixin):
-    @property
-    def tags(self):
-        return self.__parent__.tags
-
-    @property
-    def site_title(self):
-        return [self.tag, 'Browse', self.request.globals.project_name]
-
-    def __init__(self, parent, name):
-        self.__parent__ = parent
-        self.__name__ = name
-        self.tag = urllib.unquote(name)
-    def browse_url(self, tag): return self.__parent__.browse_url(tag)
-    @reify
-    def tasks(self):
-        return FindPublicNeeds(self.request, {'Search': {'tags': [{'url':self.tag}]}})
-
-
-class BrowseContext(BaseContextMixin):
-
-    @property
-    def site_title(self):
-        return ['Browse', self.request.globals.project_name]
-
-    def __init__(self, parent, name):
-        self.__parent__ = parent
-        self.__name__ = name
-        self.tags = GetTopTags(self.request)
-        self.tag = self.tags[0].name
-
-
-    def browse_url(self, tag):
-        return self.request.resource_url(self, quote_path_segment(tag))
-
-    def __getitem__(self, item):
-        return BrowseTagContext(self, item)
-
-    @reify
-    def tasks(self):
-        return FindPublicNeeds(self.request, {'Search': {'tags': [{'url':self.tag}]}})
-
-
-
 def includeme(config):
     config.add_view(index.home      , context = UserHomeContext, renderer = "ufostart:templates/user/home.html",permission='view')
     config.add_view(index.user      , context = UserProfileContext, renderer = "ufostart:templates/user/home.html")
-    config.add_view(index.browse    , context = BrowseContext, renderer = "ufostart:templates/user/browse.html")
-    config.add_view(index.browse    , context = BrowseTagContext, renderer = "ufostart:templates/user/browse.html")
-
-

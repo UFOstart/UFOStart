@@ -1,8 +1,7 @@
 """
   easy_install mako
 """
-from fabric.api import local
-from fabric.api import run, local, run, cd, lcd, put
+from fabric.api import run, local, cd, lcd, put
 from fabric.contrib import files
 
 import shutil, os, md5, fabric
@@ -11,22 +10,28 @@ from collections import namedtuple
 from mako.template import Template
 SubSite = namedtuple("SubSite", ["location", "scripts", "styles"])
 Style = namedtuple("Style", ["list", "hasBuster"])
+Environment=namedtuple("Environment",["repository","process_groups","branch"])
 
 ############## CONFIG #########################
 
 PROJECTNAME="ufostart"
 SUBSITES = [
-    SubSite(location = 'website', scripts=[], styles=Style(['site.less'], True))
+    SubSite(location = '.', scripts=[], styles=Style(['site.less', 'site_admin.less'], True))
   ]
-PROCESS_GROUPS = ['p1']
+
 CLEAN_SESSIONS = False
 
 
-CREATE_CMDS = {
-    'dev':"git clone git@github.com:HarryMcCarney/UFOStart.git ."
-    , 'live':"git clone git@github.com:HarryMcCarney/UFOStart.git ."
+ENVIRONMENTS = {
+    'dev':Environment(
+            repository="git@github.com:HarryMcCarney/UFOStart.git"
+            ,process_groups=['p1']
+            ,branch='master')
+    ,'live':Environment(
+            repository="git@github.com:HarryMcCarney/UFOStart.git"
+            ,process_groups=['p1','p2']
+            ,branch='LIVE')
 }
-
 
 EXTRA_SETUP = [
     './env/bin/easy_install redis'
@@ -65,7 +70,8 @@ def create_env(env):
     files.append("supervisor.cfg", cfg_template.render(env = env), escape=False)
     run("env/bin/supervisord -c supervisor.cfg")
     with cd("repo.git"):
-        run(CREATE_CMDS[env])
+        run("git clone {} .".format(ENVIRONMENTS[env].repository))
+        run("git checkout {}".format(ENVIRONMENTS[env].branch))
     for extra in EXTRA_SETUP:
         run(extra)
 
@@ -102,6 +108,7 @@ def build_statics(env, version):
                 run("~/node_modules/less/bin/lessc {project}/{subsite}/static/less/{stylesheet} --yui-compress {project}/{subsite}/static/css/{outname}.min.css".format(project=PROJECTNAME, subsite=loc, stylesheet=stylesheet, outname = stylesheet.rsplit(".")[0]))
 
 
+
         for subsite in SUBSITES:
             if subsite.scripts:
                 if not files.exists("{project}/{subsite}/static/scripts/build/".format(project=PROJECTNAME, subsite=subsite.location)):
@@ -127,7 +134,7 @@ def switch(env, version):
         run("env/bin/python {}setup.py develop".format(code_path))
         with cd("code"):
             run("rm current;ln -s {} current".format(version))
-        for pg in PROCESS_GROUPS:
+        for pg in ENVIRONMENTS[env].process_groups:
             result = run("env/bin/supervisorctl -c supervisor.cfg restart {}:*".format(pg), pty=True)
             if "ERROR" in result:
               run("tail -n50 logs/python*.log", pty=True)

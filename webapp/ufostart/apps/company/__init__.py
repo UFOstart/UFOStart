@@ -22,6 +22,10 @@ class BaseProjectContext(BaseContextMixin):
     def site_title(self):
         return [self.displayName, self.company.display_name, self.request.globals.project_name]
 
+    @reify
+    def company(self):
+        return self.__parent__.company
+
 
 class TemplateContext(BaseProjectContext):
     @property
@@ -31,6 +35,8 @@ class TemplateContext(BaseProjectContext):
         self.__name__ = name
         self.__parent__ = parent
         self.template = template
+
+
 
 
 class TemplatesRootContext(BaseProjectContext):
@@ -63,9 +69,6 @@ class ApplicationContext(BaseProjectContext):
         self.application = application
 
     @reify
-    def company(self):
-        return self.__parent__.company
-    @reify
     def round(self):
         return self.__parent__.round
     @reify
@@ -89,9 +92,6 @@ class NeedContext(BaseProjectContext):
         return ApplicationContext(self, item, self.__acl__, self.need.applicationMap[item])
 
     @reify
-    def company(self):
-        return self.__parent__.company
-    @reify
     def round(self):
         return self.__parent__.round
 
@@ -108,9 +108,6 @@ class ProductContext(BaseProjectContext):
         self.product = product
 
     @reify
-    def company(self):
-        return self.__parent__.company
-    @reify
     def round(self):
         return self.__parent__.round
 
@@ -125,9 +122,6 @@ class FundingContext(BaseProjectContext):
         self.__acl__ = acl
         self.funding = funding
 
-    @reify
-    def company(self):
-        return self.__parent__.company
     @reify
     def round(self):
         return self.__parent__.round
@@ -148,10 +142,6 @@ class RoundContext(BaseProjectContext):
         if item == 'product': return ProductContext(self, 'product', self.__acl__, self.round.Product)
         if item == 'funding': return FundingContext(self, 'funding', self.__acl__, self.round.Funding)
         return NeedContext(self, item, self.__acl__, self.round.needMap[item])
-
-    @reify
-    def company(self):
-        return self.__parent__.company
 
 
     def groupedNeeds(self, n = 4, added = False):
