@@ -53,6 +53,7 @@ class UserEndorsementsModel(Mapping):
     created = DateTimeField()
     endorserPicture = TextField()
     endorserName = TextField()
+    endorserSlug = TextField()
     endorserToken = TextField()
     endorserHeadline = TextField()
 

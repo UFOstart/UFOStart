@@ -7,19 +7,17 @@ from ufostart.handlers.auth import signup
 from ufostart.lib.baseviews import RootContext
 from ufostart.admin import AdminContext
 from ufostart.handlers.auth import SocialContext, SignupContext
-from ufostart.handlers.company import ProtoCompanyContext, TemplatesRootContext, ProtoInviteContext
-from ufostart.handlers.user import UserHomeContext, UserStubContext
+from ufostart.handlers.company import TemplatesRootContext, ProtoInviteContext, CompanyContext
+from ufostart.handlers.user import UserProfileContext
 from ufostart.models.auth import AnonUser, getUser, setUserF, USER_TOKEN
+from ufostart.models.procs import CheckSlugProc
 
 log = logging.getLogger(__name__)
 
 
 
 ROOT_NAVIGATION = {
-          'c':ProtoCompanyContext
-        , 'u':UserStubContext
-        , 'template':TemplatesRootContext
-        , 'home':UserHomeContext
+        'template':TemplatesRootContext
         , 'signup': SignupContext
         , 'login': SocialContext
         , 'invite': ProtoInviteContext
@@ -28,6 +26,17 @@ ROOT_NAVIGATION = {
 
 if len(set(ROOT_NAVIGATION.keys()).union(signup.RESERVEDS)) != len(signup.RESERVEDS):
     signup.RESERVEDS = ROOT_NAVIGATION.keys()
+
+CHILD_CONTEXT_MAPPING = {
+        'COMPANY': CompanyContext
+        , 'USER': UserProfileContext
+    }
+def getContextFromSlug(childSlug):
+    try:
+        return CHILD_CONTEXT_MAPPING[childSlug.type]
+    except AttributeError, e:
+        raise KeyError(e.message)
+
 
 class WebsiteRootContext(RootContext):
     __name__ = None
@@ -72,7 +81,8 @@ class WebsiteRootContext(RootContext):
             settings = self.settings.networks[item]
             return settings.module(self, item, settings)
         else:
-            raise KeyError()
+            ctxt_cls = getContextFromSlug(CheckSlugProc(self.request, {'slug': item}))
+            return ctxt_cls(self, item)
 
 
 
@@ -86,6 +96,8 @@ class WebsiteRootContext(RootContext):
         return self.request.resource_url(self, 'signup', *args, **kwargs)
     def logout_url(self, *args, **kwargs):
         return self.request.resource_url(self, 'logout', *args, **kwargs)
+    def auth_url(self, network):
+        return self.request.resource_url(self, 'login', network, query = [('furl', self.request.url)])
 
 
     @property
@@ -96,22 +108,19 @@ class WebsiteRootContext(RootContext):
         return self.request.resource_url(self, 'template')
     def template_url(self, slug, *args, **kwargs):
         return self.request.resource_url(self, 'template', slug, *args, **kwargs)
+
+
+    def profile_url(self, slug):
+        return self.request.resource_url(self, slug)
     def company_url(self, slug, *args, **kwargs):
-        return self.request.resource_url(self, 'c', slug, *args, **kwargs)
+        return self.request.resource_url(self, slug, *args, **kwargs)
     def round_url(self, slug, round_no = '1', *args, **kwargs):
-        return self.request.resource_url(self, 'c', slug, round_no, *args, **kwargs)
+        return self.request.resource_url(self, slug, round_no, *args, **kwargs)
     def need_url(self, company_slug, need_slug, *args, **kwargs):
-        return self.request.resource_url(self, 'c', company_slug, 1, need_slug, *args, **kwargs)
+        return self.request.resource_url(self, company_slug, 1, need_slug, *args, **kwargs)
     def product_url(self, slug, *args, **kwargs):
-        return self.request.resource_url(self, 'c', slug, 1, 'product', *args, **kwargs)
-    def auth_url(self, network):
-        return self.request.resource_url(self, 'login', network, query = [('furl', self.request.url)])
+        return self.request.resource_url(self, slug, 1, 'product', *args, **kwargs)
+
     @property
     def angellist_url(self):
         return self.request.resource_url(self, 'angellist', query = [('furl', self.request.url)])
-    def profile_url(self, token):
-        request = self.request
-        if token == self.user.token:
-            return request.resource_url(self, 'home')
-        else:
-            return request.resource_url(self, 'u', token)

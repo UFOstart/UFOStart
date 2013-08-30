@@ -57,18 +57,20 @@ define(["tools/ajax"], function(ajax){
             if(tLoaded.state() != 'resolved')require(["text!templates/profile.html"], function(templ){tLoaded.resolve(_.template(templ))});
             ajax.submitPrefixed({
                 url:"/web/user/mini"
-                , data: {token: data.entityId}
+                , data: {slug: data.entityId}
                 , success: function(resp, status, xhr){
                     var user = resp.User;
-                    tLoaded.done(function(templ){
-                        $(e.currentTarget).append(
-                            templ({
-                                link: '/u/'+ user.token
-                                , startupValue: '$' + hnc.formatNum(user.startupValue)
-                                , user: user
-                            })
-                        )
-                    });
+                    if(user){
+                        tLoaded.done(function(templ){
+                            $(e.currentTarget).append(
+                                templ({
+                                    link: '/'+user.slug
+                                    , startupValue: '$' + hnc.formatNum(user.startupValue)
+                                    , user: user
+                                })
+                            )
+                        });
+                    }
                 }
             });
         }

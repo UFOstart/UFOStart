@@ -146,7 +146,7 @@ class ProductPledgeForm(BaseForm):
         offer_token = values['offer']
         comment = values[offer_token]
 
-        pledge = {'name': user.name, 'network':'ufo', 'networkId': user.token, 'picture':user.getPicture(), 'comment': comment, 'offerToken': offer_token}
+        pledge = {'name': user.name, 'network':'ufo', 'networkId': user.slug, 'picture':user.getPicture(), 'comment': comment, 'offerToken': offer_token}
         data = {'token': round.token, 'Pledge' : pledge}
         try:
             PledgeCompanyProc(request, data)

@@ -86,4 +86,4 @@ def login_failure(exc, request):
 
 
 def login(context, request):
-    raise JsonAwareRedirect(request.root.profile_url(request.root.user.token))
+    raise JsonAwareRedirect(request.root.profile_url(request.root.user.slug))

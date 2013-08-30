@@ -12,7 +12,7 @@
             <div class="face-pile-mini">
                 {% _.each(user.Companies, function(c){ %}
                     <div class="picture micro">
-                        <a href="/c/{{ c.slug }}"><img src="{{ c.logo }}"/></a>
+                        <a href="/{{ c.slug }}"><img src="{{ c.logo }}"/></a>
                     </div>
                 {% }) %}
             </div>

@@ -157,7 +157,7 @@
                 ${widgets.logo(endorsement.endorserPicture)}
                 <div class="right-box">
                     <div class="date-ear-mark">${endorsement.display_date}</div>
-                    <div class="overflow"><a href="${root.profile_url(endorsement.endorserToken)}"><strong>${endorsement.endorserName}</strong></a></div>
+                    <div class="overflow"><a href="${root.profile_url(endorsement.endorserSlug)}"><strong>${endorsement.endorserName}</strong></a></div>
                     <p class="overflow text-small text-muted">${endorsement.endorserHeadline}</p>
                     <small>Endorsed ${ctxt.profile.name} for
                         <a class="brand-teal text-strong" href="${root.need_url(endorsement.companySlug, endorsement.needSlug)}">${endorsement.needName}</a> at

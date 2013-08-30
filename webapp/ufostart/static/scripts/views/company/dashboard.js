@@ -2,11 +2,11 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
     var
 
 
-    userLink = function(slug, name){return '<a href="/u/'+slug+'">' + name + '</a>'}
+    userLink = function(slug, name){return '<a href="/'+slug+'">' + name + '</a>'}
     , userPic = function(url){return url || "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm";}
-    , companyLink = function(slug, name){return '<a href="/c/'+slug+'">' + name + '</a>'}
-    , productLink = function(slug, name){return '<a href="/c/'+slug+'/1/product">' + name + '</a>'}
-    , needLink = function(cSlug, nSlug, name){return '<a href="/c/'+cSlug+'/1/'+nSlug+'">' + name + '</a>'}
+    , companyLink = function(slug, name){return '<a href="/'+slug+'">' + name + '</a>'}
+    , productLink = function(slug, name){return '<a href="/'+slug+'/1/product">' + name + '</a>'}
+    , needLink = function(cSlug, nSlug, name){return '<a href="/'+cSlug+'/1/'+nSlug+'">' + name + '</a>'}
 
     , getPledgeModel = function(model){
         var key = "Pledge", actor = model.get(key);
@@ -20,7 +20,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
     , getApplicationModel = function(model){
         var key = "Application"
             , actor = model.get(key)
-            , actorLink = "/c/"+actor.companySlug+"/1/"+actor.needSlug
+            , actorLink = "/"+actor.companySlug+"/1/"+actor.needSlug
             , user = actor.User
             , uLink = user?userLink(user.token, user.name):'<span>Someone</span>';
         return {
@@ -33,18 +33,18 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
     , getEndorsementModel = function(model){
         var key = "Endorsement"
             , actor = model.get(key)
-            , actorLink = "/u/"+actor.endorserToken;
+            , actorLink = "/"+actor.endorserSlug;
         return {
             picture: userPic(actor.endorserPicture)
             , link: actorLink
             , name: actor.endorserName
-            , subTitle : userLink(actor.endorserToken, actor.endorserName) + " endorsed <strong>"+actor.endorseeName + '</strong> for ' + needLink(actor.companySlug, actor.needSlug, actor.needName)+'.'
+            , subTitle : userLink(actor.endorserSlug, actor.endorserName) + " endorsed <strong>"+actor.endorseeName + '</strong> for ' + needLink(actor.companySlug, actor.needSlug, actor.needName)+'.'
         }
     }
     , getCompanySetupModel = function(model){
         var key = "Company"
             , actor = model.get(key)
-            , actorLink = "/c/"+actor.slug
+            , actorLink = "/"+actor.slug
             , user = actor.User;
         return {
             picture: actor.logo
@@ -62,7 +62,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
     , getPublishedModel = function(model){
          var key = "Company"
             , actor = model.get(key)
-            , actorLink = "/c/"+actor.slug
+            , actorLink = "/"+actor.slug
             , user = actor.Mentors, links = [];
         _.each(user, function(m){
             links.push(userLink(m.token, m.name));
@@ -80,7 +80,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
             var actor = model.get("Invitor"), user = model.get("User"), uLink = user.token?userLink(user.token, user.name):'<strong>' + user.name + '</strong>';
             return {
                 picture: userPic(actor.picture)
-                , link: '/u/'+actor.token
+                , link: '/'+actor.slug
                 , uLink: uLink
                 , name: actor.name
                 , subTitle: userLink(actor.token, actor.name) + ' invited '+uLink+' as a '+role+'.'
@@ -94,7 +94,7 @@ define(["tools/messaging", "tools/ajax", "libs/tachymeter"], function(messaging,
             var actor = model.get("User");
             return {
                 picture: userPic(actor.picture)
-                , link: '/u/'+actor.token
+                , link: '/'+actor.slug
                 , name: actor.name
                 , subTitle: userLink(actor.token, actor.name) + ' is now a '+role+' of this company.'
             }

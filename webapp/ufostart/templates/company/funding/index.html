@@ -136,7 +136,7 @@
                     ${widgets.profile_pic(investment.User.picture, investment.User.token)}
                     <div class="right-box">
                         <div class="pull-right"><small>${html.format_datetime(investment.created, 'medium')}</small></div>
-                        <a class="entity-link" href="${root.profile_url(investment.User.token)}">${investment.User.name}</a>
+                        <a class="entity-link" href="${root.profile_url(investment.User.slug)}">${investment.User.name}</a>
                         %if investment.User.headline:
                             <small class="text-muted">${investment.User.headline}</small>
                         %endif

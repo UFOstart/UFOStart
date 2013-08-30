@@ -1,5 +1,6 @@
 from hnc.apiclient import Mapping, ListField, DictField
 from hnc.apiclient.backend import ClientTokenProc, DBNotification
+from ufostart.models import SlugTypeModel
 from ufostart.models.tasks import NamedModel
 from ufostart.models.auth import UserModel
 from ufostart.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel, InviteModel, ServiceModel
@@ -62,6 +63,9 @@ LinkedinLoginProc = LoggingInProc('/web/user/lilogin', db_messages={'NEWUSER':Ne
 UsernameAvailableProc = ClientTokenProc("/web/user/slugavailable")
 CompanynameAvailableProc = ClientTokenProc("/web/company/slugavailable")
 
+
+
+CheckSlugProc = ClientTokenProc("/web/slug", result_cls=SlugTypeModel, root_key='Slug')
 
 #
 ################# HOMEPAGE

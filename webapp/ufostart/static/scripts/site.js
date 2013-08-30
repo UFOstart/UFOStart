@@ -41,8 +41,8 @@ require(["tools/ajax", "misc"], function(ajax, misc){
             this.LOCALE = options.LOCALE || LOCALE
         }
 
-        , getUserToken: function(){
-            return this.options.user.token;
+        , getUserSlug: function(){
+            return this.options.user.slug;
         }
 
         , rld: function(){

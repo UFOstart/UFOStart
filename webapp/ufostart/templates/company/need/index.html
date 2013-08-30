@@ -278,11 +278,11 @@
                     <div class="row">
                         <div class="col col-sm-3">
                             <div class="picture">
-                                <a href="${request.root.profile_url(application.User.token)}"><img src="${application.User.picture}"/></a>
+                                <a href="${request.root.profile_url(application.User.slug)}"><img src="${application.User.picture}"/></a>
                             </div>
                         </div>
                         <div class="col col-sm-9">
-                            <a href="${request.root.profile_url(application.User.token)}" class="name"><strong>${application.User.name}</strong></a>
+                            <a href="${request.root.profile_url(application.User.slug)}" class="name"><strong>${application.User.name}</strong></a>
                             <p class="text-small text-muted">${html.nn(application.User.position)}</p>
                             <p class="text-small text-strong">Applied on ${application.display_date}</p>
                             %if need.fulfilled:

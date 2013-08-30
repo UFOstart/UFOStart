@@ -11,8 +11,7 @@
         </%widgets:pageHeader>
 
         <div class="row mar-top-1">
-            <div class="
-            9">
+            <div class="col-lg-9">
                 ${widgets.mainMedia("Product Presentation", product.video, picture_url = product.Pictures)}
             </div>
             <div class="col-lg-3">
@@ -95,10 +94,12 @@
                         %if root.user.isAnon():
                             <a href="${root.auth_url('linkedin')}" class="btn btn-primary btn-block">Login to Pledge</a>
                         %else:
-                            <div class="form-group show-expanded">
-                                <label class="control-label">Message</label>
-                                <div class="controls">
-                                    <textarea class="form-control x-high" name="ProductPledge.${offer.token}"></textarea>
+                            <div class="col-lg-12">
+                                <div class="form-group show-expanded">
+                                    <label class="control-label">Message</label>
+                                    <div class="controls">
+                                        <textarea class="form-control x-high" name="ProductPledge.${offer.token}"></textarea>
+                                    </div>
                                 </div>
                             </div>
                             <a class="btn btn-primary show-contracted btn-block" data-toggle-target=".single-product-offer" data-toggle-class="expanded">Pledge</a>
@@ -121,7 +122,7 @@
             ${widgets.profile_pic(pledge.picture, pledge.networkId)}
             <div class="right-box">
                 <div class="pull-right"><small class="text-muted">${html.format_datetime(pledge.created, 'medium')}</small></div>
-                <a class="entity-link" href="${root.profile_url(pledge.networkId)}">${pledge.name}</a>
+                <a class="entity-link" href="${root.profile_url(pledge.slug)}">${pledge.name}</a>
                 <p class="text-small">Pledged to buy <strong>${pledge.offerName}</strong></p>
                 <div>${html.nn(pledge.comment)}</div>
             </div>

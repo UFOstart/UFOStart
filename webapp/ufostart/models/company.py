@@ -32,6 +32,7 @@ def default_user_pic(attr):
 
 class CompanyUserModel(Mapping):
     token = TextField()
+    slug = TextField()
     name = TextField()
     role = TextField()
     headline = TextField()
@@ -149,6 +150,7 @@ class UpdateModel(Mapping):
     created = DateTimeField()
     userName = TextField()
     userToken = TextField()
+    userSlug = TextField()
     userHeadline = TextField()
     userPicture = TextField()
     picture_url = property(default_user_pic('userPicture'))
@@ -189,6 +191,7 @@ class BaseCompanyModel(Mapping):
 
 
 class EndorsementModel(Mapping):
+    endorserSlug = TextField()
     endorserToken = TextField()
     endorseeName = TextField()
     endorseeHeadline = TextField()
@@ -312,7 +315,7 @@ class PledgeModel(Mapping):
     name = TextField()
     network = TextField()
     networkId = TextField()
-    token = property(attrgetter('networkId'))
+    slug = property(attrgetter('networkId'))
     confirmed = True
     picture = TextField()
     picture_url = property(default_user_pic('picture'))

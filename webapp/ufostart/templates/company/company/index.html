@@ -122,7 +122,7 @@
             ${widgets.profile_pic(update.userPicture, update.userToken)}
             <div class="right-box">
                 <div class="pull-right"><small>${html.format_datetime(update.created, 'medium')}</small></div>
-                <a class="entity-link" href="${root.profile_url(update.userToken)}">${update.userName}</a>
+                <a class="entity-link" href="${root.profile_url(update.userSlug)}">${update.userName}</a>
                 %if update.userHeadline:
                     <small class="text-muted">${update.userHeadline}</small>
                 %endif

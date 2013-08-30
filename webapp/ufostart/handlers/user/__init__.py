@@ -21,35 +21,21 @@ class ProtoProfileContext(BaseContextMixin):
 
 
 
-class UserHomeContext(ProtoProfileContext):
-    __acl__ = [(Allow, Authenticated, 'view'), (Deny, Everyone, 'view')]
-    __auth_template__ = "ufostart:templates/auth/login.html"
+class UserProfileContext(ProtoProfileContext):
     def __init__(self, parent, name):
         self.__parent__ = parent
         self.__name__ = name
-        self.user_token = parent.user.token
+
     @reify
     def profile(self):
-        return RefreshProfileProc(self.__parent__.request, {'token': self.user_token})
+        if self.user.slug == self.__name__:
+            RefreshProfileProc(self.request, {'slug': self.__name__})
+            return self.user
+        else:
+            return GetProfileProc(self.request, {'slug': self.__name__})
 
-
-class UserProfileContext(ProtoProfileContext):
-    def __init__(self, parent, name, profile):
-        self.__parent__ = parent
-        self.__name__ = name
-        self.profile = profile
-
-
-class UserStubContext(BaseContextMixin):
-
-    def __init__(self, parent, name):
-        self.__parent__ = parent
-        self.__name__ = name
-    def __getitem__(self, item):
-        return UserProfileContext(self, item, GetProfileProc(self.request, {'token': item}))
 
 
 
 def includeme(config):
-    config.add_view(index.home      , context = UserHomeContext, renderer = "ufostart:templates/user/home.html",permission='view')
     config.add_view(index.user      , context = UserProfileContext, renderer = "ufostart:templates/user/home.html")
