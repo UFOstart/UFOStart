@@ -58,7 +58,13 @@
                 %if profile.Skills:
                     <div class="box-content box-middle-shaded">
                         <div><strong>Skills</strong></div>
-                        <small>${', '.join(profile.display_skills)}</small>
+v                       <small>${', '.join(profile.display_skills)}</small>
+                    </div>
+                %endif
+                %if profile.interests:
+                     <div class="box-content box-shaded">
+                        <div><strong>Interests</strong></div>
+                        <small>${profile.interests}</small>
                     </div>
                 %endif
             </div>

@@ -78,6 +78,7 @@ class UserModel(Mapping):
     startupValue = IntegerField()
     investmentAmount = IntegerField()
     currency = TextField()
+    interests = TextField()
 
     Skills = ListField(DictField(NamedModel))
     Profile = ListField(DictField(WebUserNetworkProfile))
