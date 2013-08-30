@@ -51,6 +51,14 @@ DisconnectFacebookProc = ClientTokenProc("/web/user/disconnectFb")
 RefreshProfileProc = LoggingInProc("/web/user/profile")
 GetProfileProc = ClientTokenProc("/web/user/profile", root_key = "User", result_cls = UserModel)
 
+
+#=================================================== LINKEDIN USERNAME PROCS ==========================================================
+
+LinkedinSignupProc = LoggingInProc('/web/user/liregister', db_messages={'NEWUSER':NewUserMsg, 'FB_USER_WITH_CHANGED_EMAIL': NewUserMsg})
+LinkedinLoginProc = LoggingInProc('/web/user/lilogin', db_messages={'NEWUSER':NewUserMsg, 'FB_USER_WITH_CHANGED_EMAIL': NewUserMsg})
+
+
+
 #
 ################# HOMEPAGE
 #

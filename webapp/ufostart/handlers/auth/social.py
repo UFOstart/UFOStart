@@ -6,7 +6,7 @@ from pyramid.renderers import render_to_response
 from pyramid.response import Response
 from ufostart.models.auth import SOCIAL_NETWORK_TYPES, SOCIAL_NETWORK_TYPES_REVERSE
 
-from ufostart.models.procs import SocialConnectProc
+from ufostart.models.procs import SocialConnectProc, LinkedinLoginProc
 from ufostart.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
@@ -23,7 +23,7 @@ def login_user(context, request, profile):
     if not request.root.user.isAnon():
         params['token'] = request.root.user.token
     try:
-        user = SocialConnectProc(request, params)
+        user = LinkedinLoginProc(request, params)
     except DBNotification, e:
         log.error("UNHANDLED DB MESSAGE: %s", e.message)
         request.session.flash(GenericErrorMessage(e.message), "generic_messages")

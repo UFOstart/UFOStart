@@ -10,4 +10,4 @@ def logout(context, request):
     if request.params.get('furl'):
         request.fwd_raw(request.params.get('furl'))
     else:
-        request.fwd("website_index")
+        request.fwd(request.root)

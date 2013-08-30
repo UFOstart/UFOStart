@@ -130,7 +130,7 @@
 
 .carousel-indicators {
   position: absolute;
-  bottom: 10px;
+  bottom: 0px;
   left: 50%;
   z-index: 15;
   width: 60%;
@@ -145,14 +145,14 @@
     height: 10px;
     margin: 1px;
     text-indent: -999px;
-    border: 1px solid @carousel-indicator-border-color;
+    background-color: @carousel-indicator-bg;
     border-radius: 10px;
     cursor: pointer;
   }
   .active {
     margin: 0;
-    width:  12px;
-    height: 12px;
+    width:  10px;
+    height: 10px;
     background-color: @carousel-indicator-active-bg;
   }
 }
@@ -199,6 +199,6 @@
 
   // Move up the indicators
   .carousel-indicators {
-    bottom: 20px;
+    bottom: -30px;
   }
 }

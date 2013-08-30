@@ -1,9 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+<%inherit file="../layout.html"/>
+<%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
+<%namespace file="ufostart:templates/common/standard_form.html" name="standard_form"/>
+<%namespace file="ufostart:templates/common/widgets.html" name="form"/>
 
-</body>
-</html>
+
+<%def name="content()">
+    <div class="container">
+        <div class="row mar-top-5">
+            <div class="col-lg-12">
+                <h2 class="section-title">
+                    <span>Reserve your username</span>
+                </h2>
+                <%form:build_base_form form="${view.form}" values="${values}" errors="${errors}">
+                    <button type=""submit" class="btn btn-primary btn-linkedin">Connect with Linkedin</button>
+                </%form:build_base_form>
+            </div>
+        </div>
+    </div>
+</%def>
+
+
+
+<%def name="post_scripts()">${standard_form.simple_scripts()}</%def>

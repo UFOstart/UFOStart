@@ -32,3 +32,42 @@
   height: 2 * @headings-line-height * @font-size-xlarge;
   overflow:hidden;
 }
+
+.username-input {
+  position: relative;
+  .textaligned {
+    position: absolute;
+    top:0;
+    left:0;
+    width:200px;
+    text-align: right;
+    height:@input-height-large;
+    line-height:@input-height-large;
+    font-size:@font-size-large;
+  }
+  > .form-control {
+    padding-left: 205px;
+    color:@brand-primary;
+    font-weight:bold;
+    margin-right:50px;
+  }
+}
+
+.username-input-group {
+  .username-input{padding-right:60px;}
+  .help-inline {
+    color:red;
+    margin-top:5px;
+    font-size:@font-size-small;
+  }
+  &.valid .username-input{
+    .background-image("../img/validation.png");
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+  }
+  &.has-error .username-input{
+    .background-image("../img/validation.png");
+    background-position: 100% -44px;
+    background-repeat: no-repeat;
+  }
+}

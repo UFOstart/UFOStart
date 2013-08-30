@@ -9,26 +9,26 @@ module.exports = function(grunt) {
         dist: {
             // the files to concatenate
             src: [
-                './bootstrap/transition.js',
-                './bootstrap/alert.js',
-                './bootstrap/button.js',
-                './bootstrap/carousel.js',
-                './bootstrap/collapse.js',
-                './bootstrap/dropdown.js',
-                './bootstrap/modal.js',
-                './bootstrap/tooltip.js',
-                './bootstrap/popover.js',
-                './bootstrap/scrollspy.js',
-                './bootstrap/tab.js',
-                './bootstrap/affix.js',
-                './bower_components/json3/lib/json3.js',
-                './bower_components/store/store.js',
-                './bower_components/underscore/underscore.js',
-                './bower_components/backbone/backbone.js',
-                './bower_components/jquery-validation/jquery.validate.js'
+                 './bower_components/bootstrap/transition.js'
+                ,'./bower_components/bootstrap/alert.js'
+                ,'./bower_components/bootstrap/button.js'
+                ,'./bower_components/bootstrap/carousel.js'
+                ,'./bower_components/bootstrap/collapse.js'
+                ,'./bower_components/bootstrap/dropdown.js'
+                ,'./bower_components/bootstrap/modal.js'
+                ,'./bower_components/bootstrap/tooltip.js'
+                ,'./bower_components/bootstrap/popover.js'
+                ,'./bower_components/bootstrap/scrollspy.js'
+                ,'./bower_components/bootstrap/tab.js'
+                ,'./bower_components/bootstrap/affix.js'
+                ,'./bower_components/json3/lib/json3.js'
+                ,'./bower_components/store/store.js'
+                ,'./bower_components/underscore/underscore.js'
+                ,'./bower_components/backbone/backbone.js'
+                ,'./bower_components/jquery-validation/jquery.validate.js'
             ],
             // the location of the resulting JS file
-            dest: '../static/scripts/dist/libs.js'
+            dest: '../webapp/ufostart/static/vendor/dist/libs.js'
         }
     }
     , uglify: {
@@ -38,18 +38,18 @@ module.exports = function(grunt) {
         },
         dist: {
           files: {
-            '../static/scripts/dist/libs.min.js': ['<%= concat.dist.dest %>']
+            '../webapp/ufostart/static/vendor/dist/libs.min.js': ['<%= concat.dist.dest %>']
           }
         }
     }
     , copy: {
       main: {
         files: [
-          {expand:true, src: ['./bower_components/hncajax/tools/*.js'], dest: '../static/scripts/', rename: function(dest, src) {
+          {expand:true, src: ['./bower_components/hncajax/tools/*.js'], dest: '../webapp/ufostart/static/vendor/', rename: function(dest, src) {
               return dest + src.replace('./bower_components/hncajax/', '');
             }},
-          {src: ['./bower_components/less.js/dist/less-1.4.0-beta.js'], dest: '../static/scripts/dev/less.js'},
-          {src: ['./bower_components/requirejs/require.js'], dest: '../static/scripts/dev/require.js'}
+          {src: ['./bower_components/less.js/dist/less-1.4.0-beta.js'], dest: '../webapp/ufostart/static/vendor/dev/less.js'},
+          {src: ['./bower_components/requirejs/require.js'], dest: '../webapp/ufostart/static/vendor/dev/require.js'}
         ]
       }
     }

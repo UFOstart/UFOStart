@@ -3,6 +3,7 @@ import urllib
 from pyramid.decorator import reify
 from pyramid.security import Allow, Everyone, Authenticated
 import simplejson
+from ufostart.handlers.auth import signup
 from ufostart.lib.baseviews import RootContext
 from ufostart.admin import AdminContext
 from ufostart.handlers.auth import SocialContext, SignupContext
@@ -12,6 +13,21 @@ from ufostart.models.auth import AnonUser, getUser, setUserF, USER_TOKEN
 
 log = logging.getLogger(__name__)
 
+
+
+ROOT_NAVIGATION = {
+          'c':ProtoCompanyContext
+        , 'u':UserStubContext
+        , 'template':TemplatesRootContext
+        , 'home':UserHomeContext
+        , 'signup': SignupContext
+        , 'login': SocialContext
+        , 'invite': ProtoInviteContext
+        , 'admin': AdminContext
+    }
+
+if len(set(ROOT_NAVIGATION.keys()).union(signup.RESERVEDS)) != len(signup.RESERVEDS):
+    signup.RESERVEDS = ROOT_NAVIGATION.keys()
 
 class WebsiteRootContext(RootContext):
     __name__ = None
@@ -47,16 +63,7 @@ class WebsiteRootContext(RootContext):
         return location
 
 
-    children = {
-        'c':ProtoCompanyContext
-        , 'u':UserStubContext
-        , 'template':TemplatesRootContext
-        , 'home':UserHomeContext
-        , 'signup': SignupContext
-        , 'login': SocialContext
-        , 'invite': ProtoInviteContext
-        , 'admin': AdminContext
-    }
+    children = ROOT_NAVIGATION
 
     def __getitem__(self, item):
         if item in self.children:

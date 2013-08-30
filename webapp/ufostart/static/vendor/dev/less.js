@@ -1,5 +1,5 @@
 /*
- * LESS - Leaner CSS v1.4.2
+ * LESS - Leaner CSS v1.4.0
  * http://lesscss.org
  *
  * Copyright (c) 2009-2013, Alexis Sellier
@@ -1114,7 +1114,7 @@ less.Parser = function Parser(env) {
             // we deal with this in *combinator.js*.
             //
             combinator: function () {
-                var c = input.charAt(i);
+                var match, c = input.charAt(i);
 
                 if (c === '>' || c === '+' || c === '~' || c === '|') {
                     i++;
@@ -1136,7 +1136,7 @@ less.Parser = function Parser(env) {
             // Selectors are made out of one or more Elements, see above.
             //
             selector: function () {
-                var sel, e, elements = [], c, extend, extendList = [];
+                var sel, e, elements = [], c, match, extend, extendList = [];
 
                 while ((extend = $(this.extend)) || (e = $(this.element))) {
                     if (extend) {
@@ -1188,7 +1188,7 @@ less.Parser = function Parser(env) {
             // div, .class, body > p {...}
             //
             ruleset: function () {
-                var selectors = [], s, rules, debugInfo;
+                var selectors = [], s, rules, match, debugInfo;
                 
                 save();
 
@@ -1214,7 +1214,7 @@ less.Parser = function Parser(env) {
                 }
             },
             rule: function (tryAnonymous) {
-                var name, value, c = input.charAt(i), important;
+                var name, value, c = input.charAt(i), important, match;
                 save();
 
                 if (c === '.' || c === '#' || c === '&') { return }
@@ -1240,7 +1240,6 @@ less.Parser = function Parser(env) {
                 }
             },
             anonymousValue: function () {
-                var match;
                 if (match = /^([^@+\/'"*`(;{}-]*);/.exec(chunks[j])) {
                     i += match[0].length - 1;
                     return new(tree.Anonymous)(match[1]);
@@ -1596,7 +1595,7 @@ less.Parser = function Parser(env) {
             property: function () {
                 var name;
 
-                if (name = $(/^(\*?-?[_a-zA-Z0-9-]+)\s*:/)) {
+                if (name = $(/^(\*?-?[_a-z0-9-]+)\s*:/)) {
                     return name[1];
                 }
             }
@@ -3174,8 +3173,7 @@ tree.Extend.prototype = {
         return new(tree.Extend)(this.selector, this.option, this.index);
     },
     findSelfSelectors: function (selectors) {
-        var selfElements = [],
-            i;
+        var selfElements = [];
 
         for(i = 0; i < selectors.length; i++) {
             selfElements = selfElements.concat(selectors[i].elements);
@@ -3906,7 +3904,7 @@ tree.Rule.prototype = {
     },
     eval: function (env) {
         var strictMathBypass = false;
-        if (this.name === "font" && !env.strictMath) {
+        if (this.name === "font" && env.strictMath === false) {
             strictMathBypass = true;
             env.strictMath = true;
         }
@@ -4602,7 +4600,6 @@ tree.jsify = function (obj) {
         'dumpLineNumbers',  // option - whether to dump line numbers
         'compress',         // option - whether to compress
         'processImports',   // option - whether to process imports. if false then imports will not be imported
-        'syncImport',       // option - whether to import synchronously
         'mime',             // browser only - mime type for sheet import
         'currentFileInfo'   // information about the current file - for error reporting and importing and making urls relative etc.
     ];
@@ -4622,15 +4619,13 @@ tree.jsify = function (obj) {
         if (!this.files) { this.files = {}; }
 
         if (!this.currentFileInfo) {
-            var filename = (options && options.filename) || "input";
+            var filename = options.filename || "input";
+            options.filename = null;
             var entryPath = filename.replace(/[^\/\\]*$/, "");
-            if (options) {
-                options.filename = null;
-            }
             this.currentFileInfo = {
                 filename: filename,
                 relativeUrls: this.relativeUrls,
-                rootpath: (options && options.rootpath) || "",
+                rootpath: options.rootpath || "",
                 currentDirectory: entryPath,
                 entryPath: entryPath,
                 rootFilename: filename
@@ -4650,7 +4645,6 @@ tree.jsify = function (obj) {
         'silent',      // whether to swallow errors and warnings
         'verbose',     // whether to log more activity
         'compress',    // whether to compress
-        'yuicompress', // whether to compress with the outside tool yui compressor
         'ieCompat',    // whether to enforce IE compatibility (IE8 data-uri)
         'strictMath',  // whether math has to be within parenthesis
         'strictUnits'  // whether units need to evaluate correctly
@@ -4987,7 +4981,7 @@ tree.jsify = function (obj) {
             // this is also the most expensive.. and a match on one selector can cause an extension of a selector we had already processed if
             // we look at each selector at a time, as is done in visitRuleset
 
-            var extendIndex, targetExtendIndex, matches, extendsToAdd = [], newSelector, extendVisitor = this, selectorPath, extend, targetExtend, newExtend;
+            var extendIndex, targetExtendIndex, matches, extendsToAdd = [], newSelector, extendVisitor = this, selectorPath, extend, targetExtend;
 
             iterationCount = iterationCount || 0;
 
@@ -5093,7 +5087,7 @@ tree.jsify = function (obj) {
             if (rulesetNode.root) {
                 return;
             }
-            var matches, pathIndex, extendIndex, allExtends = this.allExtendsStack[this.allExtendsStack.length-1], selectorsToAdd = [], extendVisitor = this, selectorPath;
+            var matches, pathIndex, extendIndex, allExtends = this.allExtendsStack[this.allExtendsStack.length-1], selectorsToAdd = [], extendVisitor = this;
 
             // look at each selector path in the ruleset, find any extend matches and then copy, find and replace
 
@@ -5215,8 +5209,7 @@ tree.jsify = function (obj) {
                 path = [],
                 matchIndex,
                 selector,
-                firstElement,
-                match;
+                firstElement;
 
             for (matchIndex = 0; matchIndex < matches.length; matchIndex++) {
                 match = matches[matchIndex];
@@ -5382,7 +5375,7 @@ for (var i = 0; i < links.length; i++) {
 var session_cache = '';
 less.modifyVars = function(record) {
     var str = session_cache;
-    for (var name in record) {
+    for (name in record) {
         str += ((name.slice(0,1) === '@')? '' : '@') + name +': '+ 
                 ((record[name].slice(-1) === ';')? record[name] : record[name] +';');
     }
@@ -5481,7 +5474,7 @@ function extractUrlParts(url, baseUrl) {
     // urlParts[4] = filename
     // urlParts[5] = parameters
 
-    var urlPartsRegex = /^((?:[a-z-]+:)?\/+?(?:[^\/\?#]*\/)|([\/\\]))?((?:[^\/\\\?#]*[\/\\])*)([^\/\\\?#]*)([#\?].*)?$/i,
+    var urlPartsRegex = /^((?:[a-z-]+:)?\/+?(?:[^\/\?#]*\/)|([\/\\]))?((?:[^\/\\\?#]*[\/\\])*)([^\/\\\?#]*)([#\?].*)?$/,
         urlParts = url.match(urlPartsRegex),
         returner = {}, directories = [], i, baseUrlParts;
 
@@ -5502,7 +5495,7 @@ function extractUrlParts(url, baseUrl) {
     }
     
     if (urlParts[3]) {
-        directories = urlParts[3].replace(/\\/g, "/").split("/");
+        directories = urlParts[3].replace("\\", "/").split("/");
 
         // extract out . before .. so .. doesn't absorb a non-directory
         for(i = 0; i < directories.length; i++) {

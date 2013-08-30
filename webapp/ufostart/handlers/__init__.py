@@ -35,6 +35,7 @@ class WebsiteSettings(object):
     networks = {}
 
     def __init__(self, settings):
+        self.site_root_url = settings['site_root_url']
         self.clientToken = settings['apiToken']
         self.trackUsers = StringBool().to_python(settings['trackUsers'])
         self.gaCode = settings['gaCode']
