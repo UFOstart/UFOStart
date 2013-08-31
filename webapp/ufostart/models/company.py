@@ -481,6 +481,7 @@ class CompanyModel(BaseCompanyModel):
 
 
     totalValue = IntegerField()  # only for social friends companies
+    @property
     def display_total_value(self):
         return format_currency(self.totalValue, 'EUR')
     @reify
