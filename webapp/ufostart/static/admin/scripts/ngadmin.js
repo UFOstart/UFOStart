@@ -7,14 +7,14 @@ var module = angular.module('adminapp', [])
 });
 
 (function(module){
-    function addFactory(module, key, getURL, createURL){
+    function addFactory(module, key, getURL, getValues){
         module.factory(key, function($http, $q) {
             return {
               getAllItems: function(){
                 var deferred = $q.defer();
                 $http.post(getURL, {}
                 ).success(function(data){
-                  deferred.resolve(data[key]);
+                  deferred.resolve(getValues(data));
                 }).error(function(){
                   deferred.reject("An error occured while fetching items");
                 });
@@ -23,9 +23,10 @@ var module = angular.module('adminapp', [])
         });
     }
 
-    addFactory(module, "Templates", "/api/0.0.1/admin/template/all");
-    addFactory(module, "Needs", "/api/0.0.1/admin/need/all");
-    addFactory(module, "Services", "/api/0.0.1/admin/service/all");
+    addFactory(module, "Templates", "/api/0.0.1/admin/template/all", function(data){return data.Templates});
+    addFactory(module, "Needs", "/api/0.0.1/admin/need/all", function(data){return data.Needs});
+    addFactory(module, "Services", "/api/0.0.1/admin/service/all", function(data){return data.Services});
+    addFactory(module, "Static", "/api/0.0.1/admin/static", function(data){return data.Content.Static});
 
 })(module);
 
@@ -60,5 +61,16 @@ function ServiceListCtrl($scope, Services) {
   });
   $scope.query = function (item){
         return    (!$scope.queryName || !!~item.name.toLowerCase().indexOf($scope.queryName.toLowerCase()));
+  };
+}
+
+function StaticContentListCtrl($scope, Static) {
+  $scope.contents = [];
+
+  Static.getAllItems().then(function(data){
+      $scope.contents = data
+  });
+  $scope.query = function (item){
+        return    (!$scope.queryName || !!~item.key.toLowerCase().indexOf($scope.queryName.toLowerCase()));
   };
 }

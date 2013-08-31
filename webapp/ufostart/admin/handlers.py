@@ -6,7 +6,7 @@ from hnc.forms.messages import GenericSuccessMessage
 from hnc.tools.tools import deep_get
 from ufostart.lib.baseviews import BaseForm
 from ufostart.handlers.forms.controls import TagSearchField, PictureUploadField
-from ufostart.models.procs import AdminNeedCreateProc, AdminNeedEditProc, AdminServiceCreateProc, AdminServiceEditProc, AdminTemplatesEditProc, AdminTemplatesCreateProc, AdminNeedAllProc
+from ufostart.models.procs import AdminNeedCreateProc, AdminNeedEditProc, AdminServiceCreateProc, AdminServiceEditProc, AdminTemplatesEditProc, AdminTemplatesCreateProc, AdminNeedAllProc, AdminSetStaticContentProc
 from ufostart.models.tasks import TASK_CATEGORIES
 
 
@@ -168,7 +168,7 @@ class TemplateEditForm(TemplateCreateForm):
         values['key'] = request.context.__name__
         values['Need'] = [{'name':n} for n in values.pop('Need', [])]
         need = AdminTemplatesEditProc(request, values)
-        request.session.flash(GenericSuccessMessage("Service updated successfully!"), "generic_messages")
+        request.session.flash(GenericSuccessMessage("Template updated successfully!"), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
 
 class TemplateEditHandler(FormHandler):
@@ -177,4 +177,49 @@ class TemplateEditHandler(FormHandler):
         result['values'][self.form.id] = request.context.template.unwrap()
         return super(TemplateEditHandler, self).pre_fill_values(request, result)
 
+
+
+
+
+
+class ContentCreateForm(BaseForm):
+    label = "Create Content"
+    fields = [
+            StringField('key', "Key", REQUIRED)
+            , TextareaField('value', "HTML", REQUIRED, input_classes='x-high')
+    ]
+
+    @classmethod
+    def on_success(cls, request, values):
+        data = request.context.contentsMap
+        data[values['key']] = values['value']
+
+        contents = AdminSetStaticContentProc(request, {'Content':{'Static':[{'key':k, 'value':v} for k,v in data.items()]}})
+        request.session.flash(GenericSuccessMessage("Content created successfully!"), "generic_messages")
+        return {'success':True, 'redirect': request.resource_url(request.context)}
+
+
+class ContentCreateHandler(FormHandler):
+    form = ContentCreateForm
+
+
+
+
+class ContentEditForm(ContentCreateForm):
+    label = "Edit Content"
+    fields = [TextareaField('value', "HTML", REQUIRED, input_classes='x-high')]
+    @classmethod
+    def on_success(cls, request, values):
+        data = request.context.contentsMap
+        data[request.context.__name__] = values['value']
+
+        contents = AdminSetStaticContentProc(request, {'Content':{'Static':[{'key':k, 'value':v} for k,v in data.items()]}})
+        request.session.flash(GenericSuccessMessage("Content updated successfully!"), "generic_messages")
+        return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
+
+class ContentEditHandler(FormHandler):
+    form = ContentEditForm
+    def pre_fill_values(self, request, result):
+        result['values'][self.form.id] = request.context.content.unwrap()
+        return super(ContentEditHandler, self).pre_fill_values(request, result)
 

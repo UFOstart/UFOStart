@@ -1,6 +1,6 @@
 from hnc.apiclient import Mapping, ListField, DictField
 from hnc.apiclient.backend import ClientTokenProc, DBNotification
-from ufostart.models import SlugTypeModel, KeyValueModel
+from ufostart.models import SlugTypeModel, KeyValueModel, ContentModel
 from ufostart.models.tasks import NamedModel
 from ufostart.models.auth import UserModel
 from ufostart.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel, InviteModel, ServiceModel
@@ -150,5 +150,5 @@ AdminTemplatesGetProc = ClientTokenProc("/admin/template", result_cls=TemplateMo
 AdminTemplatesAllProc = ClientTokenProc("/admin/template/all", result_cls=TemplateModel, root_key="Templates", result_list=True)
 
 
-AdminGetStaticContentProc = GetStaticContentProc  = ClientTokenProc("/admin/static/set", root_key="Static", result_cls=KeyValueModel, result_list=True)
-AdminSetStaticContentProc = ClientTokenProc("/admin/static")
+AdminGetStaticContentProc = GetStaticContentProc  = ClientTokenProc("/admin/static", root_key="Content", result_cls=ContentModel)
+AdminSetStaticContentProc = ClientTokenProc("/admin/static/set")

@@ -1,0 +1,24 @@
+<%inherit file="layout.html"/>
+
+<%def name="bcrumbs()"></%def>
+
+<%def name="content()">
+    <div class="padded-body">
+        <a href="${url(ctxt, 'create')}" class="pull-right btn btn-primary">Create Static Content Key</a>
+        <h3>All Contents</h3>
+        <div ng-controller="StaticContentListCtrl">
+            <div class="list-group">
+                <div class="row list-group-item">
+                    <div class="col-lg-3"><input type="text" ng-model="queryName" class="search-query form-control" placeholder="Search by Key"></div>
+                </div>
+                <div class="row list-group-item" ng-repeat="content in contents | filter:query | orderBy:'key'">
+                    <div class="col-lg-4">{{content.key}}</div>
+                    <div class="col-lg-6">{{content.value}}</div>
+                    <div class="col-lg-2">
+                        <a href="${url(ctxt)}{{content.key}}/edit" class="btn btn-default edit-link">edit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>

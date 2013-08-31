@@ -5,7 +5,7 @@ from pyramid.security import DENY_ALL, ALL_PERMISSIONS, Allow
 from ufostart.lib.baseviews import BaseContextMixin
 from ufostart.admin import handlers
 from ufostart.admin.auth import AuthenticationHandler, AdminUserModel, USER_TOKEN, getUser, setUserF, canEdit
-from ufostart.models.procs import AdminNeedAllProc, AdminServiceAllProc, AdminTemplatesAllProc, AdminTemplatesGetProc, AdminNeedGetProc, AdminServiceGetProc
+from ufostart.models.procs import AdminNeedAllProc, AdminServiceAllProc, AdminTemplatesAllProc, AdminTemplatesGetProc, AdminNeedGetProc, AdminServiceGetProc, AdminGetStaticContentProc
 
 
 class AdminSettings(object):
@@ -98,11 +98,43 @@ class ServiceContext(BaseAdminContext):
 
 
 
+class SingleContentContext(BaseAdminContext):
+    def __getitem__(self, item):
+        raise KeyError()
+    @reify
+    def content(self):
+        return self.contentsMap[self.__name__]
+
+    @property
+    def contentsMap(self):
+        return self.__parent__.contentsMap
+
+class ContentContext(BaseAdminContext):
+    menu_label = "Contents"
+    def __getitem__(self, item):
+        if item in ['create']:
+            raise KeyError()
+        else:
+            return SingleContentContext(self, item)
+
+    @reify
+    def contentsMap(self):
+        result = AdminGetStaticContentProc(self.request)
+        return {k.key:k.value for k in result.Static}
+
+
+
+
+
+
+
+
 class AdminContext(BaseAdminContext):
     children = OrderedDict([
         ('template', TemplatesContext)
         , ('task', TaskContext)
         , ('service', ServiceContext)
+        , ('content', ContentContext)
     ])
 
     def __getitem__(self, item):
@@ -130,3 +162,7 @@ def includeme(config):
     config.add_view(handlers.index                               , context = TemplatesContext                    , renderer = "ufostart:templates/admin/templates.html")
     config.add_view(handlers.TemplateCreateHandler, name="create", context = TemplatesContext                    , renderer = "ufostart:templates/admin/form.html")
     config.add_view(handlers.TemplateEditHandler  , name="edit"  , context = SingleTemplateContext               , renderer = "ufostart:templates/admin/form.html")
+
+    config.add_view(handlers.index                               , context = ContentContext                    , renderer = "ufostart:templates/admin/contents.html")
+    config.add_view(handlers.ContentCreateHandler, name="create" , context = ContentContext                    , renderer = "ufostart:templates/admin/form.html")
+    config.add_view(handlers.ContentEditHandler  , name="edit"   , context = SingleContentContext               , renderer = "ufostart:templates/admin/form.html")

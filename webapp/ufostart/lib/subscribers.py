@@ -20,5 +20,6 @@ def add_renderer_variables(event):
             , 'pluralize'       : pluralize
             , 'settings'        : settings
             , 'STATIC_URL'      : settings.static_prefix
+            , 'Content'         : request.root.static_content
         })
     return event

@@ -1,4 +1,4 @@
-from hnc.apiclient import Mapping, TextField
+from hnc.apiclient import Mapping, TextField, ListField, DictField
 
 __author__ = 'Martin'
 
@@ -10,4 +10,8 @@ class SlugTypeModel(Mapping):
 
 class KeyValueModel(Mapping):
     key = TextField()
-    Value = TextField()
+    value = TextField()
+
+
+class ContentModel(Mapping):
+    Static = ListField(DictField(KeyValueModel))

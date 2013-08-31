@@ -1,6 +1,5 @@
 import logging
 import urllib
-from hnc.apiclient.backend import ClientTokenProc
 from hnc.apiclient.cached import CachedLoader
 from pyramid.decorator import reify
 from pyramid.security import Allow, Everyone, Authenticated
@@ -43,16 +42,18 @@ def getContextFromSlug(childSlug):
 
 
 
-
-def load_static_content_proc(request):
+def get_static_content(request):
     result = GetStaticContentProc(request)
-    return result
-static_content_loader = CachedLoader(load_static_content_proc, "WEBSITE_STATIC_CONTENT")
+    return {k.key:k.value for k in result.Static}
 
+class StaticContentLoader(object):
+    cache = CachedLoader(get_static_content, "WEBSITE_STATIC_CONTENT")
+    def __init__(self, request):
+        self.content = self.cache.get(request)
+        super(StaticContentLoader, self).__init__()
 
-
-
-
+    def __call__(self, key):
+        return self.content.get(key, '###{}###'.format(key))
 
 
 
@@ -78,7 +79,7 @@ class WebsiteRootContext(RootContext):
 
     @reify
     def static_content(self):
-        return static_content_loader.get(self.request)
+        return StaticContentLoader(self.request)
 
 
     @reify
