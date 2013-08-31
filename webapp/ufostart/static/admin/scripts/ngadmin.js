@@ -74,6 +74,7 @@ function StaticContentListCtrl($scope, Static) {
   $scope.query = function (item){
         var key = item.key.toLowerCase();
         return    (!$scope.queryName || !!~key.indexOf($scope.queryName.toLowerCase()))
-               && (!$scope.queryPage || key.indexOf($scope.queryPage.toLowerCase())==0);
+               && (!$scope.queryPage || key.indexOf($scope.queryPage.toLowerCase())==0)
+               && (!$scope.queryContent || !!~item.value.toLowerCase().indexOf($scope.queryContent.toLowerCase()));
   };
 }

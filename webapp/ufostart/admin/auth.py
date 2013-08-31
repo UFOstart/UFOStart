@@ -14,6 +14,11 @@ def setUserF(self, user):
     self.request.session[USER_TOKEN] = user
     self.user = user
 
+def isAdminUser(request):
+    user = request.session.get(USER_TOKEN)
+    return not user.isAnon() if user else False
+
+
 
 
 class AdminUserModel(UserModel):

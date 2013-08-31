@@ -11,6 +11,7 @@ from ufostart.handlers.auth import SocialContext, SignupContext
 from ufostart.handlers.company import TemplatesRootContext, ProtoInviteContext, CompanyContext
 from ufostart.handlers.user import UserProfileContext
 from ufostart.models.auth import AnonUser, getUser, setUserF, USER_TOKEN
+from ufostart.admin.auth import isAdminUser
 from ufostart.models.procs import CheckSlugProc, GetStaticContentProc
 
 log = logging.getLogger(__name__)
@@ -49,15 +50,24 @@ cache = CachedLoader(get_static_content, "WEBSITE_STATIC_CONTENT")
 
 class StaticContentLoader(object):
 
-    def __init__(self, request):
+    def __init__(self, request, debug, admin):
         self.content = cache.get(request)
+        self.debug = debug
+        self.admin = admin
         super(StaticContentLoader, self).__init__()
 
     def refresh(self, request):
         cache.refresh(request)
 
-    def __call__(self, key):
-        return self.content.get(key, '###{}###'.format(key))
+    def __call__(self, key, display_default = True):
+        result = self.content.get(
+                    key
+                    , '###{}###'.format(key) if display_default else  ''
+                )
+        if self.debug:
+            return '<!-- {} -->{}'.format(key, result)
+        else:
+            return result
 
 
 
@@ -81,9 +91,11 @@ class WebsiteRootContext(RootContext):
             del self.request.session[USER_TOKEN]
         self.user = AnonUser()
 
+
     @reify
     def static_content(self):
-        return StaticContentLoader(self.request)
+        req = self.request
+        return StaticContentLoader(req, req.globals.is_debug, isAdminUser(req))
 
 
     @reify

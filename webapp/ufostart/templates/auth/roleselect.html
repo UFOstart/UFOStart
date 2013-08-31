@@ -11,7 +11,7 @@
         <div class="row mar-top-2">
             <div class="col-lg-12">
                 <h2 class="section-title">
-                    <span>What are you?</span>
+                    <span>${Content("OnboardingPage.Title")|n}</span>
                 </h2>
             </div>
         </div>
@@ -51,38 +51,32 @@
 
                     <div class="expert-form mar-top-3">
                         <h3>
-                            Sell your expertise to a company
+                            ${Content("OnboardingPage.Expert.Headline")|n}
                         </h3>
-                        <p>
-                            Ut ra dionseq uaecabo repedicit parchicime voluptatur, quissinissin esto doluptate nonseriore mi, et exerspis none mo debitam adita quataquunt ra non ressimi, cus conem re nistrum doluptas venihitia pelis a nimillit ulparum ullaccae voluptio venis non essit, essim ent velesti nvenem que moluptatis es experibus expedi idelenis adistiossi blate dolent eossinvendi veliquuntium que nonsequam, cus doloreceptas sequat officii similig enientu.
-                        </p>
+                        ${Content("OnboardingPage.Expert.Explanation")|n}
                         <%form:build_base_form form="${view.schemas['expert']}" values="${values}" errors="${errors}">
-                            <button type="submit" class="btn btn-primary">Get Started</button>
+                            <button type="submit" class="btn btn-primary">${Content("OnboardingPage.Expert.ProceedButton")|n}</button>
                             <a class="btn btn-default btn-reset-role">Cancel</a>
                         </%form:build_base_form>
                     </div>
 
                     <div class="investor-form mar-top-3">
                         <h3>
-                            Invest in a Company
+                            ${Content("OnboardingPage.Investor.Headline")|n}
                         </h3>
-                        <p>
-                            Ut ra dionseq uaecabo repedicit parchicime voluptatur, quissinissin esto doluptate nonseriore mi, et exerspis none mo debitam adita quataquunt ra non ressimi, cus conem re nistrum doluptas venihitia pelis a nimillit ulparum ullaccae voluptio venis non essit, essim ent velesti nvenem que moluptatis es experibus expedi idelenis adistiossi blate dolent eossinvendi veliquuntium que nonsequam, cus doloreceptas sequat officii similig enientu.
-                        </p>
+                        ${Content("OnboardingPage.Investor.Explanation")|n}
                         <%form:build_base_form form="${view.schemas['investor']}" values="${values}" errors="${errors}">
-                            <button type="submit" class="btn btn-primary">Get Started</button>
+                            <button type="submit" class="btn btn-primary">${Content("OnboardingPage.Investor.ProceedButton")|n}</button>
                             <a class="btn btn-default btn-reset-role">Cancel</a>
                         </%form:build_base_form>
                     </div>
                     <div class="founder-form mar-top-3">
                         <h3>
-                            Start a Company
+                            ${Content("OnboardingPage.Founder.Headline")|n}
                         </h3>
-                        <p>
-                            Ut ra dionseq uaecabo repedicit parchicime voluptatur, quissinissin esto doluptate nonseriore mi, et exerspis none mo debitam adita quataquunt ra non ressimi, cus conem re nistrum doluptas venihitia pelis a nimillit ulparum ullaccae voluptio venis non essit, essim ent velesti nvenem que moluptatis es experibus expedi idelenis adistiossi blate dolent eossinvendi veliquuntium que nonsequam, cus doloreceptas sequat officii similig enientu.
-                        </p>
+                        ${Content("OnboardingPage.Founder.Explanation")|n}
                         <%form:build_base_form form="${view.schemas['founder']}" values="${values}" errors="${errors}">
-                            <button type="submit" class="btn btn-primary">Get Started</button>
+                            <button type="submit" class="btn btn-primary">${Content("OnboardingPage.Founder.ProceedButton")|n}</button>
                             <a class="btn btn-default btn-reset-role">Cancel</a>
                         </%form:build_base_form>
                     </div>
