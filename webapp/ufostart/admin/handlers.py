@@ -186,7 +186,7 @@ class ContentCreateForm(BaseForm):
     label = "Create Content"
     fields = [
             StringField('key', "Key", REQUIRED)
-            , TextareaField('value', "HTML", REQUIRED, input_classes='x-high')
+            , TextareaField('value', "Full HTML", REQUIRED, input_classes='x-high')
     ]
 
     @classmethod
@@ -207,7 +207,7 @@ class ContentCreateHandler(FormHandler):
 
 class ContentEditForm(ContentCreateForm):
     label = "Edit Content"
-    fields = [TextareaField('value', "HTML", REQUIRED, input_classes='x-high')]
+    fields = [TextareaField('value', "Full HTML", REQUIRED, input_classes='x-high')]
     @classmethod
     def on_success(cls, request, values):
         data = request.context.contentsMap
