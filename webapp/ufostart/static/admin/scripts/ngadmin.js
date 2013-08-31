@@ -66,11 +66,14 @@ function ServiceListCtrl($scope, Services) {
 
 function StaticContentListCtrl($scope, Static) {
   $scope.contents = [];
-
+  $scope.pages = [];
   Static.getAllItems().then(function(data){
       $scope.contents = data
+      $scope.pages = _.uniq(_.map(_.pluck(data, "key"), function(item){return item.split(".")[0]}));
   });
   $scope.query = function (item){
-        return    (!$scope.queryName || !!~item.key.toLowerCase().indexOf($scope.queryName.toLowerCase()));
+        var key = item.key.toLowerCase();
+        return    (!$scope.queryName || !!~key.indexOf($scope.queryName.toLowerCase()))
+               && (!$scope.queryPage || key.indexOf($scope.queryPage.toLowerCase())==0);
   };
 }

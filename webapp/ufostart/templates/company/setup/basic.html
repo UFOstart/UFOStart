@@ -2,7 +2,7 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
 <%def name="slogan()">${self.crumbs(1)}</%def>
-<%def name="sectionTitle()">Choose a Template</%def>
+<%def name="sectionTitle()">${Content("TemplateList.Title")|n}</%def>
 
 
 <%def name="bodyContent()">
@@ -26,11 +26,10 @@
 <%def name="wtfBox()">
     <div class="wtf-box active">
         <h2 class="wtf-title">
-            Whats happening here?
+            ${Content("TemplateList.Help.Title")|n}
         </h2>
         <div class="wtf-content mar-top-1">
-            <p>UFO Start is here to help you start a company or take an existing one to the next stage.</p>
-            <p>We help you structure your next step by asking you to choose the template which best describes your current situation.</p>
+            ${Content("TemplateList.Help.Text")|n}
         </div>
     </div>
 </%def>

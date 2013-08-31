@@ -2,7 +2,7 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
 <%def name="slogan()">${self.crumbs(3)}</%def>
-<%def name="sectionTitle()">Create Your Company</%def>
+<%def name="sectionTitle()">${Content("CompanyCreate.Title")|n}</%def>
 
 
 <%def name="bodyContent()">
@@ -15,8 +15,8 @@
             </div>
         </div>
         <div class="col-lg-4">
-            <h3 class="no-margin">Or import your Data from Angellist</h3>
-            <a href="${request.root.angellist_url}" class="btn btn-primary mar-top-1">Angellist Import</a>
+            <h3 class="no-margin">${Content("CompanyCreate.ImportPrompt.Angellist")|n}</h3>
+            <a href="${request.root.angellist_url}" class="btn btn-primary mar-top-1">${Content("CompanyCreate.ImportButton.Angellist")|n}</a>
         </div>
     </div>
 </%def>
@@ -40,8 +40,8 @@
         ${form.fieldMap['currency'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         ${form.fieldMap['video'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         ${form.fieldMap['slideShare'].render(form.id, request, values, errors, view, grid = form.grid)|n}
-       <button type="submit" class="btn btn-primary">Create Company</button>
-       <a href="${url(ctxt.__parent__)}" class="btn btn-default">Cancel</a>
+       <button type="submit" class="btn btn-primary">${Content("CompanyCreate.Form.Button.Submit")|n}</button>
+       <a href="${url(ctxt.__parent__)}" class="btn btn-default">${Content("CompanyCreate.Form.Button.Cancel")|n}</a>
     </form>
 </%def>
 
@@ -62,10 +62,11 @@
 
 <%def name="wtfBox()">
 <div class="wtf-box">
-    <h2 class="wtf-title">Tell us a little more</h2>
+    <h2 class="wtf-title">
+        ${Content("CompanyCreate.Help.Title")|n}
+    </h2>
     <div class="wtf-content mar-top-1">
-        <p>Now we know your company's stage we need a little more information about what you're up to.</p>
-        <p>Then you can start setting up your round.</p>
+        ${Content("CompanyCreate.Help.Text")|n}
     </div>
 </div>
 </%def>

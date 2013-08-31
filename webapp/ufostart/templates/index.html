@@ -13,11 +13,11 @@
                     <div class="mar-top-3 text-center">
                         %if request.context.user.isAnon():
                             <a class="btn btn-primary btn-xlg" href="${root.signup_url()}">
-                                Sign Up
+                                ${Content("HomePage.Button.Signup")|n}
                             </a>
                         %else:
                             <a class="btn btn-primary btn-xlg" href="${root.template_select_url}">
-                                Create a Project
+                                ${Content("HomePage.Button.CreateProject")|n}
                             </a>
                         %endif
                     </div>
@@ -128,7 +128,7 @@
 
                 <div class="text-center mar-top-2">
                     <a class="btn btn-primary btn-xlg" href="${root.signup_url()}">
-                        Sign Up
+                        ${Content("HomePage.Button.Signup")|n}
                     </a>
                 </div>
 
