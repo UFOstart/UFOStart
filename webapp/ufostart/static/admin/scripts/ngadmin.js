@@ -69,7 +69,7 @@ function StaticContentListCtrl($scope, Static) {
   $scope.pages = [];
   Static.getAllItems().then(function(data){
       $scope.contents = data
-      $scope.pages = _.uniq(_.map(_.pluck(data, "key"), function(item){return item.split(".")[0]}));
+      $scope.pages = _.sortBy(_.uniq(_.map(_.pluck(data, "key"), function(item){return item.split(".")[0]})), function(e){return e});
   });
   $scope.query = function (item){
         var key = item.key.toLowerCase();

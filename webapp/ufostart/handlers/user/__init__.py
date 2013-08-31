@@ -1,12 +1,8 @@
-from . import index
-import urllib
 from pyramid.decorator import reify
-from pyramid.security import Authenticated, Allow, Deny, Everyone
-from pyramid.traversal import quote_path_segment
+
+from . import index
 from ufostart.lib.baseviews import BaseContextMixin
-from ufostart.models.procs import RefreshProfileProc, GetProfileProc, GetTopTags, FindPublicNeeds
-
-
+from ufostart.models.procs import RefreshProfileProc, GetProfileProc, GetFriendsProc
 
 
 class ProtoProfileContext(BaseContextMixin):
@@ -35,7 +31,15 @@ class UserProfileContext(ProtoProfileContext):
             return GetProfileProc(self.request, {'slug': self.__name__})
 
 
-
+    @reify
+    def social(self):
+        return GetFriendsProc(self.request, {'slug': self.__name__})
+    @reify
+    def contacts(self):
+        return self.social.Users
+    @reify
+    def companies(self):
+        return self.social.Companies
 
 def includeme(config):
     config.add_view(index.user      , context = UserProfileContext, renderer = "ufostart:templates/user/home.html")

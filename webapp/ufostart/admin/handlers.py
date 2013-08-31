@@ -1,5 +1,5 @@
 from hnc.apiclient.backend import DBNotification, DBException
-from hnc.forms.formfields import TextareaField, REQUIRED, StringField, HtmlAttrs, ChoiceField, URLField, CheckboxField, CheckboxPostField, Field
+from hnc.forms.formfields import TextareaField, REQUIRED, StringField, HtmlAttrs, ChoiceField, URLField, CheckboxField, CheckboxPostField, Field, MultipleFormField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.layout import BS3_NCOL, Sequence
 from hnc.forms.messages import GenericSuccessMessage
@@ -184,15 +184,19 @@ class TemplateEditHandler(FormHandler):
 
 class ContentCreateForm(BaseForm):
     label = "Create Content"
+    width_class = "col-lg-12"
     fields = [
-            StringField('key', "Key", REQUIRED)
-            , TextareaField('value', "Full HTML", REQUIRED, input_classes='x-high')
+        MultipleFormField('values', fields = [BS3_NCOL(
+                StringField('key', "Key", REQUIRED)
+                , TextareaField('value', "Full HTML", REQUIRED, input_classes='x-high')
+            )], add_more_link_label='Add More Fields'
+        )
     ]
 
     @classmethod
     def on_success(cls, request, values):
         data = request.context.contentsMap
-        data[values['key']] = values['value']
+        data.update({v['key']:v['value'] for v in values['values']})
 
         contents = AdminSetStaticContentProc(request, {'Static':[{'key':k, 'value':v} for k,v in data.items()]})
         request.root.static_content.refresh(request)

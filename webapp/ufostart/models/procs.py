@@ -2,7 +2,7 @@ from hnc.apiclient import Mapping, ListField, DictField
 from hnc.apiclient.backend import ClientTokenProc, DBNotification
 from ufostart.models import SlugTypeModel, KeyValueModel, ContentModel
 from ufostart.models.tasks import NamedModel
-from ufostart.models.auth import UserModel
+from ufostart.models.auth import UserModel, ContactsUserModel
 from ufostart.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel, InviteModel, ServiceModel
 
 
@@ -51,6 +51,7 @@ DisconnectFacebookProc = ClientTokenProc("/web/user/disconnectFb")
 
 RefreshProfileProc = LoggingInProc("/web/user/profile")
 GetProfileProc = ClientTokenProc("/web/user/profile", root_key = "User", result_cls = UserModel)
+GetFriendsProc = ClientTokenProc("/web/user/friends", root_key = "User", result_cls = ContactsUserModel)
 
 
 #=================================================== LINKEDIN USERNAME PROCS ==========================================================

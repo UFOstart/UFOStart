@@ -64,12 +64,10 @@
 <%def name="wtfBox()">
 <div class="wtf-box">
     <h2 class="wtf-title">
-        Want to find customers??
+        ${Content("ProductSetup.Help.Title")|n}
     </h2>
     <div class="wtf-content">
-        <p>Once you have filled this out you will have an awesome looking product page which you can share.</p>
-        <p>Later you will add 'offers' to your product. These are variations of the product which users can pledge to buy.</p>
-        <p>Be sure to add some picture and ideally a video so your product looks great.</p>
+        ${Content("ProductSetup.Help.Text")|n}
     </div>
 </div>
 </%def>

@@ -11,6 +11,7 @@ from ufostart.models.company import CompanyModel, ApplicationModel
 
 
 
+
 class SocialNetworkProfileModel(Mapping):
     id = TextField()
     network = TextField()
@@ -75,6 +76,7 @@ class UserModel(Mapping):
     email = TextField()
     headline = TextField()
     picture = TextField()
+
     startupValue = IntegerField()
     investmentAmount = IntegerField()
     currency = TextField()
@@ -86,6 +88,11 @@ class UserModel(Mapping):
     Companies = ListField(DictField(CompanyModel))
     Applications = ListField(DictField(UserApplicationModel))
     Endorsements = ListField(DictField(UserEndorsementsModel))
+
+
+    # mockMember
+    picture_url = property(attrgetter('picture'))
+    confirmed = True
 
     def isAnon(self):
         return self.token is None
@@ -167,3 +174,9 @@ def getUser(self):
 def setUserF(self, user):
     self.request.session[USER_TOKEN] = user
     self.user = user
+
+
+
+class ContactsUserModel(Mapping):
+    Users = ListField(DictField(UserModel))
+    Companies = ListField(DictField(CompanyModel))

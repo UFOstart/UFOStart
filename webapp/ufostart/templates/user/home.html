@@ -5,7 +5,7 @@
 <%def name="content()">
     <div class="container">
         <%widgets:pageHeader>
-            User Profile
+            ${Content("ProfilePage.Title")|n}
         </%widgets:pageHeader>
         ${self.bodyContent(ctxt.profile)}
     </div>
@@ -24,46 +24,46 @@
             %endif
 
             <div class="mar-top-3">
-                <div class="box-title">User Details</div>
+                <div class="box-title">${Content("ProfilePage.UserInfoBox.Title")|n}</div>
                 <div class="box-content box-dark-shaded">
                     <div class="number-widget">
-                        <h6>Startup Value</h6>
+                        <h6>${Content("ProfilePage.UserInfoBox.Label.StartupValue")|n}</h6>
                         <div class="value light">${profile.displayStartupValue}</div>
                     </div>
 
                     %if len(profile.Companies):
                     <div class="number-widget mar-top-1">
-                        <h6>Companies</h6>
+                        <h6>${Content("ProfilePage.UserInfoBox.Label.Companies")|n}</h6>
                         <div class="small-value">${len(profile.Companies)}</div>
                     </div>
                     %endif
                     %if profile.investmentAmount:
                         <div class="number-widget mar-top-1">
-                            <strong class="text-muted text-small">Annual Investment Amount</strong>
+                            <strong class="text-muted text-small">${Content("ProfilePage.UserInfoBox.Label.InvestAmount")|n}</strong>
                             <div class="small-value">${profile.displayInvestment}</div>
                         </div>
                     %endif
 
                     <div class="row mar-top-1">
                         <div class="col-lg-6 number-widget">
-                            <strong class="text-muted text-small">Mentoring</strong>
+                            <strong class="text-muted text-small">${Content("ProfilePage.UserInfoBox.Label.Mentoring")|n}</strong>
                             <div class="small-value">${len(profile.mentoredStartups)}</div>
                         </div>
                         <div class="col-lg-6 number-widget">
-                            <strong class="text-muted text-small">Endorsements</strong>
+                            <strong class="text-muted text-small">${Content("ProfilePage.UserInfoBox.Label.Endorsements")|n}</strong>
                             <div class="small-value">${len(profile.getEndorsements())}</div>
                         </div>
                     </div>
                 </div>
                 %if profile.Skills:
                     <div class="box-content box-middle-shaded">
-                        <div><strong>Skills</strong></div>
+                        <div><strong>${Content("ProfilePage.UserInfoBox.Label.Skills")|n}</strong></div>
 v                       <small>${', '.join(profile.display_skills)}</small>
                     </div>
                 %endif
                 %if profile.interests:
                      <div class="box-content box-shaded">
-                        <div><strong>Interests</strong></div>
+                        <div><strong>${Content("ProfilePage.UserInfoBox.Label.Interests")|n}</strong></div>
                         <small>${profile.interests}</small>
                     </div>
                 %endif
@@ -86,13 +86,51 @@ v                       <small>${', '.join(profile.display_skills)}</small>
                     </div>
                 %endif
             </div>
+
+            <div class="row mar-top-5">
+                <div class="col-lg-6">
+                    ${self.contacts(ctxt.contacts)}
+                </div>
+                <div class="col-lg-6">
+                    ${self.contactCompanies(ctxt.companies)}
+                </div>
+
+            </div>
         </div>
     </div>
 </%def>
 
+<%def name="contacts(people)">
+    %if people:
+        <div class="box-title">${Content("ProfilePage.BoxTitle.YourContacts")|n}</div>
+        %for profile in people:
+            <div class="single-company box-card compact">
+                ${widgets.member_pic(profile)}
+                <div class="right-box">
+                    <div class="overflow"><a href="${root.profile_url(profile.slug)}"><strong>${profile.name}</strong></a></div>
+                    %if profile.headline:
+                        <p class="text-small">${profile.headline}</p>
+                    %endif
+                    <h6>Startup Value</h6>
+                    <div class="h2">${profile.displayStartupValue}</div>
+                </div>
+                <h6 class="clearfix">Skills</h6>
+                <small>${', '.join(profile.display_skills)}</small>
+            </div>
+        %endfor
+    %endif
+</%def>
+
+<%def name="contactCompanies(companies)">
+    %if companies:
+        <div class="box-title">${Content("ProfilePage.BoxTitle.CompaniesYouKnow")|n}</div>
+        ${companies}
+    %endif
+</%def>
+
 <%def name="mentoredCompanies(companies)">
     %if companies:
-    <div class="box-title">Mentoring</div>
+    <div class="box-title">${Content("ProfilePage.BoxTitle.Mentoring")|n}</div>
     %for company in companies:
         %if company.currentRound:
             <div class="single-company box-card compact">
@@ -115,7 +153,7 @@ v                       <small>${', '.join(profile.display_skills)}</small>
 </%def>
 
 <%def name="companies(companies)">
-    <div class="box-title">Companies</div>
+    <div class="box-title">${Content("ProfilePage.BoxTitle.Companies")|n}</div>
     %if len(companies):
         %for company in companies:
             <div class="single-company box-card compact">
@@ -143,8 +181,8 @@ v                       <small>${', '.join(profile.display_skills)}</small>
         %endfor
     %else:
         <div class="empty">
-            No Companies yet<br/>
-            <a href="${root.template_select_url}" class="btn btn-primary">Start a Company now</a>
+            ${Content("ProfilePage.BoxContent.NoCompaniesYet")|n}<br/>
+            <a href="${root.template_select_url}" class="btn btn-primary">${Content("ProfilePage.Button.CreateCompany")|n}</a>
         </div>
     %endif
 </%def>
@@ -152,7 +190,7 @@ v                       <small>${', '.join(profile.display_skills)}</small>
 
 <%def name="applications(applications)">
     %if len(applications):
-        <div class="box-title">Applications</div>
+        <div class="box-title">${Content("ProfilePage.BoxTitle.Applications")|n}</div>
         %for application in applications:
             <div class="box-card compact single-company">
                 ${widgets.app_company_logo(application, root.need_url(application.companySlug, application.needSlug))}
@@ -172,7 +210,7 @@ v                       <small>${', '.join(profile.display_skills)}</small>
 
 <%def name="displayEndorsements(endorsements)">
     %if len(endorsements):
-        <div class="box-title">Endorsements</div>
+        <div class="box-title">${Content("ProfilePage.BoxTitle.Endorsements")|n}</div>
         %for endorsement in endorsements:
             <div class="box-card extra-compact single-company">
                 ${widgets.logo(endorsement.endorserPicture)}

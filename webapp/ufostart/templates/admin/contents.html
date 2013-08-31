@@ -11,6 +11,7 @@
                 <div class="row list-group-item">
                     <div class="col-lg-2">
                         <select ng-model="queryPage" class="form-control">
+                            <option value="">-- Filter by Page --</option>
                             <option value="{{page}}" ng-repeat="page in pages">{{page}}</option>
                         </select>
                     </div>

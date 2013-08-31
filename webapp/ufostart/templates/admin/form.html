@@ -13,7 +13,7 @@
 
 
 <%def name="forms(form)">
-    <div class="col-lg-8">
+    <div class="${getattr(form,'width_class', 'col-lg-8')}">
         <legend>${form.label}</legend>
         <%widgets:build_base_form form="${form}" values="${values}" errors="${errors}">
             <button type="sumbit" class="btn btn-primary">${getattr(form, 'submit_label', 'Submit')}</button>

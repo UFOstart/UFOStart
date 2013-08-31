@@ -58,9 +58,11 @@
 
 <%def name="wtfBox()">
 <div class="wtf-box">
-    <h2 class="wtf-title">Before you go on</h2>
+    <h2 class="wtf-title">
+        ${Content("FundingSetupPage.Help.Title")|n}
+    </h2>
     <div class="wtf-content mar-top-1">
-Please describe your funding target and your company's post funding valuation. You can also upload a contract which potential investors can then see.
+        ${Content("FundingSetupPage.Help.Text")|n}
     </div>
 </div>
 </%def>

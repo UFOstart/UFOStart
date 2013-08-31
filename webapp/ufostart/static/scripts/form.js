@@ -58,6 +58,7 @@ define(['tools/ajax'], function(ajax){
             if((!e.keyCode || e.keyCode == 13)){
                 var $target = $(e.target)
                     , $root = $target.closest(this.wrapperSelector)
+                    , $dest = $root.data('appendTarget')?$root.find($root.data('appendTarget')):$root
                     , templ = $root.find(this.templateSelector).last()
                     , new_node = templ.clone()
                     , new_position = parseInt(templ.data("sequence"), 10) + 1
@@ -71,18 +72,17 @@ define(['tools/ajax'], function(ajax){
                     inc(elem, "name");
                     if(!elem.is('[type=checkbox],.typehead-token,[readonly]'))elem.val("");
                 });
+                new_node.find(".js-form-widget[data-prefix]").each(function(index, elem){
+                  inc($(elem), "data-prefix");
+                });
                 new_node.removeAttr("data-sequence").attr("data-sequence", new_position);
-                if(!new_node.find(".remove-link").length) new_node.prepend(this.removeLink);
+                if(!new_node.find(".remove-link").length) new_node.append(this.removeLink);
                 new_node.find(".numbering").html(new_position+1);
                 if($target.data('addClass')){new_node.addClass($target.data('addClass'));}
-                if($target.data("appendFirst")){
-                    $root.prepend("<hr/>").prepend(new_node);
-                    $target.hide();
-                } else {
-                    $root.find($target.data('appendTarget')).append(new_node);
-                }
-                new_node.trigger("change");
 
+                $dest[$target.data("prepend")?'prepend':'append'](new_node);
+
+                new_node.trigger("change");
                 new_node.find("[generated]").remove();
                 new_node.find(".error").removeClass("error");
                 new_node.find(".valid").removeClass("valid");
