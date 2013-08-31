@@ -51,7 +51,9 @@ DisconnectFacebookProc = ClientTokenProc("/web/user/disconnectFb")
 
 RefreshProfileProc = LoggingInProc("/web/user/profile")
 GetProfileProc = ClientTokenProc("/web/user/profile", root_key = "User", result_cls = UserModel)
+
 GetFriendsProc = ClientTokenProc("/web/user/friends", root_key = "User", result_cls = ContactsUserModel)
+GetFriendsCompaniesProc = ClientTokenProc("/web/user/friendscompanies", root_key = "Companies", result_cls = CompanyModel, result_list=True)
 
 
 #=================================================== LINKEDIN USERNAME PROCS ==========================================================

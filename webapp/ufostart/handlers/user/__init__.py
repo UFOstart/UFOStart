@@ -2,7 +2,7 @@ from pyramid.decorator import reify
 
 from . import index
 from ufostart.lib.baseviews import BaseContextMixin
-from ufostart.models.procs import RefreshProfileProc, GetProfileProc, GetFriendsProc
+from ufostart.models.procs import RefreshProfileProc, GetProfileProc, GetFriendsProc, GetFriendsCompaniesProc
 
 
 class ProtoProfileContext(BaseContextMixin):
@@ -32,14 +32,13 @@ class UserProfileContext(ProtoProfileContext):
 
 
     @reify
-    def social(self):
-        return GetFriendsProc(self.request, {'slug': self.__name__})
-    @reify
     def contacts(self):
-        return self.social.Users
+        result = GetFriendsProc(self.request, {'slug': self.__name__})
+        return result.Users
     @reify
     def companies(self):
-        return self.social.Companies
+        result = GetFriendsCompaniesProc(self.request, {'slug': self.__name__})
+        return result
 
 def includeme(config):
     config.add_view(index.user      , context = UserProfileContext, renderer = "ufostart:templates/user/home.html")
