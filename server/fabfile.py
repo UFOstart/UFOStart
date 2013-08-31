@@ -1,4 +1,4 @@
-from fabric.api import run
+from fabric.api import run, sudo
 from fabric.context_managers import cd
 from fabric.contrib import files
 from fabric.operations import put
@@ -28,7 +28,7 @@ SYSTEM_PACKAGES = ["sudo"
 
 VERSIONS = {
     "PYTHON":"2.7.5"
-    , "NGINX":"1.4.2"
+    , "NGINX":"1.5.4"
 }
 
 def set_resolv():
@@ -59,13 +59,13 @@ def adduser():
     run("cp .ssh/id_rsa.pub .ssh/authorized_keys")
 
 def set_wwwuser():
-    run("mkdir /home/www-data")
-    run("chown www-data: /home/www-data")
-    run("usermod -d /home/www-data -s /bin/bash www-data")
-    run("sudo su - {}".format("www-data"))
-    run("mkdir .ssh")
-    run("ssh-keygen -t rsa -b 4096")
-    run("cp .ssh/id_rsa.pub .ssh/authorized_keys")
+    sudo("mkdir /home/www-data")
+    sudo("chown www-data: /home/www-data")
+    sudo("usermod -d /home/www-data -s /bin/bash www-data")
+    sudo("sudo su - {}".format("www-data"))
+    sudo("mkdir .ssh")
+    sudo("ssh-keygen -t rsa -b 4096")
+    sudo("cp .ssh/id_rsa.pub .ssh/authorized_keys")
 
 
 
@@ -84,7 +84,7 @@ def update():
 
 def add_python():
     with cd("/server/src"):
-        run("wget http://www.python.org/ftp/python/2.7.5/Python-{}.tar.bz2".format(VERSIONS['PYTHON']))
+        run("wget http://www.python.org/ftp/python/{0}/Python-{0}.tar.bz2".format(VERSIONS['PYTHON']))
         run("tar xfvj Python-{}.tar.bz2".format(VERSIONS['PYTHON']))
     with cd("/server/src/Python-{}".format(VERSIONS['PYTHON'])):
         run("./configure && make && make install")
@@ -94,10 +94,10 @@ def add_python():
 
 def add_nginx():
     with cd("/server/src"):
-        run("wget http://nginx.org/download/nginx-{}.tar.gz".format(VERSIONS['NGINX']))
-        run("tar xfv nginx-{}.tar.gz".format(VERSIONS['NGINX']))
+        sudo("wget http://nginx.org/download/nginx-{}.tar.gz".format(VERSIONS['NGINX']))
+        sudo("tar xfv nginx-{}.tar.gz".format(VERSIONS['NGINX']))
     with cd("/server/src/nginx-{}".format(VERSIONS['NGINX'])):
-        run("./configure \
+        sudo("./configure \
             --group=www-data\
             --user=www-data\
             --with-http_ssl_module\
@@ -108,8 +108,8 @@ def add_nginx():
             --lock-path=/server/nginx/run/nginx.lock\
             --with-http_gzip_static_module && make && make install".format(VERSIONS['NGINX']))
     files.upload_template("nginx.initd.tmpl", "/etc/init.d/nginx", {'NGINX_VERSION': VERSIONS['NGINX']})
-    run("chmod +x /etc/init.d/nginx")
-    run("update-rc.d nginx defaults")
+    sudo("chmod +x /etc/init.d/nginx")
+    sudo("update-rc.d nginx defaults")
 
 
 def setup(host):

@@ -479,6 +479,10 @@ class CompanyModel(BaseCompanyModel):
     Rounds = ListField(DictField(RoundModel))
     Users = ListField(DictField(CompanyUserModel))
 
+
+    totalValue = IntegerField()  # only for social friends companies
+    def display_total_value(self):
+        return format_currency(self.totalValue, 'EUR')
     @reify
     def startupValue(self):
         return sum(map(attrgetter('startupValue'), self.Users))
