@@ -45,12 +45,16 @@ def getContextFromSlug(childSlug):
 def get_static_content(request):
     result = GetStaticContentProc(request)
     return {k.key:k.value for k in result.Static}
+cache = CachedLoader(get_static_content, "WEBSITE_STATIC_CONTENT")
 
 class StaticContentLoader(object):
-    cache = CachedLoader(get_static_content, "WEBSITE_STATIC_CONTENT")
+
     def __init__(self, request):
-        self.content = self.cache.get(request)
+        self.content = cache.get(request)
         super(StaticContentLoader, self).__init__()
+
+    def refresh(self, request):
+        cache.refresh(request)
 
     def __call__(self, key):
         return self.content.get(key, '###{}###'.format(key))

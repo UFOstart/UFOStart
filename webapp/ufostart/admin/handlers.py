@@ -194,7 +194,9 @@ class ContentCreateForm(BaseForm):
         data = request.context.contentsMap
         data[values['key']] = values['value']
 
-        contents = AdminSetStaticContentProc(request, {'Content':{'Static':[{'key':k, 'value':v} for k,v in data.items()]}})
+        contents = AdminSetStaticContentProc(request, {'Static':[{'key':k, 'value':v} for k,v in data.items()]})
+        request.root.static_content.refresh(request)
+
         request.session.flash(GenericSuccessMessage("Content created successfully!"), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
@@ -213,7 +215,9 @@ class ContentEditForm(ContentCreateForm):
         data = request.context.contentsMap
         data[request.context.__name__] = values['value']
 
-        contents = AdminSetStaticContentProc(request, {'Content':{'Static':[{'key':k, 'value':v} for k,v in data.items()]}})
+        contents = AdminSetStaticContentProc(request, {'Static':[{'key':k, 'value':v} for k,v in data.items()]})
+        request.root.static_content.refresh(request)
+
         request.session.flash(GenericSuccessMessage("Content updated successfully!"), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
 
@@ -223,3 +227,13 @@ class ContentEditHandler(FormHandler):
         result['values'][self.form.id] = request.context.content.unwrap()
         return super(ContentEditHandler, self).pre_fill_values(request, result)
 
+
+def delete(context, request):
+    data = request.context.contentsMap
+    data.pop(request.context.__name__, None)
+
+    contents = AdminSetStaticContentProc(request, {'Static':[{'key':k, 'value':v} for k,v in data.items()]})
+    request.root.static_content.refresh(request)
+
+    request.session.flash(GenericSuccessMessage("Content updated successfully!"), "generic_messages")
+    request.fwd_raw(request.resource_url(request.context.__parent__))

@@ -5,6 +5,7 @@ from pyramid.security import DENY_ALL, ALL_PERMISSIONS, Allow
 from ufostart.lib.baseviews import BaseContextMixin
 from ufostart.admin import handlers
 from ufostart.admin.auth import AuthenticationHandler, AdminUserModel, USER_TOKEN, getUser, setUserF, canEdit
+from ufostart.models import KeyValueModel
 from ufostart.models.procs import AdminNeedAllProc, AdminServiceAllProc, AdminTemplatesAllProc, AdminTemplatesGetProc, AdminNeedGetProc, AdminServiceGetProc, AdminGetStaticContentProc
 
 
@@ -103,7 +104,7 @@ class SingleContentContext(BaseAdminContext):
         raise KeyError()
     @reify
     def content(self):
-        return self.contentsMap[self.__name__]
+        return KeyValueModel(key = self.__name__, value = self.contentsMap[self.__name__])
 
     @property
     def contentsMap(self):
@@ -163,6 +164,7 @@ def includeme(config):
     config.add_view(handlers.TemplateCreateHandler, name="create", context = TemplatesContext                    , renderer = "ufostart:templates/admin/form.html")
     config.add_view(handlers.TemplateEditHandler  , name="edit"  , context = SingleTemplateContext               , renderer = "ufostart:templates/admin/form.html")
 
-    config.add_view(handlers.index                               , context = ContentContext                    , renderer = "ufostart:templates/admin/contents.html")
-    config.add_view(handlers.ContentCreateHandler, name="create" , context = ContentContext                    , renderer = "ufostart:templates/admin/form.html")
-    config.add_view(handlers.ContentEditHandler  , name="edit"   , context = SingleContentContext               , renderer = "ufostart:templates/admin/form.html")
+    config.add_view(handlers.index                               , context = ContentContext                      , renderer = "ufostart:templates/admin/contents.html")
+    config.add_view(handlers.ContentCreateHandler, name="create" , context = ContentContext                      , renderer = "ufostart:templates/admin/form.html")
+    config.add_view(handlers.ContentEditHandler  , name="edit"   , context = SingleContentContext                , renderer = "ufostart:templates/admin/form.html")
+    config.add_view(handlers.delete              , name="delete" , context = SingleContentContext                )

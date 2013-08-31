@@ -12,10 +12,11 @@
                     <div class="col-lg-3"><input type="text" ng-model="queryName" class="search-query form-control" placeholder="Search by Key"></div>
                 </div>
                 <div class="row list-group-item" ng-repeat="content in contents | filter:query | orderBy:'key'">
-                    <div class="col-lg-4">{{content.key}}</div>
+                    <div class="col-lg-4"><strong>{{content.key}}</strong></div>
                     <div class="col-lg-6">{{content.value}}</div>
                     <div class="col-lg-2">
-                        <a href="${url(ctxt)}{{content.key}}/edit" class="btn btn-default edit-link">edit</a>
+                        <a href="${url(ctxt)}{{content.key}}/edit" class="btn btn-primary edit-link">edit</a>
+                        <a href="${url(ctxt)}{{content.key}}/delete" onclick="confirm('really?')" class="btn btn-danger edit-link">delete</a>
                     </div>
                 </div>
             </div>
