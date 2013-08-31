@@ -5,3 +5,9 @@ __author__ = 'Martin'
 
 class SlugTypeModel(Mapping):
     type = TextField()
+
+
+
+class KeyValueModel(Mapping):
+    key = TextField()
+    Value = TextField()

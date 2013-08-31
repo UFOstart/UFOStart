@@ -1,5 +1,7 @@
 import logging
 import urllib
+from hnc.apiclient.backend import ClientTokenProc
+from hnc.apiclient.cached import CachedLoader
 from pyramid.decorator import reify
 from pyramid.security import Allow, Everyone, Authenticated
 import simplejson
@@ -10,7 +12,7 @@ from ufostart.handlers.auth import SocialContext, SignupContext
 from ufostart.handlers.company import TemplatesRootContext, ProtoInviteContext, CompanyContext
 from ufostart.handlers.user import UserProfileContext
 from ufostart.models.auth import AnonUser, getUser, setUserF, USER_TOKEN
-from ufostart.models.procs import CheckSlugProc
+from ufostart.models.procs import CheckSlugProc, GetStaticContentProc
 
 log = logging.getLogger(__name__)
 
@@ -38,6 +40,25 @@ def getContextFromSlug(childSlug):
         raise KeyError(e.message)
 
 
+
+
+
+
+def load_static_content_proc(request):
+    result = GetStaticContentProc(request)
+    return result
+static_content_loader = CachedLoader(load_static_content_proc, "WEBSITE_STATIC_CONTENT")
+
+
+
+
+
+
+
+
+
+
+
 class WebsiteRootContext(RootContext):
     __name__ = None
     __parent__ = None
@@ -54,6 +75,10 @@ class WebsiteRootContext(RootContext):
         if USER_TOKEN in self.request.session:
             del self.request.session[USER_TOKEN]
         self.user = AnonUser()
+
+    @reify
+    def static_content(self):
+        return static_content_loader.get(self.request)
 
 
     @reify
