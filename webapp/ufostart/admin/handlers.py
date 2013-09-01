@@ -72,7 +72,7 @@ class ServiceCreateForm(BaseForm):
     label = "Create Service"
     fields = [
         StringField('name', "Name", REQUIRED)
-        , URLField('url', "website", REQUIRED)
+        , URLField('url', "Website", REQUIRED)
         , PictureUploadField("logo", "Logo")
     ]
 
