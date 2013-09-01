@@ -125,13 +125,18 @@
 
                 <h2>Connect with people</h2>
                 <h6>UFOstart is well connected to all major social networks. Find an expert for your needs.</h6>
-
+                
                 <div class="text-center mar-top-2">
-                    <a class="btn btn-primary btn-xlg" href="${root.signup_url()}">
-                        ${Content("HomePage.Button.Signup")|n}
-                    </a>
+                    %if request.context.user.isAnon():
+                        <a class="btn btn-primary btn-xlg" href="${root.signup_url()}">
+                            ${Content("HomePage.Button.Signup")|n}
+                        </a>
+                    %else:
+                        <a class="btn btn-primary btn-xlg" href="${root.template_select_url}">
+                            ${Content("HomePage.Button.CreateProject")|n}
+                        </a>
+                    %endif
                 </div>
-
             </div>
         </div>
     </div>
