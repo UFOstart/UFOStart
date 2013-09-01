@@ -1,12 +1,11 @@
 import logging
 import re
 from hnc.apiclient.backend import DBNotification, DBException
-from hnc.forms.formfields import StringField, REQUIRED, HtmlAttrs, IntField, ChoiceField
+from hnc.forms.formfields import REQUIRED, HtmlAttrs, IntField, ChoiceField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.layout import BS3_NCOL
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.response import Response
-from ufostart.handlers.auth.social import login_user
 from ufostart.handlers.forms.controls import UniqueNameField, TagSearchField
 from ufostart.lib.baseviews import BaseForm
 from ufostart.models.auth import SocialNetworkProfileModel, SOCIAL_NETWORK_TYPES_REVERSE, SOCIAL_NETWORK_TYPES
@@ -25,14 +24,14 @@ def isavailable(context, request):
     username = ''.join(request.params.values())
 
     if not uname_regex.match(username):
-        return "Username should only consist of letters, lowercase characters, underscores and hyphens"
+        return "Name should only consist of letters, lowercase characters, underscores and hyphens"
     elif username in RESERVEDS:
-        return "Username already taken"
+        return "Name already taken"
     else:
         try:
             UsernameAvailableProc(request, {'slug': username})
         except (DBNotification, DBException), e:
-            return "Username already taken"
+            return "Name already taken"
         else:
             return True
 
