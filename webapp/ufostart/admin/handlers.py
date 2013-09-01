@@ -89,7 +89,7 @@ class ServiceCreateForm(BaseForm):
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class ServiceCreateHandler(FormHandler):
-    form = TaskCreateForm
+    form = ServiceCreateForm
 
 
 
@@ -192,6 +192,10 @@ class ContentCreateForm(BaseForm):
             )], add_more_link_label='Add More Fields'
         )
     ]
+    @classmethod
+    def cancel_url(cls, request):
+        return request.fwd_url(request.context.__parent__)
+
 
     @classmethod
     def on_success(cls, request, values):

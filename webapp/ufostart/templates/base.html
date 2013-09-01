@@ -41,7 +41,7 @@
         ${self.styles_debug()}
         <script src="${STATIC_URL}vendor/dev/less.js" type="text/javascript"></script>
     %else:
-        <link rel="stylesheet" type="text/css" href="${STATIC_URL}/css/${settings.css_name}.min.css?${VERSION_TOKEN}">
+        <link rel="stylesheet" type="text/css" href="${STATIC_URL}css/${settings.css_name}.min.css?${VERSION_TOKEN}">
         ${self.styles_live()}
     %endif
 
@@ -82,7 +82,7 @@
         window.__options__ = {socials : ${root.user.getSocialProfileJSON()|n}, user : ${root.user.toJSON(True)|n}
             , messagingContainer: "#message-container"
             , staticPrefix: '${STATIC_URL}'
-            , loadingHtml : '<div class="show-loading"><img src="${STATIC_URL}/img/ajax-loader-light.gif"/></div>'
+            , loadingHtml : '<div class="show-loading"><img src="${STATIC_URL}img/ajax-loader-light.gif"/></div>'
         };
     </script>
 </%def>

@@ -5,7 +5,7 @@
         %if hasattr(view, 'page_title'):
             <h5 class="page-header">${view.page_title}</h5>
         %endif
-        <div class="header-bg" style="background-image: url(${STATIC_URL}/img/${view.background})">
+        <div class="header-bg" style="background-image: url(${STATIC_URL}img/${view.background})">
             <div class="row">
                 ${caller.body()}
             </div>
