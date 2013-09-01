@@ -21,7 +21,7 @@ class CompanyCreateForm(BaseForm):
     fields=[
         PictureUploadField('logo', 'Logo', REQUIRED)
         , StringField('name', 'Name', REQUIRED)
-        , UniqueNameField("slug", "UFOStart URL")
+        , UniqueNameField("slug", "UFOStart URL", thing_name = 'company name')
         , CleanHtmlField('pitch', 'Slogan', REQUIRED, max = 90)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
         , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')

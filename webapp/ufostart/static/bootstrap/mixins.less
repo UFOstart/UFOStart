@@ -54,10 +54,10 @@
 
 // Placeholder text
 .placeholder(@color: @input-color-placeholder) {
-  &:-moz-placeholder            { color: @color; } // Firefox 4-18
-  &::-moz-placeholder           { color: @color; } // Firefox 19+
-  &:-ms-input-placeholder       { color: @color; } // Internet Explorer 10+
-  &::-webkit-input-placeholder  { color: @color; } // Safari and Chrome
+  &:-moz-placeholder            { color: @color; font-weight:500;} // Firefox 4-18
+  &::-moz-placeholder           { color: @color; font-weight:500; } // Firefox 19+
+  &:-ms-input-placeholder       { color: @color; font-weight:500; } // Internet Explorer 10+
+  &::-webkit-input-placeholder  { color: @color; font-weight:500; } // Safari and Chrome
 }
 
 // Text overflow

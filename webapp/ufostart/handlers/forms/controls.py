@@ -122,7 +122,7 @@ class UniqueNameField(StringField):
     def get_domain(self, request):
         return request.context.settings.site_root_url
 
-    def __init__(self, name, label=None, **kwargs):
-        attrs = HtmlAttrs(required = True, data_rule_remote="/signup/isavailable")
+    def __init__(self, name, label=None, thing_name="name", **kwargs):
+        attrs = HtmlAttrs(required = True, data_rule_remote="/signup/isavailable", data_msg_required="Please enter a {} to proceed".format(thing_name), placeholder="Enter {} here".format(thing_name))
         super(UniqueNameField, self).__init__(name, label, attrs, **kwargs)
 

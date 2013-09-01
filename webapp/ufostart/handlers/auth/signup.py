@@ -42,7 +42,7 @@ group_classes = UniqueNameField.group_classes + " input-larger"
 class UserNameForm(BaseForm):
     id="UserName"
     fields=[
-        UniqueNameField("username", input_classes='input-lg', group_classes = group_classes)
+        UniqueNameField("username", input_classes='input-lg', group_classes = group_classes, thing_name = 'username')
     ]
     @classmethod
     def on_success(cls, request, values):
