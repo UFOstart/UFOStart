@@ -62,10 +62,10 @@ class StaticContentLoader(object):
     def __call__(self, key, display_default = True):
         result = self.content.get(
                     key
-                    , '###{}###'.format(key) if display_default else  ''
+                    , u'###{}###'.format(key) if display_default else  ''
                 )
         if self.debug:
-            return '<!-- {} -->{}'.format(key, result)
+            return u'<!-- {} -->{}'.format(key, result)
         else:
             return result
 
