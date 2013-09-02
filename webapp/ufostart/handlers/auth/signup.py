@@ -86,7 +86,7 @@ def login_success(exc, request):
             request.session.flash(GenericErrorMessage(e.message), "generic_messages")
         return Response("Resource Found!", 302, headerlist = [('location', request.fwd_url(ctxt))])
     else:
-        return Response("Resource Found!", 302, headerlist = [('location', request.root.profile_url(user.slug))])
+        return Response("Resource Found!", 302, headerlist = [('location', request.root.signup_url('getstarted'))])
 
 
 def login_failure(exc, request):
