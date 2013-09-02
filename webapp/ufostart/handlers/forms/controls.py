@@ -7,7 +7,6 @@ from hnc.forms.formfields import StringField, TextareaField, IntField, HtmlAttrs
 from ufostart.lib.html import getSlideshareMeta, getVimeoMeta, getYoutubeMeta
 
 
-_ = lambda s:s
 
 class CurrencyIntField(IntField):
     template = "ufostart:templates/common/controls/currencyint.html"
@@ -78,9 +77,9 @@ class CleanHtmlField(StringField):
 
 class SlideShareUrl(formencode.validators.String):
     messages = dict(
-        tooLong=_('Enter a value not more than %(max)i characters long'),
-        tooShort=_('Enter a value %(min)i characters long or more'),
-        notSlideshareUrl = _("Please add a valid slideshare url. You can find it in the sharing options of the presentation.")
+        tooLong='Enter a value not more than %(max)i characters long',
+        tooShort='Enter a value %(min)i characters long or more',
+        notSlideshareUrl = "Please add a valid slideshare url. You can find it in the sharing options of the presentation."
     )
     def _to_python(self, value, state):
         result = super(SlideShareUrl, self)._to_python(value, state)
@@ -97,9 +96,9 @@ class SlideshareField(StringField):
 
 class VideoUrl(formencode.validators.String):
     messages = dict(
-        tooLong=_('Enter a value not more than %(max)i characters long'),
-        tooShort=_('Enter a value %(min)i characters long or more'),
-        notVideoUrl = _("Please add a valid youtube or vimeo url. You can find it in the browser address bar when watching the video.")
+        tooLong='Enter a value not more than %(max)i characters long',
+        tooShort='Enter a value %(min)i characters long or more',
+        notVideoUrl = "Please add a valid youtube or vimeo url. You can find it in the browser address bar when watching the video."
     )
     def _to_python(self, value, state):
         result = super(VideoUrl, self)._to_python(value, state)

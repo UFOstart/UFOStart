@@ -2,7 +2,7 @@
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 
 <%def name="slogan()">${self.crumbs(1)}</%def>
-<%def name="sectionTitle()">${Content("TemplateList.Title")|n}</%def>
+<%def name="sectionTitle()">${_("TemplateList.Title")|n}</%def>
 
 
 <%def name="bodyContent()">
@@ -26,10 +26,10 @@
 <%def name="wtfBox()">
     <div class="wtf-box active">
         <h2 class="wtf-title">
-            ${Content("TemplateList.Help.Title")|n}
+            ${_("TemplateList.Help.Title")|n}
         </h2>
         <div class="wtf-content mar-top-1">
-            ${Content("TemplateList.Help.Text")|n}
+            ${_("TemplateList.Help.Text")|n}
         </div>
     </div>
 </%def>

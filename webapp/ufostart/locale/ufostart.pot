@@ -1,0 +1,279 @@
+# Translations template for ufostart.
+# Copyright (C) 2013 ORGANIZATION
+# This file is distributed under the same license as the ufostart project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ufostart 0.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2013-09-02 22:45+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: ufostart/templates/index.html:11
+msgid "HomePage.SiteSlogan"
+msgstr ""
+
+#: ufostart/templates/index.html:16 ufostart/templates/index.html:132
+msgid "HomePage.Button.Signup"
+msgstr ""
+
+#: ufostart/templates/index.html:20 ufostart/templates/index.html:136
+msgid "HomePage.Button.CreateProject"
+msgstr ""
+
+#: ufostart/templates/index.html:47
+msgid "HomePage.Equity.Title"
+msgstr ""
+
+#: ufostart/templates/index.html:54
+msgid "HomePage.Share.Title"
+msgstr ""
+
+#: ufostart/templates/index.html:61
+msgid "HomePage.Founder.Title"
+msgstr ""
+
+#: ufostart/templates/auth/roleselect.html:14
+msgid "OnboardingPage.Title"
+msgstr ""
+
+#: ufostart/templates/auth/roleselect.html:54
+msgid "OnboardingPage.Expert.Headline"
+msgstr ""
+
+#: ufostart/templates/auth/roleselect.html:56
+msgid "OnboardingPage.Expert.Explanation"
+msgstr ""
+
+#: ufostart/templates/auth/roleselect.html:58
+msgid "OnboardingPage.Expert.ProceedButton"
+msgstr ""
+
+#: ufostart/templates/auth/roleselect.html:65
+msgid "OnboardingPage.Investor.Headline"
+msgstr ""
+
+#: ufostart/templates/auth/roleselect.html:67
+msgid "OnboardingPage.Investor.Explanation"
+msgstr ""
+
+#: ufostart/templates/auth/roleselect.html:69
+msgid "OnboardingPage.Investor.ProceedButton"
+msgstr ""
+
+#: ufostart/templates/auth/roleselect.html:75
+msgid "OnboardingPage.Founder.Headline"
+msgstr ""
+
+#: ufostart/templates/auth/roleselect.html:77
+msgid "OnboardingPage.Founder.Explanation"
+msgstr ""
+
+#: ufostart/templates/auth/roleselect.html:79
+msgid "OnboardingPage.Founder.ProceedButton"
+msgstr ""
+
+#: ufostart/templates/auth/roleselect.html:93
+msgid "OnboardingPage.Help.Title"
+msgstr ""
+
+#: ufostart/templates/auth/roleselect.html:96
+msgid "OnboardingPage.Help.Text"
+msgstr ""
+
+#: ufostart/templates/auth/username.html:34
+msgid "UsernameSelect.Help.Title"
+msgstr ""
+
+#: ufostart/templates/auth/username.html:37
+msgid "UsernameSelect.Help.Text"
+msgstr ""
+
+#: ufostart/templates/company/addmentor.html:22
+msgid "AddMentorPage.Help.Title"
+msgstr ""
+
+#: ufostart/templates/company/addmentor.html:25
+msgid "AddMentorPage.Help.Text"
+msgstr ""
+
+#: ufostart/templates/company/round.html:505
+msgid "RoundDashboard.Help.Title"
+msgstr ""
+
+#: ufostart/templates/company/round.html:508
+msgid "RoundDashboard.Help.Text"
+msgstr ""
+
+#: ufostart/templates/company/company/create.html:5
+msgid "CompanyCreate.Title"
+msgstr ""
+
+#: ufostart/templates/company/company/create.html:18
+msgid "CompanyCreate.ImportPrompt.Angellist"
+msgstr ""
+
+#: ufostart/templates/company/company/create.html:19
+msgid "CompanyCreate.ImportButton.Angellist"
+msgstr ""
+
+#: ufostart/templates/company/company/create.html:43
+msgid "CompanyCreate.Form.Button.Submit"
+msgstr ""
+
+#: ufostart/templates/company/company/create.html:44
+msgid "CompanyCreate.Form.Button.Cancel"
+msgstr ""
+
+#: ufostart/templates/company/company/create.html:66
+msgid "CompanyCreate.Help.Title"
+msgstr ""
+
+#: ufostart/templates/company/company/create.html:69
+msgid "CompanyCreate.Help.Text"
+msgstr ""
+
+#: ufostart/templates/company/company/edit.html:12
+msgid "CompanyEdit.Title"
+msgstr ""
+
+#: ufostart/templates/company/funding/create.html:62
+msgid "FundingSetupPage.Help.Title"
+msgstr ""
+
+#: ufostart/templates/company/funding/create.html:65
+msgid "FundingSetupPage.Help.Text"
+msgstr ""
+
+#: ufostart/templates/company/need/edit.html:34
+msgid "TaskSetup.Help.Title"
+msgstr ""
+
+#: ufostart/templates/company/need/edit.html:37
+msgid "TaskSetup.Help.Text"
+msgstr ""
+
+#: ufostart/templates/company/need/index.html:339
+msgid "TaskDetailsPage.Help.NeedSummary.Title"
+msgstr ""
+
+#: ufostart/templates/company/product/create.html:67
+msgid "ProductSetup.Help.Title"
+msgstr ""
+
+#: ufostart/templates/company/product/create.html:70
+msgid "ProductSetup.Help.Text"
+msgstr ""
+
+#: ufostart/templates/company/setup/basic.html:5
+msgid "TemplateList.Title"
+msgstr ""
+
+#: ufostart/templates/company/setup/basic.html:29
+msgid "TemplateList.Help.Title"
+msgstr ""
+
+#: ufostart/templates/company/setup/basic.html:32
+msgid "TemplateList.Help.Text"
+msgstr ""
+
+#: ufostart/templates/company/setup/details.html:12
+msgid "TemplateDetails.BoxTitle"
+msgstr ""
+
+#: ufostart/templates/company/setup/details.html:32
+msgid "TemplateDetails.ProceedButton"
+msgstr ""
+
+#: ufostart/templates/company/setup/details.html:33
+msgid "TemplateDetails.CancelButton"
+msgstr ""
+
+#: ufostart/templates/company/setup/details.html:39
+msgid "TemplateDetails.TaskSection.Title"
+msgstr ""
+
+#: ufostart/templates/company/setup/details.html:52
+msgid "TemplateDetails.Help.Title"
+msgstr ""
+
+#: ufostart/templates/company/setup/details.html:55
+msgid "TemplateDetails.Help.Text"
+msgstr ""
+
+#: ufostart/templates/user/home.html:8
+msgid "ProfilePage.Title"
+msgstr ""
+
+#: ufostart/templates/user/home.html:27
+msgid "ProfilePage.UserInfoBox.Title"
+msgstr ""
+
+#: ufostart/templates/user/home.html:30
+msgid "ProfilePage.UserInfoBox.Label.StartupValue"
+msgstr ""
+
+#: ufostart/templates/user/home.html:36
+msgid "ProfilePage.UserInfoBox.Label.Companies"
+msgstr ""
+
+#: ufostart/templates/user/home.html:42
+msgid "ProfilePage.UserInfoBox.Label.InvestAmount"
+msgstr ""
+
+#: ufostart/templates/user/home.html:49
+msgid "ProfilePage.UserInfoBox.Label.Mentoring"
+msgstr ""
+
+#: ufostart/templates/user/home.html:53
+msgid "ProfilePage.UserInfoBox.Label.Endorsements"
+msgstr ""
+
+#: ufostart/templates/user/home.html:60
+msgid "ProfilePage.UserInfoBox.Label.Skills"
+msgstr ""
+
+#: ufostart/templates/user/home.html:66
+msgid "ProfilePage.UserInfoBox.Label.Interests"
+msgstr ""
+
+#: ufostart/templates/user/home.html:105
+msgid "ProfilePage.BoxTitle.YourContacts"
+msgstr ""
+
+#: ufostart/templates/user/home.html:126
+msgid "ProfilePage.BoxTitle.CompaniesYouKnow"
+msgstr ""
+
+#: ufostart/templates/user/home.html:156
+msgid "ProfilePage.BoxTitle.Mentoring"
+msgstr ""
+
+#: ufostart/templates/user/home.html:179
+msgid "ProfilePage.BoxTitle.Companies"
+msgstr ""
+
+#: ufostart/templates/user/home.html:207
+msgid "ProfilePage.BoxContent.NoCompaniesYet"
+msgstr ""
+
+#: ufostart/templates/user/home.html:208
+msgid "ProfilePage.Button.CreateCompany"
+msgstr ""
+
+#: ufostart/templates/user/home.html:216
+msgid "ProfilePage.BoxTitle.Applications"
+msgstr ""
+
+#: ufostart/templates/user/home.html:236
+msgid "ProfilePage.BoxTitle.Endorsements"
+msgstr ""
+

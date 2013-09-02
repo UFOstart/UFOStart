@@ -192,9 +192,6 @@ class ContentCreateForm(BaseForm):
             )], add_more_link_label='Add More Fields'
         )
     ]
-    @classmethod
-    def cancel_url(cls, request):
-        return request.fwd_url(request.context.__parent__)
 
 
     @classmethod
@@ -203,7 +200,7 @@ class ContentCreateForm(BaseForm):
         data.update({v['key']:v['value'] for v in values['values']})
 
         contents = AdminSetStaticContentProc(request, {'Static':[{'key':k, 'value':v} for k,v in data.items()]})
-        request.root.static_content.refresh(request)
+        request._.refresh(request)
 
         request.session.flash(GenericSuccessMessage("Content created successfully!"), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context)}
@@ -211,20 +208,25 @@ class ContentCreateForm(BaseForm):
 
 class ContentCreateHandler(FormHandler):
     form = ContentCreateForm
-
-
+    def pre_fill_values(self, request, result):
+        if 'key' in request.GET:
+            result['values'][self.form.id]['values'] = [{'key':k} for k in request.GET.getall('key')]
+        return super(ContentCreateHandler, self).pre_fill_values(request, result)
 
 
 class ContentEditForm(ContentCreateForm):
     label = "Edit Content"
     fields = [TextareaField('value', "Full HTML", REQUIRED, input_classes='x-high')]
     @classmethod
+    def cancel_url(cls, request):
+        return request.fwd_url(request.context.__parent__)
+    @classmethod
     def on_success(cls, request, values):
         data = request.context.contentsMap
         data[request.context.__name__] = values['value']
 
         contents = AdminSetStaticContentProc(request, {'Static':[{'key':k, 'value':v} for k,v in data.items()]})
-        request.root.static_content.refresh(request)
+        request._.refresh(request)
 
         request.session.flash(GenericSuccessMessage("Content updated successfully!"), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
@@ -241,7 +243,12 @@ def delete(context, request):
     data.pop(request.context.__name__, None)
 
     contents = AdminSetStaticContentProc(request, {'Static':[{'key':k, 'value':v} for k,v in data.items()]})
-    request.root.static_content.refresh(request)
+    request._.refresh(request)
 
     request.session.flash(GenericSuccessMessage("Content updated successfully!"), "generic_messages")
     request.fwd_raw(request.resource_url(request.context.__parent__))
+
+
+
+def get_active_keys(context, request):
+    return [l.msgid for l in request._msg_catalog_()]

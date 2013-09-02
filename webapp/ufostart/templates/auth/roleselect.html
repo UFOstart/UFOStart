@@ -11,7 +11,7 @@
         <div class="row mar-top-2">
             <div class="col-lg-12">
                 <h2 class="section-title">
-                    <span>${Content("OnboardingPage.Title")|n}</span>
+                    <span>${_("OnboardingPage.Title")|n}</span>
                 </h2>
             </div>
         </div>
@@ -51,32 +51,32 @@
 
                     <div class="expert-form mar-top-3">
                         <h3>
-                            ${Content("OnboardingPage.Expert.Headline")|n}
+                            ${_("OnboardingPage.Expert.Headline")|n}
                         </h3>
-                        ${Content("OnboardingPage.Expert.Explanation")|n}
+                        ${_("OnboardingPage.Expert.Explanation")|n}
                         <%form:build_base_form form="${view.schemas['expert']}" values="${values}" errors="${errors}">
-                            <button type="submit" class="btn btn-primary">${Content("OnboardingPage.Expert.ProceedButton")|n}</button>
+                            <button type="submit" class="btn btn-primary">${_("OnboardingPage.Expert.ProceedButton")|n}</button>
                             <a class="btn btn-default btn-reset-role">Cancel</a>
                         </%form:build_base_form>
                     </div>
 
                     <div class="investor-form mar-top-3">
                         <h3>
-                            ${Content("OnboardingPage.Investor.Headline")|n}
+                            ${_("OnboardingPage.Investor.Headline")|n}
                         </h3>
-                        ${Content("OnboardingPage.Investor.Explanation")|n}
+                        ${_("OnboardingPage.Investor.Explanation")|n}
                         <%form:build_base_form form="${view.schemas['investor']}" values="${values}" errors="${errors}">
-                            <button type="submit" class="btn btn-primary">${Content("OnboardingPage.Investor.ProceedButton")|n}</button>
+                            <button type="submit" class="btn btn-primary">${_("OnboardingPage.Investor.ProceedButton")|n}</button>
                             <a class="btn btn-default btn-reset-role">Cancel</a>
                         </%form:build_base_form>
                     </div>
                     <div class="founder-form mar-top-3">
                         <h3>
-                            ${Content("OnboardingPage.Founder.Headline")|n}
+                            ${_("OnboardingPage.Founder.Headline")|n}
                         </h3>
-                        ${Content("OnboardingPage.Founder.Explanation")|n}
+                        ${_("OnboardingPage.Founder.Explanation")|n}
                         <%form:build_base_form form="${view.schemas['founder']}" values="${values}" errors="${errors}">
-                            <button type="submit" class="btn btn-primary">${Content("OnboardingPage.Founder.ProceedButton")|n}</button>
+                            <button type="submit" class="btn btn-primary">${_("OnboardingPage.Founder.ProceedButton")|n}</button>
                             <a class="btn btn-default btn-reset-role">Cancel</a>
                         </%form:build_base_form>
                     </div>
@@ -90,10 +90,10 @@
 <%def name="wtfBox()">
     <div class="wtf-box">
         <h2 class="wtf-title">
-            ${Content("OnboardingPage.Help.Title")|n}
+            ${_("OnboardingPage.Help.Title")|n}
         </h2>
         <div class="wtf-content mar-top-1">
-            ${Content("OnboardingPage.Help.Text")|n}
+            ${_("OnboardingPage.Help.Text")|n}
         </div>
     </div>
 </%def>

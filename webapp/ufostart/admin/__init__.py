@@ -113,7 +113,7 @@ class SingleContentContext(BaseAdminContext):
 class ContentContext(BaseAdminContext):
     menu_label = "Contents"
     def __getitem__(self, item):
-        if item in ['create']:
+        if item in ['create', 'active']:
             raise KeyError()
         else:
             return SingleContentContext(self, item)
@@ -166,5 +166,7 @@ def includeme(config):
 
     config.add_view(handlers.index                               , context = ContentContext                      , renderer = "ufostart:templates/admin/contents.html")
     config.add_view(handlers.ContentCreateHandler, name="create" , context = ContentContext                      , renderer = "ufostart:templates/admin/form.html")
+    config.add_view(handlers.get_active_keys     , name="active" , context = ContentContext                      , renderer = "json")
     config.add_view(handlers.ContentEditHandler  , name="edit"   , context = SingleContentContext                , renderer = "ufostart:templates/admin/form.html")
     config.add_view(handlers.delete              , name="delete" , context = SingleContentContext                )
+

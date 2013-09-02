@@ -1,5 +1,4 @@
 import simplejson
-from .baseviews import RootContext
 
 
 def pluralize(singular, plural, num):
@@ -20,6 +19,6 @@ def add_renderer_variables(event):
             , 'pluralize'       : pluralize
             , 'settings'        : settings
             , 'STATIC_URL'      : settings.static_prefix
-            , 'Content'         : request.root.static_content
+            , '_'               : request._
         })
     return event

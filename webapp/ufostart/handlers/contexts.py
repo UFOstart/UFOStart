@@ -1,6 +1,5 @@
 import logging
 import urllib
-from hnc.apiclient.cached import CachedLoader
 from pyramid.decorator import reify
 from pyramid.security import Allow, Everyone, Authenticated
 import simplejson
@@ -11,8 +10,7 @@ from ufostart.handlers.auth import SocialContext, SignupContext
 from ufostart.handlers.company import TemplatesRootContext, ProtoInviteContext, CompanyContext
 from ufostart.handlers.user import UserProfileContext
 from ufostart.models.auth import AnonUser, getUser, setUserF, USER_TOKEN
-from ufostart.admin.auth import isAdminUser
-from ufostart.models.procs import CheckSlugProc, GetStaticContentProc
+from ufostart.models.procs import CheckSlugProc
 
 log = logging.getLogger(__name__)
 
@@ -43,37 +41,6 @@ def getContextFromSlug(childSlug):
 
 
 
-def get_static_content(request):
-    result = GetStaticContentProc(request)
-    return {k.key:k.value for k in result.Static}
-cache = CachedLoader(get_static_content, "WEBSITE_STATIC_CONTENT")
-
-class StaticContentLoader(object):
-
-    def __init__(self, request, debug, admin):
-        self.content = cache.get(request)
-        self.debug = debug
-        self.admin = admin
-        super(StaticContentLoader, self).__init__()
-
-    def refresh(self, request):
-        cache.refresh(request)
-
-    def __call__(self, key, display_default = True):
-        result = self.content.get(
-                    key
-                    , u'###{}###'.format(key) if display_default else  ''
-                )
-        if self.debug:
-            return u'<!-- {} -->{}'.format(key, result)
-        else:
-            return result
-
-
-
-
-
-
 class WebsiteRootContext(RootContext):
     __name__ = None
     __parent__ = None
@@ -90,13 +57,6 @@ class WebsiteRootContext(RootContext):
         if USER_TOKEN in self.request.session:
             del self.request.session[USER_TOKEN]
         self.user = AnonUser()
-
-
-    @reify
-    def static_content(self):
-        req = self.request
-        return StaticContentLoader(req, req.globals.is_debug, isAdminUser(req))
-
 
     @reify
     def location(self):

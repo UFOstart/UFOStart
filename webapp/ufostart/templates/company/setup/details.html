@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-lg-4 template-details">
                 <div class="box-title">
-                    ${Content("TemplateDetails.BoxTitle")|n}
+                    ${_("TemplateDetails.BoxTitle")|n}
                 </div>
                 <div class="cut-corner">
                     <img src="${template.picture}"/>
@@ -29,14 +29,14 @@
                 ${ template.description | html.html,n }
 
                 <div class="mar-top-3">
-                    <a href="${url(ctxt, 'startcompany')}" class="btn btn-primary btn-lg">${Content("TemplateDetails.ProceedButton")|n}</a>
-                    <a href="${root.template_select_url}" class="btn btn-link">${Content("TemplateDetails.CancelButton")|n}</a>
+                    <a href="${url(ctxt, 'startcompany')}" class="btn btn-primary btn-lg">${_("TemplateDetails.ProceedButton")|n}</a>
+                    <a href="${root.template_select_url}" class="btn btn-link">${_("TemplateDetails.CancelButton")|n}</a>
                 </div>
             </div>
         </div>
     <div class="row mar-top-3">
         <div class="col-lg-12">
-            <div class="box-title">${Content("TemplateDetails.TaskSection.Title")|n}</div>
+            <div class="box-title">${_("TemplateDetails.TaskSection.Title")|n}</div>
         </div>
     </div>
     <div class="row">
@@ -49,10 +49,10 @@
 <%def name="wtfBox()">
     <div class="wtf-box active">
         <h2 class="wtf-title">
-            ${Content("TemplateDetails.Help.Title")|n}
+            ${_("TemplateDetails.Help.Title")|n}
         </h2>
         <div class="wtf-content mar-top-1">
-            ${Content("TemplateDetails.Help.Text")|n}
+            ${_("TemplateDetails.Help.Text")|n}
         </div>
     </div>
 </%def>

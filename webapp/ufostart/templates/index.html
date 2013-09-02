@@ -8,16 +8,16 @@
             <div class="row mar-top-3">
                 <div class="col-lg-12">
                     <h1 class="site-slogan">
-                        ${Content("HomePage.SiteSlogan")|n}
+                        ${_("HomePage.SiteSlogan")|n}
                     </h1>
                     <div class="mar-top-3 text-center">
                         %if request.context.user.isAnon():
                             <a class="btn btn-primary btn-xlg" href="${root.signup_url()}">
-                                ${Content("HomePage.Button.Signup")|n}
+                                ${_("HomePage.Button.Signup")|n}
                             </a>
                         %else:
                             <a class="btn btn-primary btn-xlg" href="${root.template_select_url}">
-                                ${Content("HomePage.Button.CreateProject")|n}
+                                ${_("HomePage.Button.CreateProject")|n}
                             </a>
                         %endif
                     </div>
@@ -44,21 +44,21 @@
                 <div class="text-center">
                     <div class="concept-icons money"></div>
                 </div>
-                <h2 class="home-page-section">${Content("HomePage.Equity.Title")|n}</h2>
+                <h2 class="home-page-section">${_("HomePage.Equity.Title")|n}</h2>
                 <p class="mar-top-2">Genim voluptiusam doloren ihicae ne ipsandam velign imodit quam quat. Bus non porum andam, verum re coneste dictiam eum vollaborest ommodi to blatur.</p>
             </div>
             <div class="col-lg-4">
                 <div class="text-center">
                     <div class="concept-icons share"></div>
                 </div>
-                <h2 class="home-page-section">${Content("HomePage.Share.Title")|n}</h2>
+                <h2 class="home-page-section">${_("HomePage.Share.Title")|n}</h2>
                 <p class="mar-top-2">Genim voluptiusam doloren ihicae ne ipsandam velign imodit quam quat. Bus non porum andam, verum re coneste dictiam eum vollaborest ommodi to blatur.</p>
             </div>
             <div class="col-lg-4">
                 <div class="text-center">
                     <div class="concept-icons team"></div>
                 </div>
-                <h2 class="home-page-section">${Content("HomePage.Founder.Title")|n}</h2>
+                <h2 class="home-page-section">${_("HomePage.Founder.Title")|n}</h2>
                 <p class="mar-top-2">Genim voluptiusam doloren ihicae ne ipsandam velign imodit quam quat. Bus non porum andam, verum re coneste dictiam eum vollaborest ommodi to blatur.</p>
             </div>
         </div>
@@ -129,11 +129,11 @@
                 <div class="text-center mar-top-2">
                     %if request.context.user.isAnon():
                         <a class="btn btn-primary btn-xlg" href="${root.signup_url()}">
-                            ${Content("HomePage.Button.Signup")|n}
+                            ${_("HomePage.Button.Signup")|n}
                         </a>
                     %else:
                         <a class="btn btn-primary btn-xlg" href="${root.template_select_url}">
-                            ${Content("HomePage.Button.CreateProject")|n}
+                            ${_("HomePage.Button.CreateProject")|n}
                         </a>
                     %endif
                 </div>
