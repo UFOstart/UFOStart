@@ -127,7 +127,13 @@ class FounderForm(BaseForm):
     id="founder"
     ROLES = ['FOUNDER']
     fields=[]
-    on_success = classmethod(role_select_on_success)
+    @classmethod
+    def role_select_on_success(cls, request, values):
+        user = request.context.user
+        values['token'] = user.token
+        values['Roles'] = {'name':role for role in cls.ROLES}
+        SetUserInfoProc(request, values)
+        return {'success':True, 'redirect': request.root.template_select_url}
 
 class UserRoleHandler(FormHandler):
     @property
