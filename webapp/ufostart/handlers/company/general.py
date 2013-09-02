@@ -81,7 +81,8 @@ class AddMentorHandler(FormHandler):
     form = MentorInviteForm
 
     def pre_fill_values(self, request, result):
-        result['mentors'] = GetTopMentorsProc(request).User
+        mentors = GetTopMentorsProc(request)
+        result['mentors'] = mentors.User if mentors else []
         return super(AddMentorHandler, self).pre_fill_values(request, result)
 
 def add_top_mentor(context, request):
