@@ -128,7 +128,7 @@ class FounderForm(BaseForm):
     ROLES = ['FOUNDER']
     fields=[]
     @classmethod
-    def role_select_on_success(cls, request, values):
+    def on_success(cls, request, values):
         user = request.context.user
         values['token'] = user.token
         values['Roles'] = {'name':role for role in cls.ROLES}
