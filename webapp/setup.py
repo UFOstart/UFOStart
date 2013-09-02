@@ -32,7 +32,7 @@ requires = [
     "markdown",
     "smartypants",
     "weberror",
-    'hnc>=0.1.29dev'
+    'hnc>=0.1.30dev'
     ]
 
 setup(name='ufostart',
