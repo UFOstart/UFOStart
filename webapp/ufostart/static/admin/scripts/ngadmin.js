@@ -70,6 +70,7 @@ function StaticContentListCtrl($scope, Static, UsedContent) {
   $scope.pages = [];
   $scope.missingKeys = [];
   $scope.allMissingKeys = '';
+  $scope.unusedKeys = false;
 
   var content = Static.getAllItems();
   content.then(function(data){
@@ -83,11 +84,12 @@ function StaticContentListCtrl($scope, Static, UsedContent) {
                 if(_.contains(usedData, item.key)){
                     item.active = true;
                     usedKeys.push(item.key);
+                } else {
+                    $scope.unusedKeys = true;
                 }
             });
             $scope.missingKeys = _.difference(usedData, usedKeys);
             $scope.allMissingKeys = $scope.missingKeys.join('&key=');
-
         });
   });
 
@@ -95,6 +97,7 @@ function StaticContentListCtrl($scope, Static, UsedContent) {
         var key = item.key.toLowerCase();
         return    (!$scope.queryName || !!~key.indexOf($scope.queryName.toLowerCase()))
                && (!$scope.queryPage || key.indexOf($scope.queryPage.toLowerCase())==0)
+               && (!$scope.queryUnused || !item.active)
                && (!$scope.queryContent || !!~item.value.toLowerCase().indexOf($scope.queryContent.toLowerCase()));
   };
 }
