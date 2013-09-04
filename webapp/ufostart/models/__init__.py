@@ -7,11 +7,3 @@ class SlugTypeModel(Mapping):
     type = TextField()
 
 
-
-class KeyValueModel(Mapping):
-    key = TextField()
-    value = TextField()
-
-
-class ContentModel(Mapping):
-    Static = ListField(DictField(KeyValueModel))

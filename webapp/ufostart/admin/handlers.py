@@ -6,7 +6,7 @@ from hnc.forms.messages import GenericSuccessMessage
 from hnc.tools.tools import deep_get
 from ufostart.lib.baseviews import BaseForm
 from ufostart.handlers.forms.controls import TagSearchField, PictureUploadField
-from ufostart.models.procs import AdminNeedCreateProc, AdminNeedEditProc, AdminServiceCreateProc, AdminServiceEditProc, AdminTemplatesEditProc, AdminTemplatesCreateProc, AdminNeedAllProc, AdminSetStaticContentProc
+from ufostart.models.procs import AdminNeedCreateProc, AdminNeedEditProc, AdminServiceCreateProc, AdminServiceEditProc, AdminTemplatesEditProc, AdminTemplatesCreateProc, AdminNeedAllProc, SetStaticContentProc
 from ufostart.models.tasks import TASK_CATEGORIES
 
 
@@ -73,7 +73,7 @@ class ServiceCreateForm(BaseForm):
     fields = [
         StringField('name', "Name", REQUIRED)
         , URLField('url', "Website", REQUIRED)
-        , PictureUploadField("logo", "Logo")
+        , PictureUploadField("logo", "Logo", picWidth=100, picHeight=100)
     ]
 
     @classmethod
@@ -98,7 +98,7 @@ class ServiceEditForm(ServiceCreateForm):
     label = "Edit Service"
     fields = [
         URLField('url', "website", REQUIRED)
-        , PictureUploadField("logo", "Logo")
+        , PictureUploadField("logo", "Logo", picWidth=100, picHeight=100)
     ]
     @classmethod
     def on_success(cls, request, values):
@@ -135,8 +135,7 @@ class TemplateCreateForm(BaseForm):
             Sequence(
                 StringField('name', "Name", REQUIRED)
                 , TextareaField('description', "Description", REQUIRED, input_classes='x-high')
-                , PictureUploadField("picture", "Picture")
-                , PictureUploadField("logo", "Template Icon")
+                , PictureUploadField("picture", "Picture", picWidth=277, picHeight=230)
                 , CheckboxPostField('active', "Active?")
             )
             , NeedSelector('Need', "Task List")
@@ -178,77 +177,3 @@ class TemplateEditHandler(FormHandler):
         return super(TemplateEditHandler, self).pre_fill_values(request, result)
 
 
-
-
-
-
-class ContentCreateForm(BaseForm):
-    label = "Create Content"
-    width_class = "col-lg-12"
-    fields = [
-        MultipleFormField('values', fields = [BS3_NCOL(
-                StringField('key', "Key", REQUIRED)
-                , TextareaField('value', "Full HTML", REQUIRED, input_classes='x-high')
-            )], add_more_link_label='Add More Fields'
-        )
-    ]
-
-
-    @classmethod
-    def on_success(cls, request, values):
-        data = request.context.contentsMap
-        data.update({v['key']:v['value'] for v in values['values']})
-
-        contents = AdminSetStaticContentProc(request, {'Static':[{'key':k, 'value':v} for k,v in data.items()]})
-        request._.refresh(request)
-
-        request.session.flash(GenericSuccessMessage("Content created successfully!"), "generic_messages")
-        return {'success':True, 'redirect': request.resource_url(request.context)}
-
-
-class ContentCreateHandler(FormHandler):
-    form = ContentCreateForm
-    def pre_fill_values(self, request, result):
-        if 'key' in request.GET:
-            result['values'][self.form.id]['values'] = [{'key':k} for k in request.GET.getall('key')]
-        return super(ContentCreateHandler, self).pre_fill_values(request, result)
-
-
-class ContentEditForm(ContentCreateForm):
-    label = "Edit Content"
-    fields = [TextareaField('value', "Full HTML", REQUIRED, input_classes='x-high')]
-    @classmethod
-    def cancel_url(cls, request):
-        return request.fwd_url(request.context.__parent__)
-    @classmethod
-    def on_success(cls, request, values):
-        data = request.context.contentsMap
-        data[request.context.__name__] = values['value']
-
-        contents = AdminSetStaticContentProc(request, {'Static':[{'key':k, 'value':v} for k,v in data.items()]})
-        request._.refresh(request)
-
-        request.session.flash(GenericSuccessMessage("Content updated successfully!"), "generic_messages")
-        return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
-
-class ContentEditHandler(FormHandler):
-    form = ContentEditForm
-    def pre_fill_values(self, request, result):
-        result['values'][self.form.id] = request.context.content.unwrap()
-        return super(ContentEditHandler, self).pre_fill_values(request, result)
-
-
-def delete(context, request):
-    data = request.context.contentsMap
-    data.pop(request.context.__name__, None)
-
-    contents = AdminSetStaticContentProc(request, {'Static':[{'key':k, 'value':v} for k,v in data.items()]})
-    request._.refresh(request)
-
-    request.session.flash(GenericSuccessMessage("Content updated successfully!"), "generic_messages")
-    request.fwd_raw(request.resource_url(request.context.__parent__))
-
-
-
-def get_active_keys(context, request):
-    return [l.msgid for l in request._msg_catalog_()]

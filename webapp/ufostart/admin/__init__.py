@@ -1,12 +1,12 @@
 from collections import OrderedDict
+from hnc.apps.static_content.views import set_up_content_mgmt_app, delete_view_factory, ContentEditViewFactory, ContentCreationViewFactory, KeyValueModel
 from hnc.tools.generic_views import logout_func
 from pyramid.decorator import reify
 from pyramid.security import DENY_ALL, ALL_PERMISSIONS, Allow
 from ufostart.lib.baseviews import BaseContextMixin
 from ufostart.admin import handlers
 from ufostart.admin.auth import AuthenticationHandler, AdminUserModel, USER_TOKEN, getUser, setUserF, canEdit
-from ufostart.models import KeyValueModel
-from ufostart.models.procs import AdminNeedAllProc, AdminServiceAllProc, AdminTemplatesAllProc, AdminTemplatesGetProc, AdminNeedGetProc, AdminServiceGetProc, AdminGetStaticContentProc
+from ufostart.models.procs import AdminTemplatesGetProc, AdminNeedGetProc, AdminServiceGetProc, GetStaticContentProc, SetStaticContentProc
 
 
 class AdminSettings(object):
@@ -99,6 +99,8 @@ class ServiceContext(BaseAdminContext):
 
 
 
+
+
 class SingleContentContext(BaseAdminContext):
     def __getitem__(self, item):
         raise KeyError()
@@ -120,7 +122,7 @@ class ContentContext(BaseAdminContext):
 
     @reify
     def contentsMap(self):
-        result = AdminGetStaticContentProc(self.request)
+        result = GetStaticContentProc(self.request)
         return {k.key:k.value for k in result.Static}
 
 
@@ -141,6 +143,8 @@ class AdminContext(BaseAdminContext):
     def __getitem__(self, item):
         return self.children[item](self, item)
 
+
+def dashboard(ctxt, req): return {}
 
 
 def includeme(config):
@@ -164,9 +168,19 @@ def includeme(config):
     config.add_view(handlers.TemplateCreateHandler, name="create", context = TemplatesContext                    , renderer = "ufostart:templates/admin/form.html")
     config.add_view(handlers.TemplateEditHandler  , name="edit"  , context = SingleTemplateContext               , renderer = "ufostart:templates/admin/form.html")
 
-    config.add_view(handlers.index                               , context = ContentContext                      , renderer = "ufostart:templates/admin/contents.html")
-    config.add_view(handlers.ContentCreateHandler, name="create" , context = ContentContext                      , renderer = "ufostart:templates/admin/form.html")
-    config.add_view(handlers.get_active_keys     , name="active" , context = ContentContext                      , renderer = "json")
-    config.add_view(handlers.ContentEditHandler  , name="edit"   , context = SingleContentContext                , renderer = "ufostart:templates/admin/form.html")
-    config.add_view(handlers.delete              , name="delete" , context = SingleContentContext                )
 
+    def dictionary_factory(request):
+        result = GetStaticContentProc(request)
+        return {k.key:k.value for k in result.Static}
+
+    POFILE = set_up_content_mgmt_app(config, "ufostart:locale/ufostart.pot", dictionary_factory)
+
+    # helper view
+    def get_active_keys(ctxt, req):
+            return [l.msgid for l in POFILE]
+
+    config.add_view(dashboard                                                       , context = ContentContext      , renderer = "ufostart:templates/admin/contents.html")
+    config.add_view(ContentCreationViewFactory(SetStaticContentProc), name="create" , context = ContentContext      , renderer = "ufostart:templates/admin/form.html")
+    config.add_view(get_active_keys                                 , name="active" , context = ContentContext      , renderer = "json")
+    config.add_view(ContentEditViewFactory(SetStaticContentProc)    , name="edit"   , context = SingleContentContext, renderer = "ufostart:templates/admin/form.html")
+    config.add_view(delete_view_factory(SetStaticContentProc)       , name="delete" , context = SingleContentContext)

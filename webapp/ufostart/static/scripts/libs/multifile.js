@@ -11,6 +11,9 @@
                 , uploader = this.$(".file-picker-upload")
                 , picture_template = _.template(this.$(".picture-template").html())
                 , backupText = uploader.siblings(".info").html();
+
+
+
             this.$uploader = uploader;
             this.$el.on("click", function(e){
                 if(!$(e.target).is(".file-picker-upload"))return;

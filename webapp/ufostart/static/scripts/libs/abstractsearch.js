@@ -93,7 +93,7 @@ define(["tools/hash", "tools/ajax", "text!libs/templates/searchresult.html"]
                         this.last();
                         break;
                     default:
-                        if(this.otherKey(e))this.doSearch(e.target.value);
+                        this.doSearch(e.target.value);
                 }
                 e.stopPropagation();
                 e.preventDefault();
@@ -126,20 +126,22 @@ define(["tools/hash", "tools/ajax", "text!libs/templates/searchresult.html"]
                         break
                     case 48: case 49 :case 50 :case 51 :case 52 :case 53 :case 54 :case 55 :case 56 :case 57 :
                     case 96: case 97 :case 98 :case 99 :case 100:case 101:case 102:case 103:case 104:case 105:
-                    if(e.ctrlKey||e.metaKey){
-                        var number = numberMap[e.keyCode];
-                        this.$resultNode.find(".search-result-item.active").removeClass("active");
-                        this.$resultNode.find(".search-result-item[shortcut="+number+"]").addClass("active");
-                        if(number == 0){
-                            this._extraItemSelected();
-                        } else {
-                            this.disAmbiguateEvent(e);
+                        if(e.ctrlKey||e.metaKey){
+                            var number = numberMap[e.keyCode];
+                            this.$resultNode.find(".search-result-item.active").removeClass("active");
+                            this.$resultNode.find(".search-result-item[shortcut="+number+"]").addClass("active");
+                            if(number == 0){
+                                this._extraItemSelected();
+                            } else {
+                                this.disAmbiguateEvent(e);
+                            }
+                            this.hide();
+                            e.stopPropagation();
+                            e.preventDefault();
                         }
-                        this.hide();
-                        e.stopPropagation();
-                        e.preventDefault();
-                    }
-                    break
+                        break;
+                    default:
+                        this.otherKey(e);
                 }
                 e.stopPropagation()
             }

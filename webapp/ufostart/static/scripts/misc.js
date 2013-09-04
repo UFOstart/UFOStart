@@ -43,20 +43,12 @@ define(["tools/ajax"], function(ajax){
         $('input[placeholder], textarea[placeholder]').placeholder();
     }
 
-    $(document).on({
-        click: function(e){
-            var data = $(e.target).data();
-            require([data.module], function(v){
-                v.init(data, $(e.target));
-            });
-        }
-    },  ".js-link");
-
     var tLoaded = $.Deferred();
     $(".hover-container").one({
         mouseover : function(e){
             var data = $(e.currentTarget).data();
-            if(tLoaded.state() != 'resolved')require(["text!templates/profile.html"], function(templ){tLoaded.resolve(_.template(templ))});
+            if(tLoaded.state() != 'resolved')
+                    require(["text!templates/profile.html"], function(templ){tLoaded.resolve(_.template(templ)); return {};});
             ajax.submitPrefixed({
                 url:"/web/user/mini"
                 , data: {slug: data.entityId}

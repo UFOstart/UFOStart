@@ -85,9 +85,11 @@
         <div class="picture slide-show-starter"></div>
         <div class="btn-label">${play_btn_text}</div>
     </div>
+    <div class="picture-container">
     %for i, picture in enumerate(pictures):
         <a class="picture slide-show-starter" href="${picture}" title="Screenshot ${i+1}"><img src="${picture}"/></a>
     %endfor
+    </div>
 </%def>
 
 

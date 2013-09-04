@@ -1,7 +1,6 @@
 from importlib import import_module
 
 from formencode.validators import StringBool
-from hnc.tools.cms import extend_request_with_content_mgmt
 from hnc.tools.oauth import Consumer
 from pyramid.decorator import reify
 import simplejson
@@ -9,9 +8,6 @@ import simplejson
 from . import contexts, index, auth, company, expert, user
 from ufostart.handlers.social import SocialLoginFailed, SocialLoginSuccessful
 from ufostart.models.procs import GetStaticContentProc
-
-
-__author__ = 'Martin'
 
 
 
@@ -59,16 +55,6 @@ class WebsiteSettings(object):
 def includeme(config):
     settings = config.registry.settings
     settings['g'].setSettings(WebsiteSettings, settings)
-
-
-    # add _ as static content fetcher
-    def get_static_content(request):
-        result = GetStaticContentProc(request)
-        return {k.key:k.value for k in result.Static}
-
-    pokeys = extend_request_with_content_mgmt(config, 'ufostart:locale/ufostart.pot', get_static_content)
-
-
 
 
     config.add_view(index.index       , context = contexts.WebsiteRootContext                , renderer = "ufostart:templates/index.html")

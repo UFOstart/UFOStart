@@ -64,12 +64,14 @@ ul.styled {
 .file-upload-control {
   @width: 120px;
   .file-picker-upload {
+    &.empty {
+       .pseudo-input();
+    }
     min-height:@width;
     max-width: @width;
     padding-bottom: 0;
     position: relative;
     overflow:hidden;
-    .pseudo-input();
     > .info {color:@text-color;}
     &.empty:before {
       .glyphicon;
@@ -113,8 +115,7 @@ ul.styled {
 
 .multi-file-upload-control {
   .file-picker-upload {
-    min-height:95px;
-    padding: 7px;
+    padding: 7px 7px 45px;
     width:100%;
     position: relative;
     overflow:hidden;
@@ -139,11 +140,10 @@ ul.styled {
   }
   .picture {
     float: left;
-    width: 75px;
+    max-width: 200px;
     height: 75px;
     overflow: hidden;
-    background: gray;
-    margin: 10px;
+    margin: 3px;
   }
 }
 

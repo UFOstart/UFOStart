@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-09-02 22:45+0200\n"
+"POT-Creation-Date: 2013-09-04 22:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,72 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
+
+#: ufostart/handlers/company/need.py:18
+msgid "TaskDetailsPage.Invite.FormLabel.Name"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:19
+msgid "TaskDetailsPage.Invite.FormLabel.EmailAddress"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:55
+msgid "TaskDetailsPage.Apply.FormLabel.Message"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:59
+msgid ""
+"TaskDetailsPage.Apply.SuccessMessage.You have applied for this task "
+"successfully. One of the team members will contact you shortly."
+msgstr ""
+
+#: ufostart/handlers/company/need.py:71
+msgid "TaskSetup.FormLabel.Picture"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:72
+msgid "TaskSetup.FormLabel.Title"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:73
+msgid "TaskSetup.FormLabel.Cash Value"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:74
+msgid "TaskSetup.FormLabel.Equity Value"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:75
+msgid "TaskSetup.FormLabel.Description"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:76
+msgid "TaskSetup.FormLabel.Related Tags"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:84
+msgid ""
+"TaskSetup.ErrorMessage.This task already exists, if you intend to create this"
+" task, please change its name to something less ambiguous!"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:88
+msgid "TaskSetup.SuccessMessage.Task created successfully!"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:116
+msgid ""
+"TaskSetup.ErrorMessage.This task already exists, if you intend to Edit this "
+"task, please change its name to something less ambiguous!"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:121
+msgid "TaskSetup.SuccessMessage.Task added to round!"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:124
+msgid "TaskSetup.SuccessMessage.Changes saved!"
+msgstr ""
 
 #: ufostart/templates/index.html:11
 msgid "HomePage.SiteSlogan"
@@ -161,6 +227,18 @@ msgstr ""
 msgid "TaskSetup.Help.Text"
 msgstr ""
 
+#: ufostart/templates/company/need/index.html:72
+msgid "TaskDetailsPage.Invite.Button.InviteToTask"
+msgstr ""
+
+#: ufostart/templates/company/need/index.html:77
+msgid "TaskDetailsPage.Invite.Button.InviteNow"
+msgstr ""
+
+#: ufostart/templates/company/need/index.html:78
+msgid "TaskDetailsPage.Invite.Button.Cancel"
+msgstr ""
+
 #: ufostart/templates/company/need/index.html:339
 msgid "TaskDetailsPage.Help.NeedSummary.Title"
 msgstr ""
@@ -265,15 +343,15 @@ msgstr ""
 msgid "ProfilePage.BoxContent.NoCompaniesYet"
 msgstr ""
 
-#: ufostart/templates/user/home.html:208
+#: ufostart/templates/user/home.html:209
 msgid "ProfilePage.Button.CreateCompany"
 msgstr ""
 
-#: ufostart/templates/user/home.html:216
+#: ufostart/templates/user/home.html:218
 msgid "ProfilePage.BoxTitle.Applications"
 msgstr ""
 
-#: ufostart/templates/user/home.html:236
+#: ufostart/templates/user/home.html:238
 msgid "ProfilePage.BoxTitle.Endorsements"
 msgstr ""
 

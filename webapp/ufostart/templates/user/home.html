@@ -58,7 +58,7 @@
                 %if profile.Skills:
                     <div class="box-content box-middle-shaded">
                         <div><strong>${_("ProfilePage.UserInfoBox.Label.Skills")|n}</strong></div>
-v                       <small>${', '.join(profile.display_skills)}</small>
+                        <small>${', '.join(profile.display_skills)}</small>
                     </div>
                 %endif
                 %if profile.interests:
@@ -205,7 +205,9 @@ v                       <small>${', '.join(profile.display_skills)}</small>
     %else:
         <div class="empty">
             ${_("ProfilePage.BoxContent.NoCompaniesYet")|n}<br/>
-            <a href="${root.template_select_url}" class="btn btn-primary">${_("ProfilePage.Button.CreateCompany")|n}</a>
+            %if ctxt.is_my_profile:
+                <a href="${root.template_select_url}" class="btn btn-primary">${_("ProfilePage.Button.CreateCompany")|n}</a>
+            %endif
         </div>
     %endif
 </%def>

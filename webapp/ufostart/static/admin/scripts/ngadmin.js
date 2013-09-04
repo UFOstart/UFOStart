@@ -28,7 +28,6 @@ var module = angular.module('adminapp', [])
     addFactory(module, "Services", "/api/0.0.1/admin/service/all", function(data){return data.Services});
     addFactory(module, "Static", "/api/0.0.1/admin/static", function(data){return data.Content.Static});
     addFactory(module, "UsedContent", "/admin/content/active", function(data){return data});
-
 })(module);
 
 function TemplateListCtrl($scope, Templates) {

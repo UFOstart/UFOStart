@@ -19,7 +19,7 @@ class CompanyCreateForm(BaseForm):
     id="CompanyCreate"
     label = ""
     fields=[
-        PictureUploadField('logo', 'Logo', REQUIRED)
+        PictureUploadField('logo', 'Logo', REQUIRED, picWidth=250, picHeight=170)
         , StringField('name', 'Name', REQUIRED)
         , UniqueNameField("slug", "UFOStart URL", thing_name = 'company name')
         , CleanHtmlField('pitch', 'Slogan', REQUIRED, max = 90)
@@ -76,7 +76,7 @@ class CompanyEditForm(BaseForm):
     id="CompanyEdit"
     label = ""
     fields=[
-        PictureUploadField('logo', 'Project Logo', REQUIRED)
+        PictureUploadField('logo', 'Project Logo', REQUIRED, picWidth=250, picHeight=170)
         , StringField('name', 'Project Name', REQUIRED)
         , CleanHtmlField('pitch', 'Elevator Pitch', REQUIRED, max = 90)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')

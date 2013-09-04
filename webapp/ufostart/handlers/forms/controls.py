@@ -19,13 +19,13 @@ class CurrencyIntField(IntField):
 class PictureUploadField(formfields.StringField):
     template = "ufostart:templates/common/controls/pictureupload.html"
     group_classes='file-upload-control'
+    mime_types = ['image/*']
+    picWidth = 100
+    picHeight = 100
 
     def getInputAttrs(self, request):
         attrs = self.attrs.getInputAttrs(request)
-        if self.min:
-            attrs += ' minlength="{}"'.format(self.min)
-        if self.max:
-            attrs += ' maxlength="{}"'.format(self.max)
+        attrs += 'data-pic-width="{0.picWidth}" data-pic-height="{0.picHeight}"'.format(self)
         return attrs
 
 class FileUploadField(PictureUploadField):

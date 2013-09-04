@@ -32,7 +32,12 @@
   &.box-content { padding:0 6px 120px; }
   min-height:462px;
   .clearfix;
-  > .picture {height:67px;width:67px;float:left; margin: 6px;overflow:hidden;}
+
+  > .picture-container {
+    text-align: center;
+    > .picture {height:70px;max-width:150px;display:inline-block; vertical-align: top; margin: 6px;overflow:hidden;}
+  }
+
   > .box-title.major {margin-left:6px;}
   > .play {
     position: absolute;

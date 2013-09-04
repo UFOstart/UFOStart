@@ -23,6 +23,10 @@ class UserProfileContext(ProtoProfileContext):
         self.__name__ = name
 
     @reify
+    def is_my_profile(self):
+        return self.user.slug == self.__name__
+
+    @reify
     def profile(self):
         if self.user.slug == self.__name__:
             RefreshProfileProc(self.request, {'slug': self.__name__})

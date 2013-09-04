@@ -9,13 +9,14 @@ from ufostart.handlers.forms.controls import PictureUploadField, TagSearchField,
 from ufostart.models.company import NeedModel
 from ufostart.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc, InviteToNeedProc, AddNeedToRound
 
+_ = lambda s:s
 
 class NeedIndexForm(BaseForm):
     id="Needinvite"
     label = ""
     fields=[
-        StringField("name", "Name", REQUIRED)
-        , EmailField("email", "email address", REQUIRED)
+        StringField("name", _("TaskDetailsPage.Invite.FormLabel.Name"), REQUIRED)
+        , EmailField("email", _("TaskDetailsPage.Invite.FormLabel.EmailAddress"), REQUIRED)
     ]
     @classmethod
     def on_success(cls, request, values):
@@ -51,11 +52,11 @@ class ApplicationForm(BaseForm):
     id="Application"
     label = ""
     grid = HORIZONTAL_GRID
-    fields=[StringField('message', 'Message', REQUIRED)]
+    fields=[StringField('message', _("TaskDetailsPage.Apply.FormLabel.Message"), REQUIRED)]
     @classmethod
     def on_success(cls, request, values):
         ApplyForNeedProc(request, {'token':request.context.need.token, 'Application': {'User':{'token':request.root.user.token}, 'message':values['message']}})
-        request.session.flash(GenericSuccessMessage("You have applied for this task successfully. One of the team members will contact you shortly."), "generic_messages")
+        request.session.flash(GenericSuccessMessage(_("TaskDetailsPage.Apply.SuccessMessage.You have applied for this task successfully. One of the team members will contact you shortly.")), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class ApplicationHandler(FormHandler):
@@ -67,12 +68,12 @@ class NeedCreateForm(BaseForm):
     id="NeedCreate"
     label = ""
     fields = [
-        PictureUploadField("picture", 'Picture', group_classes='file-upload-control')
-        , StringField('name', "Title", REQUIRED)
-        , CurrencyIntField('cash', "Cash Value", REQUIRED, input_classes='data-input cash', maxlength=9)
-        , CurrencyIntField('equity', "Equity Value", REQUIRED, input_classes='data-input equity', maxlength=9)
-        , TextareaField("customText", "Description", REQUIRED, input_classes='x-high')
-        , TagSearchField("Tags", "Related Tags", '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
+        PictureUploadField("picture", _("TaskSetup.FormLabel.Picture"), group_classes='file-upload-control')
+        , StringField('name', _("TaskSetup.FormLabel.Title"), REQUIRED)
+        , CurrencyIntField('cash', _("TaskSetup.FormLabel.Cash Value"), REQUIRED, input_classes='data-input cash', maxlength=9)
+        , CurrencyIntField('equity', _("TaskSetup.FormLabel.Equity Value"), REQUIRED, input_classes='data-input equity', maxlength=9)
+        , TextareaField("customText", _("TaskSetup.FormLabel.Description"), REQUIRED, input_classes='x-high')
+        , TagSearchField("Tags", _("TaskSetup.FormLabel.Related Tags"), '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
     ]
     @classmethod
     def on_success(cls, request, values):
@@ -80,11 +81,11 @@ class NeedCreateForm(BaseForm):
             need = CreateNeedProc(request, {'Needs':[values], 'token': request.context.round.token})
         except DBNotification, e:
             if e.message == 'Need_Already_Exists':
-                return {'success':False, 'errors': {'name': "This task already exists, if you intend to create this task, please change its name to something less ambiguous!"}}
+                return {'success':False, 'errors': {'name': _("TaskSetup.ErrorMessage.This task already exists, if you intend to create this task, please change its name to something less ambiguous!")}}
             else:
                 raise e
 
-        request.session.flash(GenericSuccessMessage("Task created successfully!"), "generic_messages")
+        request.session.flash(GenericSuccessMessage(_("TaskSetup.SuccessMessage.Task created successfully!")), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class NeedCreateHandler(FormHandler):
@@ -112,15 +113,15 @@ class NeedEditForm(BaseForm):
             round = EditNeedProc(request, {'Needs':[values]})
         except DBNotification, e:
             if e.message == 'Need_Already_Exists':
-                return {'success':False, 'errors': {'name': "This task already exists, if you intend to Edit this task, please change its name to something less ambiguous!"}}
+                return {'success':False, 'errors': {'name': _("TaskSetup.ErrorMessage.This task already exists, if you intend to Edit this task, please change its name to something less ambiguous!")}}
             else:
                 raise e
 
         if newNeed:
-            request.session.flash(GenericSuccessMessage("Task added to round!"), "generic_messages")
+            request.session.flash(GenericSuccessMessage(_("TaskSetup.SuccessMessage.Task added to round!")), "generic_messages")
             return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
         else:
-            request.session.flash(GenericSuccessMessage("Changes saved!"), "generic_messages")
+            request.session.flash(GenericSuccessMessage(_("TaskSetup.SuccessMessage.Changes saved!")), "generic_messages")
             return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class NeedEditHandler(FormHandler):

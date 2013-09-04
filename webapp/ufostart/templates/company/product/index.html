@@ -90,7 +90,7 @@
                     </div>
                 </div>
                 <div class="mar-top-1">
-                    %if offer.stock:
+                    %if offer.stock and ctxt.round.published:
                         %if root.user.isAnon():
                             <a href="${root.auth_url('linkedin')}" class="btn btn-primary btn-block">Login to Pledge</a>
                         %else:

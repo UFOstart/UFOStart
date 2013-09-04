@@ -10,9 +10,9 @@
                 <div ng-if="missingKeys.length">
                     <a href="${url(ctxt, 'create')}" class="pull-right btn btn-primary">Create Static Content Key</a>
                     <h3>Missing keys</h3><a href="${url(ctxt, 'create')}?key={{allMissingKeys}}">add all</a>
-                    <div ng-repeat="key in missingKeys" class="row">
-                        <div class="col-lg-4">{{key}}</div>
-                        <div class="col-lg-6"><a href="${url(ctxt, 'create')}?key={{key}}">add now</a></div>
+                    <div ng-repeat="key in missingKeys" class="row mini-list-row">
+                        <div class="col-lg-10">{{key}}</div>
+                        <div class="col-lg-2"><a href="${url(ctxt, 'create')}?key={{key}}">add now</a></div>
                     </div>
                     <hr class="mar-top-2 clearfix"/>
                 </div>

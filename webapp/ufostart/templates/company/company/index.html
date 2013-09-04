@@ -176,7 +176,7 @@
                 ${buildMember(member)}
             %endfor
             %if ctxt.canEdit and hasattr(view, 'schemas'):
-                <div class="box-bottom">
+                <div class="box-bottom box-top">
                     <a href="${url(ctxt, '1', 'mentor')}" class="btn btn-primary btn-block">Invite Mentor</a>
                 </div>
             %endif
