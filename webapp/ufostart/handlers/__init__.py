@@ -11,9 +11,16 @@ from ufostart.models.procs import GetStaticContentProc
 
 
 
-class SocialNetworkSettings(object):
+class BaseSettings(object):
+    key = "website"
+    css_name = 'site'
+    static_prefix = "/static/"
+
+
+class SocialNetworkSettings(BaseSettings):
     http_options = {'disable_ssl_certificate_validation' : True}
     default_picture = "//www.gravatar.com/avatar/00000000000000000000000000000000?d=mm"
+    static_prefix = "/static/"
     def __init__(self, module, network, appid, appsecret, **kwargs):
         self.module = module
         self.network = network
@@ -26,10 +33,7 @@ class SocialNetworkSettings(object):
     def consumer(self):
         return Consumer(self.appid, self.appsecret)
 
-class WebsiteSettings(object):
-    key = "website"
-    css_name = 'site'
-    static_prefix = "/static/"
+class WebsiteSettings(BaseSettings):
     networks = {}
 
     def __init__(self, settings):

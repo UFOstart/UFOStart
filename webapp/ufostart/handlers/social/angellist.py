@@ -2,6 +2,7 @@ import logging
 from operator import attrgetter
 import urllib
 from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField, ListField
+from hnc.tools.generic_views import BaseContext
 from httplib2 import Http
 import simplejson
 from ufostart.lib.html import getYoutubeVideoId, getVimeoVideoId
