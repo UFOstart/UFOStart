@@ -1,7 +1,7 @@
 define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, ajax, AbstractSearch){
     var
         getRec = hnc.getRecursive
-        , re = /-[0-9]+\./g
+        , re = /-[0-9]+(\.[^-.]+)?$/
         , PlainResult = ajax.Model.extend({
             idAttribute:'name'
             , getSearchLabel: function(){
@@ -31,7 +31,8 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
                 this.model.destroy();
             }
             , render: function(opts){
-                this.setElement(opts.template({model:this.model, prefix: opts.prefix, pos:opts.pos}));
+                // same logic implemented as in template, see formencode-lists "form.key-1.name"
+                this.setElement(opts.template({model:this.model, name: opts.prefix+"-"+opts.pos}));
                 return this.$el;
             }
         })
@@ -108,7 +109,6 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
                         }
                     });
                 }
-
                 var seed = this.$result.find(".label").find("input");
                 if(seed.length)
                     this.$(".label").each(function(idx, el){
@@ -130,7 +130,7 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
             , reIndex: function(){
                 this.$result.find("input[name]").each(function(idx, elem){
                     var elem = $(elem);
-                    elem.attr('name', elem.attr('name').replace(re, "-"+(idx)+"."));
+                    elem.attr('name', elem.attr('name').replace(re, "-"+(idx)+"$1"));
                 });
                 this.$input.trigger("change");
                 this.adjustInput();
