@@ -32,7 +32,7 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
             }
             , render: function(opts){
                 // same logic implemented as in template, see formencode-lists "form.key-1.name"
-                this.setElement(opts.template({model:this.model, name: opts.prefix+"-"+opts.pos}));
+                this.setElement(opts.template({model:this.model, name: opts.prefix+"-"+opts.pos, pos:opts.pos}));
                 return this.$el;
             }
         })

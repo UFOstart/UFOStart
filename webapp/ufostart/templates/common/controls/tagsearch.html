@@ -4,16 +4,16 @@
 <%block name="controls">
     <div class="tagsearch-container js-form-widget" data-api-url="${widget.api_url}" data-api="${widget.api_allow_new}" data-api-result="${widget.api_result}" data-prefix="${widget.getName(prefix)}" ${widget.getQueryExtra()|n} data-module="libs/tagsearch">
         <script type="template/text" class="tag-template">
-            ${self.tagTempl(widget, '{{ pos }}', '{{ model.getSearchLabel() }}', '{{ model.id }}')}
+            ${self.tagTempl(widget, '{{ name }}', '{{ model.getSearchLabel() }}', '{{ model.id }}')}
         </script>
         <div class="search-field">
             <div class="${widget.tag_container_class}">
                 %for i, tag in enumerate(value):
-${self.tagTempl(widget, str(i), tag['name'], tag['name'])}\
+${self.tagTempl(widget, "{}-{}".format(widget.getName(prefix), i), tag['name'], tag['name'])}\
                 %endfor
-            </div><input type="text" class="form-control query ${widget.getClasses()}" autocomplete="off" ${widget.attrs.getInputAttrs(request)|n}/>
+            </div><input type="text" class="query ${grid.input_classes} ${widget.getClasses()}" autocomplete="off" ${widget.attrs.getInputAttrs(request)|n}/>
         </div>
     </div>
 </%block>
 
-<%def name="tagTempl(widget, pos, label, id)"><span class="${widget.tag_class}"><span class="close">×</span>${label|n}<input type="hidden" name="${widget.getName(prefix)}-${pos|n}.name" value="${id|n}"/></span></%def>
+<%def name="tagTempl(widget, prefix, label, id)"><span generated class="${widget.tag_class}"><span class="close">×</span>${label|n}<input type="hidden" name="${prefix|n}.name" value="${id|n}"/></span></%def>
