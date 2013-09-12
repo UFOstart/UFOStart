@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3768246d-6f45-44a7-a48d-14b4f82460f8" name="Default" comment="" />
+    <list default="true" id="3768246d-6f45-44a7-a48d-14b4f82460f8" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_layouts/default.html" afterPath="$PROJECT_DIR$/_layouts/default.html" />
+    </list>
     <ignored path="UFOStartDocs.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,6 +28,15 @@
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
             <state line="164" column="0" selection-start="6277" selection-end="6277" vertical-scroll-proportion="0.9736842" vertical-offset="1170" max-vertical-offset="2210">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="default.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/_layouts/default.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="8" column="37" selection-start="353" selection-end="353" vertical-scroll-proportion="-4.7272725" vertical-offset="0" max-vertical-offset="312">
               <folding />
             </state>
           </provider>
@@ -58,7 +69,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/static/prettify/prettify.css" />
         <option value="$PROJECT_DIR$/_posts/2013-09-12-0001_web_company.markdown" />
         <option value="$PROJECT_DIR$/_posts/2013-09-12-0002_web_company.markdown" />
         <option value="$PROJECT_DIR$/_posts/2013-09-12-0001_web_company_create.markdown" />
@@ -74,6 +84,7 @@
         <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_company_edit.markdown" />
         <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0002_web_company.markdown" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/_layouts/default.html" />
       </list>
     </option>
   </component>
@@ -465,13 +476,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_layouts/default.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="23" selection-start="376" selection-end="376" vertical-scroll-proportion="0.13457558" vertical-offset="0" max-vertical-offset="966">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_company_create.markdown">
       <provider editor-type-id="MarkdownPreviewEditor">
         <state />
@@ -528,6 +532,13 @@
       </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state line="2" column="0" selection-start="21" selection-end="21" vertical-scroll-proportion="0.026998961" vertical-offset="0" max-vertical-offset="963">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_layouts/default.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="37" selection-start="353" selection-end="353" vertical-scroll-proportion="-4.7272725" vertical-offset="0" max-vertical-offset="312">
           <folding />
         </state>
       </provider>
