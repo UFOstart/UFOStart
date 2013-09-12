@@ -1,0 +1,16 @@
+---
+layout: endpoint
+category: endpoint
+title: /web/template
+type: READ
+request: {"key": TEMPLATE_KEY}
+response:   |
+            {
+                "status" : 0,
+                "procName" : "user_get_templates",
+                "Template" : TEMPLATES
+            }
+
+---
+
+Returns detailed information on one specific template based on the TEMPLATE_KEY.

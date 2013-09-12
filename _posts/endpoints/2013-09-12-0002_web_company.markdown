@@ -1,0 +1,31 @@
+---
+layout: endpoint
+category: endpoint
+title: /web/company
+type: READ
+request: {"slug": COMPANY_SLUG}
+response:   |
+            {
+                "status" : 0,
+                "procName" : "company_get",
+                "Company" : FULL_COMPANY_MODEL
+            }
+            {
+                    "slug" :        COMPANY_SLUG,
+                    "token" :       COMPANY_UUID,
+                    "name" :        COMPANY_NAME,
+                    "logo" :        LOGO_PICTURE_URL,
+                    "pitch" :       COMPANY_SHORT_PITCH,
+                    "description" : COMPANY_LONG_DESCRIPTION,
+                    "currency" :    ISO3_CURRENCY_CODE (EUR/USD),
+                    "Round" :       CURRENT_ROUND,
+                    "Rounds" :      [LIST_OF_ALL_ROUNDS],
+                    "Users" :       [LIST_OF_COMPANY_MEMBERS],
+                    "Mentors" :     [LIST_OF_MENTORS],
+                    "Pictures" :    [LIST_OF_SLIDESHOW_PICTURES],
+                    "Updates" :     [LIST_OF_COMPANY_NEW_UPDATES],
+            }
+
+---
+
+Returns the company identified by COMPANY_SLUG. If the slug does not identify a company, returns nothing.

@@ -1,13 +1,15 @@
 ---
 layout: endpoint
+category: endpoint
 title: /web/slug
-request: {"slug": "SLUG"}
+type: READ
+request: {"slug": SLUG}
 response:   |
             {
                 "status" : 0,
                 "procName" : "get_slug_type",
                 "Slug" : {
-                    "type" : "COMPANY|USER"
+                    "type" : COMPANY|USER
                 }
             }
 
