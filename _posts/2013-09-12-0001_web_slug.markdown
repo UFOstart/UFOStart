@@ -2,6 +2,15 @@
 layout: endpoint
 title: /web/slug
 request: {"slug": "SLUG"}
+response:   |
+            {
+                "status" : 0,
+                "procName" : "get_slug_type",
+                "Slug" : {
+                    "type" : "COMPANY|USER"
+                }
+            }
+
 ---
 
-SOME TEXT
+This endpoint determines whether a given SLUG represents a COMPANY or USER.

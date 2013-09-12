@@ -2,92 +2,32 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3768246d-6f45-44a7-a48d-14b4f82460f8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/UFOStartDocs.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/2013/09/12/0001_web_slug.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_posts/2013-09-12-0001_web_slug.markdown" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Gemfile.lock" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/Gemfile.lock" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Gemfile" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/Gemfile" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/README" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/alerts.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/badges.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/bootstrap.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/breadcrumbs.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/button-groups.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/buttons.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/carousel.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/close.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/code.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/component-animations.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/dropdowns.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/forms.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/glyphicons.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/grid.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/scripts/ie.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/scripts/ie.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/index.markdown" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/input-groups.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/jumbotron.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/labels.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-apollo.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-clj.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-css.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-go.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-hs.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-lisp.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-lua.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-ml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-n.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-proto.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-scala.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-sql.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-tex.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-vb.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-vhdl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-wiki.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-xq.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/lang-yaml.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/scripts/less.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/list-group.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/media.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/mixins.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/modals.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/navbar.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/navs.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/normalize.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/pager.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/pagination.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/panels.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/popovers.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/prettify.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/prettify/prettify.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/print.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/progress-bars.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/responsive-utilities.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/scaffolding.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/less/site.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/tables.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/theme.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/thumbnails.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/tooltip.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/type.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/utilities.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/variables.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_site/static/bootstrap/wells.less" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="DELETED" beforePath="D:\_projects\UFOStartDocs\_endpoints\0001_web_slug.markdown" afterPath="" />
-      <change type="DELETED" beforePath="D:\_projects\UFOStartDocs\index.html" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_config.yml" afterPath="$PROJECT_DIR$/_config.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/UFOStartDocs.iml" afterPath="$PROJECT_DIR$/.idea/UFOStartDocs.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/2013-09-12-0001_web_slug.markdown" afterPath="$PROJECT_DIR$/_posts/2013-09-12-0001_web_slug.markdown" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_layouts/default.html" afterPath="$PROJECT_DIR$/_layouts/default.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-apollo.js" afterPath="$PROJECT_DIR$/static/prettify/lang-apollo.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-clj.js" afterPath="$PROJECT_DIR$/static/prettify/lang-clj.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-css.js" afterPath="$PROJECT_DIR$/static/prettify/lang-css.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-go.js" afterPath="$PROJECT_DIR$/static/prettify/lang-go.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-hs.js" afterPath="$PROJECT_DIR$/static/prettify/lang-hs.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-lisp.js" afterPath="$PROJECT_DIR$/static/prettify/lang-lisp.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-lua.js" afterPath="$PROJECT_DIR$/static/prettify/lang-lua.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-ml.js" afterPath="$PROJECT_DIR$/static/prettify/lang-ml.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-n.js" afterPath="$PROJECT_DIR$/static/prettify/lang-n.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-proto.js" afterPath="$PROJECT_DIR$/static/prettify/lang-proto.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-scala.js" afterPath="$PROJECT_DIR$/static/prettify/lang-scala.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-sql.js" afterPath="$PROJECT_DIR$/static/prettify/lang-sql.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-tex.js" afterPath="$PROJECT_DIR$/static/prettify/lang-tex.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-vb.js" afterPath="$PROJECT_DIR$/static/prettify/lang-vb.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-vhdl.js" afterPath="$PROJECT_DIR$/static/prettify/lang-vhdl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-wiki.js" afterPath="$PROJECT_DIR$/static/prettify/lang-wiki.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-xq.js" afterPath="$PROJECT_DIR$/static/prettify/lang-xq.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/lang-yaml.js" afterPath="$PROJECT_DIR$/static/prettify/lang-yaml.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/prettify.css" afterPath="$PROJECT_DIR$/static/prettify/prettify.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/prettify/prettify.js" afterPath="$PROJECT_DIR$/static/prettify/prettify.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/less/site.less" afterPath="$PROJECT_DIR$/static/less/site.less" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MOVED" beforePath="D:\_projects\UFOStartDocs\index.markdown" afterPath="$PROJECT_DIR$/index.html" />
     </list>
     <ignored path="UFOStartDocs.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -109,19 +49,49 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.markdown" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.markdown">
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="16" selection-start="1595" selection-end="1595" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="702">
+            <state line="62" column="0" selection-start="2618" selection-end="2618" vertical-scroll-proportion="0.0" vertical-offset="143" max-vertical-offset="1131">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
+      <file leaf-file-name="2013-09-12-0001_web_slug.markdown" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/_posts/2013-09-12-0001_web_slug.markdown">
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="5" selection-start="18" selection-end="18" vertical-scroll-proportion="0.013157895" vertical-offset="0" max-vertical-offset="988">
+            <state line="11" column="13" selection-start="270" selection-end="270" vertical-scroll-proportion="0.14849429" vertical-offset="0" max-vertical-offset="963">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bootstrap.less" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/bootstrap/bootstrap.less">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="0" selection-start="198" selection-end="198" vertical-scroll-proportion="-3.0425532" vertical-offset="0" max-vertical-offset="715">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="default.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/_layouts/default.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="23" selection-start="376" selection-end="376" vertical-scroll-proportion="-5.909091" vertical-offset="0" max-vertical-offset="312">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="site.less" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/less/site.less">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="3" column="41" selection-start="82" selection-end="82" vertical-scroll-proportion="-0.82978725" vertical-offset="0" max-vertical-offset="195">
               <folding />
             </state>
           </provider>
@@ -146,6 +116,12 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/_layouts/default.html" />
+        <option value="$PROJECT_DIR$/static/bootstrap/bootstrap.less" />
+        <option value="$PROJECT_DIR$/_posts/2013-09-12-0001_web_slug.markdown" />
+        <option value="$PROJECT_DIR$/static/prettify/prettify.css" />
+        <option value="$PROJECT_DIR$/static/less/site.less" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -197,6 +173,66 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="UFOStartDocs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UFOStartDocs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UFOStartDocs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UFOStartDocs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UFOStartDocs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="prettify" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UFOStartDocs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UFOStartDocs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="_posts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UFOStartDocs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="UFOStartDocs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="_layouts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -380,6 +416,7 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32938856" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" x="-548" y="-2" width="480" height="1014" />
@@ -390,7 +427,6 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -409,16 +445,61 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/index.markdown">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="16" selection-start="1595" selection-end="1595" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="702">
+        <state line="1" column="5" selection-start="18" selection-end="18" vertical-scroll-proportion="0.013157895" vertical-offset="0" max-vertical-offset="988">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/static/bootstrap/bootstrap.less">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="5" selection-start="18" selection-end="18" vertical-scroll-proportion="0.013157895" vertical-offset="0" max-vertical-offset="988">
+        <state line="11" column="0" selection-start="198" selection-end="198" vertical-scroll-proportion="-3.0425532" vertical-offset="0" max-vertical-offset="715">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_layouts/default.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="23" selection-start="376" selection-end="376" vertical-scroll-proportion="-5.909091" vertical-offset="0" max-vertical-offset="312">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/prettify/prettify.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="469" selection-start="469" selection-end="469" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="641">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_site/static/less/site.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="0" selection-start="83" selection-end="83" vertical-scroll-proportion="0.085667215" vertical-offset="0" max-vertical-offset="607">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/less/site.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="41" selection-start="82" selection-end="82" vertical-scroll-proportion="-0.82978725" vertical-offset="0" max-vertical-offset="195">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="62" column="0" selection-start="2618" selection-end="2618" vertical-scroll-proportion="0.0" vertical-offset="143" max-vertical-offset="1131">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/2013-09-12-0001_web_slug.markdown">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="13" selection-start="270" selection-end="270" vertical-scroll-proportion="0.14849429" vertical-offset="0" max-vertical-offset="963">
           <folding />
         </state>
       </provider>
