@@ -1,0 +1,13 @@
+---
+layout: default
+title: Home
+---
+<ul id="endpoints">
+  {% for endpoint in site.endpoints %}
+    <li>
+        <h2>{{ endpoint.url }}</h2>
+        <div class="content">{{ endpoint.request }}</div>
+        <div class="content">{{ endpoint.content }}</div>
+    </li>
+  {% endfor %}
+</ul>
