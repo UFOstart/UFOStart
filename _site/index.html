@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8" />
+  <title>UFOStart API Documentation </title>
+  <link rel="stylesheet/less" type="text/css" href="/static/less/site.less">
+  <script src="/static/scripts/less.min.js" type="text/javascript"></script>
+    <!--[if lt IE 9]>
+      <script src="/static/scripts/ie.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <h1>UFOStartApi</h1>
+
+<h2>APi Overview</h2>
+
+<p>All API endpoints are to be called with HTTPS and the following default settings.</p>
+
+<h4>Default HTTP Settings</h4>
+
+<ul>
+<li>Method: POST</li>
+<li>Content-Type: application/json</li>
+<li>Client-Token: YOUR_CLIENT_TOKEN</li>
+</ul>
+
+
+<h4>Default JSON Request Format:</h4>
+
+<p>Some endpoints require a parameter JSON Document, some can be called without. If parameters are required, they must be submitted as valid JSON documents in the HTTP Body.</p>
+
+<h4>Default JSON Response Format:</h4>
+
+<p>The API will always return a 200 HTTP Status Code and the response as a JSON document in the body.
+If the API dos return any other error code, please check that you provided all settings as above. If they are all correct, please check your API deployment.</p>
+
+<p>Every valid API response document contains the following fields:</p>
+
+<ul>
+<li><strong>status</strong>, denotes the internal error code or 0 if no error, always returned</li>
+<li><strong>procName</strong>, name of stored procedure that got executed in the DB, this is for debugging purposes only, always returned</li>
+<li><strong>dbMessage</strong>, contains business relevant feedback, common examples are: UNKNOWN_USER, LOGIN_FAILED, only present if business logic requires</li>
+<li><strong>errorMessage</strong>, returned only when an unexpected error occurs, in this case the <strong>status</strong> will be > 0, use this for logging/debugging purposes only</li>
+</ul>
+
+
+<h2>Api Endpoint Documentation</h2>
+
+<p>Each endpoint section will contain Fiddler2 scratchpad code. You are highly encouraged to run those against your own API deployment to visualize the interactions.</p>
+
+<h4>Public website area endpoints</h4>
+
+<ul id="endpoints">
+  
+    <li>
+        <h2>/web/slug</h2>
+        <div class="content">{"slug"=>"SLUG"}</div>
+        <div class="content"><p>SOME TEXT</p>
+</div>
+    </li>
+  
+</ul>
+
+
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="/static/scripts/bootstrap.min.js"></script>
+    <script src="/static/prettify/prettify.js"></script>
+  </body>
+</html>
