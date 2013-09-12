@@ -1,3 +1,4 @@
+baseurl: /UFOStart
 auto: true
 server: true
 markdown: rdiscount
