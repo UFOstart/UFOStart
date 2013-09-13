@@ -3,3 +3,6 @@ markdown: rdiscount
 safe: true
 lsi: false
 pygments: true
+
+project_name: UFOStart
+currency_label: ISO3_CURRENCY_CODE (EUR/USD)

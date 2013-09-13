@@ -17,7 +17,7 @@ response:   |
                     "logo" :        LOGO_PICTURE_URL,
                     "pitch" :       COMPANY_SHORT_PITCH,
                     "description" : COMPANY_LONG_DESCRIPTION,
-                    "currency" :    ISO3_CURRENCY_CODE (EUR/USD),
+                    "currency" :    {{ site.currency_label }},
                     "Round" :       CURRENT_ROUND,
                     "Rounds" :      [LIST_OF_ALL_ROUNDS],
                     "Users" :       [LIST_OF_COMPANY_MEMBERS],

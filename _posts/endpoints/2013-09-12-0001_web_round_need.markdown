@@ -1,0 +1,28 @@
+---
+layout: endpoint
+category: endpoint
+title: /web/round/need
+type: WRITE
+request:    |
+            {
+                "Needs" : [{
+                        "token" : NEED_UUID <b>required</b>,
+                        "name" : NEED_NAME <b>required</b>,
+                        "Tags" : [LIST_OF_TAGS] <b>required</b>,
+                        "cash" : CASH_AMOUNT_INT <b>required</b>,
+                        "equity" : EQUITY_AMOUNT <b>required</b>,
+                        "customText" : USER_ENTERED_NEED_DESCRIPTION <b>required</b>,
+                        "picture" : NEED_PICTURE_URL
+                    }
+                ]
+            }
+response:   |
+            {
+                "status" : 0,
+                "procName" : "round_need_edit",
+                "Round" : ROUND_DETAILS
+            }
+
+---
+
+Update a list of Tasks inside a round. Each Task will have `"status":"CUSTOMISED"` after calling this endpoint.
