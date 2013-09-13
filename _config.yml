@@ -1,6 +1,4 @@
-baseurl: /UFOStart
-auto: true
-server: true
+baseurl: /UFOStart/
 markdown: rdiscount
 safe: true
 lsi: false
