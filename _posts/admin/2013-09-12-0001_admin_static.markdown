@@ -1,0 +1,24 @@
+---
+layout: endpoint
+category: admin
+title: /admin/static
+type: READ
+request: {}
+response:   |
+            {
+              "status" : 0,
+              "procName" : "admin_static_get",
+              "Content" : {
+                "Static" : [{
+                    "key" : CONTENT_KEY,
+                    "value" : FREETEXT_HTML
+                  }]
+              }
+            }
+---
+
+Return a list of all content KEY/VALUE pairs. This is used for CMS like functionality.
+
+
+
+In general, CONTENT_KEYs are formatted like `Page.section.subsection.kindofcontrol:Default Text`.

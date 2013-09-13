@@ -16,7 +16,7 @@ response:   |
                     "User" : [
                         LIST_OF_BASE_USER_INFORMATION
                     ]
-                },
+                }
             }
 
 ---

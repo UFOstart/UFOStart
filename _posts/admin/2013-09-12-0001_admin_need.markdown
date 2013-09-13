@@ -1,0 +1,15 @@
+---
+layout: endpoint
+category: admin
+title: /admin/need
+type: READ
+request: {"key": NEED_KEY}
+response:   |
+            {
+                "status" : 0,
+                "procName" : "admin_get_need",
+                "Need" : NEED_DETAILS
+            }
+---
+
+Return task-template details for a given key.

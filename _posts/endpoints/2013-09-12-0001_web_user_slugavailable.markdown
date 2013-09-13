@@ -12,4 +12,6 @@ response:   |
 
 ---
 
-Returns `"dbmessage":"SLUG_TAKEN"` is slug is not available anymore.
+Checks if slug still available.
+
+Possible dbMessage: `SLUG_TAKEN`

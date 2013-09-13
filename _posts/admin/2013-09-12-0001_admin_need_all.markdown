@@ -1,0 +1,17 @@
+---
+layout: endpoint
+category: admin
+title: /admin/need/all
+type: READ
+request: {}
+response:   |
+            {
+                "status" : 0,
+                "procName" : "admin_get_needs",
+                "Needs" : LIST_NEED_DETAILS
+            }
+
+
+---
+
+Returns all task-templates in the system. That is tasks outside of a round.

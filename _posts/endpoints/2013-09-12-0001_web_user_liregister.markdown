@@ -26,4 +26,4 @@ response:   |
 Registers a user with linkedin normalized profile information.
 
 
-Possible dbMessage: USER_ALREADY_REGISTERED
+Possible dbMessage: `USER_ALREADY_REGISTERED`

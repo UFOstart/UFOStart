@@ -1,0 +1,21 @@
+---
+layout: endpoint
+category: admin
+title: /admin/service
+type: WRITE
+request: {"name": SERVICE_NAME}
+response:   |
+            {
+                "status" : 0,
+                "procName" : "admin_service_get",
+                "Service" : {
+                    "name" : SERVICE_NAME,
+                    "url" : SERVICE_URL,
+                    "logo" : SERVICE_LOGO_URL
+                }
+            }
+
+---
+
+Returns service details based on the passed in service name.
+

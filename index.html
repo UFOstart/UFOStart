@@ -86,20 +86,46 @@ title: Home
             {% endfor %}
 
 
-            <h1 class="mar-top-3">Api Endpoint Documentation</h1>
-
-
-            <p>Each endpoint section will contain Fiddler2 scratchpad code. You are highly encouraged to run those against your own API deployment to visualize the interactions.</p>
-
+            <h4 class="mar-top-3">Web Facing Api Endpoints</h4>
             <ul>
             {% for post in site.categories.endpoint %}
                 <li><a href="#{{post.url}}">{{ post.title }}</a></li>
             {% endfor %}
             </ul>
 
+
+            <h4 class="mar-top-3">Admin Api Endpoints</h4>
+            <ul>
+            {% for post in site.categories.admin %}
+                <li><a href="#{{post.url}}">{{ post.title }}</a></li>
+            {% endfor %}
+            </ul>
+
+
+            <h1 class="mar-top-3">Web Facing Api Endpoints</h1>
             {% for post in site.categories.endpoint %}
                 <div class="single-endpoint jump-target" id="{{post.url}}">
                     <legend>Endpoint: <code class="prettyprint">{{ post.title }}</code></legend>
+                    <p class="lead">{{ post.content }}</p>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h5>Request</h5>
+                            <pre class="prettyprint">{{ post.request }}</pre>
+                        </div>
+                        <div class="col-lg-6">
+                            <h5>Response</h5>
+                            <pre class="prettyprint">{{ post.response }}</pre>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+
+            <h1 class="mar-top-3">Admin Api Endpoints</h1>
+            {% for post in site.categories.admin %}
+                <div class="single-endpoint jump-target" id="{{post.url}}">
+                    <legend>Admin Endpoint: <code class="prettyprint">{{ post.title }}</code></legend>
                     <p class="lead">{{ post.content }}</p>
                     <div class="row">
                         <div class="col-lg-6">
@@ -121,15 +147,6 @@ title: Home
 
 
 
-2013-09-12-0001_admin_need.markdown
-2013-09-12-0001_admin_need_all.markdown
-2013-09-12-0001_admin_need_create.markdown
-2013-09-12-0001_admin_need_edit.markdown
-2013-09-12-0001_admin_service.markdown
-2013-09-12-0001_admin_service_create.markdown
-2013-09-12-0001_admin_service_edit.markdown
-2013-09-12-0001_admin_static.markdown
-2013-09-12-0001_admin_static_set.markdown
-2013-09-12-0001_admin_template.markdown
-2013-09-12-0001_admin_template_create.markdown
-2013-09-12-0001_admin_template_edit.markdown
+
+
+

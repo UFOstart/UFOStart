@@ -26,4 +26,4 @@ response:   |
 Returns full user information from a linkedin normalized profile. Also refreshes social network information in background.
 
 
-Possible dbMessage: NO_USER_WITH_THIS_ACCOUNT
+Possible dbMessage: `NO_USER_WITH_THIS_ACCOUNT`
