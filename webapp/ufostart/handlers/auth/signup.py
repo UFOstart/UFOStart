@@ -100,7 +100,7 @@ def login_failure(exc, request):
 def role_select_on_success(cls, request, values):
     user = request.context.user
     values['token'] = user.token
-    values['Roles'] = {'name':role for role in cls.ROLES}
+    values['Roles'] = [{'name':role} for role in cls.ROLES]
     SetUserInfoProc(request, values)
     return {'success':True, 'redirect': request.root.profile_url(user.slug)}
 
@@ -131,7 +131,7 @@ class FounderForm(BaseForm):
     def on_success(cls, request, values):
         user = request.context.user
         values['token'] = user.token
-        values['Roles'] = {'name':role for role in cls.ROLES}
+        values['Roles'] = [{'name':role} for role in cls.ROLES]
         SetUserInfoProc(request, values)
         return {'success':True, 'redirect': request.root.template_select_url}
 

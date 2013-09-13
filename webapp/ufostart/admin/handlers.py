@@ -144,6 +144,7 @@ class TemplateCreateForm(BaseForm):
 
     @classmethod
     def on_success(cls, request, values):
+        values['Need'] = [{'name':n} for n in values.pop('Need', [])]
         try:
             need = AdminTemplatesCreateProc(request, values)
         except DBNotification, e:
