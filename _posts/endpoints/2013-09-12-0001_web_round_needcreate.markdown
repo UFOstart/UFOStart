@@ -7,7 +7,7 @@ request:    |
             {
                 "Needs" : [{
                     "name" : NEED_NAME <b>required</b>,
-                    "Tags" : [LIST_OF_TAGS] <b>required</b>,
+                    "Tags" : LIST_OF_TAGS <b>required</b>,
                     "cash" : CASH_AMOUNT_INT <b>required</b>,
                     "equity" : EQUITY_AMOUNT <b>required</b>,
                     "customText" : USER_ENTERED_NEED_DESCRIPTION <b>required</b>,

@@ -8,10 +8,7 @@ response:   |
             {
                 "status" : 0,
                 "procName" : "admin_services_get",
-                "Services" : [
-                    {"name":..., "url":..., "logo":...}
-                    ...
-                ]
+                "Services" : LIST_OF_SERVICES
             }
 ---
 

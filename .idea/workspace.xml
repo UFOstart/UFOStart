@@ -2,24 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3768246d-6f45-44a7-a48d-14b4f82460f8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_all.markdown" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_template_all.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_need_create.markdown" afterPath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_need_create.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_need_edit.markdown" afterPath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_need_edit.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_create.markdown" afterPath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_create.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_edit.markdown" afterPath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_edit.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_static_set.markdown" afterPath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_static_set.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_template_create.markdown" afterPath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_template_create.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_template_edit.markdown" afterPath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_template_edit.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_need_invite.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_need_invite.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_pledge_create.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_pledge_create.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_product_create.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_product_create.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_product_offer.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_product_offer.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_round_needAdd.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_round_needAdd.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_user_info.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_user_info.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_user_lilogin.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_user_lilogin.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_user_liregister.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_user_liregister.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_all.markdown" afterPath="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_all.markdown" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_round_need.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_round_need.markdown" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_round_needcreate.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_round_needcreate.markdown" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_slug.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_slug.markdown" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_template_list.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_template_list.markdown" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="UFOStartDocs.iws" />
@@ -41,7 +28,56 @@
     <favorites_list name="UFOStartDocs" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="2013-09-12-0001_web_round_need.markdown" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_round_need.markdown">
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="45" selection-start="298" selection-end="298" vertical-scroll-proportion="-5.2" vertical-offset="0" max-vertical-offset="429">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="2013-09-12-0001_web_round_needcreate.markdown" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_round_needcreate.markdown">
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="41" selection-start="356" selection-end="356" vertical-scroll-proportion="-5.72" vertical-offset="0" max-vertical-offset="429">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="2013-09-12-0001_web_template_list.markdown" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_template_list.markdown">
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="70" selection-start="336" selection-end="336" vertical-scroll-proportion="0.3100159" vertical-offset="0" max-vertical-offset="629">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="2013-09-12-0001_admin_service.markdown" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service.markdown">
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="28" selection-start="239" selection-end="388" vertical-scroll-proportion="-5.2" vertical-offset="0" max-vertical-offset="351">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -59,11 +95,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_template_all.markdown" />
-        <option value="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_need_edit.markdown" />
-        <option value="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_need_create.markdown" />
-        <option value="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_edit.markdown" />
-        <option value="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_create.markdown" />
         <option value="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_template_edit.markdown" />
         <option value="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_template_create.markdown" />
         <option value="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_static_set.markdown" />
@@ -75,6 +106,11 @@
         <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_user_info.markdown" />
         <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_user_liregister.markdown" />
         <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_user_lilogin.markdown" />
+        <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_slug.markdown" />
+        <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_round_need.markdown" />
+        <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_round_needcreate.markdown" />
+        <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_template_list.markdown" />
+        <option value="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_all.markdown" />
       </list>
     </option>
   </component>
@@ -170,7 +206,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="endpoints" />
+              <option name="myItemId" value="admin" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -417,16 +453,20 @@
       <created>1379076047332</created>
       <updated>1379076047332</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="fixing : space issue, all endpoints now displayed">
+      <created>1379076863262</created>
+      <updated>1379076863262</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32938856" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32938856" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -435,7 +475,7 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" x="-548" y="-2" width="480" height="1014" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" x="-548" y="-2" width="480" height="1014" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -457,72 +497,13 @@
     <MESSAGE value="fix currency" />
     <MESSAGE value="company display fixup" />
     <MESSAGE value="admin endpoints" />
-    <option name="LAST_COMMIT_MESSAGE" value="admin endpoints" />
+    <MESSAGE value="fixing : space issue, all endpoints now displayed" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing : space issue, all endpoints now displayed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_need_all.markdown">
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="29" selection-start="140" selection-end="140" vertical-scroll-proportion="0.107995845" vertical-offset="0" max-vertical-offset="963">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_need_create.markdown">
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="9" selection-start="84" selection-end="84" vertical-scroll-proportion="0.0674974" vertical-offset="0" max-vertical-offset="963">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_need_edit.markdown">
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="8" selection-start="92" selection-end="92" vertical-scroll-proportion="0.080996886" vertical-offset="0" max-vertical-offset="963">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_edit.markdown">
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="9" selection-start="85" selection-end="85" vertical-scroll-proportion="0.0674974" vertical-offset="0" max-vertical-offset="963">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_create.markdown">
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="9" selection-start="87" selection-end="87" vertical-scroll-proportion="0.0674974" vertical-offset="0" max-vertical-offset="963">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_template_edit.markdown">
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="9" selection-start="86" selection-end="86" vertical-scroll-proportion="0.0674974" vertical-offset="0" max-vertical-offset="963">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_template_create.markdown">
       <provider editor-type-id="MarkdownPreviewEditor">
         <state />
@@ -619,6 +600,66 @@
       </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="9" selection-start="86" selection-end="86" vertical-scroll-proportion="0.0674974" vertical-offset="0" max-vertical-offset="963">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_slug.markdown">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="43" selection-start="266" selection-end="266" vertical-scroll-proportion="0.14849429" vertical-offset="0" max-vertical-offset="963">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_round_need.markdown">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="45" selection-start="298" selection-end="298" vertical-scroll-proportion="-5.2" vertical-offset="0" max-vertical-offset="429">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_round_needcreate.markdown">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="41" selection-start="356" selection-end="356" vertical-scroll-proportion="-5.72" vertical-offset="0" max-vertical-offset="429">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service.markdown">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="28" selection-start="239" selection-end="388" vertical-scroll-proportion="-5.2" vertical-offset="0" max-vertical-offset="351">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_all.markdown">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="45" selection-start="240" selection-end="240" vertical-scroll-proportion="0.20667727" vertical-offset="0" max-vertical-offset="629">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_template_list.markdown">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="70" selection-start="336" selection-end="336" vertical-scroll-proportion="0.3100159" vertical-offset="0" max-vertical-offset="629">
           <folding />
         </state>
       </provider>

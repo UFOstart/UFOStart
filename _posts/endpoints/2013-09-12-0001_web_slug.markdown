@@ -9,7 +9,7 @@ response:   |
                 "status" : 0,
                 "procName" : "get_slug_type",
                 "Slug" : {
-                    "type" : COMPANY|USER
+                    "type" : "COMPANY|USER"
                 }
             }
 
