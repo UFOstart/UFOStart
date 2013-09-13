@@ -11,7 +11,7 @@ request:   |
                     "logo" :        LOGO_PICTURE_URL [required],
                     "pitch" :       COMPANY_SHORT_PITCH [required],
                     "description" : COMPANY_LONG_DESCRIPTION [required],
-                    "currency" :    {{ site.currency_label }} [required],
+                    "currency" :    ISO_CURRENCY_CODE (EUR/USD) [required],
                     "slideShare" :  SLIDESHARE_URL,
                     "video" :       YOUTUBE_URL_or_VIMEO_URL,
                     "Pictures" :    LIST_OF_SLIDESHOW_PICTURES,

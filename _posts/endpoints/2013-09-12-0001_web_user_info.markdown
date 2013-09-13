@@ -7,7 +7,7 @@ request:|
         {
             "token" : USER_TOKEN,
             "investmentAmount": ANNUAL_INVEST_AMOUNT_INT,
-            "currency": {{ site.currency_label }},
+            "currency": ISO_CURRENCY_CODE (EUR/USD),
             "Skills" : LIST_OF_SKILLS,
             "Roles" : [{
                 "name" : "EXPERT|FOUNDER|INVESTOR"
