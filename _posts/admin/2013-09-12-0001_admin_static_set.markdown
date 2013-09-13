@@ -3,7 +3,7 @@ layout: endpoint
 category: admin
 title: /admin/static/set
 type: WRITE
-request:|
+request: |
         {
           "Static" : [{
             "key" : "RoundDashboard.Help.Text",

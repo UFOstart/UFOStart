@@ -3,7 +3,7 @@ layout: endpoint
 category: endpoint
 title: /web/product/offer
 type: WRITE
-request:|
+request: |
         {
             "Product" : {
                 "token" : PRODUCT_TOKEN,

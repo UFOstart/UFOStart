@@ -3,7 +3,7 @@ layout: endpoint
 category: admin
 title: /admin/need/create
 type: WRITE
-request:|
+request: |
         {
             "name" : DEFAULT_TASK_NAME,
             "summary" : FREETEXT_TASK_SUMMARY,

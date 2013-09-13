@@ -3,7 +3,7 @@ layout: endpoint
 category: admin
 title: /admin/template/create
 type: WRITE
-request:|
+request: |
         {
           "name" : TEMPLATE_NAME <b>required</b>,
           "description" : FREETEXT_HTML_TEXT <b>required</b>,

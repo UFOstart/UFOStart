@@ -3,7 +3,7 @@ layout: endpoint
 category: admin
 title: /admin/template/edit
 type: WRITE
-request:|
+request: |
         {
           "key": UNIQUE_TEMPLATE_KEY <b>required</b>,
           "name" : TEMPLATE_NAME <b>required</b>,

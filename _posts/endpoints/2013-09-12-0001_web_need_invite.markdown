@@ -3,7 +3,7 @@ layout: endpoint
 category: endpoint
 title: /web/need/invite
 type: WRITE
-request:|
+request: |
         {
             "Invite" : {
                 "companySlug" : COMPANY_SLUG <b>required</b>,

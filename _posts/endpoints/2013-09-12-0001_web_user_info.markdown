@@ -3,7 +3,7 @@ layout: endpoint
 category: endpoint
 title: /web/user/info
 type: WRITE
-request:|
+request: |
         {
             "token" : USER_TOKEN,
             "investmentAmount": ANNUAL_INVEST_AMOUNT_INT,

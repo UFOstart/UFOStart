@@ -3,7 +3,7 @@ layout: endpoint
 category: admin
 title: /admin/service/create
 type: WRITE
-request:|
+request: |
         {
             "name" : SERVICE_NAME,
             "url" : SERVICE_URL,

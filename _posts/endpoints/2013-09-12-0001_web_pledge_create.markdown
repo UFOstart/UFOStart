@@ -3,7 +3,7 @@ layout: endpoint
 category: endpoint
 title: /web/pledge/create
 type: WRITE
-request:|
+request: |
         {
             "token" : ROUND_TOKEN,
             "Pledge" : {

@@ -3,7 +3,7 @@ layout: endpoint
 category: endpoint
 title: /web/user/lilogin
 type: WRITE
-request:|
+request: |
         {
             "Profile" : [{
                     "type" : "LI",

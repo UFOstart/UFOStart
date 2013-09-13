@@ -3,7 +3,7 @@ layout: endpoint
 category: endpoint
 title: /web/product/create
 type: WRITE
-request:|
+request: |
         {
             "token" : ROUND_TOKEN,
             "Product" : {
