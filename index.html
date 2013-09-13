@@ -59,7 +59,7 @@ title: Home
 
 
 
-
+<!--
             <h1 class="mar-top-3">Api Objects</h1>
             <ul>
             {% for post in site.categories.object %}
@@ -69,22 +69,12 @@ title: Home
 
 
             {% for post in site.categories.object %}
-                <div class="single-endpoint jump-target" id="{{post.url}}">
-                    <legend>{{ post.type }} Endpoint: <code class="prettyprint">{{ post.title }}</code></legend>
-                    <p class="lead">{{ post.content }}</p>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <h5>Request</h5>
-                            <pre class="prettyprint">{{ post.request }}</pre>
-                        </div>
-                        <div class="col-lg-6">
-                            <h5>Response</h5>
-                            <pre class="prettyprint">{{ post.response }}</pre>
-                        </div>
-                    </div>
+                <div class="single-endpoint jump-target" id="object-{{post.url}}">
+                    <legend>Object: <code class="prettyprint">{{ post.title }}</code></legend>
+                    {{ post.content }}
                 </div>
             {% endfor %}
-
+-->
 
             <h4 class="mar-top-3">Web Facing Api Endpoints</h4>
             <ul>
@@ -105,7 +95,7 @@ title: Home
             <h1 class="mar-top-3">Web Facing Api Endpoints</h1>
             {% for post in site.categories.endpoint %}
                 <div class="single-endpoint jump-target" id="{{post.url}}">
-                    <legend>Endpoint: <code class="prettyprint">{{ post.title }}</code></legend>
+                    <legend>Web Endpoint: <code class="prettyprint">{{ post.title }}</code></legend>
                     <p class="lead">{{ post.content }}</p>
                     <div class="row">
                         <div class="col-lg-6">
