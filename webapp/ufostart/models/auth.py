@@ -82,6 +82,10 @@ class UserModel(Mapping):
     currency = TextField()
     interests = TextField()
 
+    fbLink = TextField()
+    xingLink = TextField()
+
+
     Skills = ListField(DictField(NamedModel))
     Profile = ListField(DictField(WebUserNetworkProfile))
     Company = DictField(CompanyModel)

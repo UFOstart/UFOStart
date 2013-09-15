@@ -19,17 +19,18 @@ class SocialContext(BaseContextMixin):
 
 
     def __getitem__(self, item):
-        if item in self.__parent__.settings.networks:
-            settings = self.__parent__.settings.networks[item]
+        if item in self.settings.networks:
+            settings = self.settings.networks[item]
             return settings.module(self, item, settings)
         else:
             raise KeyError()
 
 class UserNameContext(BaseContextMixin):
     has_username = True
+
     def __getitem__(self, item):
-        if item in self.__parent__.settings.networks:
-            settings = self.__parent__.settings.networks[item]
+        if item in self.settings.networks:
+            settings = self.settings.networks[item]
             return settings.module(self, item, settings)
         else:
             raise KeyError()
