@@ -98,6 +98,8 @@
         %endif
     </div>
 
+
+    %if is_owner or profile.xingLink or profile.fbLink:
     <div class="mar-top-3">
         <div class="box-title">
              ${possessive_name} Networks
@@ -106,19 +108,21 @@
             <div class="box-shaded">
                 <div class="box-content box-shaded">
                     %if is_owner and not profile.fbLink:
-                        <p class="clear"><a href="${request.rld_url('facebook')}" class="btn btn-primary btn-facebook btn-block">Connect Facebook</a></p>
-                    %else:
+                        <div class="clear"><a href="${request.rld_url('facebook')}" class="btn btn-primary btn-facebook btn-block">Connect Facebook</a></div>
+                    %elif profile.fbLink:
                         <a href="${profile.fbLink}" class="text-small social-facebook" target="_blank">${possessive_name} Facebook Profile</a>
                     %endif
                     %if is_owner and not profile.xingLink:
-                        <div class="clear"><a href="${request.rld_url('xing')}" class="btn btn-primary btn-xing btn-block">Connect Xing</a></div>
-                    %else:
+                        <div class="clear mar-top-1"><a href="${request.rld_url('xing')}" class="btn btn-primary btn-xing btn-block">Connect Xing</a></div>
+                    %elif profile.xingLink:
                         <a href="${profile.xingLink}" class="text-small social-xing" target="_blank">${possessive_name} Xing Profile</a>
                     %endif
                 </div>
             </div>
         </div>
     </div>
+    %endif
+
     <div class="mar-top-3">
         ${widgets.sharebtns()}
     </div>
