@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-09-16 16:17+0200\n"
+"POT-Creation-Date: 2013-09-16 17:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -295,73 +295,77 @@ msgstr ""
 msgid "ProfilePage.UserInfoBox.Label.StartupValue"
 msgstr ""
 
-#: ufostart/templates/user/home.html:68
-msgid "ProfilePage.StartupValue.ExplanationText"
+#: ufostart/templates/user/home.html:69
+msgid "ProfilePage.StartupValue.ExplanationText:Your Profile"
 msgstr ""
 
-#: ufostart/templates/user/home.html:73
+#: ufostart/templates/user/home.html:71
+msgid "ProfilePage.StartupValue.ExplanationText:Someone else profile"
+msgstr ""
+
+#: ufostart/templates/user/home.html:77
 msgid ""
 "ProfilePage.StartupValue.ConnectPrompt:Increase your startup value by "
 "connecting with more social networks!"
 msgstr ""
 
-#: ufostart/templates/user/home.html:91
+#: ufostart/templates/user/home.html:95
 msgid "ProfilePage.UserInfoBox.Title"
 msgstr ""
 
-#: ufostart/templates/user/home.html:95
+#: ufostart/templates/user/home.html:99
 msgid "ProfilePage.UserInfoBox.Label.Companies"
 msgstr ""
 
-#: ufostart/templates/user/home.html:101
+#: ufostart/templates/user/home.html:105
 msgid "ProfilePage.UserInfoBox.Label.InvestAmount"
 msgstr ""
 
-#: ufostart/templates/user/home.html:108
+#: ufostart/templates/user/home.html:112
 msgid "ProfilePage.UserInfoBox.Label.Mentoring"
 msgstr ""
 
-#: ufostart/templates/user/home.html:112
+#: ufostart/templates/user/home.html:116
 msgid "ProfilePage.UserInfoBox.Label.Endorsements"
 msgstr ""
 
-#: ufostart/templates/user/home.html:119
+#: ufostart/templates/user/home.html:123
 msgid "ProfilePage.UserInfoBox.Label.Skills"
 msgstr ""
 
-#: ufostart/templates/user/home.html:125
+#: ufostart/templates/user/home.html:129
 msgid "ProfilePage.UserInfoBox.Label.Interests"
 msgstr ""
 
-#: ufostart/templates/user/home.html:161
+#: ufostart/templates/user/home.html:165
 msgid "ProfilePage.BoxTitle.YourContacts"
 msgstr ""
 
-#: ufostart/templates/user/home.html:182
+#: ufostart/templates/user/home.html:186
 msgid "ProfilePage.BoxTitle.CompaniesYouKnow"
 msgstr ""
 
-#: ufostart/templates/user/home.html:212
+#: ufostart/templates/user/home.html:216
 msgid "ProfilePage.BoxTitle.Mentoring"
 msgstr ""
 
-#: ufostart/templates/user/home.html:235
+#: ufostart/templates/user/home.html:239
 msgid "ProfilePage.BoxTitle.Companies"
 msgstr ""
 
-#: ufostart/templates/user/home.html:263
+#: ufostart/templates/user/home.html:267
 msgid "ProfilePage.BoxContent.NoCompaniesYet"
 msgstr ""
 
-#: ufostart/templates/user/home.html:265
+#: ufostart/templates/user/home.html:269
 msgid "ProfilePage.Button.CreateCompany"
 msgstr ""
 
-#: ufostart/templates/user/home.html:274
+#: ufostart/templates/user/home.html:278
 msgid "ProfilePage.BoxTitle.Applications"
 msgstr ""
 
-#: ufostart/templates/user/home.html:294
+#: ufostart/templates/user/home.html:298
 msgid "ProfilePage.BoxTitle.Endorsements"
 msgstr ""
 

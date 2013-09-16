@@ -65,7 +65,11 @@
             <div class="pull-right">
                 <a class="section-expander closer" data-toggle-target=".startup-value-container" data-toggle-class="expanded">Close</a>
             </div>
-            <small>${_("ProfilePage.StartupValue.ExplanationText")|n}</small>
+        %if is_owner:
+            <small>${_("ProfilePage.StartupValue.ExplanationText:Your Profile")|n}</small>
+        %else:
+            <small>${_("ProfilePage.StartupValue.ExplanationText:Someone else profile")|n}</small>
+        %endif
         </div>
         %if is_owner and not (profile.fbLink and profile.xingLink):
         <div class="box-content box-middle-shaded">
