@@ -72,9 +72,26 @@
   .background-image("../img/social-color.png");
   background-repeat: no-repeat;
   background-position: @x @y;
-  &:hover {color:transparent;}
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    color:transparent;
+    background-color: darken(@btn-primary-bg, 5%);
+    .background-image("../img/social-color.png");
+    background-position: @x @y;
+  }
+
 }
 .social-xing {.social-icon(-30px, -30px);}
 .social-facebook {.social-icon(0, -30px);}
-.action-icon-xing {padding: 15px;.social-icon(-30px, 0px);}
-.action-icon-facebook {padding: 15px;.social-icon(0, 0px);}
+
+.action-icon-xing {
+  .btn-primary;
+  padding: 15px;.social-icon(-30px, 0px);
+}
+.action-icon-facebook {
+  .btn-primary;
+  padding: 15px;.social-icon(0, 0px);
+}
