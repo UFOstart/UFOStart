@@ -56,12 +56,14 @@
 .social-icon(@x, @y) {
   @spriteSize: 32px;
   content:".";color:transparent;
+  text-indent:-999em;
   display: inline-block;
   height:@spriteSize;
   width:@spriteSize;
   .background-image("../img/social-color.png");
   background-repeat: no-repeat;
   background-position: @x @y;
+  &:hover {color:transparent;}
 }
 .social-xing {.social-icon(-32px, 0);}
 .social-facebook {.social-icon(0, 0);}
