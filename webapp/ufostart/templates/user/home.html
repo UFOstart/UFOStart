@@ -46,20 +46,50 @@
     <div class="box-card">
         ${widgets.logo(profile.picture, alt=profile.name, classes="large")}
     </div>
-
     <div class="mar-top-1 brand-teal text-strong">${profile.name}</div>
     %if profile.headline:
         <p class="text-small">${profile.headline}</p>
     %endif
 
+    <div class="mar-top-3 startup-value-container">
+        <div class="box-title">${_("ProfilePage.UserInfoBox.Label.StartupValue")|n}</div>
+        <div class="box-content box-dark-shaded">
+            <div class="number-widget">
+                <div class="pull-right">
+                    <h4 class="section-expander show-contracted" data-toggle-target=".startup-value-container" data-toggle-class="expanded">What is a startup value?</h4>
+                </div>
+                <div class="value light">${profile.displayStartupValue}</div>
+            </div>
+        </div>
+        <div class="box-content box-shaded show-expanded">
+            <div class="pull-right">
+                <a class="section-expander closer" data-toggle-target=".startup-value-container" data-toggle-class="expanded">Close</a>
+            </div>
+            <small>${_("ProfilePage.StartupValue.ExplanationText")|n}</small>
+        </div>
+        %if is_owner and not (profile.fbLink and profile.xingLink):
+        <div class="box-content box-middle-shaded">
+            <h6 class="no-margin text-muted">
+                ${_("ProfilePage.StartupValue.ConnectPrompt:Increase your startup value by connecting with more social networks!")|n}
+            </h6>
+            <div class="mar-top-1">
+            %if not profile.fbLink:
+                <a href="${request.rld_url('facebook')}" class="btn btn-primary action-icon-facebook">Connect Facebook</a>
+            %endif
+            %if not profile.xingLink:
+                <a href="${request.rld_url('xing')}" class="btn btn-primary  action-icon-xing">Connect Xing</a>
+            %endif
+            </div>
+        </div>
+        %endif
+    </div>
+
+
+
+
     <div class="mar-top-3">
         <div class="box-title">${_("ProfilePage.UserInfoBox.Title")|n}</div>
         <div class="box-content box-dark-shaded">
-            <div class="number-widget">
-                <h6>${_("ProfilePage.UserInfoBox.Label.StartupValue")|n}</h6>
-                <div class="value light">${profile.displayStartupValue}</div>
-            </div>
-
             %if len(profile.Companies):
             <div class="number-widget mar-top-1">
                 <h6>${_("ProfilePage.UserInfoBox.Label.Companies")|n}</h6>
@@ -99,7 +129,7 @@
     </div>
 
 
-    %if is_owner or profile.xingLink or profile.fbLink:
+    %if profile.xingLink or profile.fbLink:
     <div class="mar-top-3">
         <div class="box-title">
              ${possessive_name} Networks
@@ -107,14 +137,10 @@
         <div class="box-shaded">
             <div class="box-shaded">
                 <div class="box-content box-shaded">
-                    %if is_owner and not profile.fbLink:
-                        <div class="clear"><a href="${request.rld_url('facebook')}" class="btn btn-primary btn-facebook btn-block">Connect Facebook</a></div>
-                    %elif profile.fbLink:
+                    %if profile.fbLink:
                         <a href="${profile.fbLink}" class="text-small social-facebook" target="_blank">${possessive_name} Facebook Profile</a>
                     %endif
-                    %if is_owner and not profile.xingLink:
-                        <div class="clear mar-top-1"><a href="${request.rld_url('xing')}" class="btn btn-primary btn-xing btn-block">Connect Xing</a></div>
-                    %elif profile.xingLink:
+                    %if profile.xingLink:
                         <a href="${profile.xingLink}" class="text-small social-xing" target="_blank">${possessive_name} Xing Profile</a>
                     %endif
                 </div>
