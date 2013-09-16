@@ -169,15 +169,17 @@ def includeme(config):
     config.add_view(handlers.TemplateEditHandler  , name="edit"  , context = SingleTemplateContext               , renderer = "ufostart:templates/admin/form.html")
 
 
+
     def dictionary_factory(request):
         result = GetStaticContentProc(request)
         return {k.key:k.value for k in result.Static}
+
 
     POFILE = set_up_content_mgmt_app(config, "ufostart:locale/ufostart.pot", dictionary_factory)
 
     # helper view
     def get_active_keys(ctxt, req):
-            return [l.msgid for l in POFILE]
+            return [l.msgid for l in POFILE()]
 
     config.add_view(dashboard                                                       , context = ContentContext      , renderer = "ufostart:templates/admin/contents.html")
     config.add_view(ContentCreationViewFactory(SetStaticContentProc), name="create" , context = ContentContext      , renderer = "ufostart:templates/admin/form.html")

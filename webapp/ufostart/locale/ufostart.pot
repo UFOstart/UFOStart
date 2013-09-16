@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-09-04 22:10+0200\n"
+"POT-Creation-Date: 2013-09-16 11:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -291,67 +291,67 @@ msgstr ""
 msgid "ProfilePage.Title"
 msgstr ""
 
-#: ufostart/templates/user/home.html:27
+#: ufostart/templates/user/home.html:56
 msgid "ProfilePage.UserInfoBox.Title"
 msgstr ""
 
-#: ufostart/templates/user/home.html:30
+#: ufostart/templates/user/home.html:59
 msgid "ProfilePage.UserInfoBox.Label.StartupValue"
 msgstr ""
 
-#: ufostart/templates/user/home.html:36
+#: ufostart/templates/user/home.html:65
 msgid "ProfilePage.UserInfoBox.Label.Companies"
 msgstr ""
 
-#: ufostart/templates/user/home.html:42
+#: ufostart/templates/user/home.html:71
 msgid "ProfilePage.UserInfoBox.Label.InvestAmount"
 msgstr ""
 
-#: ufostart/templates/user/home.html:49
+#: ufostart/templates/user/home.html:78
 msgid "ProfilePage.UserInfoBox.Label.Mentoring"
 msgstr ""
 
-#: ufostart/templates/user/home.html:53
+#: ufostart/templates/user/home.html:82
 msgid "ProfilePage.UserInfoBox.Label.Endorsements"
 msgstr ""
 
-#: ufostart/templates/user/home.html:60
+#: ufostart/templates/user/home.html:89
 msgid "ProfilePage.UserInfoBox.Label.Skills"
 msgstr ""
 
-#: ufostart/templates/user/home.html:66
+#: ufostart/templates/user/home.html:95
 msgid "ProfilePage.UserInfoBox.Label.Interests"
 msgstr ""
 
-#: ufostart/templates/user/home.html:105
+#: ufostart/templates/user/home.html:135
 msgid "ProfilePage.BoxTitle.YourContacts"
 msgstr ""
 
-#: ufostart/templates/user/home.html:126
+#: ufostart/templates/user/home.html:156
 msgid "ProfilePage.BoxTitle.CompaniesYouKnow"
 msgstr ""
 
-#: ufostart/templates/user/home.html:156
+#: ufostart/templates/user/home.html:186
 msgid "ProfilePage.BoxTitle.Mentoring"
 msgstr ""
 
-#: ufostart/templates/user/home.html:179
+#: ufostart/templates/user/home.html:209
 msgid "ProfilePage.BoxTitle.Companies"
 msgstr ""
 
-#: ufostart/templates/user/home.html:207
+#: ufostart/templates/user/home.html:237
 msgid "ProfilePage.BoxContent.NoCompaniesYet"
 msgstr ""
 
-#: ufostart/templates/user/home.html:209
+#: ufostart/templates/user/home.html:239
 msgid "ProfilePage.Button.CreateCompany"
 msgstr ""
 
-#: ufostart/templates/user/home.html:218
+#: ufostart/templates/user/home.html:248
 msgid "ProfilePage.BoxTitle.Applications"
 msgstr ""
 
-#: ufostart/templates/user/home.html:238
+#: ufostart/templates/user/home.html:268
 msgid "ProfilePage.BoxTitle.Endorsements"
 msgstr ""
 
