@@ -98,12 +98,24 @@
 
   // Toggles
   .icon-prev,
-  .icon-next {
+  .icon-next,
+  .glyphicon-chevron-left,
+  .glyphicon-chevron-right {
     position: absolute;
     top: 50%;
-    left: 50%;
     z-index: 5;
     display: inline-block;
+  }
+  .icon-prev,
+  .glyphicon-chevron-left {
+    left: 50%;
+  }
+  .icon-next,
+  .glyphicon-chevron-right {
+    right: 50%;
+  }
+  .icon-prev,
+  .icon-next {
     width:  20px;
     height: 20px;
     margin-top: -10px;
@@ -130,7 +142,7 @@
 
 .carousel-indicators {
   position: absolute;
-  bottom: 0px;
+  bottom: 10px;
   left: 50%;
   z-index: 15;
   width: 60%;
@@ -145,14 +157,14 @@
     height: 10px;
     margin: 1px;
     text-indent: -999px;
-    background-color: @carousel-indicator-bg;
+    border: 1px solid @carousel-indicator-border-color;
     border-radius: 10px;
     cursor: pointer;
   }
   .active {
     margin: 0;
-    width:  10px;
-    height: 10px;
+    width:  12px;
+    height: 12px;
     background-color: @carousel-indicator-active-bg;
   }
 }
@@ -178,16 +190,20 @@
 
 
 // Scale up controls for tablets and up
-@media screen and (min-width: @screen-tablet) {
+@media screen and (min-width: @screen-sm-min) {
 
   // Scale up the controls a smidge
-  .carousel-control .icon-prev,
-  .carousel-control .icon-next {
-    width: 30px;
-    height: 30px;
-    margin-top: -15px;
-    margin-left: -15px;
-    font-size: 30px;
+  .carousel-control {
+    .glyphicons-chevron-left,
+    .glyphicons-chevron-right,
+    .icon-prev,
+    .icon-next {
+      width: 30px;
+      height: 30px;
+      margin-top: -15px;
+      margin-left: -15px;
+      font-size: 30px;
+    }
   }
 
   // Show and left align the captions
@@ -199,6 +215,6 @@
 
   // Move up the indicators
   .carousel-indicators {
-    bottom: -30px;
+    bottom: 20px;
   }
 }

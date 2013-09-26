@@ -5,12 +5,14 @@
 
 <div id="global-frame" class="${self.page_class()}">
     <%block name="header">
-        ${self.menu(root.user)}
-        <div class="navbar navbar-static-top">
+        <div class="navbar navbar-default navbar-static-top">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-sm-4">
                         <a class="navbar-brand" href="${request.root.home_url}"><img src="${STATIC_URL}img/logo.png?${VERSION_TOKEN}" alt="${g.project_name}"/></a>
+                    </div>
+                    <div class="col-sm-8">
+                      ${self.menu(root.user)}
                     </div>
                 </div>
            </div>
@@ -26,89 +28,70 @@
         </div>
     </%block>
     <%block name="footer">
-    <footer class="footer ${self.footer_classes()}">
-    <div class="container">
+      <footer class="footer ${self.footer_classes()}">
+      <div class="container">
         <div class="row">
-            <div class="col-lg-3 footer-link">
-                <h5 class="footer-links-title">About ${g.project_name}</h5>
-                <ul class="list-unstyled">
-                    <li><a class="footer-link" href="http://ufostart.com/about/us">Company</a></li>
-                    <li><a class="footer-link" href="http://ufostart.com/about/us">Founders</a></li>
-                    <li><a class="footer-link" href="http://ufostart.com/feedback">Contact</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-3 footer-link">
-                <h5 class="footer-links-title">Learn More</h5>
-                <ul class="list-unstyled">
-                    <li><a class="footer-link" href="/">Homepage</a></li>
-                    <li><a class="footer-link" href="http://ufostart.com/for/startups">Startups</a></li>
-                    <li><a class="footer-link" href="http://ufostart.com/for/investors">Investors</a></li>
-                    <li><a class="footer-link" href="http://ufostart.com/for/experts">Experts</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-3 footer-link">
-                <h5 class="footer-links-title">Get Started</h5>
-                <ul class="list-unstyled">
-                    <li><a class="footer-link" href="http://ufostart.com/feedback">Help</a></li>
-                </ul>
-            </div>
-            <div class="col-lg-3 footer-link">
-                <h5 class="footer-links-title">Connect</h5>
-                <ul class="list-unstyled">
-                    <li><a class="footer-link logo-prefixed facebook" href="https://www.facebook.com/UFOstart">Like us on Facebook</a></li>
-                    <li><a class="footer-link logo-prefixed twitter" href="https://twitter.com/UFOstart">Follow us on Twitter</a></li>
-                </ul>
+          <div class="col-sm-2">
+            <div class="footer-text">&copy; 2013 UFOstart</div>
+          </div>
+          <div class="col-sm-2">
+            <ul class="list-unstyled">
+              <li><a class="footer-text" href="http://ufostart.com/about/us">Company</a></li>
+              <li><a class="footer-text" href="http://ufostart.blogspot.de">Blog</a></li>
+            </ul>
+          </div>
+          <div class="col-sm-3">
+            <ul class="list-unstyled">
+              <li><a class="footer-text" href="http://ufostart.com/terms">Terms of Service</a></li>
+              <li><a class="footer-text" href="http://ufostart.com/terms">Privacy Policy</a></li>
+              <li><a class="footer-text" href="mailto:contact@ufostart.com">Contact us</a></li>
+            </ul>
+          </div>
+          <div class="col-sm-5">
+            <a class="footer-link social-logo gplus"    href="https://plus.google.com/115184185394964969331">UFOstart on Google Plus</a>
+            <a class="footer-link social-logo linkedin" href="https://twitter.com/UFOstart">UFOstart on Linkedin</a>
+            <a class="footer-link social-logo facebook" href="https://www.facebook.com/UFOstart">UFOstart on Facebook</a>
+            <a class="footer-link social-logo twitter"  href="http://www.linkedin.com/company/ufostart-ag">UFOstart on Twitter</a>
             </div>
         </div>
-    </div>
-    </footer>
+      </div>
+      </footer>
     </%block>
 </div>
 
 
 <%def name="menu(user)">
-    %if user.isAnon():
-        <div class="page-header-bar anon">
-            <div class="container">
-                <div class="row">
-                    <div class="col col-sm 12">
-                        <ul class="page-header-bar-menu">
-                            <li><a href="${request.root.login_url(query=[('furl', request.furl)])}">Log in</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            </div>
-    %else:
-        <div class="page-header-bar logged-in">
-        <div class="container">
-            <div class="row">
-                <div class="col col-sm 12">
-                    <ul class="page-header-bar-menu">
-                        <li><a href="${root.profile_url(root.user.slug)}">${user.name}</a></li>
-                        %if len(user.Companies) > 1:
-                             <li class="dropdown">
-                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                  Companies
-                                  <span class="caret"></span>
-                                 </a>
-                                 <ul class="dropdown-menu">
-                                    %for company in user.Companies:
-                                        <li>
-                                            <a href="${root.round_url(company.slug, '1')}">${company.name}</a></li>
-                                    %endfor
-                                 </ul>
-                             </li>
-                        %elif len(user.Companies) == 1:
-                            <li><a href="${root.round_url(user.getDefaultCompanySlug(), '1')}">${user.getDefaultCompanyName()}</a></li>
-                        %endif
-                        <li><a href="${request.root.logout_url()}">Log out</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        </div>
-    %endif
+  <ul class="nav navbar-nav navbar-right page-header-bar-menu ${'anon' if user.isAnon() else 'logged-in'}">
+      %if user.isAnon():
+
+        <li><a href="${request.root.login_url(query=[('furl', request.furl)])}">Log in</a></li>
+
+      %else:
+
+        <li><a href="${root.profile_url(root.user.slug)}">${user.name}</a></li>
+        <li class="navbar-divider"></li>
+        %if len(user.Companies) > 1:
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Companies
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                %for company in user.Companies:
+                  <li>
+                    <a href="${root.round_url(company.slug, '1')}">${company.name}</a>
+                  </li>
+                %endfor
+            </ul>
+          </li>
+          <li class="navbar-divider"></li>
+        %elif len(user.Companies) == 1:
+          <li><a href="${root.round_url(user.getDefaultCompanySlug(), '1')}">${user.getDefaultCompanyName()}</a></li>
+          <li class="navbar-divider"></li>
+        %endif
+        <li><a href="${request.root.logout_url()}">Log out</a></li>
+      %endif
+  </ul>
 </%def>
 
 

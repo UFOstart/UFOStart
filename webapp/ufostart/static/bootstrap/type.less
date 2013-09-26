@@ -15,7 +15,7 @@ p {
   font-weight: 200;
   line-height: 1.4;
 
-  @media (min-width: 768px) {
+  @media (min-width: @screen-sm-min) {
     font-size: (@font-size-base * 1.5);
   }
 }
@@ -25,7 +25,8 @@ p {
 // -------------------------
 
 // Ex: 14px base font * 85% = about 12px
-small   { font-size: 85%; }
+small,
+.small  { font-size: 85%; }
 
 // Undo browser default styling
 cite    { font-style: normal; }
@@ -232,8 +233,6 @@ blockquote {
 }
 
 // Quotes
-q:before,
-q:after,
 blockquote:before,
 blockquote:after {
   content: "";
@@ -241,7 +240,6 @@ blockquote:after {
 
 // Addresses
 address {
-  display: block;
   margin-bottom: @line-height-computed;
   font-style: normal;
   line-height: @line-height-base;

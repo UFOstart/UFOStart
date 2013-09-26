@@ -1,19 +1,19 @@
-.logo-prefixed{
-  &:before{
-      content:".";color:transparent;
-      display: inline-block;
-      vertical-align: middle;
-      float:left;
-      margin-left:2px;
-      margin-right:8px;
-      width:16px;
-      height:16px;
-      .background-image("../img/social-mini.png");
-      background-repeat: no-repeat;
-  }
-  &.facebook:before {background-position: 0 0;}
-  &.twitter:before {background-position: 0 -16px;}
-  &.rss:before {background-position: 0 -32px;}
+.social-logo{
+  display: inline-block;
+  color:transparent;
+  text-indent: -999em;
+  overfloe:hidden;
+  vertical-align: top;
+  margin:6px;
+  float:right;
+  width:50px;
+  height:50px;
+  .background-image("../img/social-lg.png");
+  background-repeat: no-repeat;
+  &.facebook{background-position: 0 0;}
+  &.linkedin{background-position: -50px 0;}
+  &.twitter{background-position: -100px 0;}
+  &.gplus{background-position: -150px 0;}
 }
 
 
