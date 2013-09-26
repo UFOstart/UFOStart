@@ -53,12 +53,7 @@
 
         <div class="row mar-top-1">
             %if ctxt.round.published:
-
-                <div class="col-lg-3 pull-right">
-                    ${self.sideBar(ctxt.round, ctxt.canEdit)}
-                    ${widgets.sharebtns()}
-                </div>
-                <div class="col-lg-9">
+                <div class="col-md-9">
                     <div class="row">
                         <div class="col-lg-4">
                             ${self.companyBox(ctxt.company)}
@@ -71,26 +66,30 @@
                     </div>
                     ${self.tasksSection(ctxt.company)}
                 </div>
+                <div class="col-md-3">
+                    ${self.sideBar(ctxt.round, ctxt.canEdit)}
+                    ${widgets.sharebtns()}
+                </div>
+
 
             %else:
-
-                <div class="col-lg-3 pull-right">
-                    ${self.sideBar(ctxt.round, ctxt.canEdit)}
-                    ${self.activityStream()}
-                </div>
                 <div class="col-lg-9">
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-sm-4">
                             ${self.companyBox(ctxt.company)}
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-sm-4">
                             ${self.productBox(ctxt.company)}
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-sm-4">
                             ${self.investmentBox(ctxt.round.Funding)}
                         </div>
                     </div>
                     ${self.tasksSection(ctxt.company)}
+                </div>
+                <div class="col-lg-3">
+                    ${self.sideBar(ctxt.round, ctxt.canEdit)}
+                    ${self.activityStream()}
                 </div>
 
             %endif

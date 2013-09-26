@@ -148,7 +148,7 @@
 // Brand/project name
 
 .navbar-brand {
-  float: left;
+  display: block;
   padding: @navbar-padding-vertical @navbar-padding-horizontal;
   font-size: @font-size-large;
   line-height: 0;
@@ -204,12 +204,8 @@
 
 .navbar-nav {
   margin: (@navbar-padding-vertical / 2) -@navbar-padding-horizontal;
-
-  > li > a {
-    padding-top:    10px;
-    padding-bottom: 10px;
-    line-height: @navbar-line-height;
-  }
+  > li {float: left;}
+  > li > a { line-height: @navbar-line-height; }
 
   @media (max-width: @screen-xs-max) {
     // Dropdowns get custom display when collapsed
@@ -240,15 +236,11 @@
     float: left;
     margin: 0;
 
-    > li {
-      float: left;
-      > a {
-        padding-top: ((@navbar-height - @navbar-line-height) / 2);
-        padding-bottom: ((@navbar-height - @navbar-line-height) / 2);
-      }
+    > li > a {
+      padding-top: ((@navbar-height - @navbar-line-height) / 2);
+      padding-bottom: ((@navbar-height - @navbar-line-height) / 2);
     }
   }
-
 }
 
 
