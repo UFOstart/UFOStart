@@ -11,14 +11,18 @@
         </%widgets:pageHeader>
 
         <div class="row mar-top-1">
-            <div class="col-lg-3">
-                ${self.needOverview(ctxt.need)}
-                %if not ctxt.need.fulfilled:
-                ${self.inviteForm(view.schemas['Needinvite'], values, errors)}
-                %endif
-            </div>
-            <div class="col-lg-6">
-                ${self.needDetails(ctxt.canEdit, ctxt.company, ctxt.need)}
+            <div class="col-lg-9">
+              <div class="row">
+                <div class="col-sm-4">
+                    ${self.needOverview(ctxt.need)}
+                    %if not ctxt.need.fulfilled:
+                    ${self.inviteForm(view.schemas['Needinvite'], values, errors)}
+                    %endif
+                </div>
+                <div class="col-sm-8">
+                    ${self.needDetails(ctxt.canEdit, ctxt.company, ctxt.need)}
+                </div>
+              </div>
             </div>
             <div class="col-lg-3">
                 ${self.wtfBox()}
@@ -28,7 +32,7 @@
         </div>
 
         <div class="row mar-top-2">
-            <div class="col col-lg 12">
+            <div class="col-lg-12">
                 ${self.applications(ctxt.need, ctxt.need.Applications)}
             </div>
         </div>
