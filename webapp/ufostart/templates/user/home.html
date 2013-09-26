@@ -8,10 +8,10 @@
             ${_("ProfilePage.Title")|n}
         </%widgets:pageHeader>
         <div class="row mar-top-1">
-            <div class="col-lg-3">
+            <div class="col-sm-3">
                 ${self.leftCol(ctxt.profile, ctxt.is_my_profile, ctxt.possessive_name)}
             </div>
-            <div class="col-lg-9">
+            <div class="col-sm-9">
                 ${self.bodyContent(ctxt.profile)}
             </div>
         </div>
@@ -20,22 +20,22 @@
 
 <%def name="bodyContent(profile)">
     <div class="row">
-        <div class="col-lg-${'6' if profile.Applications or profile.Endorsements else '12'}">
+        <div class="col-md-${'6' if profile.Applications or profile.Endorsements else '12'}">
             ${self.mentoredCompanies(profile.mentoredStartups)}
             ${self.companies(profile.Companies)}
         </div>
         %if profile.Applications or profile.Endorsements:
-            <div class="col-lg-6">
+            <div class="col-md-6">
                 ${self.applications(profile.Applications)}
                 ${self.displayEndorsements(profile.getEndorsements())}
             </div>
         %endif
     </div>
     <div class="row mar-top-5">
-        <div class="col-lg-6">
+        <div class="col-md-6">
             ${self.contacts(ctxt.contacts)}
         </div>
-        <div class="col-lg-6">
+        <div class="col-md-6">
             ${self.contactCompanies(ctxt.companies)}
         </div>
     </div>
@@ -108,11 +108,11 @@
             %endif
 
             <div class="row mar-top-1">
-                <div class="col-lg-6 number-widget">
+                <div class="col-xs-6 number-widget">
                     <strong class="text-muted text-small">${_("ProfilePage.UserInfoBox.Label.Mentoring")|n}</strong>
                     <div class="small-value">${len(profile.mentoredStartups)}</div>
                 </div>
-                <div class="col-lg-6 number-widget">
+                <div class="col-xs-6 number-widget">
                     <strong class="text-muted text-small">${_("ProfilePage.UserInfoBox.Label.Endorsements")|n}</strong>
                     <div class="small-value">${len(profile.getEndorsements())}</div>
                 </div>
@@ -189,13 +189,13 @@
                 ${widgets.company_logo(company)}
                 <div class="right-box">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="overflow"><a href="${root.round_url(company.slug)}"><strong>${company.name}</strong></a></div>
                             %if company.pitch:
                                 <p class="text-small">${company.pitch}</p>
                             %endif
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="member-pile face-pile-mini">
                                 %for member in company.Users:
                                     ${widgets.member_pic(member, 'micro')}
@@ -243,7 +243,7 @@
                 ${widgets.company_logo(company)}
                 <div class="right-box">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-md-6">
                             <div class="overflow"><a href="${root.round_url(company.slug)}"><strong>${company.name}</strong></a></div>
                             <small class="text-muted">Round 1</small>
                             %if company.currentRound and company.currentRound.published:
@@ -251,7 +251,7 @@
                             %else:
                                 <div class="text-small text-muted">Round not published</div>
                             %endif
-                        </div><div class="col-lg-6">
+                        </div><div class="col-md-6">
                             <div class="member-pile face-pile-mini">
                                 %for member in company.Users:
                                     ${widgets.member_pic(member, 'micro')}

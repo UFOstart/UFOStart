@@ -34,10 +34,10 @@
 
 <%def name="bodyContent(company)">
     <div class="row mar-top-1">
-        <div class="col-lg-3">
+        <div class="col-sm-4 col-md-3">
             ${self.companyMainInfo(company)}
         </div>
-        <div class="col-lg-6">
+        <div class="col-sm-8 col-md-6">
             ${widgets.mainMedia("Company Introduction", company.video, company.slideShare)}
             <div class="main-description mar-top-2">
                 ${company.description | html.html,n}
