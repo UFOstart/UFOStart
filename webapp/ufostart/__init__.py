@@ -3,12 +3,12 @@ import logging
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
-from pyramid.mako_templating import renderer_factory
 from pyramid.renderers import JSON
 from pyramid.security import Authenticated, Everyone
 from pyramid_beaker import session_factory_from_settings
 
 from hnc.tools import request
+from pyramid_mako import renderer_factory
 from .lib.subscribers import add_renderer_variables
 from .lib.globals import Globals
 from .handlers.contexts import WebsiteRootContext
