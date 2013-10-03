@@ -54,26 +54,46 @@ This registers the settings into the context and makes them acessible throughout
 Configuring caching and session backends
 ----------------------------------------
 
-You can configure your cache backend by editing the following in your ini file:
+Caching is managed by <a href="http://dogpilecache.readthedocs.org/en/latest/">dogpile</a>. Dogpile supports many different backends.
+Configure your cache backend by editing the following in your ini file:
 
     cache.backend = dogpile.cache.redis
     cache.arguments.host = 127.0.0.1
     cache.arguments.port = 6379
     cache.arguments.db = 1
 
-Find out all backends supported for caching by reading through the <a href="http://dogpilecache.readthedocs.org/en/latest/">dogpile docs</a>.
 
-Session storage is by default just locally in the file system (in redis on production systems). Change it by editing the following lines:
+Sessions are managed by <a href="http://beaker.readthedocs.org/en/latest/sessions.html">Beaker </a>.
+Session storage is by default just the local file system (its redis on production systems). Change it by editing the following lines:
 
     session.data_dir = %(here)s/../data/sess
     session.type = file
 
 
-If you find strange errors on form submission, i.e. you cannot log in, it wont remember anything done, the sessions dont change, then most likely ou have not set the cookie domain correctly.
+If you encounter strange errors on form submission, i.e. you cannot log in, it wont remember anything done, sessions don't bet updated: most likely you have not set the cookie domain correctly.
 Set it to localhost for development or configure any local webserver to host that very domain you are hosting the app on:
 
     session.cookie_domain = local.webenvironment.com
 
-Look up the <a href="http://beaker.readthedocs.org/en/latest/sessions.html">Beaker sessions docs</a> for more info.
+
+Email configuration
+===================
+
+The frontends do not handle user emails. This is done in the API.
+
+The following section configures submission of contact form emails to customer support:
+
+    email.host=
+    email.user=
+    email.pwd=
+    email.port=
+    email.recipient=
 
 
+And the following section is only used in the live.ini / production environment:
+
+    [handler_exc_handler]
+    class = hnc.tools.smtplogging.TlsSMTPHandler
+    args = ('HOST', 'FROM_EMAIL', ['RECEIPIENT1'], 'SUBJECT', ('SMTP_USER_NAME','SMTP_PASSWORD'))
+    level = ERROR
+    formatter = exc_formatter
