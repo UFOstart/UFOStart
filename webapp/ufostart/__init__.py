@@ -63,7 +63,7 @@ def main(global_config, **settings):
 
     config.add_subscriber(add_renderer_variables, 'pyramid.events.BeforeRender')
 
-    config.include("ufostart.handlers")
-    config.include("ufostart.admin")
+    config.include("ufostart.views_frontend")
+    config.include("ufostart.views_admin")
     config.scan()
     return config.make_wsgi_app()

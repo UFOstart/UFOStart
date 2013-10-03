@@ -59,8 +59,8 @@ setup(name='ufostart',
       message_extractors = {
             'ufostart': [
                 ('**.py', 'lingua_python', None),
-                ('templates/**.html', 'mako', {'input_encoding': 'utf-8'}),
-                ('templates/**.js', 'mako', {'input_encoding': 'utf-8'})
+                ('templates_frontend/**.html', 'mako', {'input_encoding': 'utf-8'}),
+                ('templates_frontend/**.js', 'mako', {'input_encoding': 'utf-8'})
                 ]
              },
       entry_points="""\
