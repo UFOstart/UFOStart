@@ -1,17 +1,19 @@
 from hnc.apiclient.backend import DBNotification, DBException
-from hnc.forms.formfields import TextareaField, REQUIRED, StringField, HtmlAttrs, ChoiceField, URLField, CheckboxField, CheckboxPostField, Field, MultipleFormField
+from hnc.forms.formfields import TextareaField, REQUIRED, StringField, HtmlAttrs, ChoiceField, URLField, CheckboxPostField, Field
 from hnc.forms.handlers import FormHandler
 from hnc.forms.layout import BS3_NCOL, Sequence
 from hnc.forms.messages import GenericSuccessMessage
-from . import t_path
-from ufostart.lib.baseviews import BaseForm
-from ufostart.handlers.forms.controls import TagSearchField, PictureUploadField
-from ufostart.models.procs import AdminNeedCreateProc, AdminNeedEditProc, AdminServiceCreateProc, AdminServiceEditProc, AdminTemplatesEditProc, AdminTemplatesCreateProc, AdminNeedAllProc, SetStaticContentProc
-from ufostart.models.tasks import TASK_CATEGORIES
 
+
+from ufostart.lib.baseviews import BaseForm
+from ufostart.app.form_controls import TagSearchField, PictureUploadField
+from ufostart.app.models.procs import AdminNeedCreateProc, AdminNeedEditProc, AdminServiceCreateProc, AdminServiceEditProc, AdminTemplatesEditProc, AdminTemplatesCreateProc, AdminNeedAllProc
+from ufostart.app.models.tasks import TASK_CATEGORIES
+
+
+def t_path(p): return "ufostart:app/templates_admin/{}".format(p)
 
 def index(context, request): return {}
-
 
 
 class TaskCreateForm(BaseForm):

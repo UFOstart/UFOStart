@@ -2,9 +2,7 @@ import logging
 from hnc.apiclient.backend import DBNotification, ClientTokenProc
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.response import Response
-from ufostart.lib.html import slugify
-from ufostart.models.auth import SocialNetworkProfileModel, SOCIAL_NETWORK_TYPES_REVERSE, SOCIAL_NETWORK_TYPES
-from ufostart.models.procs import RefreshProfileProc
+from ufostart.app.models.auth import SocialNetworkProfileModel, SOCIAL_NETWORK_TYPES_REVERSE, SOCIAL_NETWORK_TYPES
 
 log = logging.getLogger(__name__)
 

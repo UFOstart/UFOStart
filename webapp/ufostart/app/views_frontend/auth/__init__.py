@@ -1,12 +1,13 @@
-from . import social, imp, signup
 from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPForbidden
 from pyramid.security import Everyone, Allow, Authenticated, NO_PERMISSION_REQUIRED
-from ufostart.models.auth import setUserF, getUser
-from ufostart.app.views_frontend import t_path
-from ufostart.lib.baseviews import BaseContextMixin
-from ufostart.handlers.social import angellist, SocialLoginFailed, SocialLoginSuccessful
 
+from . import social, imp, signup
+from ufostart.lib.baseviews import BaseContextMixin
+from ufostart.app.models.auth import setUserF, getUser
+from ufostart.app.views_frontend.social import angellist, SocialLoginFailed, SocialLoginSuccessful
+
+def t_path(p): return "ufostart:templates_frontend/{}".format(p)
 
 class SocialContext(BaseContextMixin):
     __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'proceed')]

@@ -1,13 +1,12 @@
-import logging
-from operator import attrgetter
-import urllib
-from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField, ListField
-from hnc.tools.generic_views import BaseContext
+import logging, urllib, simplejson
 from httplib2 import Http
-import simplejson
+from operator import attrgetter
+
+from hnc.apiclient import Mapping, BooleanField, TextField, DictField, IntegerField, ListField
+
 from ufostart.lib.html import getYoutubeVideoId, getVimeoVideoId
-from ufostart.handlers.social import AbstractSocialResource, SocialNetworkException, UserRejectedNotice
-from ufostart.models.auth import SocialNetworkProfileModel
+from ufostart.app.views_frontend.social import AbstractSocialResource, SocialNetworkException, UserRejectedNotice
+from ufostart.app.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 

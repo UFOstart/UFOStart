@@ -1,13 +1,14 @@
-from importlib import import_module
-
-from formencode.validators import StringBool
-from hnc.tools.oauth import Consumer
-from pyramid.decorator import reify
 import simplejson
 
+from importlib import import_module
+from formencode.validators import StringBool
+from pyramid.decorator import reify
+
+from hnc.tools.oauth import Consumer
+
 from . import contexts, index, auth, company, expert, user
-from ufostart.handlers.social import SocialLoginFailed, SocialLoginSuccessful
-from ufostart.models.procs import GetStaticContentProc
+from ufostart.app.views_frontend.social import SocialLoginFailed, SocialLoginSuccessful
+
 
 def t_path(p): return "ufostart:templates_frontend/{}".format(p)
 
@@ -65,7 +66,7 @@ def includeme(config):
     config.add_view(auth.social.login , context = contexts.WebsiteRootContext, name = 'login', renderer = t_path("auth/login.html"))
     config.add_view(index.logout      , context = contexts.WebsiteRootContext, name = 'logout')
 
-    config.include("ufostart.views_frontend.company")
-    config.include("ufostart.views_frontend.user")
-    config.include("ufostart.views_frontend.auth")
-    config.include("ufostart.views_frontend.social")
+    config.include("ufostart.app.views_frontend.company")
+    config.include("ufostart.app.views_frontend.user")
+    config.include("ufostart.app.views_frontend.auth")
+    config.include("ufostart.app.views_frontend.social")

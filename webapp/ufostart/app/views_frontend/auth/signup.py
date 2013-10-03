@@ -1,16 +1,18 @@
-import logging
-import re
+import logging, re
+
+from pyramid.response import Response
+
 from hnc.apiclient.backend import DBNotification, DBException
 from hnc.forms.formfields import REQUIRED, HtmlAttrs, IntField, ChoiceField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.layout import BS3_NCOL
 from hnc.forms.messages import GenericErrorMessage
-from pyramid.response import Response
-from ufostart.handlers.forms.controls import UniqueNameField, TagSearchField
+
 from ufostart.lib.baseviews import BaseForm
-from ufostart.models.auth import SocialNetworkProfileModel, SOCIAL_NETWORK_TYPES_REVERSE, SOCIAL_NETWORK_TYPES
-from ufostart.models.procs import LinkedinSignupProc, UsernameAvailableProc, SetUserInfoProc
-from ufostart.models.tasks import NamedModel
+from ufostart.app.form_controls import UniqueNameField, TagSearchField
+from ufostart.app.models.auth import SocialNetworkProfileModel, SOCIAL_NETWORK_TYPES_REVERSE, SOCIAL_NETWORK_TYPES
+from ufostart.app.models.procs import LinkedinSignupProc, UsernameAvailableProc, SetUserInfoProc
+from ufostart.app.models.tasks import NamedModel
 
 log = logging.getLogger(__name__)
 

@@ -1,16 +1,16 @@
-import logging
-import urllib
+import logging, urllib, simplejson
 from pyramid.decorator import reify
 from pyramid.security import Allow, Everyone, Authenticated
-import simplejson
-from ufostart.handlers.auth import signup
+
+
 from ufostart.lib.baseviews import RootContext
-from ufostart.admin import AdminContext
-from ufostart.handlers.auth import SocialContext, SignupContext
-from ufostart.handlers.company import TemplatesRootContext, ProtoInviteContext, CompanyContext
-from ufostart.handlers.user import UserProfileContext
-from ufostart.models.auth import AnonUser, getUser, setUserF, USER_TOKEN
-from ufostart.models.procs import CheckSlugProc
+from ufostart.app.views_admin import AdminContext
+from ufostart.app.views_frontend.auth import signup
+from ufostart.app.views_frontend.auth import SocialContext, SignupContext
+from ufostart.app.views_frontend.company import TemplatesRootContext, ProtoInviteContext, CompanyContext
+from ufostart.app.views_frontend.user import UserProfileContext
+from ufostart.app.models.auth import AnonUser, getUser, setUserF, USER_TOKEN
+from ufostart.app.models.procs import CheckSlugProc
 
 log = logging.getLogger(__name__)
 

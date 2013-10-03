@@ -4,12 +4,14 @@ from datetime import datetime, timedelta
 from operator import attrgetter
 from babel.dates import format_date
 from babel.numbers import get_currency_symbol, format_decimal
-from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField, IntegerField
 from pyramid.decorator import reify
+
+from hnc.apiclient import TextField, Mapping, ListField, DictField, DateTimeField, BooleanField, IntegerField
+
 from ufostart.lib.html import getYoutubeVideoId, getVimeoVideoId, getVimeoMeta
 from ufostart.lib.tools import format_currency
-from ufostart.models.tasks import NamedModel
-from ufostart.models.workflow import WorkflowModel
+from ufostart.app.models.tasks import NamedModel
+from ufostart.app.models.workflow import WorkflowModel
 
 TEMPLATE_KEYS = {
     'E-COMMERCE':{'key':'ecommerce', 'name':'E-Commerce'}

@@ -1,4 +1,3 @@
-from datetime import datetime
 from operator import attrgetter
 from hnc.apiclient import Mapping, TextField, IntegerField, ListField, DictField, DateTimeField
 from pyramid.decorator import reify
@@ -6,8 +5,8 @@ from pyramid.security import has_permission
 import simplejson
 from ufostart.lib.html import format_date
 from ufostart.lib.tools import format_currency
-from ufostart.models.tasks import NamedModel
-from ufostart.models.company import CompanyModel, ApplicationModel
+from ufostart.app.models.tasks import NamedModel
+from ufostart.app.models.company import CompanyModel, ApplicationModel
 
 
 

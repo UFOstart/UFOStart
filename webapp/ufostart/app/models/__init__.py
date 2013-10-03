@@ -1,4 +1,4 @@
-from hnc.apiclient import Mapping, TextField, ListField, DictField
+from hnc.apiclient import Mapping, TextField
 
 __author__ = 'Martin'
 

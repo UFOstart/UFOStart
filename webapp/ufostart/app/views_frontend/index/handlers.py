@@ -1,5 +1,3 @@
-from ufostart.models.procs import FindPublicNeeds, GetPopularNeeds, GetNewProductsProc, FindPublicNeedsByLocation
-
 
 def index(context, request):
     return {}

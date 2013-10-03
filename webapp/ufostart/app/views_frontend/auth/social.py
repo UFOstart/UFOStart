@@ -1,14 +1,15 @@
 import logging
+from pyramid.renderers import render_to_response
+from pyramid.response import Response
+
 from hnc.apiclient.backend import DBNotification
 from hnc.forms.messages import GenericErrorMessage
 from hnc.tools.request import JsonAwareRedirect
-from pyramid.renderers import render_to_response
-from pyramid.response import Response
-from ufostart.lib.html import slugify
-from ufostart.models.auth import SOCIAL_NETWORK_TYPES, SOCIAL_NETWORK_TYPES_REVERSE
 
-from ufostart.models.procs import SocialConnectProc, LinkedinLoginProc
-from ufostart.models.auth import SocialNetworkProfileModel
+from ufostart.lib.html import slugify
+from ufostart.app.models.auth import SOCIAL_NETWORK_TYPES, SOCIAL_NETWORK_TYPES_REVERSE
+from ufostart.app.models.procs import LinkedinLoginProc
+from ufostart.app.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 

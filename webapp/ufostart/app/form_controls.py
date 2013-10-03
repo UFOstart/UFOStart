@@ -1,5 +1,4 @@
 from BeautifulSoup import BeautifulSoup
-import babel
 from babel.numbers import get_currency_symbol
 import formencode
 from hnc.forms import formfields

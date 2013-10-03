@@ -5,6 +5,7 @@ tmp
 *.pyc
 .DS_Store
 
+/docs/_build
 node_modules
 bower_components
 /deploy/node_modules

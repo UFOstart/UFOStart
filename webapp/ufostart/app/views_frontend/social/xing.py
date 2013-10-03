@@ -1,10 +1,9 @@
-import logging
-import urllib
+import logging, urllib,simplejson
 from urlparse import parse_qsl
 from hnc.tools.oauth import Client, Token
-import simplejson
-from ufostart.handlers.social import AbstractSocialResource, SocialNetworkException, assemble_profile_procs, SocialLoginSuccessful
-from ufostart.models.auth import SocialNetworkProfileModel
+
+from ufostart.app.views_frontend.social import AbstractSocialResource, SocialNetworkException, assemble_profile_procs, SocialLoginSuccessful
+from ufostart.app.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 

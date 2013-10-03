@@ -1,8 +1,9 @@
-from hnc.forms.formfields import EmailField, REQUIRED, PasswordField, GRID_BS3
 from pyramid.security import has_permission
-from ufostart.lib.baseviews import BaseForm
+
 from hnc.forms.handlers import FormHandler
-from ufostart.models.auth import UserModel
+from hnc.forms.formfields import EmailField, REQUIRED, PasswordField, GRID_BS3
+from ufostart.lib.baseviews import BaseForm
+from ufostart.app.models.auth import UserModel
 
 
 USER_TOKEN = "ADMIN_USER_TOKEN"

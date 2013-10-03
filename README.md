@@ -94,6 +94,6 @@ And the following section is only used in the live.ini / production environment:
 
     [handler_exc_handler]
     class = hnc.tools.smtplogging.TlsSMTPHandler
-    args = ('HOST', 'FROM_EMAIL', ['RECEIPIENT1'], 'SUBJECT', ('SMTP_USER_NAME','SMTP_PASSWORD'))
+    args = ('HOST', 'FROM_EMAIL', ['RECIEPIENT_EMAIL'], 'SUBJECT', ('SMTP_USER_NAME','SMTP_PASSWORD'))
     level = ERROR
     formatter = exc_formatter

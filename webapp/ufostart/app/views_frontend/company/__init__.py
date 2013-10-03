@@ -1,15 +1,16 @@
 from collections import OrderedDict
-from hnc.apiclient.backend import DBNotification
-from hnc.forms.messages import GenericErrorMessage
 from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound
 from pyramid.security import Allow, Everyone, Authenticated, has_permission
-import product, general, need, setup, funding
-from ufostart.app.views_frontend import t_path
+
+from hnc.apiclient.backend import DBNotification
+from hnc.forms.messages import GenericErrorMessage
+
+from . import product, general, need, setup, funding
 from ufostart.lib.baseviews import BaseContextMixin
-from ufostart.models.procs import GetCompanyProc, GetTemplateDetailsProc, GetAllCompanyTemplatesProc, GetInviteDetailsProc
+from ufostart.app.models.procs import GetCompanyProc, GetTemplateDetailsProc, GetAllCompanyTemplatesProc, GetInviteDetailsProc
 
-
+def t_path(p): return "ufostart:templates_frontend/{}".format(p)
 
 def canEdit(self): return has_permission('edit', self, self.request)
 def canApprove(self): return has_permission('approve', self, self.request)

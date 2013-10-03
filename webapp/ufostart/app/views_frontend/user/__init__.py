@@ -1,12 +1,12 @@
 from pyramid.decorator import reify
+from pyramid.security import Allow, NO_PERMISSION_REQUIRED, Authenticated
 
 from . import index
-from pyramid.security import Everyone, Allow, NO_PERMISSION_REQUIRED, Authenticated
-from ufostart.handlers.social import SocialLoginFailed, SocialLoginSuccessful
-from ufostart.app.views_frontend import t_path
 from ufostart.lib.baseviews import BaseContextMixin
-from ufostart.models.procs import RefreshProfileProc, GetProfileProc, GetFriendsProc, GetFriendsCompaniesProc
+from ufostart.app.views_frontend import social
+from ufostart.app.models.procs import RefreshProfileProc, GetProfileProc, GetFriendsProc, GetFriendsCompaniesProc
 
+def t_path(p): return "ufostart:templates_frontend/{}".format(p)
 
 class ProtoProfileContext(BaseContextMixin):
     displayType = 'User Profile'
@@ -58,6 +58,6 @@ class UserProfileContext(ProtoProfileContext):
 
 def includeme(config):
     config.add_view(index.user                              , context = UserProfileContext, renderer = t_path("user/home.html"), permission = NO_PERMISSION_REQUIRED)
-    config.add_view(index.login_success                     , containment=UserProfileContext, context = SocialLoginSuccessful, permission = NO_PERMISSION_REQUIRED)
-    config.add_view(index.login_failure                     , containment=UserProfileContext, context = SocialLoginFailed, permission = NO_PERMISSION_REQUIRED)
+    config.add_view(index.login_success                     , containment=UserProfileContext, context = social.SocialLoginSuccessful, permission = NO_PERMISSION_REQUIRED)
+    config.add_view(index.login_failure                     , containment=UserProfileContext, context = social.SocialLoginFailed, permission = NO_PERMISSION_REQUIRED)
 

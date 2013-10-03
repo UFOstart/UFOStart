@@ -1,10 +1,10 @@
 from hnc.apiclient import Mapping, ListField, DictField
 from hnc.apiclient.backend import ClientTokenProc, DBNotification
 from hnc.apps.static_content.views import ContentModel
-from ufostart.models import SlugTypeModel
-from ufostart.models.tasks import NamedModel
-from ufostart.models.auth import UserModel, ContactsUserModel
-from ufostart.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel, InviteModel, ServiceModel
+from ufostart.app.models import SlugTypeModel
+from ufostart.app.models.tasks import NamedModel
+from ufostart.app.models.auth import UserModel, ContactsUserModel
+from ufostart.app.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel, InviteModel, ServiceModel
 
 
 class NewUserMsg(DBNotification): pass

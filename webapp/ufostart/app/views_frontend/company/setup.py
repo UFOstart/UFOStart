@@ -1,11 +1,11 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import  REQUIRED, StringField, ChoiceField, HtmlAttrs
+from hnc.forms.formfields import  REQUIRED, StringField, ChoiceField
 from hnc.forms.handlers import FormHandler
 from ufostart.lib.baseviews import BaseForm
-from ufostart.handlers.auth.imp import SESSION_SAVE_TOKEN
-from ufostart.models.procs import CreateCompanyProc, EditCompanyProc
-from ufostart.handlers.forms.controls import PictureUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField, SlideshareField, VideoUrlField, UniqueNameField
-from ufostart.models.tasks import NamedModel
+from ufostart.app.form_controls import PictureUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField, SlideshareField, VideoUrlField, UniqueNameField
+from ufostart.app.views_frontend.auth.imp import SESSION_SAVE_TOKEN
+from ufostart.app.models.procs import CreateCompanyProc, EditCompanyProc
+from ufostart.app.models.tasks import NamedModel
 
 
 def basics(context, request):

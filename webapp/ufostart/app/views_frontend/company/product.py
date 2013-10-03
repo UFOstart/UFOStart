@@ -1,15 +1,17 @@
 # coding=utf-8
 from operator import methodcaller
+from pyramid.httpexceptions import HTTPForbidden, HTTPFound
+
 from hnc.apiclient.backend import DBNotification, DBException
 from hnc.forms.formfields import REQUIRED, StringField, TextareaField, HORIZONTAL_GRID, DecimalField, IntField, MultipleFormField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
-from pyramid.httpexceptions import HTTPForbidden, HTTPFound
-from . import t_path
-from ufostart.lib.baseviews import BaseForm
-from ufostart.models.procs import SetProductOffersProc, PledgeCompanyProc, CreateProductProc, RemoveProductOfferProc
-from ufostart.handlers.forms.controls import PictureGalleryUploadField, SanitizedHtmlField, CleanHtmlField, VideoUrlField, CurrencyIntField
 
+from ufostart.lib.baseviews import BaseForm
+from ufostart.app.models.procs import SetProductOffersProc, PledgeCompanyProc, CreateProductProc, RemoveProductOfferProc
+from ufostart.app.form_controls import PictureGalleryUploadField, SanitizedHtmlField, CleanHtmlField, VideoUrlField, CurrencyIntField
+
+def t_path(p): return "ufostart:templates_frontend/{}".format(p)
 
 class OfferField(MultipleFormField):
     template = t_path('common/controls/offers.html')

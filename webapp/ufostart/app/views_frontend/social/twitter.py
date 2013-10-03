@@ -1,18 +1,18 @@
-import logging
-import urllib
+import logging, simplejson, urllib
 from urlparse import parse_qsl
+from pyramid.decorator import reify
+from pyramid.renderers import render_to_response
+from pyramid.view import view_config, view_defaults
+
 from hnc.forms.formfields import REQUIRED, EmailField, HORIZONTAL_GRID
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericErrorMessage
 from hnc.tools.oauth import Consumer, Client, Token
-from pyramid.decorator import reify
-from pyramid.renderers import render_to_response
-from pyramid.view import view_config, view_defaults
-import simplejson
-from ufostart.app.views_frontend import t_path
+
 from ufostart.lib.baseviews import BaseForm
-from ufostart.handlers.social import AbstractSocialResource, SocialNetworkException, assemble_profile_procs, SocialLoginSuccessful
-from ufostart.models.auth import SocialNetworkProfileModel
+from ufostart.app.views_frontend import t_path
+from ufostart.app.views_frontend.social import AbstractSocialResource, SocialNetworkException, assemble_profile_procs, SocialLoginSuccessful
+from ufostart.app.models.auth import SocialNetworkProfileModel
 
 log = logging.getLogger(__name__)
 

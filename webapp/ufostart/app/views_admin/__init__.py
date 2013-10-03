@@ -3,22 +3,29 @@ from hnc.apps.static_content.views import set_up_content_mgmt_app, delete_view_f
 from hnc.tools.generic_views import logout_func
 from pyramid.decorator import reify
 from pyramid.security import DENY_ALL, ALL_PERMISSIONS, Allow
+
 from ufostart.lib.baseviews import BaseContextMixin
-from ufostart.admin import handlers
-from ufostart.admin.auth import AuthenticationHandler, AdminUserModel, USER_TOKEN, getUser, setUserF, canEdit
-from ufostart.models.procs import AdminTemplatesGetProc, AdminNeedGetProc, AdminServiceGetProc, GetStaticContentProc, SetStaticContentProc
+from ufostart.app.views_admin import handlers
+from ufostart.app.views_admin.auth import AuthenticationHandler, AdminUserModel, USER_TOKEN, getUser, setUserF, canEdit
+from ufostart.app.models.procs import AdminTemplatesGetProc, AdminNeedGetProc, AdminServiceGetProc, GetStaticContentProc, SetStaticContentProc
 
 
-def t_path(p): return "ufostart:templates_admin/{}".format(p)
+def t_path(p): return "ufostart:app/templates_admin/{}".format(p)
+
+
 
 class AdminSettings(object):
     key = "admin"
     css_name = 'site_admin'
     static_prefix = "/static/"
+    template_base_path = "ufostart:app/templates_admin/{}"
 
     def __init__(self, settings):
         self.login = settings['login']
         self.filepickerKey = settings['filepickerKey']
+
+    def t_path(self, path):
+        return self.template_base_path.format(path)
 
 
 
@@ -153,7 +160,6 @@ def dashboard(ctxt, req): return {}
 
 
 def includeme(config):
-
     settings = config.registry.settings
     settings['g'].setSettings(AdminSettings, settings)
 
