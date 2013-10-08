@@ -1,3 +1,7 @@
+"""
+    This is `hnc.forms <https://github.com/MartinPeschke/hnctools/tree/master/hnc/forms>`_ based custom form controls. e.g: Fileupload with FilePicker, date selectors etc.
+    Custom Form Controls, used exclusively in this project, thus they have not been moved to .
+"""
 from BeautifulSoup import BeautifulSoup
 from babel.numbers import get_currency_symbol
 import formencode
@@ -6,6 +10,11 @@ from hnc.forms.formfields import StringField, TextareaField, IntField, HtmlAttrs
 from ufostart.lib.html import getSlideshareMeta, getVimeoMeta, getYoutubeMeta
 
 def t_path(p): return "ufostart:templates_frontend/common/controls/{}".format(p)
+
+
+
+
+
 
 class CurrencyIntField(IntField):
     template = "currencyint.html"

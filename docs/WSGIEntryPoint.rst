@@ -1,5 +1,4 @@
-Have alook first at how the app starts up
+App Configuration
 ==========================================
 
-.. automodule:: ufostart
-   :members:
+hello world
