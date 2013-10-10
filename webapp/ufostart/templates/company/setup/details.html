@@ -7,7 +7,8 @@
 
 <%def name="bodyContent()">
         <div class="row">
-            <div class="col-lg-4 template-details">
+            <div class="col-sm-4">
+              <div class="template-details">
                 <div class="box-title">
                     ${_("TemplateDetails.BoxTitle")|n}
                 </div>
@@ -24,8 +25,9 @@
                     </div>
                     <hr class="mar-top-half"/>
                 </div>
+              </div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-sm-8">
                 ${ template.description | html.html,n }
 
                 <div class="mar-top-3">
