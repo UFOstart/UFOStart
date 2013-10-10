@@ -15,20 +15,15 @@
 
 
 <%block name="global_page">
-    <div class="navbar navbar-static-top">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="${request.root.admin_url()}">${g.project_name} - Admin Area</a>
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav pull-right">
-            %if not ctxt.user.isAnon():
-                <li><a href="${request.root.admin_url('logout')}">Log out</a></li>
-            %endif
-            </ul>
+    <div class="navbar no-margin">
+        <div class="navbar-header" style="padding: 14px 0;">
+          <a class="navbar-brand" href="${request.root.admin_url()}">${g.project_name} - Admin Area</a>
         </div>
+        <ul class="nav navbar-nav pull-right">
+        %if not ctxt.user.isAnon():
+            <li><a href="${request.root.admin_url('logout')}">Log out</a></li>
+        %endif
+        </ul>
    </div>
 
    <div id="global-frame" class="body-wrapper">
