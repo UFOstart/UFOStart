@@ -39,8 +39,6 @@ class NeedIndexHandler(FormHandler):
     form = NeedIndexForm
 
 
-
-
 def accept_application(context, request):
     ApproveApplicationProc(request, {'token': context.application.token})
     request.session.flash(GenericSuccessMessage("The application has been accepted!"), "generic_messages")
@@ -55,6 +53,7 @@ class ApplicationForm(BaseForm):
     fields=[StringField('message', _("TaskDetailsPage.Apply.FormLabel.Message"), REQUIRED)]
     @classmethod
     def on_success(cls, request, values):
+        _ = request._
         ApplyForNeedProc(request, {'token':request.context.need.token, 'Application': {'User':{'token':request.root.user.token}, 'message':values['message']}})
         request.session.flash(GenericSuccessMessage(_("TaskDetailsPage.Apply.SuccessMessage.You have applied for this task successfully. One of the team members will contact you shortly.")), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context)}
@@ -77,6 +76,7 @@ class NeedCreateForm(BaseForm):
     ]
     @classmethod
     def on_success(cls, request, values):
+        _ = request._
         try:
             need = CreateNeedProc(request, {'Needs':[values], 'token': request.context.round.token})
         except DBNotification, e:
@@ -103,6 +103,7 @@ class NeedEditForm(BaseForm):
 
     @classmethod
     def on_success(cls, request, values):
+        _ = request._
         need = request.context.need
         round = request.context.round
         values['token'] = need.token
