@@ -49,6 +49,7 @@ define(["tools/ajax"], function(ajax){
                     token: this.needToken
                     , Endorsement: {
                         endorserSlug: hnc.getUserSlug()
+                        , endorserToken: hnc.getUserToken()
                         , endorseeName: model.getName()
                         , endorseeHeadline: model.getPosition()
                         , endorseeLinkedinId: model.id

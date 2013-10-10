@@ -44,6 +44,9 @@ require(["tools/ajax", "misc"], function(ajax, misc){
         , getUserSlug: function(){
             return this.options.user.slug;
         }
+        , getUserToken: function(){
+            return this.options.user.token;
+        }
 
         , rld: function(){
             window.location.href = "//" + window.location.host + window.location.pathname + '?' + window.location.search;
