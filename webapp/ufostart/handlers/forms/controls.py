@@ -25,7 +25,7 @@ class PictureUploadField(formfields.StringField):
 
     def getInputAttrs(self, request):
         attrs = self.attrs.getInputAttrs(request)
-        attrs += 'data-pic-width="{0.picWidth}" data-pic-height="{0.picHeight}"'.format(self)
+        #attrs += 'data-pic-width="{0.picWidth}" data-pic-height="{0.picHeight}"'.format(self)
         return attrs
 
 class FileUploadField(PictureUploadField):

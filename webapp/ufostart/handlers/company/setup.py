@@ -94,7 +94,7 @@ class CompanyEditForm(BaseForm):
         values['token'] = company.token
 
         try:
-            company = EditCompanyProc(request, {'token':request.root.user.token, 'Company':values})
+            company = EditCompanyProc(request, values)
         except DBNotification, e:
             if e.message == 'Company_Already_Exists':
                 return {'success':False, 'errors': {'name': "Already exists"}}
