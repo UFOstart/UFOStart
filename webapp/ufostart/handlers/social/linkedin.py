@@ -3,7 +3,7 @@ import urllib
 from httplib2 import Http
 import simplejson
 from ufostart.models.auth import SocialNetworkProfileModel
-from ufostart.handlers.social import AbstractSocialResource, SocialLoginSuccessful, assemble_profile_procs
+from ufostart.handlers.social import AbstractSocialResource, SocialLoginSuccessful, assemble_profile_procs, SocialNetworkException
 
 log = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ def token_func(context, request):
     code = request.params.get("code")
     state = request.params.get("state")
     if not code or state != request.session.get_csrf_token():
-        return False
+        raise SocialNetworkException("{} Login Failed".format(settings.network))
 
     params = {'grant_type':'authorization_code', 'code':code
                 , 'redirect_uri':request.resource_url(request.context, 'cb')

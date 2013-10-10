@@ -65,7 +65,7 @@ def assemble_profile_procs(token_func, profile_func, parse_profile_func):
             else:
                 raise SocialNetworkException("{} login failed.".format(context.network.title()))
         resp, content = token_func(context, request)
-        if resp.status not in [200,201]:
+        if not resp or resp.status not in [200,201]:
             raise SocialNetworkException("{} login failed.".format(settings.network.title()))
         else:
             token, (resp, data) = profile_func(content, context, request)
