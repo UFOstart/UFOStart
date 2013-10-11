@@ -4,7 +4,7 @@
 <%block name="controls">
     <div class="js-form-widget"  data-field-name="${widget.getName(prefix)}" data-module="libs/fileupload">
         <input type="file" class="file-upload-btn" accept="application/pdf">
-        <script type="text/template" class="picture-template"><div class="file-download"><a class="stop-propagation" target="_blank" href="${value}">Download Document</a></div></script>
+        <script type="text/template" class="picture-template"><div class="file-download"><a class="stop-propagation" target="_blank" href="{{ pic.url }}">Download Document</a></div></script>
         <input type="hidden" name="${widget.getName(prefix)}" value="${value}" class="${widget.getClasses()}"/>
         <div class="file-picker-upload document ${'' if value else 'empty'}" data-fp-mimetype="application/pdf">
             %if value:
