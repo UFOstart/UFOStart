@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-10-11 16:13+0200\n"
+"POT-Creation-Date: 2013-10-11 19:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: ufostart/handlers/auth/signup.py:45
+#: ufostart/handlers/auth/signup.py:48
 msgid "SignupPage.Username.Label:Choose your username"
 msgstr ""
 
@@ -159,31 +159,31 @@ msgstr ""
 msgid "OnboardingPage.Help.Text"
 msgstr ""
 
-#: ufostart/templates/auth/username.html:13
+#: ufostart/templates/auth/username.html:14
 msgid "SignupPage.Signup.Title:New User Signup"
 msgstr ""
 
-#: ufostart/templates/auth/username.html:16
+#: ufostart/templates/auth/username.html:19
 msgid "SignupPage.Signup.SubTitle:Reserve your username and sign up with Linkedin"
 msgstr ""
 
-#: ufostart/templates/auth/username.html:20
+#: ufostart/templates/auth/username.html:23
 msgid "RegisterPage.Signup.ButtonLabel:Signup with Linkedin"
 msgstr ""
 
-#: ufostart/templates/auth/username.html:26
+#: ufostart/templates/auth/username.html:31
 msgid "RegisterPage.Login.Title:Already have an account?"
 msgstr ""
 
-#: ufostart/templates/auth/username.html:29
-msgid "RegisterPage.Login.SubTitle:Login straight in with your Linkedin account"
+#: ufostart/templates/auth/username.html:34
+msgid "RegisterPage.Login.SubTitle:Log straight in with your Linkedin account"
 msgstr ""
 
-#: ufostart/templates/auth/username.html:33
+#: ufostart/templates/auth/username.html:38
 msgid "RegisterPage.Login.ButtonLabel:Login with Linkedin"
 msgstr ""
 
-#: ufostart/templates/auth/username.html:36
+#: ufostart/templates/auth/username.html:41
 msgid ""
 "RegisterPage.Login.CreateAccount:If you don't have a Linkedin account yet, "
 "please <a href=\"https://www.linkedin.com/reg/join?trk=hb_join\" "
