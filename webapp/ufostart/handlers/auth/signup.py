@@ -16,15 +16,19 @@ log = logging.getLogger(__name__)
 
 
 uname_regex = re.compile('^[0-9a-z_.-]+$')
+_= lambda s:s
 
 RESERVEDS = []
 
 
 def isavailable(context, request):
-    username = ''.join(request.params.values())
+    try:
+        username = request.json_body['name']
+    except:
+        username = ''.join(request.params.values())
 
     if not uname_regex.match(username):
-        return "Name should only consist of letters, lowercase characters, underscores and hyphens"
+        return "Name should only contain numbers, lowercase characters, underscores and hyphens"
     elif username in RESERVEDS:
         return "Name already taken"
     else:
@@ -41,7 +45,7 @@ group_classes = UniqueNameField.group_classes + " input-larger"
 class UserNameForm(BaseForm):
     id="UserName"
     fields=[
-        UniqueNameField("username", input_classes='input-lg', group_classes = group_classes, thing_name = 'username')
+        UniqueNameField("username", _("SignupPage.Username.Label:Choose your username"), input_classes='input-lg', group_classes = group_classes, thing_name = 'username')
     ]
     @classmethod
     def on_success(cls, request, values):
@@ -53,6 +57,8 @@ class UserNameHandler(FormHandler):
     form = UserNameForm
 
     def pre_fill_values(self, request, result):
+        if not request.context.user.isAnon():
+            request.fwd(request.root)
         if request.context.has_username:
             result['values'][self.form.id]['username'] = request.context.__name__
         return super(UserNameHandler, self).pre_fill_values(request, result)

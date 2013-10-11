@@ -116,7 +116,7 @@ class VideoUrlField(StringField):
 
 
 class UniqueNameField(StringField):
-    group_classes = "username-input-group valid"
+    group_classes = "username-input-group"
     template = "ufostart:templates/common/controls/uniquename.html"
     def get_domain(self, request):
         return request.context.settings.site_root_url

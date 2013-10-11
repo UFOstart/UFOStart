@@ -64,7 +64,7 @@
   <ul class="nav navbar-nav navbar-right page-header-bar-menu ${'anon' if user.isAnon() else 'logged-in'}">
       %if user.isAnon():
 
-        <li><a href="${request.root.login_url(query=[('furl', request.furl)])}">Log in</a></li>
+        <li><a href="${request.root.signup_url(query=[('furl', request.furl)])}">Log in</a></li>
 
       %else:
 

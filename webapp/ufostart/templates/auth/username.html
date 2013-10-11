@@ -3,41 +3,82 @@
 <%namespace file="ufostart:templates/common/standard_form.html" name="standard_form"/>
 <%namespace file="ufostart:templates/common/widgets.html" name="form"/>
 
+<%def name="menu(user)"></%def>
 
 <%def name="content()">
     <div class="container">
         <div class="row mar-top-2">
-            <div class="col-lg-12">
-                <h2 class="section-title">
-                    <span>Reserve your username</span>
-                </h2>
-            </div>
-        </div>
+            <div class="col-sm-7">
+                <h1 class="section-title">
+                    <span>
+                        ${_(u"SignupPage.Signup.Title:New User Signup")|n}
+                    </span>
+                </h1>
+                <div class="row">
+                  <div class="col-lg-9">
+                    <h2>${_(u"SignupPage.Signup.SubTitle:Reserve your username and sign up with Linkedin")|n}</h2>
 
-        <div class="row mar-top-2">
-            <div class="col-lg-9">
-                <%form:build_base_form form="${view.form}" values="${values}" errors="${errors}">
-                    <button type=""submit" class="btn btn-primary btn-linkedin">Signup with Linkedin</button>
-                </%form:build_base_form>
+                    <div class="mar-top-4">
+                      <%form:build_base_form form="${view.form}" values="${values}" errors="${errors}">
+                          <button type="submit" id="linkedin-signup-btn" class="btn btn-primary btn-linkedin" ${'' if ctxt.has_username else 'disabled'}>${_(u"RegisterPage.Signup.ButtonLabel:Signup with Linkedin")|n}</button>
+                      </%form:build_base_form>
+                    </div>
+                  </div>
+                </div>
             </div>
-            <div class="col-lg-3">
-                ${self.wtfBox()}
+            <div class="col-sm-4 col-sm-offset-1">
+                <h5 class="section-title">
+                    <span>${_(u"RegisterPage.Login.Title:Already have an account?")|n}</span>
+                </h5>
+                <p class="auth__sub-heading">
+                    ${_(u"RegisterPage.Login.SubTitle:Login straight in with your Linkedin account")|n}
+                </p>
+                <div class="mar-top-4">
+                  <p class="btn-social-wrapper">
+                      <a href="${root.auth_url('linkedin')}" class="btn btn-primary btn-linkedin">${_(u"RegisterPage.Login.ButtonLabel:Login with Linkedin")|n}</a>
+                  </p>
+                  <small><strong class="text-muted">
+                    ${_(u'RegisterPage.Login.CreateAccount:If you don\'t have a Linkedin account yet, please <a href="https://www.linkedin.com/reg/join?trk=hb_join" target="_blank">create one</a>.')|n}
+                  </strong></small>
+                </div>
+
             </div>
         </div>
     </div>
 </%def>
 
-<%def name="wtfBox()">
-    <div class="wtf-box">
-        <h2 class="wtf-title">
-            ${_("UsernameSelect.Help.Title")|n}
-        </h2>
-        <div class="wtf-content mar-top-1">
-            ${_("UsernameSelect.Help.Text")|n}
-        </div>
-    </div>
-    <div class="mar-top-2"></div>
+<%def name="post_scripts()">
+    <script>
+        require(["tools/ajax"], function(ajax){
+          var form = $(".form-validated")
+              , setValid = function($t){
+                  $t.closest(".form-group").addClass("valid").removeClass("has-error").find(".help-inline[generated]").remove();
+                  $("#linkedin-signup-btn").removeAttr("disabled");
+              }
+              , setInvalid = function($t, error_msg){
+                  $t.closest(".form-group").removeClass("valid").addClass("has-error").find(".help-inline[generated]").remove();
+                    if(error_msg){
+                      $t.closest(".controls").append('<span class="help-inline" generated>'+error_msg+'</span>');
+                    }
+                  $("#linkedin-signup-btn").attr("disabled", true);
+              };
+
+          form.on({
+              keyup: _.debounce(function(e){
+                var $t = $(e.target), val = $t.val();
+                if(val.length>2){
+                  ajax.submit({
+                    url: $t.data("ruleRemote")
+                    , data: {'name':val}
+                    , success: function(resp, status, xhr){
+                      if($t.val() == val)
+                        if(resp !== true)setInvalid($t, resp); else setValid($t);
+                    }
+                  })
+
+                } else setInvalid($t);
+              }, 60)
+            });
+        });
+    </script>
 </%def>
-
-
-<%def name="post_scripts()">${standard_form.simple_scripts()}</%def>

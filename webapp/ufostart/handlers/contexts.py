@@ -86,11 +86,8 @@ class WebsiteRootContext(RootContext):
             ctxt_cls = getContextFromSlug(CheckSlugProc(self.request, {'slug': item}))
             return ctxt_cls(self, item)
 
-
-
     def admin_url(self, *args, **kwargs):
         return self.request.resource_url(self, 'admin', *args, **kwargs)
-
 
     def login_url(self, *args, **kwargs):
         return self.request.resource_url(self, 'login', *args, **kwargs)
