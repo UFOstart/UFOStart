@@ -85,7 +85,7 @@ def login_success(exc, request):
         user = signup_user(ctxt, request, exc.profile)
     except (DBNotification, DBException), e:
         if e.message == 'USER_ALREADY_REGISTERED':
-            request.session.flash(GenericErrorMessage("This Linkedin user is already registered. Please click login with Linkedin button."), "generic_messages")
+            request.session.flash(GenericErrorMessage("This Linkedin user is already registered. Please click the Login with Linkedin button."), "generic_messages")
         elif e.message == 'USER_SLUG_TAKEN':
             request.session.flash(GenericErrorMessage("This username is already registered. Please choose another one."), "generic_messages")
         else:
