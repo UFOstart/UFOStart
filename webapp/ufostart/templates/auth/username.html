@@ -61,24 +61,28 @@
                       $t.closest(".controls").append('<span class="help-inline" generated>'+error_msg+'</span>');
                     }
                   $("#linkedin-signup-btn").attr("disabled", true);
-              };
-
-          form.on({
-              keyup: _.debounce(function(e){
-                var $t = $(e.target), val = $t.val();
-                if(val.length>2){
+              }
+              , verify = function($t, val){
                   ajax.submit({
                     url: $t.data("ruleRemote")
                     , data: {'name':val}
                     , success: function(resp, status, xhr){
-                      if($t.val() == val)
+                      if(val === null || $t.val() == val)
                         if(resp !== true)setInvalid($t, resp); else setValid($t);
                     }
                   })
+              };
 
-                } else setInvalid($t);
+            form.find("[data-rule-remote]").on({
+              keyup: _.debounce(function(e){
+                var $t = $(e.target), val = $t.val();
+                if(val.length>2) verify($t, val); else setInvalid($t);
               }, 60)
             });
+          %if ctxt.has_username:
+            var $el = form.find("[data-rule-remote]");
+            verify($el, $el.val());
+          %endif
         });
     </script>
 </%def>
