@@ -142,7 +142,7 @@
             <div class="right-box">
                 <div class="position">${html.nn(member.position)}</div>
                 %if member.token:
-                    <a class="entity-link" href="${root.profile_url(member.token)}"><strong>${ member.name }</strong></a>
+                    <a class="entity-link" href="${root.profile_url(member.slug)}"><strong>${ member.name }</strong></a>
                 %else:
                     <p><strong>${ member.name }</strong></p>
                 %endif
