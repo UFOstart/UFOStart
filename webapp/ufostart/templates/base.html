@@ -23,11 +23,7 @@
         __insp.push(['wid', 378436526]);
         (function() {
             function __ldinsp(){var insp = document.createElement('script'); insp.type = 'text/javascript'; insp.async = true; insp.id = "inspsync"; insp.src = ('https:' == document.location.protocol ? 'https' : 'http') + '://www.inspectlet.com/inspectlet.js'; var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(insp, x); }
-            if (window.attachEvent){
-                                  window.attachEvent('onload', __ldinsp);
-            }else{
-                                  window.addEventListener('load', __ldinsp, false);
-            }
+            if (window.attachEvent){window.attachEvent('onload', __ldinsp);}else{window.addEventListener('load', __ldinsp, false);}
         })();
         </script>
     %endif
@@ -58,7 +54,7 @@
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', '${root.settings.gaCode}', 'uforeloaded.com');
+      ga('create', '${root.settings.gaCode}', '${root.settings.gaDomain}');
       ga('send', 'pageview');
     </script>
 </body>

@@ -41,6 +41,7 @@ class WebsiteSettings(BaseSettings):
         self.clientToken = settings['apiToken']
         self.trackUsers = StringBool().to_python(settings['trackUsers'])
         self.gaCode = settings['gaCode']
+        self.gaDomain = settings['gaDomain']
         self.filepickerKey = settings['filepickerKey']
 
         networks = settings['network']
