@@ -8,7 +8,7 @@ The instructions are written with windows in mind, all steps apply in Linux as w
 To get a local test environment running you should do the following:
 
 
-To install all requirements and dependencies, do the following from the repository root folder:
+To setup an virtual environment and install all requirements and dependencies, do the following from the repository root folder:
 
     virtualenv --no-site-packages env
     cd webapp
@@ -17,14 +17,15 @@ To install all requirements and dependencies, do the following from the reposito
 Note that <code>env</code> is already in the <code>.gitignore</code>.
 
 With this you are basically set to go.
-To bring up a development server execute the following from within the <code>/webapp</code> folder (i.e. where your ini file is located):
+
+To bring up a development server execute the following from within the <code>/webapp</code> folder (i.e. where your <code>local.ini</code> file is located):
 
     ..\env\Scripts\paster serve --reload local.ini
 
 Please note that the standard <code>local.ini</code> file requires a Redis instance and an API running somewhere.
 
 
-Configuring API Server
+Configuring the API Location
 ----------------------------------------
 
 To get any app running you will need a webapi running somewhere.
