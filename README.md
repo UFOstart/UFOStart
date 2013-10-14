@@ -99,3 +99,19 @@ And the following section is only used in the live.ini / production environment:
     args = ('HOST', 'FROM_EMAIL', ['RECIEPIENT_EMAIL'], 'SUBJECT', ('SMTP_USER_NAME','SMTP_PASSWORD'))
     level = ERROR
     formatter = exc_formatter
+    
+    
+Deployment
+==========
+
+To deploy you need fabric installed on your build server and execute:
+
+    cd deploy
+    fab -H LIVE_HOST -i LIVE_SSHKEY-u www-data deploy:env=live
+
+
+Create a development environment and deploy with
+
+    mkdir -p '/server/wwww/ufostart'
+    fab -H DEV_HOST -i DEV_SSHKEY-u www-data create_env:env=dev
+    fab -H DEV_HOST -i DEV_SSHKEY-u www-data deploy:env=dev
