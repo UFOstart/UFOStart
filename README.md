@@ -21,7 +21,7 @@ To bring up a development server execute the following from within the <code>/we
 
     ..\env\Scripts\paster serve --reload local.ini
 
-Please note that the standard local.ini file requires a Redis instance and an API running somewhere.
+Please note that the standard <code>local.ini</code> file requires a Redis instance and an API running somewhere.
 
 
 Configuring API Server
@@ -30,12 +30,13 @@ Configuring API Server
 To get any app running you will need a webapi running somewhere.
 
 Configure the API location via:
-    deploy.api.url = https://dev.api.raftcarinthia.com
+
+    deploy.api.url = https://APIHOSTDOMAIN.com
     deploy.api.version = 0.0.1
 
 And set the authentication token for each of the front ends via:
 
-    website.apiToken = 3C5EE0CB-A119-4AAF-BFD6-30F91609FA8E
+    website.apiToken = API_BACKEND_TOKEN
 
 This sets the client token for the frontend called "website".
 
@@ -64,7 +65,7 @@ Configure your cache backend by editing the following in your ini file:
 
 
 Sessions are managed by <a href="http://beaker.readthedocs.org/en/latest/sessions.html">Beaker </a>.
-Session storage is by default just the local file system (its redis on production systems). Change it by editing the following lines:
+Session storage is by default just the local file system (uses redis on production systems). Change it by editing the following lines:
 
     session.data_dir = %(here)s/../data/sess
     session.type = file
@@ -81,7 +82,7 @@ Email configuration
 
 The frontends do not handle user emails. This is done in the API.
 
-The following section configures submission of contact form emails to customer support:
+The following section only configures submission of contact form emails to customer support, if that is used:
 
     email.host=
     email.user=
