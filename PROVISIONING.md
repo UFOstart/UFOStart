@@ -47,10 +47,8 @@ A sample config could be the following (YMMV):
         listen   80;
         
         set $SERVER_DOMAIN webstaging.cloudapp.net;
-        set ENVIRONMENT dev;
+        set $ENVIRONMENT dev;
 
-        set $API_HOST apihost;
-        set $API_CLIENT_TOKEN apitoken;
 
         set $base /server/www/ufostart/$ENVIRONMENT/code/current/ufostart;
             
@@ -60,14 +58,11 @@ A sample config could be the following (YMMV):
         location /static/ {expires 30d;alias $base/static/;}
         location /web/static/ {expires 30d;alias $base/website/static/;}
 
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP  $remote_addr;
-        proxy_buffering off;
-
         location /api/ {
-            proxy_set_header Host $API_HOST;
-            proxy_set_header Client-Token "$API_CLIENT_TOKEN";
-            proxy_pass https://$API_HOST/;
+            # these need to be configured inline, as proxy_pass does not like variables much
+            proxy_set_header Host API_HOST;
+            proxy_set_header Client-Token API_CLIENT_TOKEN;
+            proxy_pass https://API_HOST/;
         }
         location /net/li/ {
             proxy_set_header x-li-format "json";
@@ -123,6 +118,11 @@ Create a development environment and deploy with
 If you want to learn everything about what gets deployed how, checkout the <code>fabfile.py</code> in the <code>deploy</code> folder.
 
 
+CONFIGURATION
+=============
+
+Please see the readme on how to configure a webserver instance.
+
 
 TROUBLESHOOTING
 ===============
@@ -137,3 +137,6 @@ TROUBLESHOOTING
 
 3. During my first deploy there was a python package error!
     Probably you found the XLRT issue. It happens. Just run it again.
+
+4. When I browse the website, I sometimes see a red bar at the top. Whats that?
+    There is a good chance that your NGINX does not forward the AJAX calls to the API correctly, check your NGINX config around <code>API_HOST</code> and <code>API_CLIENT_TOKEN</code>.
