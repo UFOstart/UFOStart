@@ -33,9 +33,7 @@ Then clean up the NGINX config:
     cat > ufostart.com.dev.conf
   
   
-Edit the file <code>ufostart.com.dev.conf</code>
-
-to reflect your staging environment <code>basepath</code> and <code>url</code>.
+Edit the file <code>ufostart.com.dev.conf</code> to reflect your staging environment <code>basepath</code> and <code>url</code>.
 
 A sample config could be the following (YMMV):
 
@@ -121,7 +119,7 @@ If you want to learn everything about what gets deployed how, checkout the <code
 CONFIGURATION
 =============
 
-Please see the readme on how to configure a webserver instance.
+Please see the <a href="README.md">readme</a> on how to configure a webserver instance.
 
 
 TROUBLESHOOTING
