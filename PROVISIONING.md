@@ -38,19 +38,15 @@ Edit the file <code>ufostart.com.dev.conf</code> to reflect your staging environ
 A sample config could be the following (YMMV):
 
     upstream ufostart_dev {
-       # check your python config where it is running
+       # check your python config where it is running and which port
        server 127.0.0.1:6545;
     }
     server {
         listen   80;
-        
-        set $SERVER_DOMAIN webstaging.cloudapp.net;
+
         set $ENVIRONMENT dev;
-
-
         set $base /server/www/ufostart/$ENVIRONMENT/code/current/ufostart;
-            
-        server_name $SERVER_DOMAIN;
+
         location /favicon.ico {expires 30d;alias $base/static/img/favicon.ico;}
         location /robots.txt {expires 30d; alias $base/static/robots.txt;}
         location /static/ {expires 30d;alias $base/static/;}
