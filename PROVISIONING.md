@@ -5,12 +5,23 @@ Use the ufostartweb image from azure to setup a new virtual box. During the proc
 
 See <a href="http://www.windowsazure.com/en-us/manage/linux/how-to-guides/ssh-into-linux/">the documentation</a> for instructions on how to generate a key.
 
-During the azure setup you can choose whatever options you like, just make sure to select SSL, HTTP and HTTPS tunnels to your webserver.
+During the azure setup you can choose whatever options you like, just make sure to select SSL, HTTP and HTTPS tunnels to your webserver. See <a href="AZURE.md">screenshots here</a>.
 
 Use putty or your favourite ssh client to connect to the virtual machine as you configured it.
 
 Notice azureuser is a sudoer but not a superuser, i.e. can do <code>sudo so</code> at any time.
 
+AZURE STEPS WITH SCREENSHOTS
+============================
+
+Step 1:
+<img src="https://raw.github.com/UFOstart/UFOStart/master/docs/aure_step1.png"/>
+
+Step 2:
+<img src="https://raw.github.com/UFOstart/UFOStart/master/docs/aure_step2.png"/>
+
+Step 3:
+<img src="https://raw.github.com/UFOstart/UFOStart/master/docs/aure_step3.png"/>
 
 VM SETUP
 ==========
