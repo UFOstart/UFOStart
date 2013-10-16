@@ -50,7 +50,6 @@ A sample config could be the following (YMMV):
         location /favicon.ico {expires 30d;alias $base/static/img/favicon.ico;}
         location /robots.txt {expires 30d; alias $base/static/robots.txt;}
         location /static/ {expires 30d;alias $base/static/;}
-        location /web/static/ {expires 30d;alias $base/website/static/;}
 
         location /api/ {
             # these need to be configured inline, as proxy_pass does not like variables much
