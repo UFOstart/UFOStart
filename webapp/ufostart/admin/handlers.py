@@ -174,7 +174,7 @@ class TemplateEditForm(TemplateCreateForm):
 class TemplateEditHandler(FormHandler):
     form = TemplateEditForm
     def pre_fill_values(self, request, result):
-        result['values'][self.form.id] = request.context.template.unwrap()
+        result['values'][self.form.id] = request.context.template.unwrap() or {}
         return super(TemplateEditHandler, self).pre_fill_values(request, result)
 
 
