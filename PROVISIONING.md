@@ -133,3 +133,7 @@ TROUBLESHOOTING
 
 4. When I browse the website, I sometimes see a red bar at the top. Whats that?
     There is a good chance that your NGINX does not forward the AJAX calls to the API correctly, check your NGINX config around <code>API_HOST</code> and <code>API_CLIENT_TOKEN</code>.
+    
+    
+5. The Api has gone away!
+    If your API server is configured by CNAME and has recently changed its IP, be sure to reload nginx config to refresh the IP behind the CNAME.
