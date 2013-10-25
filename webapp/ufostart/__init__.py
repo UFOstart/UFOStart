@@ -52,9 +52,11 @@ def main(global_config, **settings):
 
     request.extend_request_traversal(config)
 
-    renderer_factory = pyramid_mako.get_renderer_factory(config, "mako.")
-    config.add_renderer(".html", renderer_factory)
-    config.add_renderer(".xml", renderer_factory)
+    config.add_directive('add_mako_renderer', pyramid_mako.add_mako_renderer)
+
+
+    config.add_mako_renderer(".html")
+    config.add_mako_renderer(".xml")
     config.add_renderer('json', jsonRenderer)
 
     def _(request, string):
