@@ -50,6 +50,8 @@ class WebsiteSettings(BaseSettings):
             module = import_module(moduleName)
             self.networks[network] = SocialNetworkSettings(module.SocialResource, network=network, **params)
 
+        # so on startup time we know if it exists, it is very much required for the send button:
+        self.fb_app_id = self.networks['facebook'].appid
 
 
     def toPublicJSON(self, stringify = True):
