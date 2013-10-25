@@ -7,8 +7,8 @@ README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'pyramid',
-    'pyramid_mako',
+    'pyramid>=1.5a2',
+    'pyramid_mako>=0.3.1',
     'pyramid_debugtoolbar',
     'formencode',
     'pastescript',
@@ -33,7 +33,7 @@ requires = [
     "markdown",
     "smartypants",
     "weberror",
-    'hnc>=0.1.45dev'
+    'hnc>=0.1.48dev'
     ]
 
 setup(name='ufostart',
