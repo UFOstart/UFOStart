@@ -107,7 +107,7 @@ SetProductOffersProc = ClientTokenProc("/web/product/offer")
 RemoveProductOfferProc = ClientTokenProc("/web/product/offerDelete")
 
 SetCompanyTemplateProc = ClientTokenProc("/web/company/template")
-GetCompanyProc = ClientTokenProc("/web/company", root_key="Company", result_cls=CompanyModel)
+
 
 PledgeCompanyProc = ClientTokenProc("/web/pledge/create")
 

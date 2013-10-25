@@ -113,14 +113,12 @@
                             <img src="${intro.picture}" alt="${intro.name}"/>
                         </div>
                         <div class="right-box">
-
                             %if not root.user.isMe('linkedin', intro.linkedinId):
                                 <div class="pull-right linkedin-widget" data-widget="SendMessage" data-entity-id="${intro.linkedinId}" data-entity-name="${intro.name}"  data-expert-name="${expert.name}">
                                     <a class="btn btn-primary">Get Introduction</a>
                                 </div>
                             %endif
-                            <a class="overflow" href="#"><strong>${intro.name}</strong></a>
-                            <p class="text-muted text-small">${intro.position}</p>
+                            <strong>${intro.name}</strong>
                         </div>
                     </div>
                     %endfor

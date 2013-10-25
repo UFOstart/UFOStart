@@ -75,7 +75,7 @@ class IntroducerModel(Mapping):
         return u"{} {}".format(self.firstName, self.lastName)
     @property
     def position(self):
-        return "IT Expert"
+        return ""
 
 class ExpertModel(Mapping):
     linkedinId = TextField()
