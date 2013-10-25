@@ -526,7 +526,6 @@ class CompanyModel(BaseCompanyModel):
         return [u for u in self.Users if u.isMentor]
     @reify
     def members(self):
-        if len(self.Users) == 1: return []
         return sorted([u for u in self.Users if u.isTeamMember], key = attrgetter('role'))
 
     @property

@@ -12,7 +12,6 @@
             <div class="single-template">
                 <a href="${root.template_url(t.key)}" class="single-template-button no-btn">
                     <img src="${t.picture}"/>
-                    <span class="name">${t.name}</span>
                 </a>
                 <p class="description">
                     <strong>${t.name}</strong> ${ t.description | html.trunc(300),html.html,n }
