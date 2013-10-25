@@ -24,12 +24,17 @@ SYSTEM_PACKAGES = ["sudo"
                   , "libmcrypt4"
                   , "libtomcrypt-dev"
                   , "libssl-dev"
+                  , "libevent-dev"
                   , "git"]
 
 VERSIONS = {
     "PYTHON":"2.7.5"
-    , "NGINX":"1.5.4"
+    , "NGINX":"1.5.6"
 }
+KEYS = [
+  "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCj5VP8RzFPkkN+43Wmg0aN9T5XJKmx0+nBdbr+CKE3xukYkm8Hwg8lTaRQQOFWCiYAH7oxf9g0bT/Vp5a7uDok6Eh9ETPlIle0G+iikh3y+faQmuXbfCxj1Mielgf2Q/tHR6YsS50wfvyBE+hvMWtw54LY/BfoSTkZx5hWF40UcSKA7FvZwC0zbTvyrCczpliPdogazHzTNkmNu2v8QQvxRjg50RNHJI4ECKWUn/WjQUmgJOcnNKisHsK3RdI2joXhrLg86K1ndT2k7shGb7uNElEY0g0/BnEA9tVwJq5dHclJiU72ocuVbC/p4HE1R+DZxiazZhYSJ363yhgLjocL www-data@bellerophon"
+]
+
 
 def set_resolv():
     run("""
@@ -53,45 +58,50 @@ echo {host} > /etc/hostname
 def adduser():
     name = "mpeschke"
     run("adduser {}".format(name))
-    run("sudo su - {}".format(name))
-    run("mkdir .ssh")
-    run("ssh-keygen -t rsa -b 4096")
-    run("cp .ssh/id_rsa.pub .ssh/authorized_keys")
+    with cd("/home/mpeschke"):
+      sudo("mkdir .ssh", user="mpeschke")
+      sudo("ssh-keygen -t rsa -b 4096", user="mpeschke")
+      sudo("cp .ssh/id_rsa.pub .ssh/authorized_keys", user="mpeschke")
 
 def set_wwwuser():
     sudo("mkdir /home/www-data")
     sudo("chown www-data: /home/www-data")
     sudo("usermod -d /home/www-data -s /bin/bash www-data")
-    sudo("sudo su - {}".format("www-data"))
-    sudo("mkdir .ssh")
-    sudo("ssh-keygen -t rsa -b 4096")
-    sudo("cp .ssh/id_rsa.pub .ssh/authorized_keys")
-
-
-
-###fucked, somehow dont work
-def firewall():
-    put("./iptables.rules", "/etc/iptables.rules")
-    put("./iptables", "/etc/network/if-up.d/iptables")
-    run("iptables-restore < /etc/iptables.rules")
-
+    with cd("/server"):
+      sudo("chown -R www-data: www")
+    with cd("/home/www-data"):
+      sudo("mkdir .ssh", user = 'www-data')
+      sudo("ssh-keygen -t rsa -b 4096", user = 'www-data')
+      sudo("cp .ssh/id_rsa.pub .ssh/authorized_keys", user = 'www-data')
+    files.append("/home/www-data/.ssh/authorized_keys","\n".join(KEYS), use_sudo=True)
 
 def update():
-    run("mkdir /server/{src,www} -p")
-    run("apt-get update")
-    run("apt-get install -y {}".format(" ".join(SYSTEM_PACKAGES)))
+    sudo("mkdir /server/{src,www} -p")
+    sudo("apt-get update")
+    sudo("apt-get install -y {}".format(" ".join(SYSTEM_PACKAGES)))
 
 
 def add_python():
     with cd("/server/src"):
-        run("wget http://www.python.org/ftp/python/{0}/Python-{0}.tar.bz2".format(VERSIONS['PYTHON']))
-        run("tar xfvj Python-{}.tar.bz2".format(VERSIONS['PYTHON']))
+        sudo("wget http://www.python.org/ftp/python/{0}/Python-{0}.tar.bz2".format(VERSIONS['PYTHON']))
+        sudo("tar xfvj Python-{}.tar.bz2".format(VERSIONS['PYTHON']))
     with cd("/server/src/Python-{}".format(VERSIONS['PYTHON'])):
-        run("./configure && make && make install")
-        run("wget http://peak.telecommunity.com/dist/ez_setup.py")
-        run("python ez_setup.py")
-        run("easy_install virtualenv Cython ctypes")
+        sudo("./configure && make && make install")
+        sudo("wget http://peak.telecommunity.com/dist/ez_setup.py")
+        sudo("python ez_setup.py")
+        sudo("easy_install virtualenv Cython ctypes")
 
+
+def set_nginx_startup():
+    files.upload_template("nginx.initd.tmpl", "/etc/init.d/nginx", {'NGINX_VERSION': VERSIONS['NGINX']}, use_sudo=True)
+    sudo("chmod +x /etc/init.d/nginx")
+    sudo("update-rc.d nginx defaults")
+
+def set_nginx_conf():
+    sudo("mkdir -p /server/nginx/etc/{sites.enabled,sites.disabled}")
+    files.upload_template("nginx.conf.tmpl", "/server/nginx/etc/nginx.conf", VERSIONS, use_sudo=True)
+    sudo("/etc/init.d/nginx reload")
+    
 def add_nginx():
     with cd("/server/src"):
         sudo("wget http://nginx.org/download/nginx-{}.tar.gz".format(VERSIONS['NGINX']))
@@ -107,11 +117,12 @@ def add_nginx():
             --pid-path=/server/nginx/run/nginx.pid\
             --lock-path=/server/nginx/run/nginx.lock\
             --with-http_gzip_static_module && make && make install".format(VERSIONS['NGINX']))
-    files.upload_template("nginx.initd.tmpl", "/etc/init.d/nginx", {'NGINX_VERSION': VERSIONS['NGINX']})
-    sudo("chmod +x /etc/init.d/nginx")
-    sudo("update-rc.d nginx defaults")
+    set_nginx_startup()
+    set_nginx_conf()
 
 
-def setup(host):
-    set_resolv()
-    set_host(host)
+def setup():
+    update()
+    add_nginx()
+    add_python()
+    set_wwwuser()
