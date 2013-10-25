@@ -181,8 +181,10 @@ def includeme(config):
     def get_active_keys(ctxt, req):
             return [l.msgid for l in POFILE()]
 
-    config.add_view(dashboard                                                       , context = ContentContext      , renderer = "ufostart:templates/admin/contents.html")
-    config.add_view(ContentCreationViewFactory(SetStaticContentProc), name="create" , context = ContentContext      , renderer = "ufostart:templates/admin/form.html")
-    config.add_view(get_active_keys                                 , name="active" , context = ContentContext      , renderer = "json")
-    config.add_view(ContentEditViewFactory(SetStaticContentProc)    , name="edit"   , context = SingleContentContext, renderer = "ufostart:templates/admin/form.html")
-    config.add_view(delete_view_factory(SetStaticContentProc)       , name="delete" , context = SingleContentContext)
+    def f(request): return request.resource_url(request.context)
+    def f_parent(request): return request.resource_url(request.context.__parent__)
+    config.add_view(dashboard                                                               , context = ContentContext      , renderer = "ufostart:templates/admin/contents.html")
+    config.add_view(ContentCreationViewFactory(SetStaticContentProc, f)     , name="create" , context = ContentContext      , renderer = "ufostart:templates/admin/form.html")
+    config.add_view(get_active_keys                                         , name="active" , context = ContentContext      , renderer = "json")
+    config.add_view(ContentEditViewFactory(SetStaticContentProc, f_parent)  , name="edit"   , context = SingleContentContext, renderer = "ufostart:templates/admin/form.html")
+    config.add_view(delete_view_factory(SetStaticContentProc, f_parent)     , name="delete" , context = SingleContentContext)
