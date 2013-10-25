@@ -27,7 +27,11 @@ ENVIRONMENTS = {
             repository="git@github.com:UFOstart/UFOStart.git"
             ,process_groups=['p1']
             ,branch='master')
-    ,'live':Environment(
+    , 'staging':Environment(
+            repository="git@github.com:UFOstart/UFOStart.git"
+            ,process_groups=['p1']
+            ,branch='master')
+    , 'live':Environment(
             repository="git@github.com:UFOstart/UFOStart.git"
             ,process_groups=['p1','p2']
             ,branch='LIVE')
