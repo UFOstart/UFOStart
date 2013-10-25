@@ -1,5 +1,5 @@
 from datetime import datetime, date
-import logging
+import logging, pyramid_mako
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
@@ -8,7 +8,6 @@ from pyramid.security import Authenticated, Everyone
 from pyramid_beaker import session_factory_from_settings
 
 from hnc.tools import request
-from pyramid_mako import renderer_factory
 from .lib.subscribers import add_renderer_variables
 from .lib.globals import Globals
 from .handlers.contexts import WebsiteRootContext
@@ -53,6 +52,7 @@ def main(global_config, **settings):
 
     request.extend_request_traversal(config)
 
+    renderer_factory = pyramid_mako.get_renderer_factory(config, "mako.")
     config.add_renderer(".html", renderer_factory)
     config.add_renderer(".xml", renderer_factory)
     config.add_renderer('json', jsonRenderer)
