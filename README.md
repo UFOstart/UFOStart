@@ -9,21 +9,17 @@ The instructions are written with windows in mind, all steps apply in Linux as w
 Set up a local dev environment
 ------------------------------
 
-To setup an virtual environment and install all requirements and dependencies, do the following from the repository root folder:
+To setup an virtual environment and install all requirements and dependencies, do the following from your working copy root folder:
 
     virtualenv --no-site-packages env
     cd webapp
     ..\env\Scripts\python setup.py develop
 
-Note that <code>env</code> is already in the <code>.gitignore</code>.
-
-With this you are basically set to go.
-
 To bring up a development server execute the following from within the <code>/webapp</code> folder (i.e. where your <code>local.ini</code> file is located):
 
     ..\env\Scripts\paster serve --reload local.ini
 
-Please note that the standard <code>local.ini</code> file requires a Redis instance and an API running somewhere.
+Please note that the standard <code>local.ini</code> file requires a Redis instance and an API running somewhere. See below for how to change these requirements.
 
 Config files
 ------------
