@@ -12,7 +12,7 @@ Use putty or your favourite ssh client to connect to the virtual machine as you 
 Notice azureuser is a sudoer but not a superuser, i.e. can do <code>sudo so</code> at any time.
 
 
-VM SETUP
+VM Setup
 --------
 
 When you have connected to the machine:
@@ -91,7 +91,7 @@ Make sure you have the resulting <code>id_rsa</code> file available on the build
 Standard VM Layout
 ------------------
 
-The VMs are stiock Ubuntu 12.04LTS instances with the latest: nginx, python and redis installed.
+The VMs are stock Ubuntu 12.04LTS instances with the latest: nginx, python and redis installed.
 
 Nginx is located in:
 
@@ -110,7 +110,7 @@ Redis is in
 
     /etc/redis
   
-Flush redis wuth:
+Flush redis with:
 
     redis-cli
     flushall
@@ -119,7 +119,9 @@ Restart redis with:
 
     /etc/init.d/redis-server restart
 
-Python is installed system wide. Each environment uses a virtualenv in {BASE_PATH}/env
+Python is installed system wide. Each environment uses a virtualenv in {BASE_PATH}/env.
+
+
 All projects should live in
 
     /server/www
@@ -127,8 +129,28 @@ All projects should live in
 and are owned by <code>www-data</code>.
 
 
+The python webservers are managed by <a href="http://supervisord.org/">Supervisor</a>. Restart the webserver via:
 
-ENVIRONMENT SETUP
+    sudo su - www-data
+    cd /server/www/{PROJECT_NAME}/{ENV_NAME}
+    ./env/bin/supervisorctl -c supervisord.cfg restart all
+    
+Shut it down by: 
+
+    sudo su - www-data
+    cd /server/www/{PROJECT_NAME}/{ENV_NAME}
+    ./env/bin/supervisorctl -c supervisord.cfg shutdown
+    
+
+Or via init script:
+
+    sudo su
+    /etc/init.d/super_ufostart stop
+    /etc/init.d/super_ufostart start
+    
+
+
+Environment Setup
 -----------------
 
 Environment setup and deployment are automated with <a href="http://docs.fabfile.org/en/latest/">python fabric</a>.
@@ -138,8 +160,30 @@ With fabric execute the following from your working copy / build server working 
     cd deploy
     fab -H SERVER_DOMAIN -u www-data -i WWW_DATA_SSHKEY create_env:env=live
 
+    
+Environment Layout
+-----------------
 
-DEPLOYMENT
+Usually in 
+
+    /server/www/{PROJECT_NAME}/{ENV_NAME}
+    
+the currently running code is located at:
+
+    /server/www/{PROJECT_NAME}/{ENV_NAME}/code/current
+    
+you will find
+
+- <code>supervisor.cfg</code>: the config file for the python web server monitor / manager (<a href="http://supervisord.org/">Supervisor</a>)
+- <code>run</code>: contanis supervisor.pid and socket
+- <code>logs</code>: contanis supervisor logs and python webserver logs
+- <code>env</code>: contains the python virtual environment
+- <code>repo.git</code>: contains the git working copy from which to build
+- <code>code</code>: contains all old and current web app builds
+
+    
+
+Deployment
 ----------
     
 Create a development environment and deploy with
