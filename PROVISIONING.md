@@ -133,7 +133,7 @@ ENVIRONMENT SETUP
 
 Environment setup and deployment are automated with <a href="http://docs.fabfile.org/en/latest/">python fabric</a>.
     
-With fabric it is then as easy as executing from within the local project working copy:
+With fabric execute the following from your working copy / build server working copy:
 
     cd deploy
     fab -H SERVER_DOMAIN -u www-data -i WWW_DATA_SSHKEY create_env:env=live

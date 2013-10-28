@@ -30,7 +30,6 @@ class SocialLoginSuccessful(SocialResult):
     def __init__(self, profile):
         self.profile = profile
 
-
 class AbstractSocialResource(object):
     __acl__ = [(Allow, Everyone, 'view'), (Allow, Authenticated, 'import')]
     @property

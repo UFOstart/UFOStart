@@ -25,9 +25,16 @@ To bring up a development server execute the following from within the <code>/we
 
 Please note that the standard <code>local.ini</code> file requires a Redis instance and an API running somewhere.
 
+Config files
+------------
 
-Configure the API Location
-----------------------------------------
+By convention, each environment requires its own config file. I.e. if you want to deploy to an environment called "dev", you will need to have a <code>dev.ini</code> config file in your <code>webapp</code> folder.
+
+Usually we distinguish: local, dev, staging, live environments. The configuration files for your envionment should thus be undertaken in the respective config gile.
+
+
+API Location
+------------
 
 To get any app running you will need a webapi running somewhere.
 
@@ -78,6 +85,30 @@ Set it to localhost for development or configure any local webserver to host tha
     session.cookie_domain = local.webenvironment.com
 
 
+Configure social networks
+-------------------------
+
+Configure the social network application used in the relevant configuration file currently the following networks are syupported:
+
+
+    website.network.facebook.appid=
+    website.network.facebook.appsecret=
+
+    website.network.linkedin.appid=
+    website.network.linkedin.appsecret=
+
+    website.network.angellist.appid=
+    website.network.angellist.appsecret=
+
+    website.network.xing.appid=
+    website.network.xing.appsecret=
+
+    website.network.twitter.appid=
+    website.network.twitter.appsecret=
+    
+Please note that angellist does not support redirect_uri, you need to set this at angellist.co for it to work correctly.
+    
+    
 Contact email configuration
 ---------------------------
 
