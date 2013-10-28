@@ -168,10 +168,6 @@ Usually in
 
     /server/www/{PROJECT_NAME}/{ENV_NAME}
     
-the currently running code is located at:
-
-    /server/www/{PROJECT_NAME}/{ENV_NAME}/code/current
-    
 you will find
 
 - <code>supervisor.cfg</code>: the config file for the python web server monitor / manager (<a href="http://supervisord.org/">Supervisor</a>)
@@ -180,6 +176,10 @@ you will find
 - <code>env</code>: contains the python virtual environment
 - <code>repo.git</code>: contains the git working copy from which to build
 - <code>code</code>: contains all old and current web app builds
+
+The currently running code is located at:
+
+    /server/www/{PROJECT_NAME}/{ENV_NAME}/code/current
 
     
 
