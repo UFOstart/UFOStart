@@ -12,48 +12,8 @@ Use putty or your favourite ssh client to connect to the virtual machine as you 
 Notice azureuser is a sudoer but not a superuser, i.e. can do <code>sudo so</code> at any time.
 
 
-Standard VM Layout
-------------------
-
-The VMs are stiock Ubuntu 12.04LTS instances with the latest: nginx, python and redis installed.
-
-Nginx is located in:
-
-    /server/nginx
-    
-Nginx configuration:
-
-    /server/nginx/etc/sites.enabled/*.conf
-
-Nginx config changes reload:
-
-  /etc/init.d/nginx reload
-  
-  
-Redis is in
-
-  /etc/redis
-  
-Flush redis wuth:
-
-  redis-cli
-  flushall
-
-Restart redis with:
-
-  /etc/init.d/redis-server restart
-
-Python is installed system wide. Each environment uses a virtualenv in {BASE_PATH}/env
-All projects should live in
-
-  /server/www
-  
-and are owned by <code>www-data</code>.
-
-
 VM SETUP
 --------
-
 
 When you have connected to the machine:
 
@@ -126,9 +86,50 @@ You need to make sure that the <code>www-data</code> user is set up to accept yo
 I.e. add your public ssh key to <code>/home/www-data/.ssh/authorized_keys</code>.
 If you dont have a ssh key yet, generate it with the <a href="https://help.github.com/articles/generating-ssh-keys">github instructions</a>. 
 Make sure you have the resulting <code>id_rsa</code> file available on the build machine.
+
+
+Standard VM Layout
+------------------
+
+The VMs are stiock Ubuntu 12.04LTS instances with the latest: nginx, python and redis installed.
+
+Nginx is located in:
+
+    /server/nginx
     
+Nginx configuration:
+
+    /server/nginx/etc/sites.enabled/*.conf
+
+Nginx config changes reload:
+
+    /etc/init.d/nginx reload
+  
+  
+Redis is in
+
+    /etc/redis
+  
+Flush redis wuth:
+
+    redis-cli
+    flushall
+
+Restart redis with:
+
+    /etc/init.d/redis-server restart
+
+Python is installed system wide. Each environment uses a virtualenv in {BASE_PATH}/env
+All projects should live in
+
+    /server/www
+  
+and are owned by <code>www-data</code>.
+
+
+
 ENVIRONMENT SETUP
-=================
+-----------------
 
 Environment setup and deployment are automated with <a href="http://docs.fabfile.org/en/latest/">python fabric</a>.
     
@@ -139,7 +140,7 @@ With fabric it is then as easy as executing from within the local project workin
 
 
 DEPLOYMENT
-==========
+----------
     
 Create a development environment and deploy with
 
@@ -151,13 +152,13 @@ If you want to learn everything about what gets deployed how, checkout the <code
 
 
 CONFIGURATION
-=============
+-------------
 
 Please see the <a href="README.md">readme</a> on how to configure a webserver instance.
 
 
 TROUBLESHOOTING
-===============
+---------------
 
 1. I cannot login!
     Please verify that your ini-config file contains the correct domain for <code>session.cookie_domain = SERVER_DOMAIN</code>

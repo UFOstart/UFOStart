@@ -79,7 +79,7 @@ Set it to localhost for development or configure any local webserver to host tha
 
 
 Contact email configuration
-===================
+---------------------------
 
 The frontends do not handle user emails. This is done in the API.
 
@@ -102,7 +102,7 @@ And the following section is only used in the live.ini / production environment:
     
     
 Deployment
-==========
+----------
 
 To deploy you need fabric installed on your build server and execute from within the project root:
 
