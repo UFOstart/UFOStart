@@ -1,7 +1,0 @@
-baseurl: /UFOStart/
-markdown: rdiscount
-safe: true
-lsi: false
-pygments: true
-
-project_name: UFOStart

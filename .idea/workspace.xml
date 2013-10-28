@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3768246d-6f45-44a7-a48d-14b4f82460f8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_posts/object/2013-09-13-0001-Slug.markdown" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_slug.markdown" afterPath="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_slug.markdown" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/_posts/object/2013-09-13-0001-Tag.markdown" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_posts/object/2013-09-13-0001-Slug.markdown" afterPath="$PROJECT_DIR$/_posts/object/2013-09-13-0001-Slug.markdown" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -27,10 +27,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="73" column="38" selection-start="2881" selection-end="2881" vertical-scroll-proportion="0.40664557" vertical-offset="692" max-vertical-offset="1846">
+            <state line="60" column="0" selection-start="2370" selection-end="2370" vertical-scroll-proportion="-5.181818" vertical-offset="666" max-vertical-offset="1820">
               <folding />
             </state>
           </provider>
@@ -42,7 +42,19 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="26" selection-start="406" selection-end="406" vertical-scroll-proportion="-9.36" vertical-offset="0" max-vertical-offset="429">
+            <state line="11" column="36" selection-start="181" selection-end="181" vertical-scroll-proportion="-5.72" vertical-offset="0" max-vertical-offset="364">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="2013-09-13-0001-Tag.markdown" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/_posts/object/2013-09-13-0001-Tag.markdown">
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="56" selection-start="176" selection-end="176" vertical-scroll-proportion="0.20667727" vertical-offset="0" max-vertical-offset="629">
               <folding />
             </state>
           </provider>
@@ -66,7 +78,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_static_set.markdown" />
         <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_need_invite.markdown" />
         <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_pledge_create.markdown" />
         <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_product_offer.markdown" />
@@ -80,8 +91,9 @@
         <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_template_list.markdown" />
         <option value="$PROJECT_DIR$/_posts/admin/2013-09-12-0001_admin_service_all.markdown" />
         <option value="$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_slug.markdown" />
-        <option value="$PROJECT_DIR$/_posts/object/2013-09-13-0001-Slug.markdown" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/_posts/object/2013-09-13-0001-Tag.markdown" />
+        <option value="$PROJECT_DIR$/_posts/object/2013-09-13-0001-Slug.markdown" />
       </list>
     </option>
   </component>
@@ -432,12 +444,16 @@
       <created>1379077351284</created>
       <updated>1379077351284</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="endpoints documented">
+      <created>1379080395595</created>
+      <updated>1379080395595</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -474,22 +490,13 @@
     <MESSAGE value="admin endpoints" />
     <MESSAGE value="fixing : space issue, all endpoints now displayed" />
     <MESSAGE value="more homogeneous list display" />
-    <option name="LAST_COMMIT_MESSAGE" value="more homogeneous list display" />
+    <MESSAGE value="endpoints documented" />
+    <option name="LAST_COMMIT_MESSAGE" value="endpoints documented" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_need_invite.markdown">
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="9" selection-start="85" selection-end="85" vertical-scroll-proportion="0.0674974" vertical-offset="0" max-vertical-offset="963">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_posts/endpoints/2013-09-12-0001_web_pledge_create.markdown">
       <provider editor-type-id="MarkdownPreviewEditor">
         <state />
@@ -620,19 +627,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="0" selection-start="2370" selection-end="2370" vertical-scroll-proportion="-5.181818" vertical-offset="666" max-vertical-offset="1820">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/_posts/object/2013-09-13-0001-Slug.markdown">
       <provider editor-type-id="MarkdownPreviewEditor">
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="26" selection-start="406" selection-end="406" vertical-scroll-proportion="-9.36" vertical-offset="0" max-vertical-offset="429">
+        <state line="11" column="36" selection-start="181" selection-end="181" vertical-scroll-proportion="-5.72" vertical-offset="0" max-vertical-offset="364">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
+    <entry file="file://$PROJECT_DIR$/_posts/object/2013-09-13-0001-Tag.markdown">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state line="73" column="38" selection-start="2881" selection-end="2881" vertical-scroll-proportion="0.40664557" vertical-offset="692" max-vertical-offset="1846">
+        <state line="10" column="56" selection-start="176" selection-end="176" vertical-scroll-proportion="0.20667727" vertical-offset="0" max-vertical-offset="629">
           <folding />
         </state>
       </provider>

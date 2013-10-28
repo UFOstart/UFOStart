@@ -1,1 +1,0 @@
-d:\Programme\Ruby200-x64\bin\jekyll serve --watch --baseurl '/'
