@@ -5,8 +5,9 @@ This is a python pyramid project. It is recommended to run it from a virtual env
 
 The instructions are written with windows in mind, all steps apply in Linux as well, but YMMV.
 
-To get a local test environment running you should do the following:
 
+Set up a local dev environment
+------------------------------
 
 To setup an virtual environment and install all requirements and dependencies, do the following from the repository root folder:
 
@@ -25,7 +26,7 @@ To bring up a development server execute the following from within the <code>/we
 Please note that the standard <code>local.ini</code> file requires a Redis instance and an API running somewhere.
 
 
-Configuring the API Location
+Configure the API Location
 ----------------------------------------
 
 To get any app running you will need a webapi running somewhere.
@@ -52,8 +53,7 @@ This registers the settings into the context and makes them acessible throughout
 
 
 
-
-Configuring caching and session backends
+Cache and session configuration
 ----------------------------------------
 
 Caching is managed by <a href="http://dogpilecache.readthedocs.org/en/latest/">dogpile</a>. Dogpile supports many different backends.
@@ -78,7 +78,7 @@ Set it to localhost for development or configure any local webserver to host tha
     session.cookie_domain = local.webenvironment.com
 
 
-Email configuration
+Contact email configuration
 ===================
 
 The frontends do not handle user emails. This is done in the API.
@@ -104,7 +104,7 @@ And the following section is only used in the live.ini / production environment:
 Deployment
 ==========
 
-To deploy you need fabric installed on your build server and execute:
+To deploy you need fabric installed on your build server and execute from within the project root:
 
     cd deploy
     fab -H LIVE_HOST -i LIVE_SSHKEY-u www-data deploy:env=live
@@ -112,6 +112,13 @@ To deploy you need fabric installed on your build server and execute:
 
 Create a development environment and deploy with
 
-    mkdir -p '/server/wwww/ufostart'
+REMOTE on deployment target: 
+
+    mkdir -p '/server/www/ufostart'
+
+LOCAL on build server:
+
     fab -H DEV_HOST -i DEV_SSHKEY-u www-data create_env:env=dev
     fab -H DEV_HOST -i DEV_SSHKEY-u www-data deploy:env=dev
+
+    

@@ -1,7 +1,7 @@
 UFOstart Provisioning
 =====================
 
-Use the ufostartweb image from azure to setup a new virtual box. During the process yuou are asked to upload your SSH key.
+Use the ufostartweb image from azure to setup a new virtual box. During the process you are asked to upload your SSH key.
 
 See <a href="http://www.windowsazure.com/en-us/manage/linux/how-to-guides/ssh-into-linux/">the documentation</a> for instructions on how to generate a key.
 
@@ -12,8 +12,47 @@ Use putty or your favourite ssh client to connect to the virtual machine as you 
 Notice azureuser is a sudoer but not a superuser, i.e. can do <code>sudo so</code> at any time.
 
 
+Standard VM Layout
+------------------
+
+The VMs are stiock Ubuntu 12.04LTS instances with the latest: nginx, python and redis installed.
+
+Nginx is located in:
+
+    /server/nginx
+    
+Nginx configuration:
+
+    /server/nginx/etc/sites.enabled/*.conf
+
+Nginx config changes reload:
+
+  /etc/init.d/nginx reload
+  
+  
+Redis is in
+
+  /etc/redis
+  
+Flush redis wuth:
+
+  redis-cli
+  flushall
+
+Restart redis with:
+
+  /etc/init.d/redis-server restart
+
+Python is installed system wide. Each environment uses a virtualenv in {BASE_PATH}/env
+All projects should live in
+
+  /server/www
+  
+and are owned by <code>www-data</code>.
+
+
 VM SETUP
-==========
+--------
 
 
 When you have connected to the machine:
