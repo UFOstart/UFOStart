@@ -142,6 +142,10 @@ class FounderForm(BaseForm):
         return {'success':True, 'redirect': request.root.template_select_url}
 
 class UserRoleHandler(FormHandler):
+    def pre_fill_values(self, request, result):
+        result['values'][ExpertForm.id] = {"Skills" : [m.unwrap() for m in request.context.user.Skills]}
+        return super(UserRoleHandler, self).pre_fill_values(request, result)
+
     @property
     def site_title(self):
         return ['What are you?', self.request.globals.project_name]
