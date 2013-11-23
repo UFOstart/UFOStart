@@ -21,7 +21,8 @@ define(["tools/hash", "tools/ajax", "text!libs/templates/searchresult.html"]
                     .on('keydown', $.proxy(this.keypress, this))
                     .on('keyup',    $.proxy(this.keyup, this))
                     .on('focus', function(e){view.doSearch(e.target.value);})
-                    .on('blur', $.proxy(this.hideonBlur, this));
+                    .on('blur', $.proxy(this.hideonBlur, this))
+                    .on('paste', $.proxy(this.onPaste, this));
 
                 this.model.on("reset", _.bind(this.onSearchResult, this));
                 this.$resultNode = $('<div class="entity-search-result"></div>').appendTo("body");
@@ -69,7 +70,7 @@ define(["tools/hash", "tools/ajax", "text!libs/templates/searchresult.html"]
                 this.$resultNode.find(".active").removeClass('active');
                 this.$resultNode.find(".search-result-item").last().addClass("active");
             }
-
+            , onPaste: function(){}
             , keyup : function(e){
                 switch(e.keyCode) {
                     case 40: // down arrow
@@ -93,7 +94,7 @@ define(["tools/hash", "tools/ajax", "text!libs/templates/searchresult.html"]
                         this.last();
                         break;
                     default:
-                        this.doSearch(e.target.value);
+                        if(this.otherKey(e))this.doSearch(e.target.value);
                 }
                 e.stopPropagation();
                 e.preventDefault();
@@ -126,22 +127,20 @@ define(["tools/hash", "tools/ajax", "text!libs/templates/searchresult.html"]
                         break
                     case 48: case 49 :case 50 :case 51 :case 52 :case 53 :case 54 :case 55 :case 56 :case 57 :
                     case 96: case 97 :case 98 :case 99 :case 100:case 101:case 102:case 103:case 104:case 105:
-                        if(e.ctrlKey||e.metaKey){
-                            var number = numberMap[e.keyCode];
-                            this.$resultNode.find(".search-result-item.active").removeClass("active");
-                            this.$resultNode.find(".search-result-item[shortcut="+number+"]").addClass("active");
-                            if(number == 0){
-                                this._extraItemSelected();
-                            } else {
-                                this.disAmbiguateEvent(e);
-                            }
-                            this.hide();
-                            e.stopPropagation();
-                            e.preventDefault();
+                    if(e.ctrlKey||e.metaKey){
+                        var number = numberMap[e.keyCode];
+                        this.$resultNode.find(".search-result-item.active").removeClass("active");
+                        this.$resultNode.find(".search-result-item[shortcut="+number+"]").addClass("active");
+                        if(number == 0){
+                            this._extraItemSelected();
+                        } else {
+                            this.disAmbiguateEvent(e);
                         }
-                        break;
-                    default:
-                        this.otherKey(e);
+                        this.hide();
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }
+                    break
                 }
                 e.stopPropagation()
             }
@@ -188,7 +187,7 @@ define(["tools/hash", "tools/ajax", "text!libs/templates/searchresult.html"]
                                     if(resp.dbMessage){
                                         view.model.reset([]);
                                     } else {
-                                        view.model.reset(view.model.parse(resp));
+                                        view.addModels(resp)
                                     }
                                 }
                             }
@@ -197,6 +196,9 @@ define(["tools/hash", "tools/ajax", "text!libs/templates/searchresult.html"]
                         view.model.reset([]);
                     }
                 }
+            }
+            , addModels:function(resp){
+                this.model.reset(this.model.parse(resp));
             }
             , onSearchResult: function(collection){
                 if(collection){

@@ -38,14 +38,23 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
         })
         , TagSearch = AbstractSearch.extend({
             buildQuery: function(query){
+                this.$searchBox.data('empty', !query);
                 var extra = this.options.queryExtra;
                 return query?_.extend({'name':query}, extra):null;
+            }
+            , onPaste: function(e){
+                var _t = this;
+                setTimeout(function(){
+                    _.each(_t.$searchBox.val().split(","), function(term){
+                        _t.trigger("unknownterm:selected", term.trim().toLowerCase());
+                    });
+                }, 0);
             }
             , delKey: function(e){
                 return true;
             }
             , otherKey: function(e){
-                if(e.keyCode == 8 && !this.$searchBox.val()){
+                if(e.keyCode == 8 && this.$searchBox.data('empty')){
                     this.trigger("delKey");
                     return false;
                 } else if (e.keyCode == 188 && this.$searchBox.val()){
@@ -53,6 +62,15 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
                     this.trigger("unknownterm:selected", this.$searchBox.val().trim());
                     return false;
                 } else return true;
+            }
+            , addModels:function(resp){
+                var view = this, result = [], models = this.model.parse(resp), refCollection = this.options.filterOut;
+                _.each(models, function(model){
+                    if(!refCollection.get(model.name))
+                        result.push(model);
+                    }
+                );
+                this.model.reset(result);
             }
         })
         , TagSearchView = Backbone.View.extend({
@@ -110,13 +128,16 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
                     });
                 }
                 var seed = this.$result.find(".label").find("input");
-                if(seed.length)
-                    this.$(".label").each(function(idx, el){
-                        var model = new PlainResult({name: $(el).find("input[name]").val()});
-                        view.model.add(model, {silent:true});
-                        new TagView({model: model,el:el});
-                    });
+                if(seed.length)this.populate(this.$(".label"), true);
                 this.adjustInput();
+            }
+            , populate : function($elems, silent){
+                var view = this;
+                $elems.each(function(idx, el){
+                    var model = new PlainResult({name: $(el).find("input[name]").val()});
+                    view.model.add(model, {silent:silent});
+                    new TagView({model: model,el:el});
+                });
             }
             , addOne: function(model){
                 this.$result.append((new TagView({model: model})).render({template: this.tagTemplate, prefix: this.options.prefix, pos: this.model.length - 1}));
@@ -142,6 +163,7 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
                     , model: new PlainSearchResult([], {apiResult: opts.apiResult})
                     , searchUrl: opts.apiUrl
                     , queryExtra: opts.queryExtra
+                    , filterOut: this.model
                 });
             }
         })
