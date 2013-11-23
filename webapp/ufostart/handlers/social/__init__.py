@@ -11,7 +11,12 @@ log = logging.getLogger(__name__)
 class SocialResult(Exception):
     def get_redirection(self, request):
         redirections = request.session.pop_flash('redirections')
-        route = redirections[-1] if redirections else request.root.home_url
+        if redirections:
+            route = redirections[-1]
+        elif request.root.user.isAnon():
+            route = request.root.home_url
+        else:
+            route = request.root.profile_url(request.root.user.slug)
         return route
 
 

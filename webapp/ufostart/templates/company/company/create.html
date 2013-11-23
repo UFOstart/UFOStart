@@ -4,19 +4,59 @@
 <%def name="slogan()">${self.crumbs(3)}</%def>
 <%def name="sectionTitle()">${_("CompanyCreate.Title")|n}</%def>
 
-
-<%def name="bodyContent()">
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="box-dark">
-                <div class="box-content">
-                    ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
-                </div>
+<%def name="content()">
+    <div class="container">
+        <div class="row mar-top-1">
+            <div class="col-lg-9">
+                ${self.slogan()}
             </div>
         </div>
-        <div class="col-lg-4">
-            <h3 class="no-margin">${_("CompanyCreate.ImportPrompt.Angellist")|n}</h3>
-            <a href="${request.root.angellist_url}" class="btn btn-primary mar-top-1">${_("CompanyCreate.ImportButton.Angellist")|n}</a>
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="section-title">
+                    <span class="brand-primary">
+                        ${self.sectionTitle()}
+                    </span>
+                </h1>
+            </div>
+        </div>
+        <div class="row mar-top-1">
+            <div class="col-md-8 col-lg-6">
+                ${self.bodyContent()}
+            </div>
+            <div class="col-md-4 col-lg-6">
+              <div class="row">
+                <div class="col-lg-6" style="margin-bottom:30px;">
+                  <h3 class="no-margin">${_("CompanyCreate.ImportPrompt.Angellist")|n}</h3>
+                  <a href="${request.root.angellist_url}" class="btn btn-primary mar-top-1">${_("CompanyCreate.ImportButton.Angellist")|n}</a>
+                </div>
+                <div class="col-lg-6">
+                  ${self.wtfBox()}
+                </div>
+              </div>
+
+
+              <div class="row mar-top-6">
+                <div class="col-lg-12">
+                    <div id="getsat-widget-5038"></div>
+                    <script type="text/javascript" src="https://loader.engage.gsfn.us/loader.js"></script>
+                    <script type="text/javascript">
+                    if (typeof GSFN !== "undefined") { GSFN.loadWidget(5038,{"containerId":"getsat-widget-5038"}); }
+                    </script>
+                </div>
+              </div>
+
+
+            </div>
+        </div>
+    </div>
+</%def>
+
+
+<%def name="bodyContent()">
+    <div class="box-dark">
+        <div class="box-content">
+            ${self.build_form(view.form, values.get(view.form.id), errors.get(view.form.id))}
         </div>
     </div>
 </%def>

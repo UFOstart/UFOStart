@@ -1,7 +1,9 @@
 <%inherit file="../../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../../widgets.html" name="widgets"/>
+<%namespace file="../../common/task.html" name="tasklib"/>
 <%namespace file="../company/widgets.html" name="companyWidgets"/>
+
 
 
 <%def name="content()">
@@ -26,7 +28,7 @@
             </div>
             <div class="col-lg-3">
                 ${self.wtfBox()}
-                ${self.otherTasks(ctxt.round)}
+                ${tasklib.otherTasks(ctxt.round, ctxt.need)}
                 ${widgets.sharebtns()}
             </div>
         </div>
@@ -312,27 +314,6 @@
 %endif
 </%def>
 
-<%def name="otherTasks(round)">
-    <div class="company-dashboard">
-    %if len(round.roundTasks) > 1:
-        <div class="box-shaded">
-            <div class="box-shaded">
-                <div class="box-title">Other tasks from <a href="${root.round_url(ctxt.company.slug, '1')}">${ctxt.company.display_name}</a></div>
-                <div class="box-shaded box-hor-content">
-                    %for need in round.roundTasks:
-                        %if need.slug != ctxt.need.slug:
-                            <div class="list-item">
-                                <h3 class="other-task-card-header"><a href="${root.need_url(ctxt.company.slug, need.slug)}">${need.name}</a></h3>
-                                ${widgets.valuation_sml(need)}
-                            </div>
-                        %endif
-                    %endfor
-                </div>
-            </div>
-        </div>
-    %endif
-    </div>
-</%def>
 
 <%def name="wtfBox()">
     %if ctxt.need.summary:

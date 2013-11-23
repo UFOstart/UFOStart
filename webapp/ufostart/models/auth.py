@@ -84,6 +84,10 @@ class UserModel(Mapping):
 
     fbLink = TextField()
     xingLink = TextField()
+    @property
+    def liLink(self):
+        liProfile = [n for n in self.Profile if n.type == 'LI'][0]
+        return 'http://www.linkedin.com/profile/view?id={}'.format(liProfile['id'])
 
 
     Skills = ListField(DictField(NamedModel))

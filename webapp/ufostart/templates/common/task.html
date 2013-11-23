@@ -1,3 +1,4 @@
+<%namespace file="../widgets.html" name="widgets"/>
 
 <%def name="public_task_cols(cols)">
     %for i, col in enumerate(cols):
@@ -50,4 +51,35 @@
       %endif
     </div>
   </div>
+</%def>
+
+
+
+
+<%def name="otherTasks(round, current_need, title = None)">
+    <div class="company-dashboard">
+    %if len(round.roundTasks) > 1:
+        <div class="box-shaded">
+            <div class="box-shaded">
+                <div class="box-title">
+                  %if title:
+                    ${title|n}
+                  %else:
+                    Other tasks from <a href="${root.round_url(ctxt.company.slug, '1')}">${ctxt.company.display_name}</a>
+                  %endif
+                </div>
+                <div class="box-shaded box-hor-content">
+                    %for need in round.roundTasks:
+                        %if not current_need or need.slug != current_need.slug:
+                            <div class="list-item">
+                                <h3 class="other-task-card-header"><a href="${root.need_url(ctxt.company.slug, need.slug)}">${need.name}</a></h3>
+                                ${widgets.valuation_sml(need)}
+                            </div>
+                        %endif
+                    %endfor
+                </div>
+            </div>
+        </div>
+    %endif
+    </div>
 </%def>

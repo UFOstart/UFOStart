@@ -89,14 +89,12 @@ class WebsiteRootContext(RootContext):
     def admin_url(self, *args, **kwargs):
         return self.request.resource_url(self, 'admin', *args, **kwargs)
 
-    def login_url(self, *args, **kwargs):
-        return self.request.resource_url(self, 'login', *args, **kwargs)
     def signup_url(self, *args, **kwargs):
         return self.request.resource_url(self, 'signup', *args, **kwargs)
     def logout_url(self, *args, **kwargs):
         return self.request.resource_url(self, 'logout', *args, **kwargs)
-    def auth_url(self, network):
-        return self.request.resource_url(self, 'login', network, query = [('furl', self.request.url)])
+    def auth_url(self, network, furl = None):
+        return self.request.resource_url(self, 'login', network, query = [('furl', self.request.url if furl is None else furl)])
 
 
     @property

@@ -133,7 +133,6 @@
     </div>
 
 
-    %if profile.xingLink or profile.fbLink:
     <div class="mar-top-3">
         <div class="box-title">
              ${possessive_name} Networks
@@ -141,6 +140,7 @@
         <div class="box-shaded">
             <div class="box-shaded">
                 <div class="box-content box-shaded">
+                    <a href="${profile.liLink}" class="text-small social-linkedin" target="_blank">${possessive_name} Linkedin Profile</a>
                     %if profile.fbLink:
                         <a href="${profile.fbLink}" class="text-small social-facebook" target="_blank">${possessive_name} Facebook Profile</a>
                     %endif
@@ -151,7 +151,6 @@
             </div>
         </div>
     </div>
-    %endif
 
     <div class="mar-top-3">
         ${widgets.sharebtns()}

@@ -1,6 +1,7 @@
 <%inherit file="../../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
 <%namespace file="../../widgets.html" name="widgets"/>
+<%namespace file="../../common/task.html" name="tasklib"/>
 <%namespace file="widgets.html" name="companyWidgets"/>
 
 <%def name="bcrumbs()">
@@ -53,8 +54,17 @@
         <div class="col-lg-3">
             ${self.sidebarMedia(company.Pictures, company.slideShare)}
             ${widgets.sharebtns()}
+
+            <div class="mar-top-3">
+                ${self.rounds(company, company.rounds)}
+            </div>
+
+            <div class="mar-top-3">
+              ${tasklib.otherTasks(ctxt.company.Round, None, "Current Tasks")}
+            </div>
+
         </div>
-    </div>
+   </div>
 </%def>
 
 <%def name="companyMainInfo(company)">
@@ -69,10 +79,6 @@
     </div>
     <div class="mar-top-3">
         ${self.teamMembers(company.mentors, company.members)}
-    </div>
-
-    <div class="mar-top-3">
-        ${self.rounds(company, company.rounds)}
     </div>
 </%def>
 
