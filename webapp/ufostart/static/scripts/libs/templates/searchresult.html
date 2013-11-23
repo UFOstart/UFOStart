@@ -4,7 +4,9 @@
         {{ item.getSearchLabel() }}
     </li>
 {% }); %}
+{% if(withExtra){ %}
   <li class="search-result-item create-new-entity">
     Add as new
   </li>
+{% } %}
 </ul>
