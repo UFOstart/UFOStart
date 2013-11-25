@@ -1,4 +1,4 @@
-define(["tools/ajax", "libs/abstractsearch"], function(ajax, AbstractSearch){
+define(["tools/ajax", "libs/abstractsearch", "text!templates/need_searchresult.html"], function(ajax, AbstractSearch, search_result_template){
     var
     getRec = hnc.getRecursive
     , PlainResult = ajax.Model.extend({
@@ -11,14 +11,20 @@ define(["tools/ajax", "libs/abstractsearch"], function(ajax, AbstractSearch){
         model:PlainResult
         , initialize: function(models, opts){
             this.apiResult = opts.apiResult;
+            this.preExisting = opts.preExisting;
         }
-        , idAttribute:'name' // TODO: should be slug
+        , idAttribute:'slug'
         , parse: function(resp){
-            return getRec(resp, this.apiResult);
+            var c = this, result = getRec(resp, this.apiResult);
+            _.each(result, function(elem){
+                elem.alreadyExists = !!~c.preExisting.indexOf(elem.slug);
+            });
+            return result;
         }
     })
     , TypeAheadSearch = AbstractSearch.extend({
-        buildQuery: function(query){
+        template:_.template(search_result_template)
+        , buildQuery: function(query){
             return query?{type: this.options.apiType, name:query}:null;
         }
     })
@@ -39,11 +45,11 @@ define(["tools/ajax", "libs/abstractsearch"], function(ajax, AbstractSearch){
             var view = this, path = location.pathname.split('/');
             path[3] = term.id;
             path = path.join("/");
-            if(!(window.history && history.pushState)){
+
+            if(term.get('alreadyExists') || !(window.history && history.pushState)){
                 location.pathname = path;
             } else {
-//                window.history.pushState(null, term.get('name'), path);
-
+                window.history.pushState(null, term.get('name'), path);
                 $("[data-entity-property]").each(function(idx, elem){
                    var $e = $(elem), attr = $e.data('entityProperty')
                     $e.html(term.get(attr));
@@ -58,7 +64,7 @@ define(["tools/ajax", "libs/abstractsearch"], function(ajax, AbstractSearch){
             return new TypeAheadSearch({
                 el:this.$el
                 , suppressExtra: true
-                , model: new PlainSearchResult([], {apiResult: opts.apiResult})
+                , model: new PlainSearchResult([], {apiResult: opts.apiResult, preExisting: this.$el.closest(".form-validated").data("roundTasks")})
                 , apiType: opts.apiType
                 , searchUrl: opts.apiUrl
             });

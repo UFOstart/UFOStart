@@ -464,10 +464,12 @@ class RoundModel(Mapping):
     def noTotalNeeds(self):
         return len([n for n in self.Needs if n.added])
 
-
     @property
     def roundTasks(self):
         return filter(attrgetter("customized"), self.Needs)
+
+    def getRoundTaskSlugs(self):
+        return [t.slug for t in self.roundTasks]
 
 class CompanyModel(BaseCompanyModel):
     tagString = TextField()

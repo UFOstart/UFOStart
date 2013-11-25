@@ -32,12 +32,12 @@
     position:relative;
     cursor:pointer;
     color:white;
+    &.already-exists {color:#ddd;}
     &.active {
       background:darken(@dropdownBackground, 15%);
       .shortcut {background:darken(@dropdownBorder, 10%);}
     }
     + .search-result-item {border-top: 1px solid @borderColor;}
-
     .shortcut {
       background: darken(@dropdownBorder, 10%);
       border-left:1px solid @dropdownBorder;

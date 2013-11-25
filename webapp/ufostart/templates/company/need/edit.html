@@ -107,18 +107,17 @@
             filepicker.setKey('${settings.filepickerKey}');
             $(".form-validated").each(function(idx, form){
                 new View({el:form})
+               $(form).data('roundTasks', ${html.json(ctxt.round.getRoundTaskSlugs())|n});
             });
         });
-      tinymce.init({selector: "textarea",
-      plugins: [
-        "advlist autolink lists link image charmap print preview anchor",
-        "searchreplace visualblocks code fullscreen",
-        "insertdatetime media table contextmenu paste"
-      ],
-      toolbar: "undo redo | styleselect | bold italic | bullist numlist outdent indent | link image",
-
+      tinymce.init({
+        selector: "textarea",
+        plugins: [
+          "advlist autolink lists link image charmap print preview anchor",
+          "searchreplace visualblocks code fullscreen",
+          "insertdatetime media table contextmenu paste"
+        ],
+        toolbar: "undo redo | styleselect | bold italic | bullist numlist outdent indent | link image",
       });
-
-
     </script>
 </%def>
