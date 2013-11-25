@@ -41,6 +41,10 @@ class PictureGalleryUploadField(formfields.StringField):
 class TagSearchField(formfields.TagSearchField):
     template = "ufostart:templates/common/controls/tagsearch.html"
 
+class ServiceSearchField(formfields.TagSearchField):
+    api_allow_new = False
+    template = "ufostart:templates/common/controls/servicesearch.html"
+
 
 class HTMLString(formencode.validators.String):
   messages = {"invalid_format":'There was some error in your HTML!'}

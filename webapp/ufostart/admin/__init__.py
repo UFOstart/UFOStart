@@ -2,11 +2,12 @@ from collections import OrderedDict
 from hnc.apps.static_content.views import set_up_content_mgmt_app, delete_view_factory, ContentEditViewFactory, ContentCreationViewFactory, KeyValueModel
 from hnc.tools.generic_views import logout_func
 from pyramid.decorator import reify
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.security import DENY_ALL, ALL_PERMISSIONS, Allow
 from ufostart.lib.baseviews import BaseContextMixin
 from ufostart.admin import handlers
 from ufostart.admin.auth import AuthenticationHandler, AdminUserModel, USER_TOKEN, getUser, setUserF, canEdit
-from ufostart.models.procs import AdminTemplatesGetProc, AdminNeedGetProc, AdminServiceGetProc, GetStaticContentProc, SetStaticContentProc
+from ufostart.models.procs import AdminTemplatesGetProc, AdminNeedGetProc, AdminServiceGetProc, GetStaticContentProc, SetStaticContentProc, AdminPageGetProc
 
 
 class AdminSettings(object):
@@ -129,6 +130,17 @@ class ContentContext(BaseAdminContext):
 
 
 
+class PageContext(BaseAdminContext):
+    menu_label = "Pages"
+    @reify
+    def page(self):
+        try:
+            return AdminPageGetProc(self.request, {'url':self.request.params['url']})
+        except KeyError, e:
+            raise HTTPNotFound()
+
+
+
 
 
 
@@ -138,6 +150,7 @@ class AdminContext(BaseAdminContext):
         , ('task', TaskContext)
         , ('service', ServiceContext)
         , ('content', ContentContext)
+        , ('page', PageContext)
     ])
 
     def __getitem__(self, item):
@@ -167,6 +180,10 @@ def includeme(config):
     config.add_view(handlers.index                               , context = TemplatesContext                    , renderer = "ufostart:templates/admin/templates.html")
     config.add_view(handlers.TemplateCreateHandler, name="create", context = TemplatesContext                    , renderer = "ufostart:templates/admin/form.html")
     config.add_view(handlers.TemplateEditHandler  , name="edit"  , context = SingleTemplateContext               , renderer = "ufostart:templates/admin/form.html")
+
+    config.add_view(handlers.index                               , context = PageContext                         , renderer = "ufostart:templates/admin/pages.html")
+    config.add_view(handlers.PageCreateHandler, name="create"    , context = PageContext                         , renderer = "ufostart:templates/admin/form.html")
+    config.add_view(handlers.PageEditHandler  , name="edit"      , context = PageContext                   , renderer = "ufostart:templates/admin/form.html")
 
 
 

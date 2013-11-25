@@ -203,7 +203,7 @@
         </div>
         <div class="box-content">
             <h3 class="no-margin"><a class="overflow" href="${need_url}">${need.name}</a></h3>
-            <div class="mar-top-1 long-description">${html.coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
+            <div class="mar-top-1 long-description">${html.clean_coalesce(need.customText, need.summary) | html.trunc(descr_len)}</div>
         </div>
         <hr class="boxed"/>
         <div class="box-content">

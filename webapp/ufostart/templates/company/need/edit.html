@@ -8,13 +8,13 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="section-title">
-                    <span class="brand-primary">${ctxt.need.name}</span>
+                    <span class="brand-primary" data-entity-property="name">${ctxt.need.name}</span>
                 </h1>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-9">
-              <p>${ctxt.need.summary}</p>
+              <p data-entity-property="summary">${ctxt.need.summary}</p>
             </div>
         </div>
         <div class="row mar-top-2">
@@ -75,6 +75,7 @@
                         ${need.display_total(company.currency)}
                     </div>
                 </div>
+                ${form.fieldMap['parttime'].render(form.id, request, values, errors, view, grid = form.grid)|n}
             </div>
             <div class="col-lg-4">
                 ${form.fieldMap['equity'].render(form.id, request, values, errors, view, grid = form.grid)|n}
@@ -85,6 +86,9 @@
         <div class="label-list">
             ${form.fieldMap['Tags'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         </div>
+        <div class="label-list">
+            ${form.fieldMap['Services'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+        </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">${btn_label}</button>
             ${caller.cancel_button(form)|n}
@@ -94,6 +98,7 @@
 
 
 <%def name="post_scripts()">
+    <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
     <script type="text/javascript">
         (function(a){if(window.filepicker){return}var b=a.createElement("script");b.type="text/javascript";b.async=!0;b.src=("https:"===a.location.protocol?"https:":"http:")+"//api.filepicker.io/v1/filepicker.js";var c=a.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c);var d={};d._queue=[];var e="pick,pickMultiple,pickAndStore,read,write,writeUrl,export,convert,store,storeUrl,remove,stat,setKey,constructWidget,makeDropPane".split(",");var f=function(a,b){return function(){b.push([a,arguments])}};for(var g=0;g<e.length;g++){d[e[g]]=f(e[g],d._queue)}window.filepicker=d})(document);
     </script>
@@ -104,5 +109,16 @@
                 new View({el:form})
             });
         });
+      tinymce.init({selector: "textarea",
+      plugins: [
+        "advlist autolink lists link image charmap print preview anchor",
+        "searchreplace visualblocks code fullscreen",
+        "insertdatetime media table contextmenu paste"
+      ],
+      toolbar: "undo redo | styleselect | bold italic | bullist numlist outdent indent | link image",
+
+      });
+
+
     </script>
 </%def>

@@ -23,12 +23,26 @@ var module = angular.module('adminapp', [])
         });
     }
 
+    addFactory(module, "Pages", "/api/0.0.1/admin/static/allPages", function(data){return data.Pages});
     addFactory(module, "Templates", "/api/0.0.1/admin/template/all", function(data){return data.Templates});
     addFactory(module, "Needs", "/api/0.0.1/admin/need/all", function(data){return data.Needs});
     addFactory(module, "Services", "/api/0.0.1/admin/service/all", function(data){return data.Services});
     addFactory(module, "Static", "/api/0.0.1/admin/static", function(data){return data.Content.Static});
     addFactory(module, "UsedContent", "/admin/content/active", function(data){return data});
 })(module);
+
+function PageListCtrl($scope, Pages) {
+  $scope.pages = [];
+  $scope.queryStatus = 'true';
+  Pages.getAllItems().then(function(data){
+      $scope.pages = data
+  });
+  $scope.query = function (item){
+        return    ((!$scope.queryURL || !!~item.url.toLowerCase().indexOf($scope.queryURL.toLowerCase()))
+                && (!$scope.queryTitle || !!~item.title.toLowerCase().indexOf($scope.queryTitle.toLowerCase()))
+                && (!$scope.queryStatus || $scope.queryStatus == 'true' && item.active || $scope.queryStatus == 'false' && !item.active ))  ;
+  };
+}
 
 function TemplateListCtrl($scope, Templates) {
   $scope.templates = [];

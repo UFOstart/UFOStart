@@ -2,6 +2,7 @@ from hnc.apiclient import Mapping, ListField, DictField
 from hnc.apiclient.backend import ClientTokenProc, DBNotification
 from hnc.apps.static_content.views import ContentModel
 from ufostart.models import SlugTypeModel
+from ufostart.models.content import PageModel
 from ufostart.models.tasks import NamedModel
 from ufostart.models.auth import UserModel, ContactsUserModel
 from ufostart.models.company import RoundModel, CompanyModel, NeedModel, TemplateModel, InviteModel, ServiceModel
@@ -156,3 +157,9 @@ AdminTemplatesAllProc = ClientTokenProc("/admin/template/all", result_cls=Templa
 
 GetStaticContentProc  = ClientTokenProc("/admin/static", root_key="Content", result_cls=ContentModel)
 SetStaticContentProc = ClientTokenProc("/admin/static/set")
+
+
+AdminPageCreateProc = ClientTokenProc("/admin/static/createPage", result_cls=PageModel, root_key="Page")
+AdminPageEditProc = ClientTokenProc("/admin/static/editPage", result_cls=PageModel, root_key="Page")
+AdminPageGetProc = ClientTokenProc("/admin/static/getPage", result_cls=PageModel, root_key="Page")
+AdminPageAllProc = ClientTokenProc("/admin/static/allPages", result_cls=PageModel, root_key="Pages", result_list=True)

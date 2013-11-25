@@ -6,7 +6,7 @@ from hnc.forms.messages import GenericSuccessMessage
 from hnc.tools.tools import deep_get
 from ufostart.lib.baseviews import BaseForm
 from ufostart.handlers.forms.controls import TagSearchField, PictureUploadField
-from ufostart.models.procs import AdminNeedCreateProc, AdminNeedEditProc, AdminServiceCreateProc, AdminServiceEditProc, AdminTemplatesEditProc, AdminTemplatesCreateProc, AdminNeedAllProc, SetStaticContentProc
+from ufostart.models.procs import AdminNeedCreateProc, AdminNeedEditProc, AdminServiceCreateProc, AdminServiceEditProc, AdminTemplatesEditProc, AdminTemplatesCreateProc, AdminNeedAllProc, SetStaticContentProc, AdminPageEditProc, AdminPageCreateProc
 from ufostart.models.tasks import TASK_CATEGORIES
 
 
@@ -176,5 +176,53 @@ class TemplateEditHandler(FormHandler):
     def pre_fill_values(self, request, result):
         result['values'][self.form.id] = request.context.template.unwrap() or {}
         return super(TemplateEditHandler, self).pre_fill_values(request, result)
+
+
+
+
+
+class PageCreateForm(BaseForm):
+    label = "Create Page"
+    fields = [
+        StringField('url', "URL", REQUIRED)
+        , StringField('title', "title", REQUIRED)
+        , StringField('metaKeywords', "Meta Keywords")
+        , StringField('metaDescription', "Meta Description")
+        , TextareaField('content', "Content", input_classes='x-high')
+    ]
+
+    @classmethod
+    def on_success(cls, request, values):
+        values['Need'] = [{'name':n} for n in values.pop('Need', [])]
+        try:
+            need = AdminPageCreateProc(request, values)
+        except DBNotification, e:
+            if e.message == 'Page_Already_Exists':
+                return {'success':False, 'errors': {'name': "This Page already exists, please change the name to a unique name."}}
+            else:
+                raise e
+        request.session.flash(GenericSuccessMessage("Page created successfully!"), "generic_messages")
+        return {'success':True, 'redirect': request.resource_url(request.context)}
+
+class PageCreateHandler(FormHandler):
+    form = PageCreateForm
+
+
+
+class PageEditForm(PageCreateForm):
+    label = "Edit Page"
+    @classmethod
+    def on_success(cls, request, values):
+        values['key'] = request.context.__name__
+        values['Need'] = [{'name':n} for n in values.pop('Need', [])]
+        need = AdminPageEditProc(request, values)
+        request.session.flash(GenericSuccessMessage("Page updated successfully!"), "generic_messages")
+        return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
+
+class PageEditHandler(FormHandler):
+    form = PageEditForm
+    def pre_fill_values(self, request, result):
+        result['values'][self.form.id] = request.context.page.unwrap() or {}
+        return super(PageEditHandler, self).pre_fill_values(request, result)
 
 

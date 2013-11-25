@@ -1,0 +1,33 @@
+<%inherit file="layout.html"/>
+
+<%def name="bcrumbs()"></%def>
+
+<%def name="content()">
+    <div class="padded-body">
+        <a href="${url(ctxt, 'create')}" class="pull-right btn btn-primary">Create Page</a>
+        <h3>All Pages</h3>
+        <div ng-controller="PageListCtrl">
+            <div class="list-group">
+                <div class="row list-group-item">
+                    <div class="col-lg-2"><input type="text" ng-model="queryURL" class="search-query form-control" placeholder="Search by Url"></div>
+                    <div class="col-lg-2"><input type="text" ng-model="queryTitle" class="search-query form-control" placeholder="Search by Title"></div>
+                    <div class="col-lg-2">
+                        <select ng-model="queryStatus" class="search-query form-control">
+                            <option value="">---</option>
+                            <option value="true">ACTIVE</option>
+                            <option value="false">disabled</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row list-group-item" ng-repeat="page in pages | filter:query | orderBy:'name'">
+                    <div class="col-lg-2">{{page.url}}</div>
+                    <div class="col-lg-2">{{page.title}}</div>
+                    <div class="col-lg-2">{{page.active|filter_active}}</div>
+                    <div class="col-lg-2">
+                        <a href="${url(ctxt)}edit?url={{page.url}}" class="btn btn-default edit-link">edit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</%def>

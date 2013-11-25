@@ -23,7 +23,7 @@ define(["tools/ajax", "form"], function(ajax, Form){
             if(isNaN(cash) || isNaN(equity)){
                 this.$total.html( this.cashCur + '---' );
             } else {
-                this.$total.html( this.cashCur + (cash + equity) );
+                this.$total.html( hnc.formatNum(this.cashCur + (cash + equity)) );
             }
         }
         , render: function(){

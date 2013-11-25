@@ -344,7 +344,7 @@
                         ${need.name}
                     </a>
                 </h3>
-                <p class="mar-top-1">${ html.coalesce(need.customText, need.summary) | html.trunc(300) }</p>
+                <p class="mar-top-1">${ html.clean_coalesce(need.customText, need.summary) | html.trunc(300) }</p>
             </div>
 
             %if need.customized:

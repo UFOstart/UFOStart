@@ -72,6 +72,7 @@
             <div class="col-lg-8">
                 ${form.fieldMap['name'].render(form.id, request, values, errors, view, grid = form.grid)|n}
                 ${form.fieldMap['slug'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                ${form.fieldMap['companyUrl'].render(form.id, request, values, errors, view, grid = form.grid)|n}
             </div>
         </div>
         ${form.fieldMap['pitch'].render(form.id, request, values, errors, view, grid = form.grid)|n}
@@ -80,6 +81,7 @@
         ${form.fieldMap['currency'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         ${form.fieldMap['video'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         ${form.fieldMap['slideShare'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+        ${form.fieldMap['socialMediaUrl'].render(form.id, request, values, errors, view, grid = form.grid)|n}
        <button type="submit" class="btn btn-primary">${_("CompanyCreate.Form.Button.Submit")|n}</button>
        <a href="${url(ctxt.__parent__)}" class="btn btn-default">${_("CompanyCreate.Form.Button.Cancel")|n}</a>
     </form>

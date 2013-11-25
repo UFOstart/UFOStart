@@ -1,11 +1,11 @@
 # coding=utf-8
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import StringField, REQUIRED, TextareaField, IntField, HtmlAttrs, HORIZONTAL_GRID, DecimalField, EmailField
+from hnc.forms.formfields import StringField, REQUIRED, TextareaField, IntField, HtmlAttrs, HORIZONTAL_GRID, DecimalField, EmailField, CheckboxField, CheckboxPostField, TypeAheadField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
 from ufostart.lib.baseviews import BaseForm
-from ufostart.handlers.forms.controls import PictureUploadField, TagSearchField, CurrencyIntField
+from ufostart.handlers.forms.controls import PictureUploadField, TagSearchField, CurrencyIntField, SanitizedHtmlField, ServiceSearchField
 from ufostart.models.company import NeedModel
 from ufostart.models.procs import CreateNeedProc, EditNeedProc, ApplyForNeedProc, ApproveApplicationProc, InviteToNeedProc, AddNeedToRound
 
@@ -68,11 +68,13 @@ class NeedCreateForm(BaseForm):
     label = ""
     fields = [
         PictureUploadField("picture", _("TaskSetup.FormLabel.Picture"), group_classes='file-upload-control')
-        , StringField('name', _("TaskSetup.FormLabel.Title"), REQUIRED)
-        , CurrencyIntField('cash', _("TaskSetup.FormLabel.Cash Value"), REQUIRED, input_classes='data-input cash', maxlength=9)
-        , CurrencyIntField('equity', _("TaskSetup.FormLabel.Equity Value"), REQUIRED, input_classes='data-input equity', maxlength=9)
-        , TextareaField("customText", _("TaskSetup.FormLabel.Description"), REQUIRED, input_classes='x-high')
+        , TypeAheadField('name', _("TaskSetup.FormLabel.Title"), '/web/need/name', 'Needs', attrs = REQUIRED, js_module = "views/company/need_switch", api_allow_new = True)
+        , CheckboxPostField('parttime', _("TaskSetup.FormLabel.is part time"))
+        , CurrencyIntField('cash', _("TaskSetup.FormLabel.Cash Value"), REQUIRED, input_classes='data-input cash', maxlength=8)
+        , CurrencyIntField('equity', _("TaskSetup.FormLabel.Equity Value"), REQUIRED, input_classes='data-input equity', maxlength=8)
+        , SanitizedHtmlField("customText", _("TaskSetup.FormLabel.Description"), REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", _("TaskSetup.FormLabel.Related Tags"), '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
+        , ServiceSearchField("Services", _("TaskSetup.FormLabel.Related Services"), '/web/service/search', 'Services', attrs = HtmlAttrs(placeholder = "Add Services"))
     ]
     @classmethod
     def on_success(cls, request, values):

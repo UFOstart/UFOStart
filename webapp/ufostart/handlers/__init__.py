@@ -65,8 +65,9 @@ def includeme(config):
 
 
     config.add_view(index.index       , context = contexts.WebsiteRootContext                , renderer = "ufostart:templates/index.html")
-    config.add_view(auth.social.login , context = contexts.WebsiteRootContext, name = 'login', renderer = "ufostart:templates/auth/login.html")
-    config.add_view(index.logout      , context = contexts.WebsiteRootContext, name = 'logout')
+    config.add_view(auth.social.login , context = contexts.WebsiteRootContext, name='login'  , renderer = "ufostart:templates/auth/login.html")
+    config.add_view(index.logout      , context = contexts.WebsiteRootContext, name='logout')
+    config.add_view(index.content_view, context = contexts.WebsiteRootContext, name='content', renderer = "ufostart:templates/content.html")
 
     config.include("ufostart.handlers.company")
     config.include("ufostart.handlers.user")

@@ -52,6 +52,11 @@
             <div class="box-shaded box-content">
                 <p class="text-small">${_(u"TaskDetailsPage.Equity.Explanation:We are working with mixed equity-cash payments. You'll get paid in cash as well as company shares.")|n}</p>
                 ${widgets.valuation(need)}
+                %if need.parttime:
+                    <div class="mar-top-half">
+                      <small>${_(u"TaskDetailsPage.Task.Parttime:This need is part time.")|n}</small>
+                    </div>
+                %endif
             </div>
         </div>
     </div>
@@ -152,7 +157,7 @@
         <img src="${need.picture}"/>
     %endif
 
-    ${html.nn(need.customText) | html.html,n }
+      ${html.nn(need.customText) | n }
 
     <div class="mar-top-2">
         %for tag in need.tags:

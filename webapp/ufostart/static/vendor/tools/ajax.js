@@ -2,37 +2,38 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
   var opts = window.__options__
   , ajax = {
       submit: function(options){
-              var
-              data = _.clone(options.data)
-              , params = _.extend({
-                  type: "POST"
-                  , dataType: "json"
-                  , contentType: "application/json; charset=utf-8"
-                  }, options || {})
-              , errorF = params.error;
-              params.success = function (resp, status, xhr) {
-                  if (resp.redirect) {
-                    xhr.redirection = resp.redirect;
-                    window.location.href = resp.redirect;
-                  } else if(resp.reload) {
-                    window.location.href = hnc.options.furl;
-                  } else if (resp.dbMessage){
-                    if(options.error){options.error(resp.dbMessage, resp, data);}
-                    else {messaging.addError({message:resp.dbMessage})}
-                  } else if (resp.errorMessage){
-                    messaging.addError({message:resp.errorMessage});
-                  } else if (options.success) options.success.apply(this, [resp, status, xhr, data]);
-                  if(resp.message){
-                    messaging[resp.success?'addSuccess':'addError']({message:resp.message})
-                  }
-              };
-              params.error = function(xhr, status, msg){
-                var err = xhr.getResponseHeader("X-Debug-Url");
-                  messaging.addError({message:err?'Error at:<a href="'+err+'">'+err+'</a>':msg});
-                  if(errorF)errorF(xhr, status, msg);
-              };
-              if (typeof params.data != 'string') { params.data = JSON.stringify(params.data) }
-              $.ajax(params);
+        var
+        data = _.clone(options.data)
+        , params = _.extend({
+          type: "POST"
+          , dataType: "json"
+          , contentType: "application/json; charset=utf-8"
+          }, options || {})
+        , errorF = params.error;
+        params.success = function (resp, status, xhr) {
+            if (resp.redirect) {
+                xhr.redirection = resp.redirect;
+                window.location.href = resp.redirect;
+            } else if(resp.reload) {
+                window.location.href = hnc.options.furl;
+            } else if (resp.dbMessage){
+                if(options.error){options.error(resp.dbMessage, resp, data);}
+                else {messaging.addError({message:resp.dbMessage})}
+            } else if (resp.errorMessage){
+                messaging.addError({message:resp.errorMessage});
+            } else if (options.success)
+                options.success.apply(this, [resp, status, xhr, data]);
+            if(resp.message){
+                messaging[resp.success?'addSuccess':'addError']({message:resp.message})
+            }
+        };
+        params.error = function(xhr, status, msg){
+            var err = xhr.getResponseHeader("X-Debug-Url");
+            if(mas||err)messaging.addError({message:err?'Error at:<a href="'+err+'">'+err+'</a>':msg});
+            if(errorF)errorF(xhr, status, msg);
+        };
+        if (typeof params.data != 'string') { params.data = JSON.stringify(params.data) }
+        $.ajax(params);
       }
       , submitPrefixed: function(options){
             options.headers = {'Client-Token': opts.clientToken};

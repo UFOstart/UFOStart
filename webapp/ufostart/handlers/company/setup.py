@@ -1,5 +1,5 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import  REQUIRED, StringField, ChoiceField, HtmlAttrs
+from hnc.forms.formfields import  REQUIRED, StringField, ChoiceField, HtmlAttrs, URLField
 from hnc.forms.handlers import FormHandler
 from ufostart.lib.baseviews import BaseForm
 from ufostart.handlers.auth.imp import SESSION_SAVE_TOKEN
@@ -21,13 +21,15 @@ class CompanyCreateForm(BaseForm):
     fields=[
         PictureUploadField('logo', 'Logo', REQUIRED, picWidth=250, picHeight=170)
         , StringField('name', 'Name', REQUIRED)
-        , UniqueNameField("slug", "UFOstart URL", thing_name = 'company name')
+        , UniqueNameField("slug", "UFOstart Url", thing_name = 'company name')
+        , URLField("companyUrl", "Project Website")
         , CleanHtmlField('pitch', 'Slogan', REQUIRED, max = 90)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
         , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')
         , StringField("video", "Paste a Vimeo or Youtube Url")
         , StringField("slideShare", "Paste a Slideshare Url")
-        , ChoiceField("currency", "Company Currency", optionGetter=lambda s: [NamedModel(name = 'EUR'), NamedModel(name = 'USD')])
+        , ChoiceField("currency", "Project Currency", optionGetter=lambda s: [NamedModel(name = 'EUR'), NamedModel(name = 'USD')])
+        , URLField("socialMediaUrl", "Project Blog Url")
     ]
 
     @classmethod
@@ -78,11 +80,13 @@ class CompanyEditForm(BaseForm):
     fields=[
         PictureUploadField('logo', 'Project Logo', REQUIRED, picWidth=250, picHeight=170)
         , StringField('name', 'Project Name', REQUIRED)
+        , URLField("companyUrl", "Project Website")
         , CleanHtmlField('pitch', 'Elevator Pitch', REQUIRED, max = 90)
         , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
         , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')
         , VideoUrlField("video", "Paste a Vimeo or Youtube Url")
         , SlideshareField("slideShare", "Paste a Slideshare Url")
+        , URLField("socialMediaUrl", "Project Blog Url")
     ]
 
     @classmethod

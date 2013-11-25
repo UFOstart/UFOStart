@@ -1,0 +1,12 @@
+<%inherit file="layout.html"/>
+<%namespace file="widgets.html" name="widgets"/>
+
+<%def name="seo_tags()">
+<meta name="keywords" content="${page.metaKeywords | html.nn,n}">
+<meta name="description" content="${page.metaDescription | html.nn,n}">
+</%def>
+<%block name="title">${page.title | html.nn,n} | ${request.globals.project_name} </%block>
+
+<%def name="content()">
+    ${page.content | html.nn,n}
+</%def>

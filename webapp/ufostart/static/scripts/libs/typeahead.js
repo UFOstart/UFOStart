@@ -19,7 +19,7 @@ define(["tools/ajax", "libs/abstractsearch"], function(ajax, AbstractSearch){
     })
     , TypeAheadSearch = AbstractSearch.extend({
         buildQuery: function(query){
-            return {type: this.options.apiType, term:query};
+            return query?{type: this.options.apiType, name:query}:null;
         }
     })
     , PlainTypeAhead = Backbone.View.extend({
@@ -115,7 +115,7 @@ define(["tools/ajax", "libs/abstractsearch"], function(ajax, AbstractSearch){
                     params['filter'] = el.val();
                 }
             });
-            return query?_.extend(params, {type: this.options.apiType, term:query}):null;
+            return query?_.extend(params, {type: this.options.apiType, name:query}):null;
         }
     })
     , DependentTA = TokenTypeAhead.extend({

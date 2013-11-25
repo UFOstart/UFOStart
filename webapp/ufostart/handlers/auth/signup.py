@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 uname_regex = re.compile('^[0-9a-z_.-]+$')
 _= lambda s:s
 
-RESERVEDS = []
+RESERVEDS = ['content', 'login']
 
 
 def isavailable(context, request):

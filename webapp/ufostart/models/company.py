@@ -215,6 +215,7 @@ class NeedModel(Mapping):
     name = TextField()
 
     _inUse = BooleanField()
+    parttime = BooleanField()
     summary = TextField()
     status = TextField()
     category = TextField()
@@ -241,6 +242,9 @@ class NeedModel(Mapping):
             return None
     def getRecentApplications(self, n):
         return sorted(self.Applications, key = attrgetter('created'), reverse = True)[:n]
+
+
+
 
     @property
     def added(self):
@@ -273,9 +277,6 @@ class NeedModel(Mapping):
     @property
     def display_mix(self):
         return '{}%'.format(self.equity_ratio)
-
-
-
     @property
     def experts(self):
         return self.Experts
@@ -478,6 +479,9 @@ class CompanyModel(BaseCompanyModel):
     Round = DictField(RoundModel)
     Rounds = ListField(DictField(RoundModel))
     Users = ListField(DictField(CompanyUserModel))
+
+    companyUrl = TextField()
+    socialMediaUrl = TextField()
 
 
     totalValue = IntegerField()  # only for social friends companies

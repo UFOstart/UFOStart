@@ -2,21 +2,35 @@ import hashlib
 import logging
 import re
 from urlparse import urlparse, parse_qsl
+from xml.sax.saxutils import quoteattr
 from BeautifulSoup import BeautifulSoup
 from babel import dates
-from hnc.apiclient import Mapping, TextField, IntegerField
-from hnc.tools.tools import word_truncate_by_letters
 from httplib2 import Http
+from HTMLParser import HTMLParser
 import markdown
 import simplejson
 import smartypants
 import unidecode
+
+from hnc.apiclient import Mapping, TextField, IntegerField
+from hnc.tools.tools import word_truncate_by_letters
 
 
 log = logging.getLogger(__name__)
 
 __author__ = 'Martin'
 
+def json(data):
+    return simplejson.dumps(data)
+
+
+def attributes(data):
+    if isinstance(data, basestring):
+        return data
+    elif isinstance(data, dict):
+        return ' '.join(['{}={}'.format(k, quoteattr(v)) for k,v in data.items()])
+    else:
+        return ' '.join(['{}={}'.format(k, quoteattr(v)) for k,v in data])
 
 def hash(txt):
     if not txt: return None
@@ -59,6 +73,36 @@ def clean(txt):
       tag.extract()
   val = soup.renderContents()
   return val.decode("utf-8")
+
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        self.fed = []
+    def handle_data(self, d):
+        self.fed.append(d)
+    def get_data(self):
+        return ''.join(self.fed)
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
+
+def clean_coalesce(html1, txt2):
+    result = ''
+    if html1: result = strip_tags(html1).strip()
+    return result or txt2
+
+
+
+def make_link(txt):
+    if not txt: return ''
+    elif txt.startswith('http'):
+        return txt
+    else:
+        return "http://{}".format(txt)
+
 
 
 def format_date(date, format="short"):

@@ -79,6 +79,12 @@ class ApplicationContext(BaseProjectContext):
 class NeedContext(BaseProjectContext):
     displayType = "Task"
     @property
+    def displayProps(self):
+        """
+        only used for need edit, need_switch.js to find and replace names on switch
+        """
+        return 'data-entity-property="name"'
+    @property
     def displayName(self):
         return self.need.name
 

@@ -69,8 +69,17 @@
 
 <%def name="companyMainInfo(company)">
     ${widgets.company_logo(company, classes="large")}
-    <a class="entity-link mar-top-half" href="${url(ctxt)}">${ctxt.company.name}</a>
+    %if company.companyUrl:
+      <a class="entity-link mar-top-half" target="_blank" href="${company.companyUrl | html.make_link }">${company.name}</a>
+    %else:
+      <div class="entity-link mar-top-half">${company.name}</div>
+    %endif
+    %if company.socialMediaUrl:
+      <small><a target="_blank" href="${company.socialMediaUrl | html.make_link }">${_("Blog").format(company_name = company.name)|n}</a></small>
+    %endif
     <div class="pitch">${html.nn(company.pitch)}</div>
+
+
     <div class="number-widget mar-top-1">
         <h6>Startup Value</h6>
         <div class="value light">

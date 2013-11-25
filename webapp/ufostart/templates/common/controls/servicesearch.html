@@ -10,16 +10,16 @@
          ${widget.getQueryExtra()|n} \
          data-module="libs/tagsearch">
         <script type="template/text" class="tag-template">
-            ${self.tagTempl(widget, '{{ name }}', '{{ model.getSearchLabel() }}', '{{ model.id }}')}
+            ${self.tagTempl(widget, '{{ name }}', '{{ model.getSearchLabel() }}', "{{ model.get('logo') }}", '{{ model.id }}')}
         </script>
         <div class="search-field">
             <div class="${widget.tag_container_class}">
                 %for i, tag in enumerate(value):
-${self.tagTempl(widget, "{}-{}".format(widget.getName(prefix), i), tag['name'], tag['name'])}\
+${self.tagTempl(widget, "{}-{}".format(widget.getName(prefix), i), tag['name'], tag['logo'], tag['name'])}\
                 %endfor
             </div><input type="text" class="query ${grid.input_classes} ${widget.getClasses()}" autocomplete="off" ${widget.attrs.getInputAttrs(request)|n}/>
         </div>
     </div>
 </%block>
 
-<%def name="tagTempl(widget, prefix, label, id)"><span generated class="${widget.tag_class}"><span class="close">×</span>${label|n}<input type="hidden" name="${prefix|n}.name" value="${id|n}"/></span></%def>
+<%def name="tagTempl(widget, prefix, label, logo, id)"><span generated class="${widget.tag_class}"><span class="close">×</span> <img class="service-logo" src="${logo|n}"/>${label|n}<input type="hidden" name="${prefix|n}.name" value="${id|n}"/></span></%def>

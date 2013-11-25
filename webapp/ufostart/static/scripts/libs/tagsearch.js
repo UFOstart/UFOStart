@@ -75,6 +75,7 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
         })
         , TagSearchView = Backbone.View.extend({
             MODEL_CLS: TagModels
+            , events: {"replaceModels .query": "replaceModels"}
             , initialize: function(opts){
                 var view = this;
                 this.$input = this.$(".query");
@@ -130,6 +131,13 @@ define(["tools/hash", "tools/ajax", "libs/abstractsearch"], function(hashlib, aj
                 var seed = this.$result.find(".label").find("input");
                 if(seed.length)this.populate(this.$(".label"), true);
                 this.adjustInput();
+            }
+            , replaceModels: function(e, models){
+                var model = this.model, ms;
+                while (ms = model.first()) {
+                  ms.destroy();
+                }
+                _.each(models, function(m){model.add(m);});
             }
             , populate : function($elems, silent){
                 var view = this;

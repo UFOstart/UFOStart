@@ -101,7 +101,13 @@
         %if link:
             <a class="crumb" href="${url(res)}"><span class="title">${res.displayType}</span><br/>${res.displayName}</a>
         %else:
-            <span class="crumb"><span class="title">${res.displayType}</span><br/>${res.displayName}</span>
+            <span class="crumb"><span class="title">${res.displayType}</span><br/>
+              %if hasattr(res, "displayProps"):
+                  <span ${html.attributes(res.displayProps)|n}>${res.displayName}</span>
+              %else:
+                  ${res.displayName}
+              %endif
+            </span>
         %endif
     %endif
 </%def>
