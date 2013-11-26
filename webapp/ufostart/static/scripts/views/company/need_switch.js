@@ -2,9 +2,9 @@ define(["tools/ajax", "libs/abstractsearch", "text!templates/need_searchresult.h
     var
     getRec = hnc.getRecursive
     , PlainResult = ajax.Model.extend({
-        idAttribute:'name'
+        idAttribute:'slug'
         , getSearchLabel: function(){
-            return this.id;
+            return this.get('name');
         }
     })
     , PlainSearchResult = ajax.Collection.extend({
