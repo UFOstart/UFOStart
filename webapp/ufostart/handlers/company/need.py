@@ -64,7 +64,7 @@ class ApplicationHandler(FormHandler):
 
 def unpack_advisor(request, values):
     advisor = values.pop('advisor', {})
-    if advisor:
+    if 'name' in advisor and 'email' in advisor:
         user = request.root.user
         company = request.context.company
         values['Invite'] = [{'invitorToken': user.token, 'invitorName': user.name, 'companySlug':  company.slug, 'role':'ADVISOR', 'email':advisor['email'], 'name':advisor['name']}]
