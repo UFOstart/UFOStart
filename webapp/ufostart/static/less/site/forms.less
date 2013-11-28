@@ -193,6 +193,7 @@ ul.styled {
   display: inline-block;
   vertical-align: top;
   position: relative;
+  z-index:@zindex-navbar+1;
   width:@spriteSize;
 
   > .control-label-help-icon {
@@ -208,7 +209,7 @@ ul.styled {
     background-position: 0 -64px;
   }
   > .control-label-tooltip {
-    @width: 250px;
+    @width: 300px;
     display: none;
     min-width: @width;
     position: absolute;
@@ -249,7 +250,13 @@ ul.styled {
       background-position: 0 -80px;
     }
   }
-  .control-label-tooltip-body {padding: 12px;font-weight: normal;text-transform: none;}
+  .control-label-tooltip-body {
+    padding: 12px;font-weight: normal;text-transform: none;
+    > .tooltip-body{
+        overflow-y:auto;
+        max-height:180px;
+    }
+  }
 }
 
 

@@ -71,7 +71,7 @@ class NeedCreateForm(BaseForm):
         , TypeAheadField('name', _("TaskSetup.FormLabel.Title"), '/web/need/name', 'Needs', attrs = REQUIRED, js_module = "views/company/need_switch", api_allow_new = True)
         , CheckboxPostField('parttime', _("TaskSetup.FormLabel.is part time"))
         , CurrencyIntField('cash', _("TaskSetup.FormLabel.Cash Value"), HtmlAttrs(required=True, data_control_help=_("TaskSetup.FormLabel.Cash Value.Help")), input_classes='data-input cash', maxlength=8)
-        , CurrencyIntField('equity', _("TaskSetup.FormLabel.Equity Value"), HtmlAttrs(required=True, data_control_help=_("TaskSetup.FormLabel.Equity Value")), input_classes='data-input equity', maxlength=8)
+        , CurrencyIntField('equity', _("TaskSetup.FormLabel.Equity Value"), HtmlAttrs(required=True, data_control_help=_("TaskSetup.FormLabel.Equity Value.Help")), input_classes='data-input equity', maxlength=8)
         , SanitizedHtmlField("customText", _("TaskSetup.FormLabel.Description"), REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", _("TaskSetup.FormLabel.Related Tags"), '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
         , ServiceSearchField("Services", _("TaskSetup.FormLabel.Related Services"), '/web/service/search', 'Services', attrs = HtmlAttrs(placeholder = "Add Services"))

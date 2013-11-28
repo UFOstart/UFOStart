@@ -67,7 +67,7 @@ define(['tools/hash', 'tools/ajax'], function(hashlib, ajax){
                     '<span class="control-label-help-icon">?</span>' +
                     '<div class="control-label-tooltip">' +
                     '<div class="control-label-tooltip-title">'+$target.text()+'</div>' +
-                    '<div class="control-label-tooltip-body">'+text+'</div>' +
+                    '<div class="control-label-tooltip-body"><div class="tooltip-body">'+text+'</div></div>' +
                     '</div></div>').appendTo($target)
                 , toggleVisible = function(e){
                     if(tt.toggleClass("expanded").hasClass("expanded")){
