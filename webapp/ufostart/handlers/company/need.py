@@ -84,8 +84,8 @@ class NeedCreateForm(BaseForm):
         , TagSearchField("Tags", _("TaskSetup.FormLabel.Related Tags"), '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
         , ServiceSearchField("Services", _("TaskSetup.FormLabel.Related Services"), '/web/service/search', 'Services', attrs = HtmlAttrs(placeholder = "Add Services"))
 
-        , StringField("advisor.name", _("TaskSetup.FormLabel.Advisor.Name"))
-        , EmailField("advisor.email", _("TaskSetup.FormLabel.Advisor.EmailAddress"))
+        , StringField("advisor.name", _("TaskSetup.FormLabel.Advisor.Name"), input_classes="ignore")
+        , EmailField("advisor.email", _("TaskSetup.FormLabel.Advisor.EmailAddress"), input_classes="ignore")
     ]
 
     @classmethod

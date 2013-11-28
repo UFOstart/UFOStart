@@ -16,8 +16,8 @@
     <div class="${getattr(form,'width_class', 'col-lg-8')}">
         <legend>${form.label}</legend>
         <%widgets:build_base_form form="${form}" values="${values}" errors="${errors}">
-            <button type="sumbit" class="btn btn-primary">${getattr(form, 'submit_label', 'Submit')}</button>
-            <a href="${form.cancel_url(request)}" class="btn btn-default">${getattr(form, 'cancel_label', 'Cancel')}</a>
+            <button type="sumbit" class="btn btn-primary">${getattr(form, 'submit_label', _('Button:Submit'))}</button>
+            <a href="${form.cancel_url(request)}" class="btn btn-default">${getattr(form, 'cancel_label', _('Button:Cancel'))}</a>
         </%widgets:build_base_form>
     </div>
     <div class="col-lg-4">

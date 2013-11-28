@@ -40,8 +40,8 @@
         %for field in view.form.fields:
             ${field.render(form.id, request, values, errors, view, grid = form.grid)|n}
         %endfor
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a href="${url(ctxt)}" class="btn btn-default">Cancel</a>
+        <button type="submit" class="btn btn-primary">${_("Button:Submit")|n}</button>
+        <a href="${url(ctxt)}" class="btn btn-default">${_("Button:Cancel")|n}</a>
 
     </form>
 </%def>

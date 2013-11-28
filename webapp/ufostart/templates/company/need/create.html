@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="section-title">
-                    <span class="brand-primary">Add a new task</span>
+                    <span class="brand-primary">${_(u"TaskSetup.Heading:Add a new task")|n}</span>
                 </h1>
             </div>
         </div>
@@ -15,7 +15,7 @@
                 <div class="box-content box-dark">
                     <%self:build_form need="${need}" btn_label="Create Task" form="${view.form}" values="${values.get(view.form.id)}" errors="${errors.get(view.form.id)}" company="${ctxt.company}">
                         <%def name="cancel_button(form)">
-                            <a href="${url(ctxt)}" class="btn btn-default">Cancel</a>
+                            <a href="${url(ctxt)}" class="btn btn-default">${_("Button:Cancel")|n}</a>
                         </%def>
                     </%self:build_form>
                 </div>

@@ -22,7 +22,7 @@
                 <div class="box-content box-dark">
                     <%self:build_form need="${ctxt.need}" btn_label="${'Save Changes' if ctxt.need.added else 'Add to Round'}" form="${view.form}" values="${values.get(view.form.id)}" errors="${errors.get(view.form.id)}" company="${ctxt.company}">
                         <%def name="cancel_button(form)">
-                            <a href="${url(ctxt) if hasattr(ctxt, 'need') and ctxt.need.added else url(ctxt.__parent__)}" class="btn btn-default">Cancel</a>
+                            <a href="${url(ctxt) if hasattr(ctxt, 'need') and ctxt.need.added else url(ctxt.__parent__)}" class="btn btn-default">${_("Button:Cancel")|n}</a>
                         </%def>
                     </%self:build_form>
                 </div>
@@ -83,12 +83,18 @@
                     ${form.fieldMap['parttime'].render(form.id, request, values, errors, view, grid = form.grid)|n}
                 </div>
               </div>
-              <div class="row">
-                <div class="col-sm-6">
+              <div class="row advisor-hide-target">
+                <div class="col-sm-12 show-contracted">
+                  <a class="advisor-hider link" style="color:white">${_("TaskSetup.Label:Invite an Advisor to help edit this task.")|n}</a>
+                </div>
+                <div class="col-sm-6 show-expanded">
                     ${form.fieldMap['advisor.name'].render(form.id, request, values, errors, view, grid = form.grid)|n}
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-5 show-expanded">
                   ${form.fieldMap['advisor.email'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                </div>
+                <div class="col-sm-1 show-expanded">
+                  <a class="close advisor-hider" style="color:white">&times;</a>
                 </div>
               </div>
             </div>
@@ -121,6 +127,12 @@
                 new View({el:form})
                $(form).data('roundTasks', ${html.json(ctxt.round.getRoundTaskSlugs())|n});
             });
+          $(".advisor-hider").on("click", function(e){
+            $(e.currentTarget).closest(".advisor-hide-target").toggleClass("expanded").find("input.required").toggleClass("required ignore");
+            e.preventDefault();
+            e.stopPropagation();
+          });
+
         });
       tinymce.init({
         selector: "textarea",

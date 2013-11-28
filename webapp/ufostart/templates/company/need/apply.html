@@ -30,8 +30,8 @@
                 </div>
                 <div class="row mar-top-1">
                     <div class="col-lg-12">
-                        <button type="submit" class="btn btn-primary">Submit Application</button>
-                        <a href="${url(ctxt)}" class="btn btn-default">Cancel</a>
+                        <button type="submit" class="btn btn-primary">${_(u"Application.Form.BtnLabel:Submit Application")|n}</button>
+                        <a href="${url(ctxt)}" class="btn btn-default">${_("Button:Cancel")|n}</a>
                     </div>
                 </div>
             </div>
@@ -51,6 +51,5 @@
                 ajax.ifyForm({root: elem});
             });
         });
-
     </script>
 </%def>
