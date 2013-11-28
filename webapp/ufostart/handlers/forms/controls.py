@@ -46,6 +46,23 @@ class ServiceSearchField(formfields.TagSearchField):
     template = "ufostart:templates/common/controls/servicesearch.html"
 
 
+#class AdvisorInviteField(formfields.StringField):
+#    def extValueToForm(self, value, name_ext):
+#        if isinstance(value, dict):
+#            return value.get(name_ext, '')
+#        else:
+#            return '' if value is None else value
+#
+#    def getExtName(self, prefix, name_ext):
+#        return '{}.{}.{}'.format(prefix, self.name, name_ext)
+#
+#    template = "ufostart:templates/common/controls/advisorinvite.html"
+#    name_name = 'name'
+#    email_name = 'email'
+#    def getValidator(self, request):
+#        return {self.name_name: formencode.validators.String(), self.email_name: formencode.validators.String()}
+
+
 class HTMLString(formencode.validators.String):
   messages = {"invalid_format":'There was some error in your HTML!'}
   valid_tags = ['a','strong', 'em', 'p', 'ul', 'ol', 'li', 'br', 'b', 'i', 'u', 's', 'strike', 'font', 'pre', 'blockquote', 'div', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']

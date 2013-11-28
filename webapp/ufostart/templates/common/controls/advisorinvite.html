@@ -1,0 +1,8 @@
+<%inherit file="hnc.forms:templates/basefield.html"/>
+<%namespace name="lib" file="hnc.forms:templates/lib.html"/>
+
+<%block name="controls">
+    <div class="username-input">
+        <input type="${widget.type}" class="${grid.input_classes} ${widget.getClasses()}" name="${widget.getExtName(prefix, self.name_name)}" id="${widget.getExtName(prefix, self.name_name)}" value="${widget.extValueToForm(value, self.name_name)}" ${widget.getInputAttrs(request)|n}/>
+    </div>
+</%block>

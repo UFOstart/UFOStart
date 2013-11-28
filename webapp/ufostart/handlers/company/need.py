@@ -1,6 +1,6 @@
 # coding=utf-8
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import StringField, REQUIRED, TextareaField, IntField, HtmlAttrs, HORIZONTAL_GRID, DecimalField, EmailField, CheckboxField, CheckboxPostField, TypeAheadField
+from hnc.forms.formfields import StringField, REQUIRED, HtmlAttrs, HORIZONTAL_GRID, EmailField, CheckboxPostField, TypeAheadField
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
@@ -62,6 +62,14 @@ class ApplicationHandler(FormHandler):
     forms = [ApplicationForm, NeedIndexForm]
 
 
+def unpack_advisor(request, values):
+    advisor = values.pop('advisor', {})
+    if advisor:
+        user = request.root.user
+        company = request.context.company
+        values['Invite'] = [{'invitorToken': user.token, 'invitorName': user.name, 'companySlug':  company.slug, 'role':'ADVISOR', 'email':advisor['email'], 'name':advisor['name']}]
+    return values
+
 
 class NeedCreateForm(BaseForm):
     id="NeedCreate"
@@ -75,11 +83,16 @@ class NeedCreateForm(BaseForm):
         , SanitizedHtmlField("customText", _("TaskSetup.FormLabel.Description"), REQUIRED, input_classes='x-high')
         , TagSearchField("Tags", _("TaskSetup.FormLabel.Related Tags"), '/web/tag/search', 'Tags', attrs = HtmlAttrs(required=True, data_required_min = 3, placeholder = "Add Tags"))
         , ServiceSearchField("Services", _("TaskSetup.FormLabel.Related Services"), '/web/service/search', 'Services', attrs = HtmlAttrs(placeholder = "Add Services"))
+
+        , StringField("advisor.name", _("TaskSetup.FormLabel.Advisor.Name"))
+        , EmailField("advisor.email", _("TaskSetup.FormLabel.Advisor.EmailAddress"))
     ]
+
     @classmethod
     def on_success(cls, request, values):
         _ = request._
         try:
+            values = unpack_advisor(request, values)
             need = CreateNeedProc(request, {'Needs':[values], 'token': request.context.round.token})
         except DBNotification, e:
             if e.message == 'Need_Already_Exists':
@@ -103,12 +116,15 @@ class NeedEditForm(BaseForm):
     label = ""
     fields = NeedCreateForm.fields
 
+
     @classmethod
     def on_success(cls, request, values):
         _ = request._
         need = request.context.need
         round = request.context.round
         values['token'] = need.token
+
+        values = unpack_advisor(request, values)
         newNeed = not need.added
         if newNeed:
             AddNeedToRound(request, {'Round': {'token':round.token, 'Needs':[{'token':need.token}]}})

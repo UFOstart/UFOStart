@@ -80,14 +80,15 @@
                 </div>
                 <div class="col-sm-6">
                     ${form.fieldMap['equity'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                    ${form.fieldMap['parttime'].render(form.id, request, values, errors, view, grid = form.grid)|n}
                 </div>
               </div>
               <div class="row">
                 <div class="col-sm-6">
-                  ${form.fieldMap['parttime'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                    ${form.fieldMap['advisor.name'].render(form.id, request, values, errors, view, grid = form.grid)|n}
                 </div>
                 <div class="col-sm-6">
-
+                  ${form.fieldMap['advisor.email'].render(form.id, request, values, errors, view, grid = form.grid)|n}
                 </div>
               </div>
             </div>
