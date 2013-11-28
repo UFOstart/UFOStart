@@ -1,4 +1,7 @@
 from hnc.apiclient import Mapping, TextField
+from translationstring import TranslationStringFactory
+
+_ = TranslationStringFactory("ufo")
 
 class NamedModel(Mapping):
     name = TextField()
@@ -12,10 +15,10 @@ class RoleModel(NamedModel):
     key = TextField()
     label = TextField()
     def getKey(self, request):return self.key
-    def getLabel(self, request):return self.label
+    def getLabel(self, request):return request._(self.label)
 
 
-ROLES = [RoleModel(key = "FOUNDER", label = "Founder"), RoleModel(key = "TEAM_MEMBER", label = "Team Member")]
+ROLES = [RoleModel(key = "FOUNDER", label = _("RoleLabel.Founder")), RoleModel(key = "TEAM_MEMBER", label = _("RoleLabel.Team Member")), RoleModel(key = "ADVISOR", label = _("RoleLabel.Advisor"))]
 
 
 class TaskCategoriesModel(NamedModel):

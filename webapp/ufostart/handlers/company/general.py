@@ -55,7 +55,8 @@ class MentorInviteForm(BaseInviteForm):
         return BaseInviteForm.on_success(request, values)
 
 
-def get_roles(request): return ROLES
+def get_roles(request):
+    return ROLES
 class InviteTeamForm(BaseInviteForm):
     fields = BaseInviteForm.fields + [ChoiceField("role", "Invitee is", get_roles)]
 

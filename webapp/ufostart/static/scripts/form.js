@@ -1,4 +1,5 @@
-define(['tools/ajax'], function(ajax){
+define(['tools/hash', 'tools/ajax'], function(hashlib, ajax){
+
     jQuery.validator.addMethod("greaterThan",
     function(value, element, params) {
         if (!/Invalid|NaN/.test(new Date(value))) {
@@ -7,6 +8,7 @@ define(['tools/ajax'], function(ajax){
         return isNaN(value) && isNaN($(params).val())
             || (Number(value) > Number($(params).val()));
     },'Must be greater than {0}.');
+
     var View = Backbone.View.extend({
         events: {
             "click .remove-link": "removeRow"
@@ -53,6 +55,26 @@ define(['tools/ajax'], function(ajax){
                 $el.datepicker( $el.data() );
                 $el.siblings(".datepicker-opener").click(function(){$el.datepicker('show')});
             });
+            el.find("[data-control-help]").each($.proxy(this.helpSetup, this));
+        }
+        , helpSetup: function(idx, elem){
+            var $el = $(elem)
+                , uId = hashlib.UUID()
+                , $parent = $el.closest(".form-group")
+                , text = $el.data("controlHelp")
+                , $target = $parent.find(".control-label")
+                , tt = $('<div class="control-label-help" id="tooltip-'+uId+'">' +
+                    '<span class="control-label-help-icon">?</span>' +
+                    '<div class="control-label-tooltip">' +
+                    '<div class="control-label-tooltip-title">'+$target.text()+'</div>' +
+                    '<div class="control-label-tooltip-body">'+text+'</div>' +
+                    '</div></div>').appendTo($target)
+                .on({'click':
+                    function(e){
+                        tt.toggleClass("expanded");
+                    }
+                }
+            );
         }
         , addRow : function(e){
             if((!e.keyCode || e.keyCode == 13)){

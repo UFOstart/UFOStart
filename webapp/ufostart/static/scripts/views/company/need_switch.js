@@ -46,10 +46,9 @@ define(["tools/ajax", "libs/abstractsearch", "text!templates/need_searchresult.h
             path[3] = term.id;
             path = path.join("/");
 
-            if(term.get('alreadyExists') || !(window.history && history.pushState)){
+            if(term.get('alreadyExists')){
                 location.pathname = path;
             } else {
-                window.history.pushState(null, term.get('name'), path);
                 $("[data-entity-property]").each(function(idx, elem){
                    var $e = $(elem), attr = $e.data('entityProperty')
                     $e.html(term.get(attr));

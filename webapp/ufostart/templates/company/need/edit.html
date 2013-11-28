@@ -62,23 +62,34 @@
 
         ${form.fieldMap['name'].render(form.id, request, values, errors, view, grid = form.grid)|n}
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-md-3">
                 ${form.fieldMap['picture'].render(form.id, request, values, errors, view, grid = form.grid)|n}
             </div>
-            <div class="col-lg-4 col-lg-offset-1">
-                ${form.fieldMap['cash'].render(form.id, request, values, errors, view, grid = form.grid)|n}
-                <div class="form-group">
-                    <label class="control-label">
-                        Total Value
-                    </label>
-                    <div class="pseudo-controls data-target total" data-currency-symbol="${company.currency_symbol}">
-                        ${need.display_total(company.currency)}
+            <div class="col-md-9">
+              <div class="row">
+                <div class="col-sm-6">
+                    ${form.fieldMap['cash'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                    <div class="form-group">
+                        <label class="control-label">
+                            Total Value
+                        </label>
+                        <div class="pseudo-controls data-target total" data-currency-symbol="${company.currency_symbol}">
+                            ${need.display_total(company.currency)}
+                        </div>
                     </div>
                 </div>
-                ${form.fieldMap['parttime'].render(form.id, request, values, errors, view, grid = form.grid)|n}
-            </div>
-            <div class="col-lg-4">
-                ${form.fieldMap['equity'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                <div class="col-sm-6">
+                    ${form.fieldMap['equity'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  ${form.fieldMap['parttime'].render(form.id, request, values, errors, view, grid = form.grid)|n}
+                </div>
+                <div class="col-sm-6">
+
+                </div>
+              </div>
             </div>
         </div>
 

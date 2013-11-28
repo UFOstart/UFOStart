@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-10-16 20:00+0200\n"
+"POT-Creation-Date: 2013-11-28 11:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,43 +48,67 @@ msgid "TaskSetup.FormLabel.Title"
 msgstr ""
 
 #: ufostart/handlers/company/need.py:72
+msgid "TaskSetup.FormLabel.is part time"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:73
 msgid "TaskSetup.FormLabel.Cash Value"
 msgstr ""
 
 #: ufostart/handlers/company/need.py:73
-msgid "TaskSetup.FormLabel.Equity Value"
+msgid "TaskSetup.FormLabel.Cash Value.Help"
 msgstr ""
 
 #: ufostart/handlers/company/need.py:74
-msgid "TaskSetup.FormLabel.Description"
+msgid "TaskSetup.FormLabel.Equity Value"
 msgstr ""
 
 #: ufostart/handlers/company/need.py:75
+msgid "TaskSetup.FormLabel.Description"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:76
 msgid "TaskSetup.FormLabel.Related Tags"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:84
+#: ufostart/handlers/company/need.py:77
+msgid "TaskSetup.FormLabel.Related Services"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:86
 msgid ""
 "TaskSetup.ErrorMessage.This task already exists, if you intend to create this"
 " task, please change its name to something less ambiguous!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:88
+#: ufostart/handlers/company/need.py:90
 msgid "TaskSetup.SuccessMessage.Task created successfully!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:117
+#: ufostart/handlers/company/need.py:119
 msgid ""
 "TaskSetup.ErrorMessage.This task already exists, if you intend to Edit this "
 "task, please change its name to something less ambiguous!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:122
+#: ufostart/handlers/company/need.py:124
 msgid "TaskSetup.SuccessMessage.Task added to round!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:125
+#: ufostart/handlers/company/need.py:127
 msgid "TaskSetup.SuccessMessage.Changes saved!"
+msgstr ""
+
+#: ufostart/models/tasks.py:21
+msgid "RoleLabel.Founder"
+msgstr ""
+
+#: ufostart/models/tasks.py:21
+msgid "RoleLabel.Team Member"
+msgstr ""
+
+#: ufostart/models/tasks.py:21
+msgid "RoleLabel.Advisor"
 msgstr ""
 
 #: ufostart/templates/index.html:11
@@ -115,47 +139,47 @@ msgstr ""
 msgid "OnboardingPage.Title"
 msgstr ""
 
-#: ufostart/templates/auth/roleselect.html:51
+#: ufostart/templates/auth/roleselect.html:52
 msgid "OnboardingPage.Expert.Headline"
 msgstr ""
 
-#: ufostart/templates/auth/roleselect.html:53
+#: ufostart/templates/auth/roleselect.html:54
 msgid "OnboardingPage.Expert.Explanation"
 msgstr ""
 
-#: ufostart/templates/auth/roleselect.html:55
+#: ufostart/templates/auth/roleselect.html:56
 msgid "OnboardingPage.Expert.ProceedButton"
 msgstr ""
 
-#: ufostart/templates/auth/roleselect.html:62
+#: ufostart/templates/auth/roleselect.html:63
 msgid "OnboardingPage.Investor.Headline"
 msgstr ""
 
-#: ufostart/templates/auth/roleselect.html:64
+#: ufostart/templates/auth/roleselect.html:65
 msgid "OnboardingPage.Investor.Explanation"
 msgstr ""
 
-#: ufostart/templates/auth/roleselect.html:66
+#: ufostart/templates/auth/roleselect.html:67
 msgid "OnboardingPage.Investor.ProceedButton"
 msgstr ""
 
-#: ufostart/templates/auth/roleselect.html:72
+#: ufostart/templates/auth/roleselect.html:73
 msgid "OnboardingPage.Founder.Headline"
 msgstr ""
 
-#: ufostart/templates/auth/roleselect.html:74
+#: ufostart/templates/auth/roleselect.html:75
 msgid "OnboardingPage.Founder.Explanation"
 msgstr ""
 
-#: ufostart/templates/auth/roleselect.html:76
+#: ufostart/templates/auth/roleselect.html:77
 msgid "OnboardingPage.Founder.ProceedButton"
 msgstr ""
 
-#: ufostart/templates/auth/roleselect.html:92
+#: ufostart/templates/auth/roleselect.html:94
 msgid "OnboardingPage.Help.Title"
 msgstr ""
 
-#: ufostart/templates/auth/roleselect.html:95
+#: ufostart/templates/auth/roleselect.html:97
 msgid "OnboardingPage.Help.Text"
 msgstr ""
 
@@ -198,11 +222,11 @@ msgstr ""
 msgid "AddMentorPage.Help.Text"
 msgstr ""
 
-#: ufostart/templates/company/round.html:504
+#: ufostart/templates/company/round.html:499
 msgid "RoundDashboard.Help.Title"
 msgstr ""
 
-#: ufostart/templates/company/round.html:507
+#: ufostart/templates/company/round.html:502
 msgid "RoundDashboard.Help.Text"
 msgstr ""
 
@@ -210,32 +234,36 @@ msgstr ""
 msgid "CompanyCreate.Title"
 msgstr ""
 
-#: ufostart/templates/company/company/create.html:18
+#: ufostart/templates/company/company/create.html:30
 msgid "CompanyCreate.ImportPrompt.Angellist"
 msgstr ""
 
-#: ufostart/templates/company/company/create.html:19
+#: ufostart/templates/company/company/create.html:31
 msgid "CompanyCreate.ImportButton.Angellist"
 msgstr ""
 
-#: ufostart/templates/company/company/create.html:43
+#: ufostart/templates/company/company/create.html:85
 msgid "CompanyCreate.Form.Button.Submit"
 msgstr ""
 
-#: ufostart/templates/company/company/create.html:44
+#: ufostart/templates/company/company/create.html:86
 msgid "CompanyCreate.Form.Button.Cancel"
 msgstr ""
 
-#: ufostart/templates/company/company/create.html:66
+#: ufostart/templates/company/company/create.html:108
 msgid "CompanyCreate.Help.Title"
 msgstr ""
 
-#: ufostart/templates/company/company/create.html:69
+#: ufostart/templates/company/company/create.html:111
 msgid "CompanyCreate.Help.Text"
 msgstr ""
 
 #: ufostart/templates/company/company/edit.html:12
 msgid "CompanyEdit.Title"
+msgstr ""
+
+#: ufostart/templates/company/company/index.html:78
+msgid "Blog"
 msgstr ""
 
 #: ufostart/templates/company/funding/create.html:62
@@ -246,37 +274,41 @@ msgstr ""
 msgid "FundingSetupPage.Help.Text"
 msgstr ""
 
-#: ufostart/templates/company/need/edit.html:34
+#: ufostart/templates/company/need/edit.html:42
 msgid "TaskSetup.Help.Title"
 msgstr ""
 
-#: ufostart/templates/company/need/edit.html:37
+#: ufostart/templates/company/need/edit.html:45
 msgid "TaskSetup.Help.Text"
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:49
+#: ufostart/templates/company/need/index.html:51
 msgid "TaskDetailsPage.Task.Title:Task Details"
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:51
+#: ufostart/templates/company/need/index.html:53
 msgid ""
 "TaskDetailsPage.Equity.Explanation:We are working with mixed equity-cash "
 "payments. You'll get paid in cash as well as company shares."
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:76
+#: ufostart/templates/company/need/index.html:57
+msgid "TaskDetailsPage.Task.Parttime:This need is part time."
+msgstr ""
+
+#: ufostart/templates/company/need/index.html:83
 msgid "TaskDetailsPage.Invite.Button.InviteToTask"
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:81
+#: ufostart/templates/company/need/index.html:88
 msgid "TaskDetailsPage.Invite.Button.InviteNow"
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:82
+#: ufostart/templates/company/need/index.html:89
 msgid "TaskDetailsPage.Invite.Button.Cancel"
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:343
+#: ufostart/templates/company/need/index.html:327
 msgid "TaskDetailsPage.Help.NeedSummary.Title"
 msgstr ""
 
@@ -292,11 +324,11 @@ msgstr ""
 msgid "TemplateList.Title"
 msgstr ""
 
-#: ufostart/templates/company/setup/basic.html:29
+#: ufostart/templates/company/setup/basic.html:28
 msgid "TemplateList.Help.Title"
 msgstr ""
 
-#: ufostart/templates/company/setup/basic.html:32
+#: ufostart/templates/company/setup/basic.html:31
 msgid "TemplateList.Help.Text"
 msgstr ""
 
@@ -374,35 +406,35 @@ msgstr ""
 msgid "ProfilePage.UserInfoBox.Label.Interests"
 msgstr ""
 
-#: ufostart/templates/user/home.html:165
+#: ufostart/templates/user/home.html:164
 msgid "ProfilePage.BoxTitle.YourContacts"
 msgstr ""
 
-#: ufostart/templates/user/home.html:186
+#: ufostart/templates/user/home.html:185
 msgid "ProfilePage.BoxTitle.CompaniesYouKnow"
 msgstr ""
 
-#: ufostart/templates/user/home.html:216
+#: ufostart/templates/user/home.html:215
 msgid "ProfilePage.BoxTitle.Mentoring"
 msgstr ""
 
-#: ufostart/templates/user/home.html:239
+#: ufostart/templates/user/home.html:238
 msgid "ProfilePage.BoxTitle.Companies"
 msgstr ""
 
-#: ufostart/templates/user/home.html:267
+#: ufostart/templates/user/home.html:266
 msgid "ProfilePage.BoxContent.NoCompaniesYet"
 msgstr ""
 
-#: ufostart/templates/user/home.html:269
+#: ufostart/templates/user/home.html:268
 msgid "ProfilePage.Button.CreateCompany"
 msgstr ""
 
-#: ufostart/templates/user/home.html:278
+#: ufostart/templates/user/home.html:277
 msgid "ProfilePage.BoxTitle.Applications"
 msgstr ""
 
-#: ufostart/templates/user/home.html:298
+#: ufostart/templates/user/home.html:297
 msgid "ProfilePage.BoxTitle.Endorsements"
 msgstr ""
 

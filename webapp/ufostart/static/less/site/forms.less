@@ -187,6 +187,70 @@ ul.styled {
 }
 
 
+.control-label-help {
+  @spriteSize: 16px;
+  @wtf-color: #8f66aa;
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  width:@spriteSize;
+
+  > .control-label-help-icon {
+    content:"?";color:transparent;
+    text-indent:-999em;
+    display: inline-block;
+    vertical-align: top;
+    cursor:pointer;
+    height:@spriteSize;
+    width:@spriteSize;
+    .background-image("../img/section_exp.png");
+    background-repeat: no-repeat;
+    background-position: 0 -64px;
+  }
+  > .control-label-tooltip {
+    @width: 250px;
+    display: none;
+    min-width: @width;
+    position: absolute;
+    z-index: 2;
+    background: @wtf-color;
+    margin-left: (-@width / 2) + @spriteSize / 2;
+    bottom: 2*@spriteSize + 2px;
+    border-radius:@border-radius-small;
+    &:after {
+      content:".";
+      text-indent: -999em;
+      overflow: hidden;
+      width: 0;
+      height: 0;
+      position: absolute;
+      bottom: -@spriteSize;
+      left:50%;
+      margin-left:-@spriteSize;
+      border-top: @spriteSize solid @wtf-color;
+      border-left: @spriteSize solid transparent;
+      border-right: @spriteSize solid transparent;
+    }
+  }
+  &.expanded > .control-label-tooltip {display: block;}
+  .control-label-tooltip-title {
+    padding: 12px 12px 6px;border-bottom:1px solid white;
+    &:before {
+      content:".";
+      text-indent: -999em;
+      overflow: hidden;
+      width: @spriteSize;
+      height: @spriteSize;
+      float:right;
+      cursor:pointer;
+      margin: -4px -4px 0 0 ;
+      .background-image("../img/section_exp.png");
+      background-repeat: no-repeat;
+      background-position: 0 -80px;
+    }
+  }
+  .control-label-tooltip-body {padding: 12px;font-weight: normal;text-transform: none;}
+}
 
 
 .username-input {
