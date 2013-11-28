@@ -29,7 +29,7 @@ define(["tools/messaging", "tools/hash", "tools/form"], function(messaging, hash
         };
         params.error = function(xhr, status, msg){
             var err = xhr.getResponseHeader("X-Debug-Url");
-            if(mas||err)messaging.addError({message:err?'Error at:<a href="'+err+'">'+err+'</a>':msg});
+            if(msg||err)messaging.addError({message:err?'Error at:<a href="'+err+'">'+err+'</a>':msg});
             if(errorF)errorF(xhr, status, msg);
         };
         if (typeof params.data != 'string') { params.data = JSON.stringify(params.data) }

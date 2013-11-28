@@ -69,12 +69,17 @@ define(['tools/hash', 'tools/ajax'], function(hashlib, ajax){
                     '<div class="control-label-tooltip-title">'+$target.text()+'</div>' +
                     '<div class="control-label-tooltip-body">'+text+'</div>' +
                     '</div></div>').appendTo($target)
-                .on({'click':
-                    function(e){
-                        tt.toggleClass("expanded");
+                , toggleVisible = function(e){
+                    if(tt.toggleClass("expanded").hasClass("expanded")){
+                        //to prevent immediate closure
+                        setTimeout(
+                            function(){$(document).on("click.tt-handler-"+uId+",keyup.tt-handler-"+uId, toggleVisible);}
+                            , 0);
+                    } else {
+                        $(document).off("click.tt-handler-"+uId+",keyup.tt-handler-"+uId, toggleVisible);
                     }
-                }
-            );
+                };
+                tt.on({'click': toggleVisible});
         }
         , addRow : function(e){
             if((!e.keyCode || e.keyCode == 13)){
