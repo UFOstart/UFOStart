@@ -87,10 +87,10 @@
 
 <%def name="inviteForm(form, values, errors)">
   <div class="expander ${'expanded' if request.params.get('invite') else ''}">
-    <a class="btn btn-primary show-contracted btn-block" data-toggle-target=".expander" data-toggle-class="expanded">${_("TaskDetailsPage.Invite.Button:Don't know what to do?")|n}</a>
+    <a class="btn btn-primary show-contracted btn-block" data-toggle-target=".expander" data-toggle-class="expanded">${_("TaskDetailsPage.Invite.Button:Ask advisor for help")|n}</a>
     <div class="show-expanded">
       <div class="box-title">
-          ${_("TaskDetailsPage.Invite.Button:Don't know what to do?")|n}
+          ${_("TaskDetailsPage.Invite.Button:Ask advisor for help")|n}
       </div>
       <form class="box-content box-dark ${form.grid.form_classes}" id="${form.id}" method="POST">
         <p class="text-small">${_(u"TaskDetailsPage.Invite.Explanation:Invite someone to help you customise this task.")|n}</p>
