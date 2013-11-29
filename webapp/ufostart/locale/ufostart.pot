@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-29 17:04+0100\n"
+"POT-Creation-Date: 2013-11-29 17:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,93 +21,103 @@ msgstr ""
 msgid "SignupPage.Username.Label:Choose your username"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:26
+#: ufostart/handlers/company/need.py:53 ufostart/handlers/company/need.py:85
 msgid "TaskDetailsPage.Invite.FormLabel.Name"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:27
+#: ufostart/handlers/company/need.py:54 ufostart/handlers/company/need.py:86
 msgid "TaskDetailsPage.Invite.FormLabel.EmailAddress"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:65
-msgid "TaskDetailsPage.Apply.FormLabel.Message"
+#: ufostart/handlers/company/need.py:75
+msgid "TaskDetailsPage.Message:You successfully recommended this task to {name}!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:73
+#: ufostart/handlers/company/need.py:95
 msgid ""
-"TaskDetailsPage.Apply.SuccessMessage.You have applied for this task "
-"successfully. One of the team members will contact you shortly."
+"TaskDetailsPage.Message:You successfully invited {name} to advise you with "
+"this task!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:118
-msgid "TaskSetup.FormLabel.Picture"
-msgstr ""
-
-#: ufostart/handlers/company/need.py:119
-msgid "TaskSetup.FormLabel.Title"
-msgstr ""
-
-#: ufostart/handlers/company/need.py:121
-msgid "TaskSetup.FormLabel.is part time"
+#: ufostart/handlers/company/need.py:114
+msgid "TaskDetailsPage.Apply.FormLabel:Message"
 msgstr ""
 
 #: ufostart/handlers/company/need.py:122
+msgid ""
+"TaskDetailsPage.Apply.Success:You have successfully applied for this task. "
+"One of the team members will contact you shortly."
+msgstr ""
+
+#: ufostart/handlers/company/need.py:139
+msgid "TaskSetup.FormLabel.Picture"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:140
+msgid "TaskSetup.FormLabel.Title"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:142
+msgid "TaskSetup.FormLabel.is part time"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:143
 msgid "TaskSetup.FormLabel.Cash Value"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:123
+#: ufostart/handlers/company/need.py:144
 msgid "TaskSetup.FormLabel.Cash Value.Help"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:125
+#: ufostart/handlers/company/need.py:146
 msgid "TaskSetup.FormLabel.Equity Value"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:126
+#: ufostart/handlers/company/need.py:147
 msgid "TaskSetup.FormLabel.Equity Value.Help"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:128
+#: ufostart/handlers/company/need.py:149
 msgid "TaskSetup.FormLabel.Description"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:129
+#: ufostart/handlers/company/need.py:150
 msgid "TaskSetup.FormLabel.Related Tags"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:131
+#: ufostart/handlers/company/need.py:152
 msgid "TaskSetup.FormLabel.Related Services"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:134
+#: ufostart/handlers/company/need.py:155
 msgid "TaskSetup.FormLabel.Advisor.Name"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:135
+#: ufostart/handlers/company/need.py:156
 msgid "TaskSetup.FormLabel.Advisor.EmailAddress"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:148
+#: ufostart/handlers/company/need.py:169
 msgid ""
 "TaskSetup.ErrorMessage.This task already exists, if you intend to create this"
 " task, please change its name to something less ambiguous!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:155
+#: ufostart/handlers/company/need.py:176
 msgid "TaskSetup.SuccessMessage.Task created successfully!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:190
+#: ufostart/handlers/company/need.py:211
 msgid ""
 "TaskSetup.ErrorMessage.This task already exists, if you intend to Edit this "
 "task, please change its name to something less ambiguous!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:198
+#: ufostart/handlers/company/need.py:219
 msgid "TaskSetup.SuccessMessage.Task added to round!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:202
+#: ufostart/handlers/company/need.py:223
 msgid "TaskSetup.SuccessMessage.Changes saved!"
 msgstr ""
 
@@ -394,39 +404,59 @@ msgstr ""
 msgid "TaskSetup.Label:Invite an Advisor to help edit this task."
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:51
+#: ufostart/templates/company/need/index.html:60
 msgid "TaskDetailsPage.Task.Title:Task Details"
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:53
+#: ufostart/templates/company/need/index.html:62
 msgid ""
 "TaskDetailsPage.Equity.Explanation:We are working with mixed equity-cash "
 "payments. You'll get paid in cash as well as company shares."
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:57
+#: ufostart/templates/company/need/index.html:66
 msgid "TaskDetailsPage.Task.Parttime:This need is part time."
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:84
-msgid "TaskDetailsPage.Invite.Button.InviteToTask"
+#: ufostart/templates/company/need/index.html:90
+#: ufostart/templates/company/need/index.html:93
+msgid "TaskDetailsPage.Invite.Button:Don't know what to do?"
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:86
+#: ufostart/templates/company/need/index.html:96
 msgid ""
-"TaskDetailsPage.Invite.Explanation:Recommend this need to experts in the "
+"TaskDetailsPage.Invite.Explanation:Invite someone to help you customise this "
+"task."
+msgstr ""
+
+#: ufostart/templates/company/need/index.html:100
+msgid "TaskDetailsPage.Invite.Button:Submit"
+msgstr ""
+
+#: ufostart/templates/company/need/index.html:101
+msgid "TaskDetailsPage.Invite.Button:Cancel"
+msgstr ""
+
+#: ufostart/templates/company/need/index.html:111
+#: ufostart/templates/company/need/index.html:114
+msgid "TaskDetailsPage.Recommend.Button:Recommend this task"
+msgstr ""
+
+#: ufostart/templates/company/need/index.html:117
+msgid ""
+"TaskDetailsPage.Recommend.Explanation:Recommend this task to experts in the "
 "field."
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:90
-msgid "TaskDetailsPage.Invite.Button.InviteNow"
+#: ufostart/templates/company/need/index.html:121
+msgid "TaskDetailsPage.Recommend.Button:Submit"
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:91
-msgid "TaskDetailsPage.Invite.Button.Cancel"
+#: ufostart/templates/company/need/index.html:122
+msgid "TaskDetailsPage.Recommend.Button:Cancel"
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:329
+#: ufostart/templates/company/need/index.html:360
 msgid "TaskDetailsPage.Help.NeedSummary.Title"
 msgstr ""
 
@@ -442,40 +472,40 @@ msgstr ""
 msgid "Button:Pledge Now"
 msgstr ""
 
-#: ufostart/templates/company/setup/basic.html:5
-msgid "TemplateList.Title"
-msgstr ""
-
-#: ufostart/templates/company/setup/basic.html:28
-msgid "TemplateList.Help.Title"
-msgstr ""
-
-#: ufostart/templates/company/setup/basic.html:31
-msgid "TemplateList.Help.Text"
-msgstr ""
-
-#: ufostart/templates/company/setup/details.html:13
+#: ufostart/templates/company/templates/details.html:13
 msgid "TemplateDetails.BoxTitle"
 msgstr ""
 
-#: ufostart/templates/company/setup/details.html:34
+#: ufostart/templates/company/templates/details.html:34
 msgid "TemplateDetails.ProceedButton"
 msgstr ""
 
-#: ufostart/templates/company/setup/details.html:35
+#: ufostart/templates/company/templates/details.html:35
 msgid "TemplateDetails.CancelButton"
 msgstr ""
 
-#: ufostart/templates/company/setup/details.html:41
+#: ufostart/templates/company/templates/details.html:41
 msgid "TemplateDetails.TaskSection.Title"
 msgstr ""
 
-#: ufostart/templates/company/setup/details.html:54
+#: ufostart/templates/company/templates/details.html:54
 msgid "TemplateDetails.Help.Title"
 msgstr ""
 
-#: ufostart/templates/company/setup/details.html:57
+#: ufostart/templates/company/templates/details.html:57
 msgid "TemplateDetails.Help.Text"
+msgstr ""
+
+#: ufostart/templates/company/templates/list.html:5
+msgid "TemplateList.Title"
+msgstr ""
+
+#: ufostart/templates/company/templates/list.html:28
+msgid "TemplateList.Help.Title"
+msgstr ""
+
+#: ufostart/templates/company/templates/list.html:31
+msgid "TemplateList.Help.Text"
 msgstr ""
 
 #: ufostart/templates/user/home.html:8

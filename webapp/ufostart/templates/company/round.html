@@ -325,106 +325,104 @@
 </%def>
 
 <%def name="buildNeed(need, published)">
-    <div class="need-card ${need.status}" data-entity-id="${need.token}">
-        %if need.fulfilled:
-            <a class="customize success" href="#"><span class="glyphicon glyphicon-ok-sign"></span> Task Fulfilled</a>
+  <div class="need-card ${need.status}" data-entity-id="${need.token}">
+      %if need.fulfilled:
+        <a class="customize success" href="#"><span class="glyphicon glyphicon-ok-sign"></span> Task Fulfilled</a>
+      %endif
+    <div class="need-card-inner">
+      <div class="cut-corner box-header-muted box-content no-link">
+
+          %if not published and ctxt.canEdit:
+            <span class="remove" data-target=".need-card">×</span>
+          %endif
+        <a class="pull-left section-drop-expander link" title="Expand" data-toggle-class="expanded" data-toggle-target=".need-card-inner"><span class="section-drop-icon"></span></a>
+        <h3 class="no-margin">
+          <a href="${url(ctxt, need.slug, 'edit') if not need.customized and ctxt.canEdit else url(ctxt, need.slug)}">
+              ${need.name}
+          </a>
+        </h3>
+        <p class="show-expanded mar-top-1">${ html.clean_coalesce(need.customText, need.summary) | html.trunc(300) }</p>
+      </div>
+
+        %if need.customized:
+          <div class="box-content show-expanded">
+              ${widgets.valuation_sml(need)}
+          </div>
         %endif
-        <div class="need-card-inner">
-            <div class="cut-corner box-header-muted box-content no-link">
-                %if not published and ctxt.canEdit:
-                    <span class="remove" data-target=".need-card">×</span>
-                %endif
-                <h3 class="no-margin">
-                    <a href="${url(ctxt, need.slug, 'edit') if not need.customized and ctxt.canEdit else url(ctxt, need.slug)}">
-                        ${need.name}
-                    </a>
-                </h3>
-                <p class="mar-top-1">${ html.clean_coalesce(need.customText, need.summary) | html.trunc(300) }</p>
+
+        %if need.fulfilled:
+          <div class="box-content">
+            <div class="box-card extra-compact">
+                ${companyWidgets.applicationCard(need.acceptedApplication)}
             </div>
-
-            %if need.customized:
-                <div class="box-content">
-                    ${widgets.valuation_sml(need)}
-               </div>
-               <hr class="boxed"/>
-            %endif
-
-            %if need.fulfilled:
-                <div class="box-content">
-                <div class="box-card extra-compact">
-                    ${companyWidgets.applicationCard(need.acceptedApplication)}
-                </div>
-                </div>
-            %elif published:
-                %if len(need.Endorsements):
-                    <div class="box-content">
-                        <h6>Endorsed Experts</h6>
-                        <div class="picture-pile">
-                        %for endorse in need.Endorsements[:4]:
-                            <div class="picture small">
-                                <img src="${endorse.endorseePicture}" alt="${endorse.endorseeName}"/>
-                            </div>
-                        %endfor
-                        </div>
-                    </div>
-                %else:
-                    <div class="empty">No Endorsements yet</div>
-                %endif
-
-                <hr class="boxed"/>
-
-                %if len(need.Applications):
-                    <div class="box-content">
-                        <h6>Recent Applications</h6>
-                        %for application in need.getRecentApplications(4):
-                            <div class="box-card extra-compact box-card-separated">
-                                ${companyWidgets.applicationCard(application)}
-                            </div>
-                        %endfor
-                    </div>
-                %else:
-                    <div class="empty">No Applications yet</div>
-                %endif
-
-            %else:
-                <div class="box-content">
-                    %for tag in need.tags:
-                        <span class="label label-info spaced text-small">${tag}</span>
+          </div>
+        %elif published:
+            %if len(need.Endorsements):
+              <div class="box-content">
+                <h6>Endorsed Experts</h6>
+                <div class="picture-pile">
+                    %for endorse in need.Endorsements[:4]:
+                      <div class="picture small">
+                        <img src="${endorse.endorseePicture}" alt="${endorse.endorseeName}"/>
+                      </div>
                     %endfor
                 </div>
-                %if need.experts:
-                    <hr class="boxed"/>
-                    <div class="box-content">
-                        <div class="experts">
-                            <h6>Recommended Experts</h6>
-                            <div class="picture-pile">
-                            %for expert in need.experts[:4]:
-                                <div class="picture small">
-                                    <img src="${expert.picture}" alt="${expert.name}"/>
-                                </div>
-                            %endfor
-                            </div>
-                        </div>
-                    </div>
-                %endif
-                %if need.services:
-                    <hr class="boxed"/>
-                    <div class="box-content">
-                    <div class="services">
-                        <h6>Recomended Cloud Services</h6>
-                        <div class="picture-pile">
-                        %for service in need.services[:4]:
-                            <div class="picture small">
-                                <img src="${service.logo_url}" name="${service.name}"/>
-                            </div>
-                        %endfor
-                        </div>
-                    </div>
-                    </div>
-                %endif
+              </div>
+            %else:
+              <div class="empty">No Endorsements yet</div>
             %endif
-        </div>
+
+            %if len(need.Applications):
+              <div class="box-content">
+                <h6>Recent Applications</h6>
+                  %for application in need.getRecentApplications(4):
+                    <div class="box-card extra-compact box-card-separated">
+                        ${companyWidgets.applicationCard(application)}
+                    </div>
+                  %endfor
+              </div>
+            %else:
+              <div class="empty">No Applications yet</div>
+            %endif
+
+        %else:
+          <div class="box-content show-expanded">
+              %for tag in need.tags:
+                <span class="label label-info spaced text-small">${tag}</span>
+              %endfor
+          </div>
+
+        %if need.experts:
+          <div class="box-content">
+            <div class="experts">
+              <h6>Recommended Experts</h6>
+              <div class="picture-pile">
+                  %for expert in need.experts[:4]:
+                    <div class="picture small">
+                      <img src="${expert.picture}" alt="${expert.name}"/>
+                    </div>
+                  %endfor
+              </div>
+            </div>
+          </div>
+        %endif
+        %if need.services:
+          <div class="box-content">
+            <div class="services">
+              <h6>Recomended Cloud Services</h6>
+              <div class="picture-pile">
+                  %for service in need.services[:4]:
+                    <div class="picture small">
+                      <img src="${service.logo_url}" name="${service.name}"/>
+                    </div>
+                  %endfor
+              </div>
+            </div>
+          </div>
+        %endif
+        %endif
     </div>
+  </div>
 </%def>
 
 

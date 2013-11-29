@@ -3,8 +3,8 @@ from ufostart.handlers.company.__resources__ import TemplatesRootContext, Templa
 
 
 def includeme(config):
-    config.add_view(setup.basics                 , context = TemplatesRootContext                        , renderer = "ufostart:templates/company/setup/basic.html")
-    config.add_view(setup.details                , context = TemplateContext                             , renderer = "ufostart:templates/company/setup/details.html")
+    config.add_view(setup.basics                 , context = TemplatesRootContext                        , renderer = "ufostart:templates/company/templates/list.html")
+    config.add_view(setup.details                , context = TemplateContext                             , renderer = "ufostart:templates/company/templates/details.html")
 
 
     config.add_view(setup.CreateProjectHandler   , context = TemplateContext   , name = 'startcompany'   , renderer = "ufostart:templates/company/company/create.html", permission = 'create')
