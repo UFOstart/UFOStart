@@ -3,7 +3,11 @@
   display: block;
 }
 .link {cursor: pointer;}
-
+.link-underlined {
+  color: white;
+  text-decoration: underline;
+  &:hover, &:active {color: #ddd; }
+}
 .overflow {.text-overflow();display: block;}
 
 .date-ear-mark {color:@text-muted; font-size:@font-size-small; padding: 0 0 0 10px;float:right;}

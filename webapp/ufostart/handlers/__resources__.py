@@ -4,10 +4,11 @@ from pyramid.decorator import reify
 from pyramid.security import Allow, Everyone, Authenticated
 import simplejson
 from ufostart.handlers.auth import signup
+from ufostart.handlers.company.invite import ProtoInviteContext
 from ufostart.lib.baseviews import RootContext
 from ufostart.admin import AdminContext
 from ufostart.handlers.auth import SocialContext, SignupContext
-from ufostart.handlers.company import TemplatesRootContext, ProtoInviteContext, CompanyContext
+from ufostart.handlers.company import TemplatesRootContext, CompanyContext
 from ufostart.handlers.user import UserProfileContext
 from ufostart.models.auth import AnonUser, getUser, setUserF, USER_TOKEN
 from ufostart.models.procs import CheckSlugProc

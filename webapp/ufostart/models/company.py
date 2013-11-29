@@ -604,6 +604,7 @@ class InviteModel(Mapping):
     name = TextField()
     role = TextField()
     inviteToken = TextField()
+    Need = DictField(NeedModel)
 
     @property
     def position(self):

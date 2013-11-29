@@ -126,7 +126,8 @@ AddNeedToRound = ClientTokenProc("/web/round/needAdd")
 
 
 InviteToCompanyProc = ClientTokenProc("/web/company/invite")
-InviteToNeedProc = ClientTokenProc("/web/need/invite")
+RecommendNeedProc = ClientTokenProc("/web/need/invite")
+InviteToNeedProc = ClientTokenProc("/web/round/needinvite")
 GetInviteDetailsProc = ClientTokenProc("/web/company/getInvite", result_cls=InviteModel, root_key="Invite")
 AcceptInviteProc = ClientTokenProc("/web/company/acceptInvite")
 

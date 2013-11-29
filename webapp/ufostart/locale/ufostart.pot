@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-28 11:53+0100\n"
+"POT-Creation-Date: 2013-11-29 11:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,81 +21,93 @@ msgstr ""
 msgid "SignupPage.Username.Label:Choose your username"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:18
+#: ufostart/handlers/company/need.py:25
 msgid "TaskDetailsPage.Invite.FormLabel.Name"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:19
+#: ufostart/handlers/company/need.py:26
 msgid "TaskDetailsPage.Invite.FormLabel.EmailAddress"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:53
+#: ufostart/handlers/company/need.py:64
 msgid "TaskDetailsPage.Apply.FormLabel.Message"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:58
+#: ufostart/handlers/company/need.py:72
 msgid ""
 "TaskDetailsPage.Apply.SuccessMessage.You have applied for this task "
 "successfully. One of the team members will contact you shortly."
 msgstr ""
 
-#: ufostart/handlers/company/need.py:70
+#: ufostart/handlers/company/need.py:111
 msgid "TaskSetup.FormLabel.Picture"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:71
+#: ufostart/handlers/company/need.py:112
 msgid "TaskSetup.FormLabel.Title"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:72
+#: ufostart/handlers/company/need.py:114
 msgid "TaskSetup.FormLabel.is part time"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:73
+#: ufostart/handlers/company/need.py:115
 msgid "TaskSetup.FormLabel.Cash Value"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:73
+#: ufostart/handlers/company/need.py:116
 msgid "TaskSetup.FormLabel.Cash Value.Help"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:74
+#: ufostart/handlers/company/need.py:118
 msgid "TaskSetup.FormLabel.Equity Value"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:75
+#: ufostart/handlers/company/need.py:119
+msgid "TaskSetup.FormLabel.Equity Value.Help"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:121
 msgid "TaskSetup.FormLabel.Description"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:76
+#: ufostart/handlers/company/need.py:122
 msgid "TaskSetup.FormLabel.Related Tags"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:77
+#: ufostart/handlers/company/need.py:124
 msgid "TaskSetup.FormLabel.Related Services"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:86
+#: ufostart/handlers/company/need.py:127
+msgid "TaskSetup.FormLabel.Advisor.Name"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:128
+msgid "TaskSetup.FormLabel.Advisor.EmailAddress"
+msgstr ""
+
+#: ufostart/handlers/company/need.py:141
 msgid ""
 "TaskSetup.ErrorMessage.This task already exists, if you intend to create this"
 " task, please change its name to something less ambiguous!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:90
+#: ufostart/handlers/company/need.py:151
 msgid "TaskSetup.SuccessMessage.Task created successfully!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:119
+#: ufostart/handlers/company/need.py:186
 msgid ""
 "TaskSetup.ErrorMessage.This task already exists, if you intend to Edit this "
 "task, please change its name to something less ambiguous!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:124
+#: ufostart/handlers/company/need.py:197
 msgid "TaskSetup.SuccessMessage.Task added to round!"
 msgstr ""
 
-#: ufostart/handlers/company/need.py:127
+#: ufostart/handlers/company/need.py:201
 msgid "TaskSetup.SuccessMessage.Changes saved!"
 msgstr ""
 
@@ -133,6 +145,25 @@ msgstr ""
 
 #: ufostart/templates/index.html:61
 msgid "HomePage.Founder.Title"
+msgstr ""
+
+#: ufostart/templates/admin/form.html:19
+#: ufostart/templates/auth/twitter_email.html:29
+#: ufostart/templates/common/standard_form.html:41
+#: ufostart/templates/common/standard_form.html:56
+#: ufostart/templates/company/product/create.html:43
+msgid "Button:Submit"
+msgstr ""
+
+#: ufostart/templates/admin/form.html:20
+#: ufostart/templates/common/standard_form.html:43
+#: ufostart/templates/common/standard_form.html:58
+#: ufostart/templates/company/need/apply.html:34
+#: ufostart/templates/company/need/create.html:21
+#: ufostart/templates/company/need/edit.html:25
+#: ufostart/templates/company/product/create.html:44
+#: ufostart/templates/company/product/index.html:113
+msgid "Button:Cancel"
 msgstr ""
 
 #: ufostart/templates/auth/roleselect.html:14
@@ -214,6 +245,11 @@ msgid ""
 "target=\"_blank\">create one</a>."
 msgstr ""
 
+#: ufostart/templates/common/standard_form.html:42
+#: ufostart/templates/common/standard_form.html:57
+msgid "Button:Resend"
+msgstr ""
+
 #: ufostart/templates/company/addmentor.html:22
 msgid "AddMentorPage.Help.Title"
 msgstr ""
@@ -274,12 +310,24 @@ msgstr ""
 msgid "FundingSetupPage.Help.Text"
 msgstr ""
 
+#: ufostart/templates/company/need/apply.html:33
+msgid "Application.Form.BtnLabel:Submit Application"
+msgstr ""
+
+#: ufostart/templates/company/need/create.html:9
+msgid "TaskSetup.Heading:Add a new task"
+msgstr ""
+
 #: ufostart/templates/company/need/edit.html:42
 msgid "TaskSetup.Help.Title"
 msgstr ""
 
 #: ufostart/templates/company/need/edit.html:45
 msgid "TaskSetup.Help.Text"
+msgstr ""
+
+#: ufostart/templates/company/need/edit.html:88
+msgid "TaskSetup.Label:Invite an Advisor to help edit this task."
 msgstr ""
 
 #: ufostart/templates/company/need/index.html:51
@@ -296,19 +344,19 @@ msgstr ""
 msgid "TaskDetailsPage.Task.Parttime:This need is part time."
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:83
+#: ufostart/templates/company/need/index.html:84
 msgid "TaskDetailsPage.Invite.Button.InviteToTask"
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:88
+#: ufostart/templates/company/need/index.html:89
 msgid "TaskDetailsPage.Invite.Button.InviteNow"
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:89
+#: ufostart/templates/company/need/index.html:90
 msgid "TaskDetailsPage.Invite.Button.Cancel"
 msgstr ""
 
-#: ufostart/templates/company/need/index.html:327
+#: ufostart/templates/company/need/index.html:328
 msgid "TaskDetailsPage.Help.NeedSummary.Title"
 msgstr ""
 
@@ -318,6 +366,10 @@ msgstr ""
 
 #: ufostart/templates/company/product/create.html:70
 msgid "ProductSetup.Help.Text"
+msgstr ""
+
+#: ufostart/templates/company/product/index.html:112
+msgid "Button:Pledge Now"
 msgstr ""
 
 #: ufostart/templates/company/setup/basic.html:5

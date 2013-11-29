@@ -10,7 +10,7 @@ from pyramid_beaker import session_factory_from_settings
 from hnc.tools import request
 from .lib.subscribers import add_renderer_variables
 from .lib.globals import Globals
-from .handlers.contexts import WebsiteRootContext
+from .handlers.__resources__ import WebsiteRootContext
 
 log = logging.getLogger(__name__)
 

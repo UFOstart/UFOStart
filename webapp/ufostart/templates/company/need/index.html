@@ -6,7 +6,7 @@
 
 
 
-<%def name="content()">
+<%def name="content(with_forms = True)">
     <div class="container" data-entity="need" data-entity-id="${ctxt.need.slug}" data-name="${ctxt.need.name}" data-company-name="${ctxt.company.display_name}">
         <%widgets:pageHeader canEdit="${ctxt.canEdit and not ctxt.need.fulfilled}">
             ${ctxt.need.name}
@@ -17,7 +17,7 @@
               <div class="row">
                 <div class="col-sm-4">
                     ${self.needOverview(ctxt.need)}
-                    %if not ctxt.need.fulfilled:
+                    %if with_forms and not ctxt.need.fulfilled:
                     ${self.inviteForm(view.schemas['Needinvite'], values, errors)}
                     %endif
                 </div>
@@ -80,6 +80,7 @@
 <%def name="inviteForm(form, values, errors)">
     %if form:
         <div class="mar-top-2 expander ${'expanded' if request.params.get('invite') else ''}">
+
             <a class="btn btn-primary show-contracted btn-block" data-toggle-target=".expander" data-toggle-class="expanded">${_("TaskDetailsPage.Invite.Button.InviteToTask")|n}</a>
             <form class="box-content box-dark show-expanded ${form.grid.form_classes}" id="${form.id}" method="POST">
                 ${baseform.prelims(form)}

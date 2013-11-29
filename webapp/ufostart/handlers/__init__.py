@@ -5,10 +5,9 @@ from hnc.tools.oauth import Consumer
 from pyramid.decorator import reify
 import simplejson
 
-from . import contexts, index, auth, company, expert, user
+from . import index, auth, company, expert, user
+from ufostart.handlers.__resources__ import WebsiteRootContext
 from ufostart.handlers.social import SocialLoginFailed, SocialLoginSuccessful
-from ufostart.models.procs import GetStaticContentProc
-
 
 
 class BaseSettings(object):
@@ -64,10 +63,10 @@ def includeme(config):
     settings['g'].setSettings(WebsiteSettings, settings)
 
 
-    config.add_view(index.index       , context = contexts.WebsiteRootContext                , renderer = "ufostart:templates/index.html")
-    config.add_view(auth.social.login , context = contexts.WebsiteRootContext, name='login'  , renderer = "ufostart:templates/auth/login.html")
-    config.add_view(index.logout      , context = contexts.WebsiteRootContext, name='logout')
-    config.add_view(index.content_view, context = contexts.WebsiteRootContext, name='content', renderer = "ufostart:templates/content.html")
+    config.add_view(index.index       , context = WebsiteRootContext                , renderer = "ufostart:templates/index.html")
+    config.add_view(auth.social.login , context = WebsiteRootContext, name='login'  , renderer = "ufostart:templates/auth/login.html")
+    config.add_view(index.logout      , context = WebsiteRootContext, name='logout')
+    config.add_view(index.content_view, context = WebsiteRootContext, name='content', renderer = "ufostart:templates/content.html")
 
     config.include("ufostart.handlers.company")
     config.include("ufostart.handlers.user")

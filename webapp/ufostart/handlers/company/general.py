@@ -102,15 +102,3 @@ def add_top_mentor(context, request):
     request.session.flash(GenericSuccessMessage(u"You successfully invited {name} to your company!".format(**values)), "generic_messages")
     raise HTTPFound(request.resource_url(request.context))
 
-
-def invite_landing(context, request):
-    return {'invite': context.invite}
-
-def confirm(context, request):
-    AcceptInviteProc(request, {'inviteToken':context.__name__, 'userToken': request.root.user.token})
-    RefreshProfileProc(request, {'token': request.root.user.token})
-    raise HTTPFound(request.root.round_url(context.invite.companySlug, '1'))
-
-def reject(context, request):
-    raise HTTPFound(request.root.round_url(context.invite.companySlug, '1'))
-

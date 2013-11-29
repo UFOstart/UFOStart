@@ -1,6 +1,6 @@
 <%inherit file="../layout.html"/>
 <%namespace file="hnc:forms/templates/baseform.html" name="baseform"/>
-<%namespace file="round.html" name="compView"/>
+<%namespace file="need/index.html" name="compView"/>
 
 <%def name="content()">
   <div class="container">
@@ -13,9 +13,10 @@
           <div class="content">
             <h2>Hello ${ctxt.invite.name}</h2>
             <h4>
-              You have been invited to be a ${ctxt.invite.position} for
+                ${ctxt.invite.invitorName} asks you to help out customizing
               <a class="link-underlined" href="${root.company_url(ctxt.invite.companySlug)}">${ctxt.company.display_name}'s</a>
-              <a class="link-underlined" href="${root.round_url(ctxt.invite.companySlug, 1)}">${ctxt.round.display_name} Round</a>.
+              <a class="link-underlined" href="${root.need_url(ctxt.invite.companySlug, ctxt.need.slug)}">${ctxt.need.name}</a>
+              need.
             </h4>
               %if root.user.isAnon():
                 <h4>Please login to confirm.</h4>
@@ -33,25 +34,5 @@
       </div>
     </div>
   </div>
-  ${compView.content()}
-</%def>
-
-
-<%def name="extra_head()">
-    %if ctxt.round.published:
-        <script type="text/javascript" src="${STATIC_URL}vendor/dist/raphael-min.js"></script>
-    %endif
-</%def>
-<%def name="post_scripts()">
-<script>
-    require(["views/company/dashboard", "libs/tachymeter"], function(View, Tacho){
-        var view =new View({
-            el: $("#project-round-need-dashboard")
-        });
-        %if ctxt.round.published:
-            new Tacho({el: document.getElementById('tachymeter'), fillRatio: ${ctxt.round.getExpiryPercentage()}});
-        %endif
-    });
-</script>
-${compView.templates()}
+  ${compView.content(with_forms = False)}
 </%def>

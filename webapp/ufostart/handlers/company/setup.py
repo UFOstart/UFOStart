@@ -1,5 +1,5 @@
 from hnc.apiclient.backend import DBNotification
-from hnc.forms.formfields import  REQUIRED, StringField, ChoiceField, HtmlAttrs, URLField
+from hnc.forms.formfields import  REQUIRED, StringField, ChoiceField, URLField
 from hnc.forms.handlers import FormHandler
 from ufostart.lib.baseviews import BaseForm
 from ufostart.handlers.auth.imp import SESSION_SAVE_TOKEN
