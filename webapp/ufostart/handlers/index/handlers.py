@@ -16,6 +16,10 @@ def logout(context, request):
 
 def content_view(context, request):
     try:
-        return {'page':AdminPageGetProc(request, {'url':'/'.join(request.subpath)})}
+        page = AdminPageGetProc(request, {'url':'/'.join(request.subpath)})
+        if page and page.active:
+            return {'page':page}
+        else:
+            raise HTTPNotFound()
     except KeyError, e:
         raise HTTPNotFound()

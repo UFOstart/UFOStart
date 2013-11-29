@@ -186,6 +186,7 @@ class PageCreateForm(BaseForm):
     fields = [
         StringField('url', "URL", REQUIRED)
         , StringField('title', "title", REQUIRED)
+        , CheckboxPostField('active', "Enabled")
         , StringField('metaKeywords', "Meta Keywords")
         , StringField('metaDescription', "Meta Description")
         , TextareaField('content', "Content", input_classes='x-high')
@@ -207,6 +208,9 @@ class PageCreateForm(BaseForm):
 class PageCreateHandler(FormHandler):
     form = PageCreateForm
 
+    def pre_fill_values(self, request, result):
+        result['values'][self.form.id]['active'] = True
+        return super(PageCreateHandler, self).pre_fill_values(request, result)
 
 
 class PageEditForm(PageCreateForm):
@@ -217,7 +221,7 @@ class PageEditForm(PageCreateForm):
         values['Need'] = [{'name':n} for n in values.pop('Need', [])]
         need = AdminPageEditProc(request, values)
         request.session.flash(GenericSuccessMessage("Page updated successfully!"), "generic_messages")
-        return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
+        return {'success':True, 'redirect': request.resource_url(request.context)}
 
 class PageEditHandler(FormHandler):
     form = PageEditForm
