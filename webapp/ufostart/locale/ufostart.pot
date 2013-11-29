@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-29 17:31+0100\n"
+"POT-Creation-Date: 2013-11-29 18:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -316,11 +316,11 @@ msgstr ""
 msgid "AddMentorPage.Help.Text"
 msgstr ""
 
-#: ufostart/templates/company/round.html:499
+#: ufostart/templates/company/round.html:497
 msgid "RoundDashboard.Help.Title"
 msgstr ""
 
-#: ufostart/templates/company/round.html:502
+#: ufostart/templates/company/round.html:500
 msgid "RoundDashboard.Help.Text"
 msgstr ""
 
@@ -420,7 +420,7 @@ msgstr ""
 
 #: ufostart/templates/company/need/index.html:90
 #: ufostart/templates/company/need/index.html:93
-msgid "TaskDetailsPage.Invite.Button:Don't know what to do?"
+msgid "TaskDetailsPage.Invite.Button:Ask advisor for help"
 msgstr ""
 
 #: ufostart/templates/company/need/index.html:96
