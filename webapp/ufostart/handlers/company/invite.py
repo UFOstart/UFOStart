@@ -96,8 +96,7 @@ class InviteNeedContext(InviteContext):
         return self.round.needMap[self.invite.Need.slug]
 
     def after_action_fwd(self):
-        context = self.request.context
-        raise HTTPFound(self.request.root.need_url(context.invite.companySlug, context.need.slug))
+        raise HTTPFound(self.request.root.need_url(self.invite.companySlug, self.need.slug))
 
 
 

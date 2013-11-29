@@ -83,7 +83,7 @@ class ApplicationHandler(FormHandler): forms = [ApplicationForm, NeedIndexForm]
 
 def unpack_advisor(request, values):
     advisor = values.pop('advisor', {})
-    if 'name' in advisor and 'email' in advisor:
+    if advisor.get('name') and advisor.get('email'):
         user = request.root.user
         company = request.context.company
         advisor = {
@@ -94,11 +94,17 @@ def unpack_advisor(request, values):
             , 'email': advisor['email']
             , 'name': advisor['name']
         }
+    else:
+        advisor = None
     return values, advisor
 
 def invite_advisor_to_need(request, need, advisor):
-    advisor['Need'] = {"slug": need.slug, "name": need.name}
-    InviteToNeedProc(request, {'Invite': advisor})
+    try:
+        advisor['Need'] = {"slug": need.slug, "name": need.name}
+        InviteToNeedProc(request, {'Invite': advisor})
+    except DBNotification, e:
+        log.error(e)
+
 
 
 ######################### need advisor edit/create views
@@ -143,10 +149,7 @@ class NeedCreateForm(BaseForm):
             else:
                 raise e
 
-        try:
-            invite_advisor_to_need(request, need, advisor)
-        except DBNotification, e:
-            log.error(e)
+        if advisor: invite_advisor_to_need(request, need, advisor)
 
         request.session.flash(GenericSuccessMessage(_("TaskSetup.SuccessMessage.Task created successfully!")),
                               "generic_messages")
@@ -188,10 +191,7 @@ class NeedEditForm(BaseForm):
             else:
                 raise e
 
-        try:
-            invite_advisor_to_need(request, need, advisor)
-        except DBNotification, e:
-            log.error(e)
+        if advisor: invite_advisor_to_need(request, need, advisor)
 
         if newNeed:
             request.session.flash(GenericSuccessMessage(_("TaskSetup.SuccessMessage.Task added to round!")),
