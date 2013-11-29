@@ -145,6 +145,8 @@ class RoundContext(BaseProjectContext):
         if item == 'funding': return FundingContext(self, 'funding', self.__acl__, self.round.Funding)
         return NeedContext(self, item, self.__acl__, self.round.needMap[item])
 
+    def hasSuggestedNeeds(self):
+        return len([need for need in self.round.Needs if need.added == False])> 0
 
     def groupedNeeds(self, n = 4, added = False):
         needs = [need for need in self.round.Needs if need.added == added]
