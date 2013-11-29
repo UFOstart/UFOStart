@@ -1,12 +1,15 @@
 from hnc.apiclient.backend import DBNotification
 from hnc.forms.formfields import  REQUIRED, StringField, ChoiceField, URLField
 from hnc.forms.handlers import FormHandler
+from pyramid.i18n import TranslationStringFactory
 from ufostart.lib.baseviews import BaseForm
 from ufostart.handlers.auth.imp import SESSION_SAVE_TOKEN
 from ufostart.models.procs import CreateCompanyProc, EditCompanyProc
 from ufostart.handlers.forms.controls import PictureUploadField, PictureGalleryUploadField, CleanHtmlField, SanitizedHtmlField, SlideshareField, VideoUrlField, UniqueNameField
 from ufostart.models.tasks import NamedModel
 
+
+_ = TranslationStringFactory("uforeloaded")
 
 def basics(context, request):
     return {'templates': context.templates}
@@ -19,17 +22,17 @@ class CompanyCreateForm(BaseForm):
     id="CompanyCreate"
     label = ""
     fields=[
-        PictureUploadField('logo', 'Logo', REQUIRED, picWidth=250, picHeight=170)
-        , StringField('name', 'Name', REQUIRED)
-        , UniqueNameField("slug", "UFOstart Url", thing_name = 'company name')
-        , URLField("companyUrl", "Project Website")
-        , CleanHtmlField('pitch', 'Slogan', REQUIRED, max = 90)
-        , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
-        , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')
-        , StringField("video", "Paste a Vimeo or Youtube Url")
-        , StringField("slideShare", "Paste a Slideshare Url")
-        , ChoiceField("currency", "Project Currency", optionGetter=lambda s: [NamedModel(name = 'EUR'), NamedModel(name = 'USD')])
-        , URLField("socialMediaUrl", "Project Blog Url")
+        PictureUploadField('logo', _('CompanyCreate.Form.Label:Logo'), REQUIRED, picWidth=250, picHeight=170)
+        , StringField('name', _('CompanyCreate.Form.Label:Name'), REQUIRED)
+        , UniqueNameField("slug", _('CompanyCreate.Form.Label:UFOstart Url'), thing_name = 'company name')
+        , URLField("companyUrl", _('CompanyCreate.Form.Label:Project Website'))
+        , CleanHtmlField('pitch', _('CompanyCreate.Form.Label:Slogan'), REQUIRED, max = 90)
+        , SanitizedHtmlField("description", _('CompanyCreate.Form.Label:Description'), REQUIRED, input_classes='x-high')
+        , PictureGalleryUploadField('Pictures', _('CompanyCreate.Form.Label:Drag multiple images into your gallery'))
+        , StringField("video", _('CompanyCreate.Form.Label:Paste a Vimeo or Youtube Url'))
+        , StringField("slideShare", _('CompanyCreate.Form.Label:Paste a Slideshare Url'))
+        , ChoiceField("currency", _('CompanyCreate.Form.Label:Project Currency'), optionGetter=lambda s: [NamedModel(name = 'EUR'), NamedModel(name = 'USD')])
+        , URLField("socialMediaUrl", _('CompanyCreate.Form.Label:Project Blog Url'))
     ]
 
     @classmethod
@@ -49,7 +52,7 @@ class CompanyCreateForm(BaseForm):
             company = CreateCompanyProc(request, {'token':request.root.user.token, 'Company':values})
         except DBNotification, e:
             if e.message == 'Company_Already_Exists':
-                return {'success':False, 'errors': {'name': "Already exists"}}
+                return {'success':False, 'errors': {'name': _('CompanyCreate.Form.Error:Already exists')}}
             else:
                 return {'success':False, 'message': 'Something went wrong: {}'.format(e.message)}
         else:
@@ -78,15 +81,16 @@ class CompanyEditForm(BaseForm):
     id="CompanyEdit"
     label = ""
     fields=[
-        PictureUploadField('logo', 'Project Logo', REQUIRED, picWidth=250, picHeight=170)
-        , StringField('name', 'Project Name', REQUIRED)
-        , URLField("companyUrl", "Project Website")
-        , CleanHtmlField('pitch', 'Elevator Pitch', REQUIRED, max = 90)
-        , SanitizedHtmlField("description", "Description", REQUIRED, input_classes='x-high')
-        , PictureGalleryUploadField('Pictures', 'Drag multiple images into your gallery')
-        , VideoUrlField("video", "Paste a Vimeo or Youtube Url")
-        , SlideshareField("slideShare", "Paste a Slideshare Url")
-        , URLField("socialMediaUrl", "Project Blog Url")
+        PictureUploadField('logo', _('CompanyCreate.Form.Label:Logo'), REQUIRED, picWidth=250, picHeight=170)
+        , StringField('name', _('CompanyCreate.Form.Label:Name'), REQUIRED)
+        , URLField("companyUrl", _('CompanyCreate.Form.Label:Project Website'))
+        , CleanHtmlField('pitch', _('CompanyCreate.Form.Label:Slogan'), REQUIRED, max = 90)
+        , SanitizedHtmlField("description", _('CompanyCreate.Form.Label:Description'), REQUIRED, input_classes='x-high')
+        , PictureGalleryUploadField('Pictures', _('CompanyCreate.Form.Label:Drag multiple images into your gallery'))
+
+        , StringField("video", _('CompanyCreate.Form.Label:Paste a Vimeo or Youtube Url'))
+        , StringField("slideShare", _('CompanyCreate.Form.Label:Paste a Slideshare Url'))
+        , URLField("socialMediaUrl", _('CompanyCreate.Form.Label:Project Blog Url'))
     ]
 
     @classmethod
@@ -101,7 +105,7 @@ class CompanyEditForm(BaseForm):
             company = EditCompanyProc(request, values)
         except DBNotification, e:
             if e.message == 'Company_Already_Exists':
-                return {'success':False, 'errors': {'name': "Already exists"}}
+                return {'success':False, 'errors': {'name': _('CompanyCreate.Form.Error:Already exists')}}
             else:
                 return {'success':False, 'message': 'Something went wrong: {}'.format(e.message)}
         else:

@@ -3,20 +3,13 @@ from hnc.apiclient.backend import DBNotification
 from hnc.forms.messages import GenericErrorMessage
 from pyramid.decorator import reify
 from pyramid.httpexceptions import HTTPFound, HTTPNotFound
+from pyramid.i18n import TranslationStringFactory
 from pyramid.security import Allow, Everyone, Authenticated
 from ufostart.handlers.company.__resources__ import RoundContext, ProtoCompanyContext, CompanyContext, BaseProjectContext
 from ufostart.models.procs import AcceptInviteProc, RefreshProfileProc, GetCompanyProc, GetInviteDetailsProc
 
-__author__ = 'Martin'
+_ = TranslationStringFactory("uforeloaded")
 
-
-
-def parent_property(name):
-    f = attrgetter(name)
-    @property
-    def parent_property_wrapper(self):
-        return f(self.__parent__)
-    return  parent_property_wrapper
 
 
 class ProtoInviteContext(BaseProjectContext):

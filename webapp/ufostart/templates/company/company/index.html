@@ -26,7 +26,7 @@
 <%def name="content()">
     <div class="container">
         <%widgets:pageHeader canEdit="${ctxt.canEdit}">
-            <span class="sub-title">Company Profile</span> ${ctxt.company.name}
+            <span class="sub-title">${_(u"CompanyPage.Title:Company Profile")|n}</span> ${ctxt.company.name}
         </%widgets:pageHeader>
         ${self.bodyContent(ctxt.company)}
     </div>
@@ -120,7 +120,7 @@
 
 <%def name="updates(company, form, values, errors)">
     <div class="box-title">
-        Updates
+        ${_(u"CompanyPage.Heading:Updates")|n}
     </div>
     %if ctxt.canEdit and form:
         <div class="box-dark">
@@ -174,7 +174,7 @@
     </%def>
 
     <div class="box-title">
-        Team Members
+        ${_(u"CompanyPage.Heading:Team Members")|n}
     </div>
     <div class="box-hor-content box-dark-shaded">
         %for member in members:
@@ -195,7 +195,7 @@
             %endfor
             %if ctxt.canEdit and hasattr(view, 'schemas'):
                 <div class="box-bottom box-top">
-                    <a href="${url(ctxt, '1', 'mentor')}" class="btn btn-primary btn-block">Invite Mentor</a>
+                    <a href="${url(ctxt, '1', 'mentor')}" class="btn btn-primary btn-block">${_(u"CompanyPage.Button:Invite Mentor")|n}</a>
                 </div>
             %endif
         </div>

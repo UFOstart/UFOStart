@@ -4,6 +4,7 @@ from hnc.forms.formfields import StringField, REQUIRED, HtmlAttrs, HORIZONTAL_GR
 from hnc.forms.handlers import FormHandler
 from hnc.forms.messages import GenericSuccessMessage
 from pyramid.httpexceptions import HTTPFound
+from pyramid.i18n import TranslationStringFactory
 from ufostart.lib.baseviews import BaseForm
 from ufostart.handlers.forms.controls import PictureUploadField, TagSearchField, CurrencyIntField, SanitizedHtmlField, ServiceSearchField
 from ufostart.models.company import NeedModel
@@ -12,14 +13,41 @@ import logging
 log = logging.getLogger(__name__)
 
 
-_ = lambda s: s
+_ = TranslationStringFactory("uforeloaded")
+
+
+######################### need advisor helper
+
+
+def unpack_advisor(request, advisor):
+    if advisor.get('name') and advisor.get('email'):
+        user = request.root.user
+        company = request.context.company
+        advisor = {
+            'invitorToken': user.token
+            , 'invitorName': user.name
+            , 'companySlug': company.slug
+            , 'role': 'ADVISOR'
+            , 'email': advisor['email']
+            , 'name': advisor['name']
+        }
+    else:
+        advisor = None
+    return advisor
+
+def invite_advisor_to_need(request, need, advisor):
+    try:
+        advisor['Need'] = {"slug": need.slug, "name": need.name}
+        InviteToNeedProc(request, {'Invite': advisor})
+    except DBNotification, e:
+        log.error(e)
 
 
 ######################### need index page and need recommendation
 
 
-class NeedIndexForm(BaseForm):
-    id = "Needinvite"
+class RecommendNeedForm(BaseForm):
+    id = "need_recommend_form"
     label = ""
     fields = [
         StringField("name", _("TaskDetailsPage.Invite.FormLabel.Name"), REQUIRED)
@@ -28,6 +56,7 @@ class NeedIndexForm(BaseForm):
 
     @classmethod
     def on_success(cls, request, values):
+        _ = request._
         user = request.root.user
         company = request.context.company
         need = request.context.need
@@ -43,12 +72,33 @@ class NeedIndexForm(BaseForm):
         }
 
         RecommendNeedProc(request, {'Invite': params})
-        request.session.flash(GenericSuccessMessage(u"You successfully invited {name} to this task!".format(**values)),
+        request.session.flash(GenericSuccessMessage(_(u"TaskDetailsPage.Message:You successfully recommended this task to {name}!").format(**values)),
                               "generic_messages")
         return {'success': True, 'redirect': request.resource_url(request.context)}
 
 
-class NeedIndexHandler(FormHandler): form = NeedIndexForm
+
+class InviteAdvisorToNeedForm(BaseForm):
+    id = "need_invite_form"
+    label = ""
+    fields = [
+        StringField("name", _("TaskDetailsPage.Invite.FormLabel.Name"), REQUIRED)
+        , EmailField("email", _("TaskDetailsPage.Invite.FormLabel.EmailAddress"), REQUIRED)
+    ]
+
+    @classmethod
+    def on_success(cls, request, values):
+        _ = request._
+        need = request.context.need
+        advisor = unpack_advisor(request, values)
+        invite_advisor_to_need(request, need, advisor)
+        request.session.flash(GenericSuccessMessage(_(u"TaskDetailsPage.Message:You successfully invited {name} to advise you with this task!").format(**values)),
+                              "generic_messages")
+        return {'success': True, 'redirect': request.resource_url(request.context)}
+
+
+class NeedIndexHandler(FormHandler):
+    forms = [RecommendNeedForm, InviteAdvisorToNeedForm]
 
 
 def accept_application(context, request):
@@ -61,7 +111,7 @@ class ApplicationForm(BaseForm):
     id = "Application"
     label = ""
     grid = HORIZONTAL_GRID
-    fields = [StringField('message', _("TaskDetailsPage.Apply.FormLabel.Message"), REQUIRED)]
+    fields = [StringField('message', _("TaskDetailsPage.Apply.FormLabel:Message"), REQUIRED)]
 
     @classmethod
     def on_success(cls, request, values):
@@ -70,40 +120,12 @@ class ApplicationForm(BaseForm):
                                    'Application': {'User': {'token': request.root.user.token},
                                                    'message': values['message']}})
         request.session.flash(GenericSuccessMessage(_(
-            "TaskDetailsPage.Apply.SuccessMessage.You have applied for this task successfully. One of the team members will contact you shortly.")),
+            "TaskDetailsPage.Apply.Success:You have successfully applied for this task. One of the team members will contact you shortly.")),
                               "generic_messages")
         return {'success': True, 'redirect': request.resource_url(request.context)}
 
 
-class ApplicationHandler(FormHandler): forms = [ApplicationForm, NeedIndexForm]
-
-
-######################### need advisor helper
-
-
-def unpack_advisor(request, values):
-    advisor = values.pop('advisor', {})
-    if advisor.get('name') and advisor.get('email'):
-        user = request.root.user
-        company = request.context.company
-        advisor = {
-            'invitorToken': user.token
-            , 'invitorName': user.name
-            , 'companySlug': company.slug
-            , 'role': 'ADVISOR'
-            , 'email': advisor['email']
-            , 'name': advisor['name']
-        }
-    else:
-        advisor = None
-    return values, advisor
-
-def invite_advisor_to_need(request, need, advisor):
-    try:
-        advisor['Need'] = {"slug": need.slug, "name": need.name}
-        InviteToNeedProc(request, {'Invite': advisor})
-    except DBNotification, e:
-        log.error(e)
+class ApplicationHandler(FormHandler): forms = [ApplicationForm, RecommendNeedForm]
 
 
 
@@ -139,7 +161,7 @@ class NeedCreateForm(BaseForm):
         _ = request._
 
         try:
-            values, advisor = unpack_advisor(request, values)
+            advisor = unpack_advisor(request, values.pop('advisor', {}))
             need = CreateNeedProc(request,
                                   {'Needs': [values], 'token': request.context.round.token})
         except DBNotification, e:
@@ -176,7 +198,7 @@ class NeedEditForm(BaseForm):
         round = request.context.round
         values['token'] = need.token
 
-        values, advisor = unpack_advisor(request, values)
+        advisor = unpack_advisor(request, values.pop('advisor', {}))
         newNeed = not need.added
         if newNeed:
             AddNeedToRound(request,
