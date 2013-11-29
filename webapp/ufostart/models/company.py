@@ -50,7 +50,7 @@ class CompanyUserModel(Mapping):
         return self.role == "FOUNDER"
     @property
     def isTeamMember(self):
-        return self.role in ["FOUNDER", "TEAM_MEMBER"]
+        return self.role != "MENTOR"
 
     @property
     def confirmed(self):
