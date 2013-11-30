@@ -198,7 +198,7 @@ class PageCreateForm(BaseForm):
         try:
             need = AdminPageCreateProc(request, values)
         except DBNotification, e:
-            if e.message == 'Page_Already_Exists':
+            if e.message in ('Page_Already_Exists', 'Url already exists'):
                 return {'success':False, 'errors': {'name': "This Page already exists, please change the name to a unique name."}}
             else:
                 raise e
