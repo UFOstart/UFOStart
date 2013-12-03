@@ -125,7 +125,7 @@ class ApplicationForm(BaseForm):
         return {'success': True, 'redirect': request.resource_url(request.context)}
 
 
-class ApplicationHandler(FormHandler): forms = [ApplicationForm, RecommendNeedForm]
+class ApplicationHandler(FormHandler): forms = [ApplicationForm, RecommendNeedForm, InviteAdvisorToNeedForm]
 
 
 
