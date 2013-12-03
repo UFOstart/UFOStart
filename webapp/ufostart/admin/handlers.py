@@ -144,7 +144,9 @@ class TemplateCreateForm(BaseForm):
 
     @classmethod
     def on_success(cls, request, values):
-        values['Need'] = [{'name':n} for n in values.pop('Need', [])]
+        needs = values.pop('Need', [])
+        if not isinstance(needs, list): needs = [needs]
+        values['Need'] = [{'name':n} for n in needs]
         try:
             need = AdminTemplatesCreateProc(request, values)
         except DBNotification, e:
@@ -166,7 +168,9 @@ class TemplateEditForm(TemplateCreateForm):
     @classmethod
     def on_success(cls, request, values):
         values['key'] = request.context.__name__
-        values['Need'] = [{'name':n} for n in values.pop('Need', [])]
+        needs = values.pop('Need', [])
+        if not isinstance(needs, list): needs = [needs]
+        values['Need'] = [{'name':n} for n in needs]
         need = AdminTemplatesEditProc(request, values)
         request.session.flash(GenericSuccessMessage("Template updated successfully!"), "generic_messages")
         return {'success':True, 'redirect': request.resource_url(request.context.__parent__)}
