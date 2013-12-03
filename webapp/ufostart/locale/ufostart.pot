@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-12-03 10:25+0100\n"
+"POT-Creation-Date: 2013-12-03 10:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -361,7 +361,7 @@ msgid "CompanyPage.Title:Company Profile"
 msgstr ""
 
 #: ufostart/templates/company/company/index.html:78
-msgid "Footer:Blog"
+msgid "CompanyPage.Link:Social Media"
 msgstr ""
 
 #: ufostart/templates/company/company/index.html:123
