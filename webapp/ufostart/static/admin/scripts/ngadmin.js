@@ -88,7 +88,7 @@ function StaticContentListCtrl($scope, Static, UsedContent) {
   var content = Static.getAllItems();
   content.then(function(data){
       $scope.contents = data;
-      $scope.pages = _.sortBy(_.uniq(_.map(_.pluck(data, "key"), function(item){return item.split(".")[0]})), function(e){return e});
+      $scope.pages = _.sortBy(_.uniq(_.map(_.pluck(data, "key"), function(item){return item.split(/[.:]/)[0]})), function(e){return e});
   });
   UsedContent.getAllItems().then(function(usedData){
         content.then(function(data){

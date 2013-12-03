@@ -75,7 +75,7 @@
       <div class="entity-link mar-top-half">${company.name}</div>
     %endif
     %if company.socialMediaUrl:
-      <small><a target="_blank" href="${company.socialMediaUrl | html.make_link }">${_("Blog").format(company_name = company.name)|n}</a></small>
+      <small><a target="_blank" href="${company.socialMediaUrl | html.make_link }">${_("Footer:Blog").format(company_name = company.name)|n}</a></small>
     %endif
     <div class="pitch">${html.nn(company.pitch)}</div>
 

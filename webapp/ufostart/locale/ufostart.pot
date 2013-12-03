@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-11-29 18:22+0100\n"
+"POT-Creation-Date: 2013-12-03 10:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -316,11 +316,11 @@ msgstr ""
 msgid "AddMentorPage.Help.Text"
 msgstr ""
 
-#: ufostart/templates/company/round.html:497
+#: ufostart/templates/company/round.html:507
 msgid "RoundDashboard.Help.Title"
 msgstr ""
 
-#: ufostart/templates/company/round.html:500
+#: ufostart/templates/company/round.html:510
 msgid "RoundDashboard.Help.Text"
 msgstr ""
 
@@ -361,7 +361,7 @@ msgid "CompanyPage.Title:Company Profile"
 msgstr ""
 
 #: ufostart/templates/company/company/index.html:78
-msgid "Blog"
+msgid "Footer:Blog"
 msgstr ""
 
 #: ufostart/templates/company/company/index.html:123
