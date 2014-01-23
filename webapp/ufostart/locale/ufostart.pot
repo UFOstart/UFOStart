@@ -1,14 +1,14 @@
 # Translations template for ufostart.
-# Copyright (C) 2013 ORGANIZATION
+# Copyright (C) 2014 ORGANIZATION
 # This file is distributed under the same license as the ufostart project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-12-03 10:57+0100\n"
+"POT-Creation-Date: 2014-01-23 12:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -193,16 +193,40 @@ msgstr ""
 msgid "HomePage.Button.CreateProject"
 msgstr ""
 
+#: ufostart/templates/index.html:38
+msgid "HomePage.Heading:How does UFOstart work?"
+msgstr ""
+
 #: ufostart/templates/index.html:47
 msgid "HomePage.Equity.Title"
+msgstr ""
+
+#: ufostart/templates/index.html:48
+msgid ""
+"HomePage.Equity.Text:Reduce the amount of cash you need by up to 80%. Reward "
+"loyal, passionate talent & partners with partial ownership in your idea."
 msgstr ""
 
 #: ufostart/templates/index.html:54
 msgid "HomePage.Share.Title"
 msgstr ""
 
+#: ufostart/templates/index.html:55
+msgid ""
+"HomePage.Equity.Text:Genim voluptiusam doloren ihicae ne ipsandam velign "
+"imodit quam quat. Bus non porum andam, verum re coneste dictiam eum "
+"vollaborest ommodi to blatur."
+msgstr ""
+
 #: ufostart/templates/index.html:61
 msgid "HomePage.Founder.Title"
+msgstr ""
+
+#: ufostart/templates/index.html:62
+msgid ""
+"HomePage.Founder.Text:Genim voluptiusam doloren ihicae ne ipsandam velign "
+"imodit quam quat. Bus non porum andam, verum re coneste dictiam eum "
+"vollaborest ommodi to blatur."
 msgstr ""
 
 #: ufostart/templates/admin/form.html:19
