@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-01-23 13:11+0100\n"
+"POT-Creation-Date: 2014-01-23 13:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -204,7 +204,7 @@ msgstr ""
 #: ufostart/templates/index.html:48
 msgid ""
 "HomePage.Equity.Text:Reduce the amount of cash you need by up to 80%. Reward "
-"loyal, passionate talent & partners with partial ownership in your idea."
+"loyal, passionate talent and partners with partial ownership in your idea."
 msgstr ""
 
 #: ufostart/templates/index.html:54
