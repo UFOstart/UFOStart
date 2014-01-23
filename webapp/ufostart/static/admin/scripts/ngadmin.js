@@ -111,6 +111,6 @@ function StaticContentListCtrl($scope, Static, UsedContent) {
         return    (!$scope.queryName || !!~key.indexOf($scope.queryName.toLowerCase()))
                && (!$scope.queryPage || key.indexOf($scope.queryPage.toLowerCase())==0)
                && (!$scope.queryUnused || !item.active)
-               && (!$scope.queryContent || !!~item.value.toLowerCase().indexOf($scope.queryContent.toLowerCase()));
+               && (!$scope.queryContent || item.value && !!~item.value.toLowerCase().indexOf($scope.queryContent.toLowerCase()));
   };
 }
