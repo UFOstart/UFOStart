@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ufostart 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-01-23 13:05+0100\n"
+"POT-Creation-Date: 2014-01-23 13:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,9 +213,8 @@ msgstr ""
 
 #: ufostart/templates/index.html:55
 msgid ""
-"HomePage.Equity.Text:Genim voluptiusam doloren ihicae ne ipsandam velign "
-"imodit quam quat. Bus non porum andam, verum re coneste dictiam eum "
-"vollaborest ommodi to blatur."
+"HomePage.Share.Text:Tap into the power of your network, and our crowd of "
+"resources, to make the connections you need to move forward."
 msgstr ""
 
 #: ufostart/templates/index.html:61
@@ -224,9 +223,8 @@ msgstr ""
 
 #: ufostart/templates/index.html:62
 msgid ""
-"HomePage.Founder.Text:Genim voluptiusam doloren ihicae ne ipsandam velign "
-"imodit quam quat. Bus non porum andam, verum re coneste dictiam eum "
-"vollaborest ommodi to blatur."
+"HomePage.Founder.Text:The easiest way to successfully launch next big idea, "
+"and also lend your expertise to other projects from around the world."
 msgstr ""
 
 #: ufostart/templates/admin/form.html:19
